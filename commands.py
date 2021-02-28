@@ -12,7 +12,7 @@ class ProcessCommand:
 
 
     def __call__(self, message):
-        commands_dict = {"p": self.play_pause, "s": self.stop, "r": self.rate, "u": self.play_by_url, "v": self.volume, "b": self.back, "f": self.forward, "h": lambda arg: ProcessCommand.help}
+        commands_dict = {"p": self.play_pause, "s": self.stop, "r": self.rate, "u": self.play_by_url, "v": self.volume, "sb": self.back, "sf": self.forward, "h": lambda arg: ProcessCommand.help}
         try:
             command = re.findall("[a-z]+", message.split(" ")[0].lower())[0]
         except IndexError:
@@ -23,7 +23,7 @@ class ProcessCommand:
         except KeyError:
             return "Unknown command.\n" + ProcessCommand.help
         except Exception as e:
-            print("error in process_command: ", e)
+            traceback.print_exc()
             return "error: {}".format(e)
 
     def play_pause(self, arg):
