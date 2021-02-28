@@ -3,12 +3,14 @@ import time
 
 class Player:
     def __init__(self, ttclient, output_device, input_device):
-        self.output_device = output_device
-        self.input_device = input_device
         self._ttclient = ttclient
         self._vlc_instance = vlc.Instance()
         self._vlc_player = self._vlc_instance.media_player_new()
         self._vlc_player.audio_set_volume(50)
+        self.output_devices = self.get_output_devices()
+        self.input_devices = self.get_input_devices()
+        self.output_device = output_device
+        self.input_device = input_device
         self.track_data = {}
         self.state = "Stopped"
 
@@ -41,7 +43,7 @@ class Player:
         self.state = "Stopped"
         self.track_data = {}
         self._stop_in_teamtalk()
-        self._vlc_player.stop()
+        self._vlc_player.pause()
 
     def _play_in_teamtalk(self, artist, title):
         self._ttclient.enableVoiceTransmission(True)
@@ -80,7 +82,5 @@ class Player:
         return devices
 
     def initialize_devices(self):
-        output_devices = self.get_output_devices()
-        self._vlc_player.audio_output_device_set(None, output_devices[list(output_devices)[self.output_device]])
-        input_devices = self.get_input_devices()
-        self._ttclient.initSoundInputDevice(input_devices[list(input_devices)[self.input_device]])
+        self._vlc_player.audio_output_device_set(None, self.output_devices[list(self.output_devices)[self.output_device]])
+        self._ttclient.initSoundInputDevice(self.input_devices[list(self.input_devices)[self.input_device]])

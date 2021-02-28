@@ -1,3 +1,4 @@
+import re
 from threading import Thread
 
 
@@ -12,7 +13,10 @@ class ProcessCommand(object):
 
     def __call__(self, message):
         commands_dict = {"p": self.play_pause, "s": self.stop, "r": self.rate, "u": self.play_by_url, "h": lambda arg: ProcessCommand.help}
-        command = message.split(" ")[0][1::]
+        try:
+            command = re.findall("[a-z]+", message.split(" ")[0].lower())[0]
+        except IndexError:
+            return ProcessCommand.help
         arg = " ".join(message.split(" ")[1::])
         try:
             return commands_dict[command](arg)
@@ -26,9 +30,9 @@ class ProcessCommand(object):
         if arg:
             self.play_from_vk(arg)
         else:
-            if self.player.state == "playing":
+            if self.player.state == "Playing":
                 self.player.pause()
-            elif self.player.state == "paused":
+            elif self.player.state == "Paused":
                 playing_thread = Thread(target=self.player.play)
                 playing_thread.start()
 

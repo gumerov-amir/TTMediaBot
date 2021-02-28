@@ -10,8 +10,8 @@ def echo_dict(d, indent_level=0):
 def echo_devices():
     player = Player(TeamTalk(), 0, 0)
     echo("output devices")
-    echo_dict(player.get_output_devices(), indent_level=1)
+    echo_dict(player.output_devices, indent_level=1)
     echo("input devices")
-    echo_dict(player.get_input_devices(), indent_level=1)
+    echo_dict(player.input_devices, indent_level=1)
 
 
