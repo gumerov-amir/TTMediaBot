@@ -1,0 +1,11 @@
+beautifulsoup4==4.9.3
+bs4==0.0.1
+certifi==2020.12.5
+chardet==4.0.0
+idna==2.10
+python-vlc==3.0.11115
+requests==2.25.1
+six==1.15.0
+soupsieve==2.2
+urllib3==1.26.3
+vk-api==11.9.1
