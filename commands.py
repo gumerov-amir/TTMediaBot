@@ -1,4 +1,5 @@
 import re
+import traceback
 from threading import Thread
 
 
@@ -23,8 +24,8 @@ class ProcessCommand(object):
         except KeyError:
             return "Unknown command.\n" + ProcessCommand.help
         except Exception as e:
-            print("error in process_command: ", e)
-            return "error: {}".format(e)
+            traceback.print_exc()
+            return f"error: {e}"
 
     def play_pause(self, arg):
         if arg:
@@ -38,7 +39,7 @@ class ProcessCommand(object):
 
     def play_from_vk(self, arg):
         # vk_track_list = []
-        vk_track_list_iter = self.vk_audio.search_iter(arg)
+        vk_track_list_iter = self.vk_audio.audio.search(arg)
         try:
             track = next(vk_track_list_iter)
             playing_thread = Thread(target=self.player.play, args=(track["url"], track["artist"], track["title"]))
