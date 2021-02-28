@@ -1,3 +1,5 @@
+import sys
+
 import vk_api
 from vk_api import audio
 

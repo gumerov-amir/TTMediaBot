@@ -3,7 +3,7 @@ from threading import Thread
 
 
 
-class ProcessCommand(object):
+class ProcessCommand:
     help = """help text of ttmediabot"""
 
     def __init__(self, player, vk_audio):
@@ -12,7 +12,7 @@ class ProcessCommand(object):
 
 
     def __call__(self, message):
-        commands_dict = {"p": self.play_pause, "s": self.stop, "r": self.rate, "u": self.play_by_url, "h": lambda arg: ProcessCommand.help}
+        commands_dict = {"p": self.play_pause, "s": self.stop, "r": self.rate, "u": self.play_by_url, "v": self.volume, "b": self.back, "f": self.forward, "h": lambda arg: ProcessCommand.help}
         try:
             command = re.findall("[a-z]+", message.split(" ")[0].lower())[0]
         except IndexError:
@@ -28,13 +28,14 @@ class ProcessCommand(object):
 
     def play_pause(self, arg):
         if arg:
-            self.play_from_vk(arg)
+            return self.play_from_vk(arg)
         else:
             if self.player.state == "Playing":
-                self.player.pause()
+                return self.player.pause()
             elif self.player.state == "Paused":
                 playing_thread = Thread(target=self.player.play)
                 playing_thread.start()
+                return
 
     def play_from_vk(self, arg):
         # vk_track_list = []
@@ -63,6 +64,29 @@ class ProcessCommand(object):
     def stop(self, arg):
         self.player.stop()
 
+    def volume(self, arg):
+        try:
+            self.player.set_volume(int(arg))
+        except ValueError:
+            return "Укажите число"
+
+    def forward(self, arg):
+        try:
+            if arg:
+                self.player.seek_forward(abs(int(arg)) / 100)
+            else:
+                self.player.seek_forward()
+        except ValueError:
+            return "Введите число от 1 до 100"
+
+    def back(self, arg):
+        try:
+            if arg:
+                self.player.seek_back(abs(int(arg)) / 100)
+            else:
+                self.player.seek_back()
+        except ValueError:
+            return "Введите число от 1 до 100"
 
 
 
