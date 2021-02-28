@@ -1,9 +1,4 @@
-<<<<<<< HEAD
 import requests
-=======
-import sys
-
->>>>>>> f6b19a383666de882b46843a2bf349435fc774a4
 import vk_api
 from vk_api import audio
 
