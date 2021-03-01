@@ -2,6 +2,7 @@ beautifulsoup4==4.9.3
 bs4==0.0.1
 certifi==2020.12.5
 chardet==4.0.0
+click==7.1.2
 idna==2.10
 python-vlc==3.0.11115
 requests==2.25.1
