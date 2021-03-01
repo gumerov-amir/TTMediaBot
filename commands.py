@@ -15,12 +15,13 @@ class ProcessCommand(object):
         try:
             command = re.findall("[a-z]+", message.split(" ")[0].lower())[0]
         except IndexError:
-            return ProcessCommand.help
+            return self.help()
         arg = " ".join(message.split(" ")[1::])
         try:
             return self.commands_dict[command](arg)
         except KeyError:
-            return "Unknown command.\n" + self.help(None)
+            return "Unknown command.\n" + self.help(
+            )
         except Exception as e:
             traceback.print_exc()
             return f"error: {e}"
@@ -49,8 +50,8 @@ class ProcessCommand(object):
                 return
             else:
                 return "По вашему запросу ничего не найдено."
-        except TypeError:
-            return "error: {}".format(track)
+        except KeyError:
+            return "Трэк не доступен"
 
     def rate(self, arg):
         """Изменяет скорость"""
@@ -61,8 +62,13 @@ class ProcessCommand(object):
 
     def play_by_url(self, arg):
         """Воиспроизводит поток по ссылке."""
-        playing_thread = Thread(target=self.player.play, args=(arg))
-        playing_thread.start()
+        if len(arg.split("://")) == 2 and arg.split("://")[0] != "file":
+            playing_thread = Thread(target=self.player.play, args=(arg,))
+            playing_thread.start()
+        elif not arg:
+            return self.help()
+        else:
+            return "Введите коректный url или разрешённый протокол"
 
     def stop(self, arg):
         """Останавливает аудио"""
@@ -90,7 +96,7 @@ class ProcessCommand(object):
     def next(self, arg):
         pass
 
-    def help(self, arg):
+    def help(self, arg=None):
         """Возращает справку"""
         help_strings = []
         for i in list(self.commands_dict):
