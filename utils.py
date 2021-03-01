@@ -8,10 +8,11 @@ def echo_dict(d, indent_level=0):
         echo("{}{}: {}".format("   " * indent_level, n,k))
 
 def echo_devices():
-    player = Player(TeamTalk(), 0, 0)
-    echo("output devices")
-    echo_dict(player.output_devices, indent_level=1)
-    echo("input devices")
+    player = Player(TeamTalk(), None)
+    echo("Input devices:")
     echo_dict(player.input_devices, indent_level=1)
+    echo()
+    echo("Output devices:")
+    echo_dict(player.output_devices, indent_level=1)
 
 

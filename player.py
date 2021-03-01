@@ -3,19 +3,20 @@ import time
 
 class Player:
     def __init__(self, ttclient, config):
-        self.config = config
         self._ttclient = ttclient
+        self.config = config
         self._vlc_instance = vlc.Instance()
         self._vlc_player = self._vlc_instance.media_player_new()
-        self._vlc_player.audio_set_volume(int(self.config["default_volume"]))
-        self.max_volume = int(self.config["max_volume"])
-        self.faded_volume = bool(self.config["faded_volume"])
-        self.faded_volume_timestamp = float(self.config["faded_volume_timestamp"])
-        self.seek_step = float(config["seek_step"])
+        if self.config:
+            self._vlc_player.audio_set_volume(int(self.config["default_volume"]))
+            self.max_volume = int(self.config["max_volume"])
+            self.faded_volume = bool(self.config["faded_volume"])
+            self.faded_volume_timestamp = float(self.config["faded_volume_timestamp"])
+            self.seek_step = float(config["seek_step"])
+            self.output_device = int(self.config["output_device"])
+            self.input_device = int(self.config["input_device"])
         self.output_devices = self.get_output_devices()
         self.input_devices = self.get_input_devices()
-        self.output_device = int(self.config["output_device"])
-        self.input_device = int(self.config["input_device"])
         self.track_data = {}
         self.state = "Stopped"
 
@@ -77,8 +78,8 @@ class Player:
         else:
             self._vlc_player.audio_set_volume(volume)
 
-    def seek_back(self, time_step=0):
-        time_step = time_step if time_step  != 0 else self.seek_step
+    def seek_back(self, time_step=None):
+        time_step = float(time_step) / 100 if time_step else self.seek_step / 100
         pos = self._vlc_player.get_position() - time_step
         if pos < 0:
             pos = 0
@@ -86,8 +87,8 @@ class Player:
             pos = 1
         self._vlc_player.set_position(pos)
 
-    def seek_forward(self, time_step=0):
-        time_step = time_step if time_step  != 0 else self.seek_step
+    def seek_forward(self, time_step=None):
+        time_step = float(time_step) / 100 if time_step else self.seek_step / 100
         pos = self._vlc_player.get_position() + time_step
         if pos < 0:
             pos = 0

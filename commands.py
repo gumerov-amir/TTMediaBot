@@ -13,7 +13,7 @@ class ProcessCommand(object):
 
 
     def __call__(self, message):
-        commands_dict = {"p": self.play_pause, "s": self.stop, "r": self.rate, "u": self.play_by_url, "h": lambda arg: ProcessCommand.help}
+        commands_dict = {"p": self.play_pause, "s": self.stop, "sb": self.seek_back, "sf": self.seek_forward, "r": self.rate, "v": self.volume, "u": self.play_by_url, "h": lambda arg: ProcessCommand.help}
         try:
             command = re.findall("[a-z]+", message.split(" ")[0].lower())[0]
         except IndexError:
@@ -38,16 +38,18 @@ class ProcessCommand(object):
                 playing_thread.start()
 
     def play_from_vk(self, arg):
-        # vk_track_list = []
-        vk_track_list_iter = self.vk_audio.audio.search(arg)
+        vk_results = self.vk_audio.audio.search(q=arg)
+        vk_track_count = vk_results["count"]
+        vk_track_list = vk_results["items"]
         try:
-            track = next(vk_track_list_iter)
-            playing_thread = Thread(target=self.player.play, args=(track["url"], track["artist"], track["title"]))
-            playing_thread.start()
-            #vk_track_list.append(track)
-            return
-        except StopIteration:
-            return "По вашему запросу ничего не найдено"
+            if vk_track_count > 0:
+                track = vk_track_list[0]
+                playing_thread = Thread(target=self.player.play, args=(track["url"], track["artist"], track["title"]))
+                playing_thread.start()
+                #vk_track_list.append(track)
+                return
+            else:
+                return "По вашему запросу ничего не найдено."
         except TypeError:
             return "error: {}".format(track)
 
@@ -58,14 +60,29 @@ class ProcessCommand(object):
             return "Введите число, используйте ."
 
     def play_by_url(self, arg):
-        playing_thread = Thread(target=self.player.play, args=(arg, "", arg))
+        playing_thread = Thread(target=self.player.play, args=(arg))
         playing_thread.start()
 
     def stop(self, arg):
         self.player.stop()
 
+    def volume(self, arg):
+        try:
+            self.player.set_volume(int(arg))
+        except ValueError:
+            return("Недопустимое значение. Укажите число от 1 до 100.")
 
+    def seek_back(self, arg):
+        try:
+            self.player.seek_back(arg)
+        except ValueError:
+            return("Недопустимое значение. Укажите число от 1 до 100.")
 
+    def seek_forward(self, arg):
+        try:
+            self.player.seek_forward(arg)
+        except ValueError:
+            return("Недопустимое значение. Укажите число от 1 до 100.")
 
     def next(self, arg):
         pass
