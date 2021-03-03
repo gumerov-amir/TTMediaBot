@@ -50,6 +50,8 @@ class TeamTalk(TeamTalkPy.TeamTalk):
         return False, TTMessage()
 
     def reply_to_message(self, msg, text):
+        if len(text) > 512:
+            return
         message = TeamTalkPy.TextMessage()
         message.nFromUserID = self.getMyUserID()
         message.nMsgType = 1
