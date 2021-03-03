@@ -23,6 +23,8 @@ class Bot(object):
             result, msg = self.ttclient.waitForEvent(ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG)
             if result:
                 if msg.textmessage.nMsgType == 1:
+                    print(msg.textmessage.szMessage)
                     reply_text = self.process_command(msg.textmessage.szMessage)
+                    print(reply_text)
                     if reply_text:
                         self.ttclient.reply_to_message(msg.textmessage, reply_text)
