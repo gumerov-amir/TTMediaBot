@@ -8,7 +8,7 @@ class ProcessCommand(object):
     def __init__(self, player, vk_audio):
         self.player = player
         self.vk_audio = vk_audio
-        self.commands_dict = {"p": self.play_pause, "s": self.stop, "sb": self.seek_back, "sf": self.seek_forward, "r": self.rate, "v": self.volume, "u": self.play_by_url, "h": self.help}
+        self.commands_dict = {"p": self.play_pause, "s": self.stop, "sb": self.seek_back, "sf": self.seek_forward, "r": self.rate, "v": self.volume, "u": self.play_by_url, "h": self.help, "n": self.next, "b": self.back}
 
 
     def __call__(self, message):
@@ -29,7 +29,7 @@ class ProcessCommand(object):
     def play_pause(self, arg):
         """Текст справки play pause"""
         if arg:
-            self.play_from_vk(arg)
+            return self.vk_search(arg)
         else:
             if self.player.state == "Playing":
                 self.player.pause()
@@ -37,7 +37,7 @@ class ProcessCommand(object):
                 playing_thread = Thread(target=self.player.play)
                 playing_thread.start()
 
-    def play_from_vk(self, arg):
+    def vk_search(self, arg):
         vk_results = self.vk_audio.audio.search(q=arg)
         vk_track_count = vk_results["count"]
         vk_track_list = vk_results["items"]
@@ -46,8 +46,9 @@ class ProcessCommand(object):
                 track = vk_track_list[0]
                 playing_thread = Thread(target=self.player.play, args=(track["url"], track["artist"], track["title"]))
                 playing_thread.start()
-                #vk_track_list.append(track)
-                return
+                self.track_list = vk_track_list
+                self.vk_search_number = 0
+                return "По вашему запросу найдено {}. сейчас играет {} - {}".format(vk_track_count, track["artist"], track["title"])
             else:
                 return "По вашему запросу ничего не найдено."
         except KeyError:
@@ -55,8 +56,14 @@ class ProcessCommand(object):
 
     def rate(self, arg):
         """Изменяет скорость"""
+        if not arg:
+            self.player._vlc_player.set_rate(1)
         try:
-            self.player._vlc_player.set_rate(float(arg))
+            rate_number = abs(float(arg))
+            if rate_number > 0 and rate_number <= 4:
+                self.player._vlc_player.set_rate(rate_number)
+            else:
+                return "Скорость от 1 до 4"
         except ValueError:
             return "Введите число, используйте ."
 
@@ -77,7 +84,11 @@ class ProcessCommand(object):
     def volume(self, arg):
         """Изменяет Громкость"""
         try:
-            self.player.set_volume(int(arg))
+            volume = int(arg)
+            if volume >= 0 and volume <= 100:
+                self.player.set_volume(int(arg))
+            else:
+                return "Громкость в диапозоне 1 100"
         except ValueError:
             return("Недопустимое значение. Укажите число от 1 до 100.")
 
@@ -94,7 +105,26 @@ class ProcessCommand(object):
             return("Недопустимое значение. Укажите число от 1 до 100.")
 
     def next(self, arg):
-        pass
+        self.vk_search_number += 1
+        try:
+            track = self.track_list[self.vk_search_number]
+            playing_thread = Thread(target=self.player.play, args=(track["url"], track["artist"], track["title"]))
+            playing_thread.start()
+            return "сейчас играет {} - {}".format(track["artist"], track["title"])
+        except IndexError:
+            return "это последний трек"
+
+    def back(self, arg):
+        self.vk_search_number -= 1
+        if self.vk_search_number < 0:
+            return "это первый трек"
+        try:
+            track = self.track_list[self.vk_search_number]
+            playing_thread = Thread(target=self.player.play, args=(track["url"], track["artist"], track["title"]))
+            playing_thread.start()
+            return "сейчас играет {} - {}".format(track["artist"], track["title"])
+        except IndexError:
+            return "это первый трек"
 
     def help(self, arg=None):
         """Возращает справку"""

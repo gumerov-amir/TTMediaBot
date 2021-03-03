@@ -20,7 +20,13 @@ class TeamTalk(TeamTalkPy.TeamTalk):
         if not result:
             sys.exit("Failed to log in")
         result, msg = self.waitForCmdSuccess(cmdid, 2000)
-        cmdid = self.doJoinChannelByID(int(config["channel_id"]), config["channel_password"])
+        if config["channel"].isdigit():
+            channel_id = int(config["channel"])
+        else:
+            channel_id = self.getChannelIDFromPath(config["channel"])
+            if channel_id == 0:
+                channel_id = 1
+        cmdid = self.doJoinChannelByID(channel_id, config["channel_password"])
         result, msg = self.waitForCmdSuccess(cmdid, 2000)
         if not result:
             sys.exit("Failed to join channel")
