@@ -1,5 +1,9 @@
+from enum import Enum
 import vlc
+from threading import Thread
 import time
+
+from .track import Track
 
 class Player:
     def __init__(self, ttclient, config):
@@ -17,56 +21,58 @@ class Player:
             self.input_device = int(self.config["input_device"])
         self.output_devices = self.get_output_devices()
         self.input_devices = self.get_input_devices()
-        self.track_data = {}
-        self.state = "Stopped"
-
-    def play(self, url=None, artist=None, title=None):
-        self.state = "Playing"
         self.initialize_devices()
-        if url== None:
-            self._play_in_teamtalk(self.track_data["artist"], self.track_data["title"])
-            self._vlc_player.play()
+        self.track_list = []
+        self.track = Track()
+        self.state = State.Stopped
+        self.mode = Mode.Single
+        self.playing_thread = PlayingThread(self)
+        self.playing_thread.start()
+
+    def play(self, tracks=None):
+        self.state = State.Playing
+        if tracks:
+            if type(tracks) == list:
+                self.track_list = tracks
+                self.track = tracks[0]
+            else:
+                self.track = tracks
+                self.track_list.append(self.track)
+            self._play_with_vlc(self.track.url)
         else:
-            self._play_in_teamtalk(artist, title)
-            self._play_with_vlc(url)
-            self.track_data = {"artist": artist, "title": title}
-        time.sleep(1)
-        while self._vlc_player.get_state() == vlc.State.Playing:
-            time.sleep(1)
-        if self._vlc_player.get_state() == vlc.State.Ended:
-            self._stop_in_teamtalk()
-            self.state = "Stopped"
-
-
-
+            self._vlc_player.play()
 
     def pause(self):
-        self.state = "Paused"
+        self.state = State.Paused
         self._vlc_player.pause()
-        self._pause_in_teamtalk()
 
     def stop(self):
-        self.state = "Stopped"
-        self.track_data = {}
-        self._stop_in_teamtalk()
+        self.state = State.Stopped
         self._vlc_player.pause()
 
-    def _play_in_teamtalk(self, artist, title):
-        self._ttclient.enableVoiceTransmission(True)
-        self._ttclient.doChangeStatus(0, "playing {} - {}".format(artist, title))
-
-    def _pause_in_teamtalk(self):
-        self._ttclient.enableVoiceTransmission(False)
-        time.sleep(1)
-        self._ttclient.doChangeStatus(0, "paused {} - {}".format(self.track_data["artist"], self.track_data["title"]))
-
-    def _stop_in_teamtalk(self):
-        self._ttclient.enableVoiceTransmission(False)
-        self._ttclient.doChangeStatus(0, "")
 
     def _play_with_vlc(self, arg):
         self._vlc_player.set_media(self._vlc_instance.media_new(arg))
         self._vlc_player.play()
+
+    def next(self):
+        try:
+            self.track = self.track_list[self.track_list.index(self.track) + 1]
+        except IndexError:
+            self.state = State.Stopped
+            return
+        self._play_with_vlc(self.track.url)
+
+    def back(self):
+        try:
+            track_index = self.track_list.index(self.track) - 1
+            if track_index < 0:
+                raise IndexError
+            self.track = self.track_list[track_index]
+        except IndexError:
+            self.state = State.Stopped
+            raise IndexError
+        self._play_with_vlc(self.track.url)
 
     def set_volume(self, volume):
         volume = volume if volume <= self.max_volume else self.max_volume
@@ -118,3 +124,25 @@ class Player:
     def initialize_devices(self):
         self._vlc_player.audio_output_device_set(None, self.output_devices[list(self.output_devices)[self.output_device]])
         self._ttclient.initSoundInputDevice(self.input_devices[list(self.input_devices)[self.input_device]])
+
+class State(Enum):
+    Stopped = "Stopped"
+    Playing = "Playing"
+    Paused = "Paused"
+
+class Mode(Enum):
+    Single = 0
+    TracList = 1
+
+class PlayingThread(Thread):
+    def __init__(self, player):
+        Thread.__init__(self)
+        self.player = player
+
+    def run(self):
+        while True:
+            if self.player.state == State.Playing and self.player._vlc_player.get_state() == vlc.State.Ended:
+                if self.player.mode == Mode.Single:
+                    self.player.state = State.Stopped
+                elif self.player.mode == Mode.TracList:
+                    self.player.next()

@@ -1,5 +1,5 @@
 from click import echo
-from player import Player
+from bot.player import Player
 from TeamTalkPy import TeamTalk
 
 

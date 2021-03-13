@@ -1,6 +1,6 @@
 import click
 
-import core
+from bot import Bot
 import utils
 
 
@@ -11,7 +11,7 @@ def cli(c="config.ini", devices=False):
     if devices:
         utils.echo_devices()
     else:
-        bot = core.Bot(c)
+        bot = Bot(c)
         bot.run()
 
 
