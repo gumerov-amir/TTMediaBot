@@ -1,8 +1,5 @@
-import commands
+from . import commands, event_handler, player, services, tt
 import configparser
-import player
-import tt
-import services
 import sys
 from TeamTalkPy import ClientEvent
 
@@ -15,10 +12,14 @@ class Bot(object):
             self.config.readfp(f)
         self.ttclient = tt.TeamTalk(self.config["teamtalk"])
         self.player = player.Player(self.ttclient, self.config["player"])
-        self.vk_audio = services.initialize_vk(self.config["vk"])
-        self.process_command = commands.ProcessCommand(self.player, self.vk_audio)
+        self.services = {}
+        for service_name in self.config["general"]["services"].split(","):
+            self.services[service_name] = getattr(services, service_name).Service(self.config[service_name])
+        self.process_command = commands.ProcessCommand(self.player, self.services, self.services[self.config['general']['default_service']])
+        self.event_handler = event_handler.EventHandler(self.player, self.ttclient)
 
     def run(self):
+        self.event_handler.start()
         while True:
             result, msg = self.ttclient.waitForEvent(ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG)
             if result:
