@@ -24,6 +24,6 @@ class EventHandler(Thread):
                 elif self.player.state == State.Paused:
                     self.ttclient.enableVoiceTransmission(False)
                     self.ttclient.doChangeStatus(0, "{state}: {title} - {artist}".format(state=self.player.state.value, title=self.player.track.title, artist=self.player.track.artist))
-            if self.player.track.get_meta_dict() != last_track_meta_dict:
+            if self.player.track.get_meta_dict() != last_track_meta_dict and last_player_state != State.Stopped:
                 last_track_meta_dict = self.player.track.get_meta_dict()
                 self.ttclient.doChangeStatus(0, "{state}: {title} - {artist}".format(state=self.player.state.value, title=self.player.track.title, artist=self.player.track.artist))

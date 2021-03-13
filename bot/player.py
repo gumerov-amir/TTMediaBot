@@ -132,7 +132,7 @@ class State(Enum):
 
 class Mode(Enum):
     Single = 0
-    TracList = 1
+    TrackList = 1
 
 class PlayingThread(Thread):
     def __init__(self, player):
@@ -144,5 +144,5 @@ class PlayingThread(Thread):
             if self.player.state == State.Playing and self.player._vlc_player.get_state() == vlc.State.Ended:
                 if self.player.mode == Mode.Single:
                     self.player.state = State.Stopped
-                elif self.player.mode == Mode.TracList:
+                elif self.player.mode == Mode.TrackList:
                     self.player.next()
