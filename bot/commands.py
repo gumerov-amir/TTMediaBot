@@ -2,7 +2,7 @@ import re
 import traceback
 from threading import Thread
 
-from .player import State
+from .player import Mode, State
 from .track import Track
 
 class ProcessCommand(object):
@@ -10,7 +10,7 @@ class ProcessCommand(object):
         self.player = player
         self.services = services
         self.service = default_service
-        self.commands_dict = {"p": self.play_pause, "s": self.stop, "sb": self.seek_back, "sf": self.seek_forward, "r": self.rate, "v": self.volume, "u": self.play_by_url, "h": self.help, "n": self.next, "b": self.back}
+        self.commands_dict = {"p": self.play_pause, "s": self.stop, "m": self.mode,     "sb": self.seek_back, "sf": self.seek_forward, "r": self.rate, "v": self.volume, "u": self.play_by_url, "h": self.help, "n": self.next, "b": self.back}
 
 
     def __call__(self, message):
@@ -20,10 +20,10 @@ class ProcessCommand(object):
             return self.help()
         arg = " ".join(message.split(" ")[1::])
         try:
-            return self.commands_dict[command](arg)
-        except KeyError:
-            return "Unknown command.\n" + self.help(
-            )
+            if command in self.commands_dict:
+                return self.commands_dict[command](arg)
+            else:
+                return _("Unknown command.\n") + self.help()
         except Exception as e:
             traceback.print_exc()
             return f"error: {e}"
@@ -35,7 +35,7 @@ class ProcessCommand(object):
             if track_list:
                 self.player.play(track_list)
             else:
-                return "Ничего не найдено"
+                return _("not found")
         else:
             if self.player.state == State.Playing:
                 self.player.pause()
@@ -52,9 +52,9 @@ class ProcessCommand(object):
             if rate_number > 0 and rate_number <= 4:
                 self.player._vlc_player.set_rate(rate_number)
             else:
-                return "Скорость от 1 до 4"
+                return _("Speed must be from 1 to 4")
         except ValueError:
-            return "Введите число, используйте ."
+            return _("Введите число, используйте .")
 
     def play_by_url(self, arg):
         """Воиспроизводит поток по ссылке."""
@@ -64,7 +64,7 @@ class ProcessCommand(object):
         elif not arg:
             return self.help()
         else:
-            return "Введите коректный url или разрешённый протокол"
+            return _("Введите коректный url или разрешённый протокол")
 
     def stop(self, arg):
         """Останавливает аудио"""
@@ -77,41 +77,59 @@ class ProcessCommand(object):
             if volume >= 0 and volume <= 100:
                 self.player.set_volume(int(arg))
             else:
-                return "Громкость в диапозоне 1 100"
+                return _("Громкость в диапозоне 1 100")
         except ValueError:
-            return("Недопустимое значение. Укажите число от 1 до 100.")
+            return _("Недопустимое значение. Укажите число от 1 до 100.")
 
     def seek_back(self, arg):
         try:
             self.player.seek_back(arg)
         except ValueError:
-            return("Недопустимое значение. Укажите число от 1 до 100.")
+            return _("Недопустимое значение. Укажите число от 1 до 100.")
 
     def seek_forward(self, arg):
         try:
             self.player.seek_forward(arg)
         except ValueError:
-            return("Недопустимое значение. Укажите число от 1 до 100.")
+            return _("Недопустимое значение. Укажите число от 1 до 100.")
 
     def next(self, arg):
         try:
             playing_thread = Thread(target=self.player.next)
             playing_thread.start()
         except IndexError:
-            return "это последний трек"
+            return _("это последний трек")
 
     def back(self, arg):
         try:
             playing_thread = Thread(target=self.player.back)
             playing_thread.start()
         except IndexError:
-            return "Это первый трек"
+            return _("Это первый трек")
+
+    def mode(self, arg):
+        mode_help = "current_ mode: {current_mode}\n{modes}".format(current_mode=self.player.mode.name, modes="\n".join(["{name} - {value}".format(name=i.name, value=i.value) for i in [Mode.Single, Mode.TrackList]]))
+        if arg:
+            try:
+                mode = Mode(int(arg))
+                self.player.mode = Mode(mode)
+            except TypeError:
+                return mode_help
+        else:
+            return mode_help
+
+    mode.help = "ModeHelp"
+
 
     def help(self, arg=None):
-        """Возращает справку"""
         help_strings = []
         for i in list(self.commands_dict):
-            help_strings.append(
-                "{}: {}".format(i, self.commands_dict[i].__doc__)
-            )
+            try:
+                help_strings.append(
+                    "{}: {}".format(i, self.commands_dict[i].help)
+                )
+            except AttributeError:
+                pass
         return "\n".join(help_strings)
+
+    help.help = "Возращает справку"

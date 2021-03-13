@@ -1,5 +1,6 @@
 from . import commands, event_handler, player, services, tt
 import configparser
+import gettext
 import sys
 from TeamTalkPy import ClientEvent
 
@@ -10,6 +11,8 @@ class Bot(object):
         self.config = configparser.ConfigParser()
         with open(config_file, "r", encoding="utf-8") as f:
             self.config.readfp(f)
+        self.translation = gettext.translation("TTMediaBot", "local", languages=[self.config["general"]["language"]])
+        self.translation.install()
         self.ttclient = tt.TeamTalk(self.config["teamtalk"])
         self.player = player.Player(self.ttclient, self.config["player"])
         self.services = {}
