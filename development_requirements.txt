@@ -49,3 +49,5 @@ typing-extensions==3.7.4.3
 urllib3==1.26.3
 vk-api==11.9.1
 wemake-python-styleguide==0.15.2
+youtube-dl==2021.3.14
+youtube-search==2.1.0

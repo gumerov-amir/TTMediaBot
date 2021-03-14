@@ -19,4 +19,4 @@ class Service:
         if results["count"] > 0:
             return [Track(url=i["url"], title=i["title"], artist=i["artist"]) for i in results["items"]]
         else:
-            return None
+            return

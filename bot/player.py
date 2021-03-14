@@ -14,7 +14,7 @@ class Player:
         if self.config:
             self._vlc_player.audio_set_volume(int(self.config["default_volume"]))
             self.max_volume = int(self.config["max_volume"])
-            self.faded_volume = bool(self.config["faded_volume"])
+            self.faded_volume = {"True": True, "False": False}[self.config["faded_volume"]]
             self.faded_volume_timestamp = float(self.config["faded_volume_timestamp"])
             self.seek_step = float(config["seek_step"])
             self.output_device = int(self.config["output_device"])
@@ -53,6 +53,12 @@ class Player:
 
     def _play_with_vlc(self, arg):
         self._vlc_player.set_media(self._vlc_instance.media_new(arg))
+        # for youtube
+        if arg.split("://")[1][0:15] == "www.youtube.com" or arg.split("://")[1][0:11] == "youtube.com":
+            print("y")
+            vlc_list_player =  self._vlc_instance.media_list_player_new()
+            vlc_list_player.set_media_player(self._vlc_player)
+            vlc_list_player.set_media_list(self._vlc_instance.media_list_new([arg]))
         self._vlc_player.play()
 
     def next(self):
