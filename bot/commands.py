@@ -10,7 +10,7 @@ class ProcessCommand(object):
         self.player = player
         self.services = services
         self.service = default_service
-        self.commands_dict = {"p": self.play_pause, "s": self.stop, "m": self.mode,     "sb": self.seek_back, "sf": self.seek_forward, "r": self.rate, "v": self.volume, "u": self.play_by_url, "h": self.help, "n": self.next, "b": self.back}
+        self.commands_dict = {"p": self.play_pause, "s": self.stop, "m": self.mode,     "sb": self.seek_back, "sf": self.seek_forward, "r": self.rate, "v": self.volume, "u": self.play_by_url, "h": self.help, "n": self.next, "b": self.back, "c": self.change_service}
 
 
     def __call__(self, message):
@@ -40,7 +40,7 @@ class ProcessCommand(object):
             if self.player.state == State.Playing:
                 self.player.pause()
             elif self.player.state == State.Paused:
-                self.player.play
+                self.player.play()
 
 
     def rate(self, arg):
@@ -120,6 +120,15 @@ class ProcessCommand(object):
 
     mode.help = "ModeHelp"
 
+    def change_service(self, arg):
+        service_help = "current service: {current_service}\nevalable: {services}".format(current_service=self.service.__module__.split(".")[-1], services=", ".join([i for i in self.services]))
+        if arg:
+            if arg in self.services:
+                self.service = self.services[arg]
+            else:
+                return service_help
+        else:
+            return service_help
 
     def help(self, arg=None):
         help_strings = []
