@@ -1,6 +1,5 @@
 import re
 import traceback
-from threading import Thread
 
 from .player import Mode, State
 from .track import Track
@@ -59,8 +58,7 @@ class ProcessCommand(object):
     def play_by_url(self, arg):
         """Воиспроизводит поток по ссылке."""
         if len(arg.split("://")) == 2 and arg.split("://")[0] != "file":
-            playing_thread = Thread(target=self.player.play, args=(Track(url=arg),))
-            playing_thread.start()
+            self.player.play(Track(url=arg, from_url=True))
         elif not arg:
             return self.help()
         else:
@@ -95,15 +93,13 @@ class ProcessCommand(object):
 
     def next(self, arg):
         try:
-            playing_thread = Thread(target=self.player.next)
-            playing_thread.start()
+            self.player.next()
         except IndexError:
             return _("это последний трек")
 
     def back(self, arg):
         try:
-            playing_thread = Thread(target=self.player.back)
-            playing_thread.start()
+            self.player.back()
         except IndexError:
             return _("Это первый трек")
 
