@@ -30,7 +30,6 @@ class Player:
         self.playing_thread.start()
 
     def play(self, tracks=None):
-        self.state = State.Playing
         if tracks:
             if type(tracks) == list:
                 self.track_list = tracks
@@ -41,6 +40,10 @@ class Player:
             self._play_with_vlc(self.track.url)
         else:
             self._vlc_player.play()
+        while self._vlc_player.get_state() != vlc.State.Playing:
+            pass    
+        self.state = State.Playing
+
 
     def pause(self):
         self.state = State.Paused
@@ -52,13 +55,8 @@ class Player:
 
 
     def _play_with_vlc(self, arg):
+        print("pwv", arg)
         self._vlc_player.set_media(self._vlc_instance.media_new(arg))
-        # for youtube
-        if arg.split("://")[1][0:15] == "www.youtube.com" or arg.split("://")[1][0:11] == "youtube.com":
-            print("y")
-            vlc_list_player =  self._vlc_instance.media_list_player_new()
-            vlc_list_player.set_media_player(self._vlc_player)
-            vlc_list_player.set_media_list(self._vlc_instance.media_list_new([arg]))
         self._vlc_player.play()
 
     def next(self):
@@ -152,3 +150,9 @@ class PlayingThread(Thread):
                     self.player.state = State.Stopped
                 elif self.player.mode == Mode.TrackList:
                     self.player.next()
+            if self.player.state == State.Playing and self.player.track.from_url:
+                media = self.player._vlc_player.get_media()
+                media.parse_with_options(vlc.MediaParseFlag.fetch_network, 0)
+                new_name = media.get_meta(12)
+                if self.player.track.name != new_name:
+                    self.player.track.name = new_name

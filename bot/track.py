@@ -1,12 +1,11 @@
 class Track:
-    def __init__(self, url=None, title=None, artist=None):
+    def __init__(self, url=None, name=None, from_url=False):
         self.url = url
-        self.title = title
-        self.artist = artist
-        self.media = None
+        self.name = name
+        self.from_url = from_url
 
-    def get_meta_dict(self):
-        return {"artist": self.artist, "title": self.title, "url": self.url}
+    def get_meta(self):
+        return {"name": self.name, "url": self.url}
 
     def __repr__(self):
-        return "{title} - {artist} ({url})".format(title=self.title, artist=self.artist, url=self.url)
+        return "{name} ({url})".format(name=self.name, url=self.url)
