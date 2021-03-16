@@ -15,6 +15,12 @@ class Service:
     def search(self, text):
         search = youtube_search.YoutubeSearch(text, max_results=100)
         if search.videos:
-            return [Track(url=self.get_real_url("https://www.youtube.com" + video["url_suffix"]), name="{} - {}".format(video["title"], video["channel"])) for video in search.videos]
+            tracks = []
+            for video in search.videos:
+                try:
+                    tracks.append(Track(url=self.get_real_url("https://www.youtube.com" + video["url_suffix"]), name="{} - {}".format(video["title"], video["channel"])))
+                except KeyError:
+                    pass
+            return tracks
         else:
             return
