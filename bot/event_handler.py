@@ -27,3 +27,4 @@ class EventHandler(Thread):
             if self.player.track.get_meta() != last_track_meta and last_player_state != State.Stopped:
                 last_track_meta = self.player.track.get_meta()
                 self.ttclient.doChangeStatus(0, "{state}: {name}".format(state=self.player.state.value, name=self.player.track.name))
+            time.sleep(1)

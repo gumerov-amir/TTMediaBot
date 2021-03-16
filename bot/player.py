@@ -156,3 +156,4 @@ class PlayingThread(Thread):
                 new_name = media.get_meta(12)
                 if self.player.track.name != new_name:
                     self.player.track.name = new_name
+            time.sleep(1)

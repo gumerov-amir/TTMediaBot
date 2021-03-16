@@ -1,4 +1,5 @@
 import re
+import time
 import traceback
 
 from .player import Mode, State
@@ -30,7 +31,9 @@ class ProcessCommand(object):
     def play_pause(self, arg):
         """Текст справки play pause"""
         if arg:
+            s = time.time()
             track_list = self.service.search(arg)
+            print(time.time() - s)
             if track_list:
                 self.player.play(track_list)
             else:
