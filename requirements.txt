@@ -11,4 +11,5 @@ six==1.15.0
 soupsieve==2.2
 urllib3==1.26.3
 vk-api==11.9.1
+youtube-dl==2021.3.14
 youtube-search==2.1.0
