@@ -4,9 +4,11 @@ certifi==2020.12.5
 chardet==4.0.0
 click==7.1.2
 idna==2.10
+pafy==0.5.5
 python-vlc==3.0.11115
 requests==2.25.1
 six==1.15.0
 soupsieve==2.2
 urllib3==1.26.3
 vk-api==11.9.1
+youtube-search==2.1.0
