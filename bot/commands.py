@@ -68,7 +68,10 @@ class ProcessCommand(object):
         if arg:
             try:
                 tracks = self.streamer.get(arg, self.is_admin)
-                self.player.play(tracks)
+                if tracks:
+                    self.player.play(tracks)
+                else:
+                    return _("Пустая Папка")
             except ValueError:
                 return _('Неверный протокол')
         elif not arg:

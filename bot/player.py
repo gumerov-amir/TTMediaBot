@@ -31,12 +31,8 @@ class Player:
 
     def play(self, tracks=None):
         if tracks:
-            if type(tracks) == list:
-                self.track_list = tracks
-                self.track = tracks[0]
-            else:
-                self.track = tracks
-                self.track_list.append(self.track)
+            self.track_list = tracks
+            self.track = tracks[0]
             self._play_with_vlc(self.track.url)
         else:
             self._vlc_player.play()

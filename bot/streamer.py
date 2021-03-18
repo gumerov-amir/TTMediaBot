@@ -25,8 +25,10 @@ class Streamer:
             if os.path.isdir(local_path):
                 tracks = []
                 for file in os.listdir(local_path):
-                    track = Track(url=os.path.join(local_path, file), from_url=True)
-                    tracks.append(track)
+                    path = os.path.join(local_path, file)
+                    if os.path.isfile(path):
+                        track = Track(url=os.path.join(local_path, file), from_url=True)
+                        tracks.append(track)
                 return tracks
         else:
             raise ValueError('Invalid protocol')
