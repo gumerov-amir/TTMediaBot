@@ -6,30 +6,30 @@ import sys
 
 class TeamTalk(TeamTalkPy.TeamTalk):
     def __init__(self, config):
-        TeamTalkPy.setLicense(config["license_name"], config["license_key"])
+        TeamTalkPy.setLicense(config['license_name'], config['license_key'])
         TeamTalkPy.TeamTalk.__init__(self)
-        self.connect(config["hostname"], int(config["tcp"]), int(config["udp"]))
+        self.connect(config['hostname'], int(config['tcp']), int(config['udp']))
         result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CON_SUCCESS)
         if not result:
-            sys.exit("Failed to connect")
-        cmdid = self.doLogin(config["nickname"], config["username"], config["password"], config["client_name"])
+            sys.exit('Failed to connect')
+        cmdid = self.doLogin(config['nickname'], config['username'], config['password'], config['client_name'])
         result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CMD_MYSELF_LOGGEDIN)
         if not result:
-            sys.exit("Failed to log in")
+            sys.exit('Failed to log in')
         result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CMD_SERVER_UPDATE)
         if not result:
-            sys.exit("Failed to log in")
+            sys.exit('Failed to log in')
         result, msg = self.waitForCmdSuccess(cmdid, 2000)
-        if config["channel"].isdigit():
-            channel_id = int(config["channel"])
+        if config['channel'].isdigit():
+            channel_id = int(config['channel'])
         else:
-            channel_id = self.getChannelIDFromPath(config["channel"])
+            channel_id = self.getChannelIDFromPath(config['channel'])
             if channel_id == 0:
                 channel_id = 1
-        cmdid = self.doJoinChannelByID(channel_id, config["channel_password"])
+        cmdid = self.doJoinChannelByID(channel_id, config['channel_password'])
         result, msg = self.waitForCmdSuccess(cmdid, 2000)
         if not result:
-            sys.exit("Failed to join channel")
+            sys.exit('Failed to join channel')
 
     def waitForEvent(self, event, timeout=2000):
         msg = self.getMessage(timeout)
@@ -58,6 +58,11 @@ class TeamTalk(TeamTalkPy.TeamTalk):
         message.szMessage = text
         message.nToUserID = msg.nFromUserID
         self.doTextMessage(message)
+
+    def change_nickname(self, nickname):
+        self.doChangeNickname(nickname)
+
+
 
 
 

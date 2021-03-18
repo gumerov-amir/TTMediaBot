@@ -132,4 +132,5 @@ config.ini
 *.dll
 TeamTalkPy
 *.json
+log.txt
 

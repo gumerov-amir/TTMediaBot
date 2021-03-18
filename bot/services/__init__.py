@@ -1,1 +1,1 @@
-from . import vk, yt
+from bot.services import vk, yt

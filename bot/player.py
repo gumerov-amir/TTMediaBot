@@ -12,13 +12,13 @@ class Player:
         self._vlc_instance = vlc.Instance()
         self._vlc_player = self._vlc_instance.media_player_new()
         if self.config:
-            self._vlc_player.audio_set_volume(int(self.config["default_volume"]))
-            self.max_volume = int(self.config["max_volume"])
-            self.faded_volume = {"True": True, "False": False}[self.config["faded_volume"]]
-            self.faded_volume_timestamp = float(self.config["faded_volume_timestamp"])
-            self.seek_step = float(config["seek_step"])
-            self.output_device = int(self.config["output_device"])
-            self.input_device = int(self.config["input_device"])
+            self._vlc_player.audio_set_volume(int(self.config['default_volume']))
+            self.max_volume = int(self.config['max_volume'])
+            self.faded_volume = {'True': True, 'False': False}[self.config['faded_volume']]
+            self.faded_volume_timestamp = float(self.config['faded_volume_timestamp'])
+            self.seek_step = float(config['seek_step'])
+            self.output_device = int(self.config['output_device'])
+            self.input_device = int(self.config['input_device'])
         self.output_devices = self.get_output_devices()
         self.input_devices = self.get_input_devices()
         self.initialize_devices()
@@ -55,7 +55,6 @@ class Player:
 
 
     def _play_with_vlc(self, arg):
-        print("pwv", arg)
         self._vlc_player.set_media(self._vlc_instance.media_new(arg))
         self._vlc_player.play()
 
@@ -113,7 +112,7 @@ class Player:
             mod = mods
             while mod:
                 mod = mod.contents
-                devices[str(mod.description, "utf-8")] = mod.device
+                devices[str(mod.description, 'utf-8')] = mod.device
                 mod = mod.next
         vlc.libvlc_audio_output_device_list_release(mods)
         return devices
@@ -130,9 +129,9 @@ class Player:
         self._ttclient.initSoundInputDevice(self.input_devices[list(self.input_devices)[self.input_device]])
 
 class State(Enum):
-    Stopped = "Stopped"
-    Playing = "Playing"
-    Paused = "Paused"
+    Stopped = 'Stopped'
+    Playing = 'Playing'
+    Paused = 'Paused'
 
 class Mode(Enum):
     Single = 0
