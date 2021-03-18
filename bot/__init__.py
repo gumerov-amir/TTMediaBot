@@ -15,7 +15,7 @@ class Bot(object):
             self.config.readfp(f)
         if self.config.getboolean('general', 'log'):
             sys.stdout = Logger(self.config['general']['log_file_name'])
-        self.translation = gettext.translation('TTMediaBot', 'local', languages=[self.config['general']['language']])
+        self.translation = gettext.translation('TTMediaBot', 'locale', languages=[self.config['general']['language']])
         self.translation.install()
         self.ttclient = tt.TeamTalk(self.config['teamtalk'])
         self.player = player.Player(self.ttclient, self.config['player'])
