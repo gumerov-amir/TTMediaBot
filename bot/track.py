@@ -5,7 +5,7 @@ class Track:
         self.from_url = from_url
 
     def get_meta(self):
-        return {"name": self.name, "url": self.url}
+        return {'name': self.name, 'url': self.url}
 
     def __repr__(self):
-        return "{name} ({url})".format(name=self.name, url=self.url)
+        return '{name} ({url})'.format(name=self.name, url=self.url)

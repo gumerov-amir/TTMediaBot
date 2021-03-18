@@ -3,6 +3,7 @@ bs4==0.0.1
 certifi==2020.12.5
 chardet==4.0.0
 click==7.1.2
+colorama==0.4.4
 idna==2.10
 pafy==0.5.5
 python-vlc==3.0.11115
@@ -11,5 +12,6 @@ six==1.15.0
 soupsieve==2.2
 urllib3==1.26.3
 vk-api==11.9.1
+win32-setctime==1.0.3
 youtube-dl==2021.3.14
 youtube-search==2.1.0
