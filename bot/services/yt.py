@@ -23,7 +23,7 @@ class Service:
                     video = pafy.new(urljoin('https://www.youtube.com', video['url_suffix']))
                     best_audio = video.getbestaudio()
                     real_url = best_audio.url
-                    name = '{} - {}'.format(video['title'], video['channel'])
+                    name = '{} - {}'.format(video.title, video.author)
                     track = Track(url=real_url, name=name)
                     tracks.append(track)
                 except KeyError:
