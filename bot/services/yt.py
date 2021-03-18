@@ -28,6 +28,8 @@ class Service:
                     tracks.append(track)
                 except KeyError:
                     continue
+                except AttributeError:
+                    continue
             return tracks
         else:
             return None

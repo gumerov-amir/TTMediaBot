@@ -1,10 +1,10 @@
 import re
 import time
 import traceback
-from urllib.parse import urlparse
 
+
+from .streamer import Streamer
 from .player import Mode, State
-from .track import Track
 
 class ProcessCommand(object):
     def __init__(self, player, ttclient, services, default_service):
@@ -12,12 +12,13 @@ class ProcessCommand(object):
         self.ttclient = ttclient
         self.services = services
         self.service = default_service
+        self.streamer = Streamer(self.services)
         self.commands_dict = {'p': self.play_pause, 's': self.stop, 'm': self.mode,     'sb': self.seek_back, 'sf': self.seek_forward, 'r': self.rate, 'v': self.volume, 'u': self.play_by_url, 'h': self.help, 'n': self.next, 'b': self.back, 'c': self.change_service}
         self.admin_commands_dict = {'girl': lambda arg: 'Настенька', "cn": self.change_nickname}
 
 
     def __call__(self, message, is_admin):
-        print(is_admin)
+        self.is_admin = is_admin
         try:
             command = re.findall('[a-z]+', message.split(' ')[0].lower())[0]
         except IndexError:
@@ -64,19 +65,14 @@ class ProcessCommand(object):
             return _('Введите число, используйте .')
 
     def play_by_url(self, arg):
-        allow_schemes = ['http', 'https']
-        parsed_url = urlparse(arg)
-        if parsed_url.scheme in allow_schemes:
-            track = Track(url=arg, from_url=True)
-            for service in self.services.values():
-                if parsed_url.hostname in service.hostnames:
-                    track = service.get(arg)
-                    break
-            self.player.play(track)
+        if arg:
+            try:
+                tracks = self.streamer.get(arg, self.is_admin)
+                self.player.play(tracks)
+            except ValueError:
+                return _('Неверный протокол')
         elif not arg:
             return self.help()
-        else:
-            return _('Введите коректный url или разрешённый протокол')
 
     def stop(self, arg):
         '''Останавливает аудио'''

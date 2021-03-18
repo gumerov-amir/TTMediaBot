@@ -40,7 +40,7 @@ class Player:
             self._play_with_vlc(self.track.url)
         else:
             self._vlc_player.play()
-        while self._vlc_player.get_state() != vlc.State.Playing:
+        while self._vlc_player.get_state() != vlc.State.Playing and self._vlc_player.get_state() != vlc.State.Ended:
             pass    
         self.state = State.Playing
 
@@ -151,8 +151,10 @@ class PlayingThread(Thread):
                     self.player.next()
             if self.player.state == State.Playing and self.player.track.from_url:
                 media = self.player._vlc_player.get_media()
-                media.parse_with_options(vlc.MediaParseFlag.fetch_network, 0)
+                media.parse_with_options(vlc.MediaParseFlag.do_interact, 0)
                 new_name = media.get_meta(12)
+                if not new_name:
+                    new_name = "{} - {}".format(media.get_meta(vlc.Meta.Title), media.get_meta(vlc.Meta.Artist))
                 if self.player.track.name != new_name:
                     self.player.track.name = new_name
             time.sleep(1)
