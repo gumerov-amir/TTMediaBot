@@ -27,10 +27,8 @@ class Bot(object):
             else:
                 None
             self.services[service_name] = Service(config)
-        self.process_command = commands.ProcessCommand(self.player, self.ttclient, self.services, self.services[self.config['general']['default_service']])
+        self.process_command = commands.ProcessCommand(self.player, self.ttclient, self.services, self.services[self.config['general']['default_service']], self.config['general']['admins'], self.config['general']['banned_users'])
         self.event_handler = event_handler.EventHandler(self.player, self.ttclient)
-        self.admins = self.config['general']['admins'].split(',')
-        self.banned_users = self.config['general']['banned_users'].split(',')
 
     def run(self):
         self.event_handler.start()
@@ -38,12 +36,6 @@ class Bot(object):
             result, msg = self.ttclient.waitForEvent(ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG)
             if result:
                 if msg.textmessage.nMsgType == 1:
-                    print(msg.textmessage.szMessage)
-                    print(msg.textmessage.szFromUsername)
-                    if not msg.textmessage.szFromUsername in self.banned_users:
-                        reply_text = self.process_command(msg.textmessage.szMessage, is_admin=msg.textmessage.szFromUsername in self.admins)
-                    else:
-                        reply_text = _('You are a banned user.')
-                    print(reply_text)
+                    reply_text = self.process_command(msg.textmessage.szMessage, self.ttclient.getUser(msg.textmessage.nFromUserID))
                     if reply_text:
-                        self.ttclient.reply_to_message(msg.textmessage, reply_text)
+                        self.ttclient.send_message(reply_text, msg.textmessage.nFromUserID)

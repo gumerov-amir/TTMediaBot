@@ -49,14 +49,17 @@ class TeamTalk(TeamTalkPy.TeamTalk):
                 return result, msg
         return False, TTMessage()
 
-    def reply_to_message(self, msg, text):
+    def send_message(self, text, id=None, type=1):
         if len(text) > 512:
             return
         message = TeamTalkPy.TextMessage()
         message.nFromUserID = self.getMyUserID()
-        message.nMsgType = 1
+        message.nMsgType = type
         message.szMessage = text
-        message.nToUserID = msg.nFromUserID
+        if type == 1:
+            message.nToUserID = id
+        elif type == 2:
+            message.nChannelID = self.getMyChannelID()
         self.doTextMessage(message)
 
     def change_nickname(self, nickname):
