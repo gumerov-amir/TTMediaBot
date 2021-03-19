@@ -20,14 +20,15 @@ class Streamer:
         elif is_admin and parsed_url.scheme == 'file':
             local_path = '{}:{}'.format(parsed_url.hostname, parsed_url.path)
             if os.path.isfile(local_path):
-                track = Track(url=local_path, from_url=True)
+                track = Track(url=local_path, name='.'.join(os.path.split(local_path)[-1].split(".")[0:-1]))
                 return [track,]
             if os.path.isdir(local_path):
                 tracks = []
-                for file in os.listdir(local_path):
-                    path = os.path.join(local_path, file)
-                    if os.path.isfile(path):
-                        track = Track(url=os.path.join(local_path, file), from_url=True)
+                for path, dirs, files in os.walk(local_path):
+                    for file in files:
+                        url = os.path.join(path, file)
+                        name = '.'.join(os.path.split(url)[-1].split(".")[0:-1])
+                        track = Track(url=url, name=name)
                         tracks.append(track)
                 return tracks
         else:

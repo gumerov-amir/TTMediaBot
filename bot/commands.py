@@ -70,8 +70,10 @@ class ProcessCommand(object):
                 tracks = self.streamer.get(arg, self.is_admin)
                 if tracks:
                     self.player.play(tracks)
+                elif tracks == []:
+                    return _('Пустая Папка')
                 else:
-                    return _("Пустая Папка")
+                    return _('Not exist file')
             except ValueError:
                 return _('Неверный протокол')
         elif not arg:
