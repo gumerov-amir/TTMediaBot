@@ -51,6 +51,7 @@ class TeamTalk(TeamTalkPy.TeamTalk):
 
     def send_message(self, text, id=None, type=1):
         if len(text) > 512:
+            print(len(text))
             return
         message = TeamTalkPy.TextMessage()
         message.nFromUserID = self.getMyUserID()
