@@ -2,6 +2,7 @@ from enum import Enum
 import vlc
 from threading import Thread
 import time
+import random
 
 from .track import Track
 
@@ -24,6 +25,7 @@ class Player:
         self.initialize_devices()
         self.track_list = []
         self.track = Track()
+        self.track_index = 0
         self.state = State.Stopped
         self.mode = Mode.Single
         self.playing_thread = PlayingThread(self)
@@ -32,7 +34,12 @@ class Player:
     def play(self, tracks=None):
         if tracks:
             self.track_list = tracks
-            self.track = tracks[0]
+            if self.mode == Mode.Random:
+                self.track = random.choice(self.track_list)
+                self.track_index = self.track_list.index(self.track)
+            else:
+                self.track_index = 0
+                self.track = tracks[self.track_index]
             self._play_with_vlc(self.track.url)
         else:
             self._vlc_player.play()
@@ -48,6 +55,8 @@ class Player:
     def stop(self):
         self.state = State.Stopped
         self._vlc_player.pause()
+        self.track_index = None
+        self.track = Track()
 
 
     def _play_with_vlc(self, arg):
@@ -55,23 +64,41 @@ class Player:
         self._vlc_player.play()
 
     def next(self):
-        try:
-            self.track = self.track_list[self.track_list.index(self.track) + 1]
-        except IndexError:
-            self.state = State.Stopped
-            return
+        if self.mode == Mode.Random:
+            self.track = random.choice(self.track_list)
+            self.track_index = self.track_list.index(self.track)
+        else:
+            try:
+                self.track = self.track_list[self.track_index + 1]
+            except IndexError:
+                self.state = State.Stopped
+                raise IndexError('')
+            self.track_index += 1
         self._play_with_vlc(self.track.url)
 
     def back(self):
-        try:
-            track_index = self.track_list.index(self.track) - 1
-            if track_index < 0:
-                raise IndexError
-            self.track = self.track_list[track_index]
-        except IndexError:
-            self.state = State.Stopped
-            raise IndexError
+        if self.mode == Mode.Random:
+            self.track = random.choice(self.track_list)
+            self.track_index = self.track_list.index(self.track)
+        else:
+            try:
+                track_index = self.track_index - 1
+                if track_index < 0:
+                    raise IndexError('')
+                self.track = self.track_list[track_index]
+            except IndexError:
+                self.state = State.Stopped
+                raise IndexError('')
+            self.track_index -= 1
         self._play_with_vlc(self.track.url)
+
+    def play_by_index(self, index):
+        if index >= 0 and index < len(self.track_list):
+            self.track_index = index
+            self.track = self.track_list[self.track_index]
+            self._play_with_vlc(self.track.url)
+        else:
+            raise IndexError('')
 
     def set_volume(self, volume):
         volume = volume if volume <= self.max_volume else self.max_volume
@@ -132,6 +159,7 @@ class State(Enum):
 class Mode(Enum):
     Single = 0
     TrackList = 1
+    Random = 2
 
 class PlayingThread(Thread):
     def __init__(self, player):
@@ -143,7 +171,7 @@ class PlayingThread(Thread):
             if self.player.state == State.Playing and self.player._vlc_player.get_state() == vlc.State.Ended:
                 if self.player.mode == Mode.Single:
                     self.player.state = State.Stopped
-                elif self.player.mode == Mode.TrackList:
+                elif self.player.mode == Mode.TrackList or self.player.mode == Mode.Random:
                     self.player.next()
             if self.player.state == State.Playing and self.player.track.from_url:
                 media = self.player._vlc_player.get_media()

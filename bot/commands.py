@@ -15,7 +15,7 @@ class ProcessCommand(object):
         self.streamer = Streamer(self.services)
         self.admins = admins
         self.banned_users = banned_users
-        self.commands_dict = {'p': self.play_pause, 's': self.stop, 'm': self.mode,     'sb': self.seek_back, 'sf': self.seek_forward, 'r': self.rate, 'v': self.volume, 'u': self.play_by_url, 'h': self.help, 'n': self.next, 'b': self.back, 'c': self.change_service}
+        self.commands_dict = {'p': self.play_pause, 's': self.stop, 'm': self.mode,     'sb': self.seek_back, 'sf': self.seek_forward, 'r': self.rate, 'v': self.volume, 'u': self.play_by_url, 'h': self.help, 'n': self.next, 'b': self.back, 'sv': self.change_service, "dl": lambda arg: self.player.track.url, "c": self.select_track}
         self.admin_commands_dict = {'girl': lambda arg: 'Настенька', "cn": self.change_nickname}
 
 
@@ -126,7 +126,7 @@ class ProcessCommand(object):
             return _('Это первый трек')
 
     def mode(self, arg):
-        mode_help = 'current_ mode: {current_mode}\n{modes}'.format(current_mode=self.player.mode.name, modes='\n'.join(['{name} - {value}'.format(name=i.name, value=i.value) for i in [Mode.Single, Mode.TrackList]]))
+        mode_help = 'current_ mode: {current_mode}\n{modes}'.format(current_mode=self.player.mode.name, modes='\n'.join(['{name} - {value}'.format(name=i.name, value=i.value) for i in [Mode.Single, Mode.TrackList, Mode.Random]]))
         if arg:
             try:
                 mode = Mode(int(arg))
@@ -147,6 +147,21 @@ class ProcessCommand(object):
                 return service_help
         else:
             return service_help
+
+    def select_track(self, arg):
+        if arg:
+            try:
+                self.player.play_by_index(int(arg) - 1)
+                return _('now playing {} {}').format(arg, self.player.track.name)
+            except IndexError:
+                return _('Out of list')
+            except ValueError:
+                return _('Enter number')
+        else:
+            if self.player.track_index or self.player.track_index >= 0:
+                return _('now playing {} {}').format(self.player.track_index + 1, self.player.track.name)
+            else:
+                return _('now nothing is not playing')
 
     def change_nickname(self, arg):
         try:
