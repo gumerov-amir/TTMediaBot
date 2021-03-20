@@ -14,7 +14,8 @@ class Bot(object):
         with open(config_file, 'r', encoding='utf-8') as f:
             self.config.readfp(f)
         if self.config.getboolean('general', 'log'):
-            sys.stdout = Logger(self.config['general']['log_file_name'])
+            sys.stdout = Logger(sys.stdout, self.config['general']['log_file_name'])
+            sys.stderr = Logger(sys.stderr, self.config['general']['log_file_name'])
         self.translation = gettext.translation('TTMediaBot', 'locale', languages=[self.config['general']['language']])
         self.translation.install()
         self.ttclient = tt.TeamTalk(self.config['teamtalk'])
@@ -37,5 +38,6 @@ class Bot(object):
             if result:
                 if msg.textmessage.nMsgType == 1:
                     reply_text = self.process_command(msg.textmessage.szMessage, self.ttclient.getUser(msg.textmessage.nFromUserID))
+                    print("{text} from ({username}) replied: {reply_text}".format(text=msg.textmessage.szMessage, username=msg.textmessage.szFromUsername, reply_text=reply_text))
                     if reply_text:
                         self.ttclient.send_message(reply_text, msg.textmessage.nFromUserID)

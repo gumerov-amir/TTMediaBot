@@ -70,13 +70,12 @@ class Player:
         else:
             try:
                 self.track = self.track_list[self.track_index + 1]
+                self.track_index += 1
             except IndexError:
-                self.state = State.Stopped
-                raise IndexError('')
-            self.track_index += 1
+                raise errors.NoNextTrackError()
         self._play_with_vlc(self.track.url)
 
-    def back(self):
+    def previous(self):
         if self.mode == Mode.Random:
             self.track = random.choice(self.track_list)
             self.track_index = self.track_list.index(self.track)
@@ -84,12 +83,11 @@ class Player:
             try:
                 track_index = self.track_index - 1
                 if track_index < 0:
-                    raise IndexError('')
+                    raise errors.NoPreviousTrackError()
                 self.track = self.track_list[track_index]
+                self.track_index -= 1
             except IndexError:
-                self.state = State.Stopped
-                raise IndexError('')
-            self.track_index -= 1
+                raise errors.NoPreviousTrackError()
         self._play_with_vlc(self.track.url)
 
     def play_by_index(self, index):
@@ -98,7 +96,7 @@ class Player:
             self.track = self.track_list[self.track_index]
             self._play_with_vlc(self.track.url)
         else:
-            raise IndexError('')
+            raise errors.IncorrectTrackIndexError()
 
     def set_volume(self, volume):
         volume = volume if volume <= self.max_volume else self.max_volume

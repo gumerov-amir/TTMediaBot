@@ -2,7 +2,7 @@ import requests
 import vk_api
 from vk_api import audio
 from bot.track import Track
-
+from bot import errors
 
 class Service:
     def __init__(self, config):
@@ -19,4 +19,4 @@ class Service:
         if results['count'] > 0:
             return [Track(url=i['url'], name='{title} - {artist}'.format(title=i['title'], artist=i['artist'])) for i in results['items']]
         else:
-            return
+            raise errors.NotFoundError
