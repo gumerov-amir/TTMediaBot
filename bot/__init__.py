@@ -3,7 +3,6 @@ from . import commands, event_handler, player, services, tt
 import configparser
 import gettext
 import sys
-from TeamTalkPy import ClientEvent
 from utils import Logger
 
 
@@ -34,11 +33,9 @@ class Bot(object):
     def run(self):
         self.event_handler.start()
         while True:
-            result, msg = self.ttclient.waitForEvent(ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG)
+            result, request_text, user = self.ttclient.get_private_message()
             if result:
-                if msg.textmessage.nMsgType == 1:
-                    user = self.ttclient.get_user(msg.textmessage.nFromUserID)
-                    reply_text = self.process_command(msg.textmessage.szMessage, user)
-                    print("{text} from ({username}) replied: {reply_text}".format(text=msg.textmessage.szMessage, username=user.username, reply_text=reply_text))
-                    if reply_text:
-                        self.ttclient.send_message(reply_text, user)
+                reply_text = self.process_command(request_text, user)
+                print("{text} from ({username}) replied: {reply_text}".format(text=request_text, username=user.username, reply_text=reply_text))
+                if reply_text:
+                    self.ttclient.send_message(reply_text, user)

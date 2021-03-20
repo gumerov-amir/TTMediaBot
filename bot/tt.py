@@ -61,6 +61,19 @@ class TeamTalk(TeamTalkPy.TeamTalk):
                 return result, msg
         return False, TTMessage()
 
+    def get_private_message(self):
+        result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG)
+        if result:
+            if msg.textmessage.nMsgType == 1:
+                return True, _str(msg.textmessage.szMessage), self.get_user(msg.textmessage.nFromUserID)
+            else:
+                return False, None, None
+        else:
+            return False, None, None
+
+
+
+
     def send_message(self, text, user=None, type=1):
         if len(text) > 512:
             print(len(text))
