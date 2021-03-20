@@ -3,11 +3,17 @@ from TeamTalkPy import TTMessage, ClientEvent
 import time
 import sys
 
-def _str(text):
-    if sys.platform != 'win32':
-        return bytes(text, 'utf-8')
-    else:
-        return text
+def _str(data):
+    if isinstance(data, str):
+        if sys.platform != 'win32':
+            return bytes(data, 'utf-8')
+        else:
+            return data
+    elif isinstance(data, bytes):
+        return str(data, 'utf-8')
+
+
+
 
 
 class TeamTalk(TeamTalkPy.TeamTalk):
@@ -55,7 +61,7 @@ class TeamTalk(TeamTalkPy.TeamTalk):
                 return result, msg
         return False, TTMessage()
 
-    def send_message(self, text, id=None, type=1):
+    def send_message(self, text, user=None, type=1):
         if len(text) > 512:
             print(len(text))
             return
@@ -64,19 +70,32 @@ class TeamTalk(TeamTalkPy.TeamTalk):
         message.nMsgType = type
         message.szMessage = text
         if type == 1:
-            message.nToUserID = id
+            message.nToUserID = user.id
         elif type == 2:
             message.nChannelID = self.getMyChannelID()
         self.doTextMessage(message)
 
     def change_nickname(self, nickname):
-        self.doChangeNickname(nickname)
+        self.doChangeNickname(_str(nickname))
+
+    def change_status_text(self, text):
+        self.doChangeStatus(0, _str(text))
 
 
 
 
 
+    def get_user(self, id):
+        user = self.getUser(id)
+        return User(user.nUserID, _str(user.szNickname), _str(user.szUsername), user.nChannelID)
 
+
+class User:
+    def __init__(self, id, nickname, username, channel_id):
+        self.id = id
+        self.nickname = nickname
+        self.username = username
+        channel_id = channel_id
 
 
 
