@@ -89,6 +89,10 @@ class TeamTalk(TeamTalkPy.TeamTalk):
         user = self.getUser(id)
         return User(user.nUserID, _str(user.szNickname), _str(user.szUsername), user.nChannelID)
 
+    def get_my_channel_id(self):
+        return self.getMyChannelID()
+
+
 
 class User:
     def __init__(self, id, nickname, username, channel_id):
