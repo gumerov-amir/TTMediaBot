@@ -2,6 +2,7 @@ import os
 from urllib.parse import urlparse
 
 from bot.track import Track
+from bot import errors
 
 class Streamer:
     def __init__(self, services):
@@ -22,7 +23,7 @@ class Streamer:
             if os.path.isfile(local_path):
                 track = Track(url=local_path, name='.'.join(os.path.split(local_path)[-1].split(".")[0:-1]))
                 return [track,]
-            if os.path.isdir(local_path):
+            elif os.path.isdir(local_path):
                 tracks = []
                 for path, dirs, files in os.walk(local_path):
                     for file in files:
@@ -31,5 +32,7 @@ class Streamer:
                         track = Track(url=url, name=name)
                         tracks.append(track)
                 return tracks
+            else:
+                raise errors.PathNotExistError('')
         else:
-            raise ValueError('Invalid protocol')
+            raise errors.IncorrectProtocolError('')

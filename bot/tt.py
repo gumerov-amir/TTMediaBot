@@ -3,16 +3,22 @@ from TeamTalkPy import TTMessage, ClientEvent
 import time
 import sys
 
+def _str(text):
+    if sys.platform != 'win32':
+        return bytes(text, 'utf-8')
+    else:
+        return text
+
 
 class TeamTalk(TeamTalkPy.TeamTalk):
     def __init__(self, config):
-        TeamTalkPy.setLicense(config['license_name'], config['license_key'])
+        TeamTalkPy.setLicense(_str(config['license_name']), _str(config['license_key']))
         TeamTalkPy.TeamTalk.__init__(self)
-        self.connect(config['hostname'], int(config['tcp']), int(config['udp']))
+        self.connect(_str(config['hostname']), int(config['tcp']), int(config['udp']))
         result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CON_SUCCESS)
         if not result:
             sys.exit('Failed to connect')
-        cmdid = self.doLogin(config['nickname'], config['username'], config['password'], config['client_name'])
+        cmdid = self.doLogin(_str(config['nickname']), _str(config['username']), _str(config['password']), _str(config['client_name']))
         result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CMD_MYSELF_LOGGEDIN)
         if not result:
             sys.exit('Failed to log in')
@@ -23,10 +29,10 @@ class TeamTalk(TeamTalkPy.TeamTalk):
         if config['channel'].isdigit():
             channel_id = int(config['channel'])
         else:
-            channel_id = self.getChannelIDFromPath(config['channel'])
+            channel_id = self.getChannelIDFromPath(_str(config['channel']))
             if channel_id == 0:
                 channel_id = 1
-        cmdid = self.doJoinChannelByID(channel_id, config['channel_password'])
+        cmdid = self.doJoinChannelByID(channel_id, _str(config['channel_password']))
         result, msg = self.waitForCmdSuccess(cmdid, 2000)
         if not result:
             sys.exit('Failed to join channel')

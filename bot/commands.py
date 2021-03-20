@@ -5,6 +5,8 @@ import traceback
 
 from .streamer import Streamer
 from .player import Mode, State
+from . import errors
+
 
 class ProcessCommand(object):
     def __init__(self, player, ttclient, services, default_service, admins, banned_users):
@@ -46,12 +48,12 @@ class ProcessCommand(object):
     def play_pause(self, arg):
         if arg:
             self.ttclient.send_message(_('it is finding'), self.user.nUserID)
-            track_list = self.service.search(arg)
-            if track_list:
+            try:
+                track_list = self.service.search(arg)
                 self.player.play(track_list)
                 self.ttclient.send_message(_("{} offered {}").format(self.user.szNickname, track_list[0].name), type=2)
                 return _('Playing {}').format(track_list[0].name)
-            else:
+            except errors.NotFoundError:
                 return _('not found')
         else:
             if self.player.state == State.Playing:
@@ -77,15 +79,12 @@ class ProcessCommand(object):
         if arg:
             try:
                 tracks = self.streamer.get(arg, self.is_admin)
-                if tracks:
-                    self.player.play(tracks)
-                elif tracks == []:
-                    return _('Пустая Папка')
-                else:
-                    return _('Not exist file')
-            except ValueError:
+                self.player.play(tracks)
+            except errors.IncorrectProtocolError:
                 return _('Неверный протокол')
-        elif not arg:
+            except errors.PathNotExistError:
+                return _('path not exist')
+        else:
             return self.help()
 
     def stop(self, arg):
@@ -116,13 +115,13 @@ class ProcessCommand(object):
     def next(self, arg):
         try:
             self.player.next()
-        except IndexError:
+        except errors.NoNextTrackError:
             return _('это последний трек')
 
     def back(self, arg):
         try:
-            self.player.back()
-        except IndexError:
+            self.player.previous()
+        except errors.NoPreviousTrackError:
             return _('Это первый трек')
 
     def mode(self, arg):
@@ -153,7 +152,7 @@ class ProcessCommand(object):
             try:
                 self.player.play_by_index(int(arg) - 1)
                 return _('now playing {} {}').format(arg, self.player.track.name)
-            except IndexError:
+            except errors.IncorrectTrackIndexError:
                 return _('Out of list')
             except ValueError:
                 return _('Enter number')

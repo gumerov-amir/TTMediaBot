@@ -4,6 +4,7 @@ import pafy
 from urllib.parse import urljoin
 
 from bot.track import Track
+from bot import errors
 
 class Service:
     def __init__(self, config):
@@ -32,4 +33,4 @@ class Service:
                     continue
             return tracks
         else:
-            return None
+            raise errors.NotFoundError('')
