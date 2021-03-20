@@ -37,7 +37,8 @@ class Bot(object):
             result, msg = self.ttclient.waitForEvent(ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG)
             if result:
                 if msg.textmessage.nMsgType == 1:
-                    reply_text = self.process_command(msg.textmessage.szMessage, self.ttclient.getUser(msg.textmessage.nFromUserID))
-                    print("{text} from ({username}) replied: {reply_text}".format(text=msg.textmessage.szMessage, username=msg.textmessage.szFromUsername, reply_text=reply_text))
+                    user = self.ttclient.get_user(msg.textmessage.nFromUserID)
+                    reply_text = self.process_command(msg.textmessage.szMessage, user)
+                    print("{text} from ({username}) replied: {reply_text}".format(text=msg.textmessage.szMessage, username=user.username, reply_text=reply_text))
                     if reply_text:
-                        self.ttclient.send_message(reply_text, msg.textmessage.nFromUserID)
+                        self.ttclient.send_message(reply_text, user)

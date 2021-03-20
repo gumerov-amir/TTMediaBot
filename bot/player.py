@@ -20,6 +20,9 @@ class Player:
             self.seek_step = float(config['seek_step'])
             self.output_device = int(self.config['output_device'])
             self.input_device = int(self.config['input_device'])
+        else:
+            self.output_device = 0
+            self.input_device = 0
         self.output_devices = self.get_output_devices()
         self.input_devices = self.get_input_devices()
         self.initialize_devices()
@@ -29,7 +32,8 @@ class Player:
         self.state = State.Stopped
         self.mode = Mode.Single
         self.playing_thread = PlayingThread(self)
-        self.playing_thread.start()
+        if self.config:
+            self.playing_thread.start()
 
     def play(self, tracks=None):
         if tracks:

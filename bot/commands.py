@@ -22,12 +22,12 @@ class ProcessCommand(object):
 
 
     def __call__(self, message, user):
-        if user.szUsername in self.banned_users:
+        if user.username in self.banned_users:
             return _('You are banned')
         self.user = user
-        self.is_admin = user.szUsername in self.admins
+        self.is_admin = user.username in self.admins
         if not self.is_admin:
-            if user.nChannelID != self.ttclient.getMyChannelID():
+            if user.channel_id != self.ttclient.get_my_channel_id():
                 return _('You aren\'t in channel with bot')
         try:    
             command = re.findall('[a-z]+', message.split(' ')[0].lower())[0]
@@ -47,11 +47,11 @@ class ProcessCommand(object):
 
     def play_pause(self, arg):
         if arg:
-            self.ttclient.send_message(_('it is finding'), self.user.nUserID)
+            self.ttclient.send_message(_('it is finding'), self.user)
             try:
                 track_list = self.service.search(arg)
                 self.player.play(track_list)
-                self.ttclient.send_message(_("{} offered {}").format(self.user.szNickname, track_list[0].name), type=2)
+                self.ttclient.send_message(_("{} offered {}").format(self.user.nickname, track_list[0].name), type=2)
                 return _('Playing {}').format(track_list[0].name)
             except errors.NotFoundError:
                 return _('not found')
