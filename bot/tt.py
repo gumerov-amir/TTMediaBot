@@ -81,7 +81,7 @@ class TeamTalk(TeamTalkPy.TeamTalk):
         message = TeamTalkPy.TextMessage()
         message.nFromUserID = self.getMyUserID()
         message.nMsgType = type
-        message.szMessage = text
+        message.szMessage = _str(text)
         if type == 1:
             message.nToUserID = user.id
         elif type == 2:
