@@ -14,13 +14,13 @@ class Player:
         self._vlc_instance = vlc.Instance()
         self._vlc_player = self._vlc_instance.media_player_new()
         if self.config:
-            self._vlc_player.audio_set_volume(int(self.config['default_volume']))
-            self.max_volume = int(self.config['max_volume'])
-            self.faded_volume = {'True': True, 'False': False}[self.config['faded_volume']]
-            self.faded_volume_timestamp = float(self.config['faded_volume_timestamp'])
-            self.seek_step = float(config['seek_step'])
-            self.output_device = int(self.config['output_device'])
-            self.input_device = int(self.config['input_device'])
+            self._vlc_player.audio_set_volume(self.config['default_volume'])
+            self.max_volume = self.config['max_volume']
+            self.faded_volume = self.config['faded_volume']
+            self.faded_volume_timestamp = self.config['faded_volume_timestamp']
+            self.seek_step = config['seek_step']
+            self.output_device = self.config['output_device']
+            self.input_device = self.config['input_device']
         else:
             self.output_device = 0
             self.input_device = 0
@@ -69,39 +69,44 @@ class Player:
         self._vlc_player.play()
 
     def next(self):
+        track_index = self.track_index
         if self.mode == Mode.Random:
-            self.track = random.choice(self.track_list)
-            self.track_index = self.track_list.index(self.track)
+            track_index = random.randint(0, len(self.track_list))
         else:
-            try:
-                self.track = self.track_list[self.track_index + 1]
-                self.track_index += 1
-            except IndexError:
-                raise errors.NoNextTrackError()
-        self._play_with_vlc(self.track.url)
+            track_index += 1
+        try:
+            self.play_by_index(track_index)
+        except errors.IncorrectTrackIndexError:
+            raise errors.NoNextTrackError()
 
     def previous(self):
+        track_index = self.track_index
         if self.mode == Mode.Random:
-            self.track = random.choice(self.track_list)
-            self.track_index = self.track_list.index(self.track)
+            track_index = random.randint(0, len(self.track_list))
         else:
-            try:
-                track_index = self.track_index - 1
-                if track_index < 0:
-                    raise errors.NoPreviousTrackError()
-                self.track = self.track_list[track_index]
-                self.track_index -= 1
-            except IndexError:
+            if track_index - 1 < 0:
                 raise errors.NoPreviousTrackError()
-        self._play_with_vlc(self.track.url)
+            track_index -= 1
+        try:
+            self.play_by_index(track_index)
+        except errors.IncorrectTrackIndexError:
+            raise errors.NoPreviousTrackError()
 
     def play_by_index(self, index):
         if index >= 0 and index < len(self.track_list):
             self.track_index = index
             self.track = self.track_list[self.track_index]
             self._play_with_vlc(self.track.url)
+            if self.state == State.Paused:
+                while self._vlc_player.get_state() != vlc.State.Playing and self._vlc_player.get_state() != vlc.State.Ended:
+                    pass    
+                self.state = State.Playing
         else:
             raise errors.IncorrectTrackIndexError()
+
+    def get_volume(self):
+        return self._vlc_player.audio_get_volume()
+
 
     def set_volume(self, volume):
         volume = volume if volume <= self.max_volume else self.max_volume
@@ -113,8 +118,14 @@ class Player:
         else:
             self._vlc_player.audio_set_volume(volume)
 
+    def get_rate(self):
+        return self._vlc_player.get_rate()
+
+    def set_rate(self, arg):
+        self._vlc_player.set_rate(arg)
+
     def seek_back(self, time_step=None):
-        time_step = float(time_step) / 100 if time_step else self.seek_step / 100
+        time_step = time_step / 100 if time_step else self.seek_step / 100
         pos = self._vlc_player.get_position() - time_step
         if pos < 0:
             pos = 0
@@ -123,13 +134,25 @@ class Player:
         self._vlc_player.set_position(pos)
 
     def seek_forward(self, time_step=None):
-        time_step = float(time_step) / 100 if time_step else self.seek_step / 100
+        time_step = time_step / 100 if time_step else self.seek_step / 100
         pos = self._vlc_player.get_position() + time_step
         if pos < 0:
             pos = 0
         elif pos > 1:
             pos = 1
         self._vlc_player.set_position(pos)
+
+    def get_position(self):
+        if self.state != State.Stopped:
+            return self._vlc_player.get_position() * 100
+        else:
+            raise errors.NothingPlayingError()
+
+    def set_position(self, arg):
+        if arg >= 0 and arg <= 100:
+            self._vlc_player.set_position(arg)
+        else:
+            raise errors.IncorrectPositionError()
 
     def get_output_devices(self):
         devices = {}
@@ -164,6 +187,8 @@ class Mode(Enum):
     TrackList = 1
     Random = 2
 
+
+
 class PlayingThread(Thread):
     def __init__(self, player):
         Thread.__init__(self)
@@ -175,7 +200,10 @@ class PlayingThread(Thread):
                 if self.player.mode == Mode.Single:
                     self.player.state = State.Stopped
                 elif self.player.mode == Mode.TrackList or self.player.mode == Mode.Random:
-                    self.player.next()
+                    try:
+                        self.player.next()
+                    except errors.NoNextTrackError:
+                        self.player.stop()
             if self.player.state == State.Playing and self.player.track.from_url:
                 media = self.player._vlc_player.get_media()
                 media.parse_with_options(vlc.MediaParseFlag.do_interact, 0)
@@ -184,4 +212,4 @@ class PlayingThread(Thread):
                     new_name = "{} - {}".format(media.get_meta(vlc.Meta.Title), media.get_meta(vlc.Meta.Artist))
                 if self.player.track.name != new_name:
                     self.player.track.name = new_name
-            time.sleep(1)
+            time.sleep(0.01)

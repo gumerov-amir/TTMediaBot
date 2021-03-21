@@ -8,6 +8,7 @@ from bot import errors
 
 class Service:
     def __init__(self, config):
+        self.name = 'yt'
         self.hostnames = ['www.youtube.com', 'youtube.com', 'youtu.be', 'www.youtu.be']
 
     def get(self, url):

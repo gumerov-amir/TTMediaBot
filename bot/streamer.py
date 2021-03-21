@@ -5,15 +5,15 @@ from bot.track import Track
 from bot import errors
 
 class Streamer:
-    def __init__(self, services):
+    def __init__(self, service_manager):
         self.allow_schemes = ['http', 'https']
-        self.services = services
+        self.service_manager = service_manager
 
     def get(self, url, is_admin):
         parsed_url = urlparse(url)
         if parsed_url.scheme in self.allow_schemes:
             track = Track(url=url, from_url=True)
-            for service in self.services.values():
+            for service in self.service_manager.available_services.values():
                 if parsed_url.hostname in service.hostnames:
                     track = service.get(url)
                     break

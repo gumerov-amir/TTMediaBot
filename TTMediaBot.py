@@ -5,7 +5,7 @@ import utils
 
 
 @click.command()
-@click.option("-c", help="config file", default="config.ini")
+@click.option("-c", help="config file", default="config.json")
 @click.option("--devices", is_flag=True)
 def cli(c="config.ini", devices=False):
     if devices:

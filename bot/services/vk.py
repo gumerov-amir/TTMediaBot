@@ -6,6 +6,7 @@ from bot import errors
 
 class Service:
     def __init__(self, config):
+        self.name = 'vk'
         http = requests.Session()
         http.headers.update({
         'User-agent': 'KateMobileAndroid/47-427 (Android 6.0.1; SDK 23; armeabi-v7a; samsung SM-G900F; ru)'
