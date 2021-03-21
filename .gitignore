@@ -128,9 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-config.ini
 *.dll
 TeamTalkPy
-*.json
+config.json
 log.txt
 
