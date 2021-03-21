@@ -16,3 +16,10 @@ class PathNotExistError(Exception):
 class IncorrectTrackIndexError(Exception):
     pass
 
+class NothingPlayingError(Exception):
+    pass
+
+class IncorrectPositionError:
+    pass
+
+
