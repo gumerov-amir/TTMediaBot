@@ -168,7 +168,7 @@ class ServiceCommand:
     def __call__(self, arg, user):
         service_help = 'current service: {current_service}\nevailable: {available_services}'.format(current_service=self.service_manager.service.name, available_services=', '.join([i for i in self.service_manager.available_services]))
         if arg:
-            if arg in self.service_manager.available_services:
+            if arg.lower() in self.service_manager.available_services:
                 self.service_manager.service = self.service_manager.available_services[arg]
             else:
                 return service_help
