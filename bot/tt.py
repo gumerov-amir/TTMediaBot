@@ -12,9 +12,12 @@ def _str(data):
     elif isinstance(data, bytes):
         return str(data, 'utf-8')
 
-
-
-
+def split(text):
+    strings = []
+    for i in range(0, int(len(text) / 512) + 1):
+        strings.append(text[0:512])
+        text = text[512::]
+    return strings
 
 class TeamTalk(TeamTalkPy.TeamTalk):
     def __init__(self, config):
@@ -75,24 +78,22 @@ class TeamTalk(TeamTalkPy.TeamTalk):
 
 
     def send_message(self, text, user=None, type=1):
-        if len(text) > 512:
-            print(len(text))
-            return
-        message = TeamTalkPy.TextMessage()
-        message.nFromUserID = self.getMyUserID()
-        message.nMsgType = type
-        message.szMessage = _str(text)
-        if type == 1:
-            message.nToUserID = user.id
-        elif type == 2:
-            message.nChannelID = self.getMyChannelID()
-        self.doTextMessage(message)
+        for string in split(text):
+            message = TeamTalkPy.TextMessage()
+            message.nFromUserID = self.getMyUserID()
+            message.nMsgType = type
+            message.szMessage = _str(string)
+            if type == 1:
+                message.nToUserID = user.id
+            elif type == 2:
+                message.nChannelID = self.getMyChannelID()
+            self.doTextMessage(message)
 
     def change_nickname(self, nickname):
         self.doChangeNickname(_str(nickname))
 
     def change_status_text(self, text):
-        self.doChangeStatus(0, _str(text))
+        self.doChangeStatus(0, _str(split(text)[0]))
 
 
 
