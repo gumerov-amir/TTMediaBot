@@ -12,3 +12,7 @@ class IncorrectProtocolError(Exception):
 
 class PathNotExistError(Exception):
     pass
+
+class IncorrectTrackIndexError(Exception):
+    pass
+

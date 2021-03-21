@@ -4,6 +4,7 @@ from threading import Thread
 import time
 import random
 
+from . import errors
 from .track import Track
 
 class Player:
