@@ -1,4 +1,4 @@
-from bot.player import Mode, State
+from bot.player.enums import Mode, State
 from bot import errors
 
 

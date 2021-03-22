@@ -1,8 +1,9 @@
 from threading import Thread
 import time
-from .player import State
 
-class EventHandler(Thread):
+from bot.player import State
+
+class TTPlayerConnector(Thread):
     def __init__(self, player, ttclient):
         Thread.__init__(self)
         self.player = player
