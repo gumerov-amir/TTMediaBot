@@ -16,7 +16,7 @@ class Service:
         self.hostnames = []
 
     def search(self, text):
-        results = self.api.audio.search(q=text)
+        results = self.api.audio.search(q=text, count=300, sort=0)
         if results['count'] > 0:
             return [Track(url=i['url'], name='{title} - {artist}'.format(title=i['title'], artist=i['artist'])) for i in results['items']]
         else:

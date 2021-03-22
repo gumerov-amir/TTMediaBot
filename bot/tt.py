@@ -1,5 +1,6 @@
 import TeamTalkPy
 from TeamTalkPy import TTMessage, ClientEvent
+import textwrap
 import time
 import sys
 
@@ -13,11 +14,32 @@ def _str(data):
         return str(data, 'utf-8')
 
 def split(text):
-    strings = []
-    for i in range(0, int(len(text) / 512) + 1):
-        strings.append(text[0:512])
-        text = text[512::]
-    return strings
+    lines = ['']
+    if len(text) <= 512:
+        lines[0] = text
+    else:
+        for line in text.split('\n'):
+            if len(line) < 512:
+                if len(lines[-1]) + len(line) <= 512:
+                    lines[-1] += '\n' + line
+                else:
+                    lines.append(line)
+            else:
+                words = ['']
+                for word in line.split(' '):
+                    if len(word) <= 512:
+                        if len(words[-1]) + len(word) <= 512:
+                            words[-1] += ' ' + word
+                        else:
+                            words.append(word)
+                    else:
+                        chunc = word
+                        for i in range(0, int(len(word) / 512) + 1):
+                            words.append(chunc[0:512])
+                            chunc = chunc[512::]
+                lines += words
+    return lines
+
 
 class TeamTalk(TeamTalkPy.TeamTalk):
     def __init__(self, tt_config, user_config):

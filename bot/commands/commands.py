@@ -10,6 +10,16 @@ class Command:
         self.streamer = command_processor.streamer
 
 
+
+
+class AboutCommand(Command):
+    def __init__(self, command_processor):
+        Command.__init__(self, command_processor)
+        self.help = _('Return information about bot')
+
+    def __call__(self, arg, user):
+        return _('It is the best TeamTalk bot of all blind world')
+
 class PlayPauseCommand(Command):
     def __init__(self, command_processor):
         Command.__init__(self, command_processor)
@@ -132,6 +142,8 @@ class NextTrackCommand:
             self.player.next()
         except errors.NoNextTrackError:
             return _('это последний трек')
+        except errors.NothingIsPlayingError:
+            return _('Now nothing is playing')
 
 
 class PreviousTrackCommand:
@@ -143,6 +155,8 @@ class PreviousTrackCommand:
             self.player.previous()
         except errors.NoPreviousTrackError:
             return _('Это первый трек')
+        except errors.NothingIsPlayingError:
+            return _('Nothing is playing')
 
 
 class ModeCommand:
@@ -188,10 +202,12 @@ class SelectTrackCommand:
                 return _('now playing {} {}').format(arg, self.player.track.name)
             except errors.IncorrectTrackIndexError:
                 return _('Out of list')
+            except errors.NothingIsPlayingError:
+                return _('Nothing is playing')
             except ValueError:
                 return _('Enter number')
         else:
-            if self.player.track_index or self.player.track_index >= 0:
+            if self.player.track and self.player.track_index >= 0:
                 return _('now playing {} {}').format(self.player.track_index + 1, self.player.track.name)
             else:
                 return _('now nothing is not playing')
@@ -219,6 +235,6 @@ class PositionCommand:
                 return _('Must be integer')
         else:
             try:
-                return str(self.player.get_position())
-            except errors.NothingPlayingError:
+                return str(round(self.player.get_position(), 2))
+            except errors.NothingIsPlayingError:
                 return _('Now nothing is playing')

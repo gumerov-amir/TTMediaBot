@@ -14,21 +14,22 @@ class CommandProcessor(object):
         self.service_manager = service_manager
         self.streamer = Streamer(self.service_manager)
         self.commands_dict = {
-            'p': PlayPauseCommand(self),
-            's': StopCommand(self),
-            'm': ModeCommand(self),
-            'sb': SeekBackCommand(self),
-            'sf': SeekForwardCommand(self),
-            'r': RateCommand(self),
-            'v': VolumeCommand(self),
-            'u': PlayUrlCommand(self),
-            'n': NextTrackCommand(self),
-            'b': PreviousTrackCommand(self),
-            'sv': ServiceCommand(self),
-            'dl"': lambda arg, user: self.player.track.url,
-            'ps': PositionCommand(self),
-            'c': SelectTrackCommand(self),
             'h': self.help,
+            'a': AboutCommand(self),
+            'p': PlayPauseCommand(self),
+            'u': PlayUrlCommand(self),
+            'sv': ServiceCommand(self),
+            's': StopCommand(self),
+            'n': NextTrackCommand(self),
+            'c': SelectTrackCommand(self),
+            'b': PreviousTrackCommand(self),
+            'sf': SeekForwardCommand(self),
+            'ps': PositionCommand(self),
+            'sb': SeekBackCommand(self),
+            'v': VolumeCommand(self),
+            'r': RateCommand(self),
+            'm': ModeCommand(self),
+            'dl': lambda arg, user: self.player.track.url,
         }
         self.admin_commands_dict = {
             'girl': lambda arg, user: 'Настенька',
@@ -60,11 +61,19 @@ class CommandProcessor(object):
 
     def help(self, arg=None, user=None):
         help_strings = []
-        for i in list(self.commands_dict):
+        for i in list(self.commands_dict)[1::]:
             try:
                 help_strings.append(
                     '{}: {}'.format(i, self.commands_dict[i].help)
                 )
             except AttributeError:
                 help_strings.append('{}: help text not found'.format(i))
+        if user and user.is_admin:
+            for i in list(self.admin_commands_dict)[1::]:
+                try:
+                    help_strings.append(
+                        '{}: {}'.format(i, self.admin_commands_dict[i].help)
+                    )
+                except AttributeError:
+                    help_strings.append('{}: help text not found'.format(i))
         return '\n'.join(help_strings)

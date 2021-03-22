@@ -16,7 +16,7 @@ class PathNotExistError(Exception):
 class IncorrectTrackIndexError(Exception):
     pass
 
-class NothingPlayingError(Exception):
+class NothingIsPlayingError(Exception):
     pass
 
 class IncorrectPositionError:

@@ -2,6 +2,7 @@ import sys
 from . import commands, event_handler, player, services, tt
 import json
 import gettext
+import time
 import sys
 from utils import Logger
 
@@ -27,7 +28,8 @@ class Bot(object):
         while True:
             result, request_text, user = self.ttclient.get_private_message()
             if result:
+                s = time.time()
                 reply_text = self.command_processor(request_text, user)
-                print("{text} from ({username}) replied: {reply_text}".format(text=request_text, username=user.username, reply_text=reply_text))
+                print("{text} from ({username}) replied: {reply_text} tooked {time}".format(text=request_text, username=user.username, reply_text=reply_text, time=time.time() - s))
                 if reply_text:
                     self.ttclient.send_message(reply_text, user)

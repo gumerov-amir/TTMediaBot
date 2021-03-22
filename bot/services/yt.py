@@ -17,7 +17,7 @@ class Service:
         return Track(url=best_audio.url, name="{} - {}".format(video.title, video.author))
 
     def search(self, text):
-        search = youtube_search.YoutubeSearch(text, max_results=100)
+        search = youtube_search.YoutubeSearch(text, max_results=300)
         if search.videos:
             tracks = []
             for video in search.videos:
