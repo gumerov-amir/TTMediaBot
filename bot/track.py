@@ -7,5 +7,11 @@ class Track:
     def get_meta(self):
         return {'name': self.name, 'url': self.url}
 
+    def __bool__(self):
+        if self.url:
+            return True
+        else:
+            return False
+
     def __repr__(self):
         return '{name} ({url})'.format(name=self.name, url=self.url)

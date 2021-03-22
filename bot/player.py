@@ -29,7 +29,7 @@ class Player:
         self.initialize_devices()
         self.track_list = []
         self.track = Track()
-        self.track_index = 0
+        self.track_index = -1
         self.state = State.Stopped
         self.mode = Mode.Single
         self.playing_thread = PlayingThread(self)
@@ -60,8 +60,9 @@ class Player:
     def stop(self):
         self.state = State.Stopped
         self._vlc_player.pause()
-        self.track_index = None
+        self.track_index = -1
         self.track = Track()
+        self.track_list = []
 
 
     def _play_with_vlc(self, arg):
@@ -84,15 +85,15 @@ class Player:
         if self.mode == Mode.Random:
             track_index = random.randint(0, len(self.track_list))
         else:
-            if track_index - 1 < 0:
-                raise errors.NoPreviousTrackError()
             track_index -= 1
         try:
             self.play_by_index(track_index)
         except errors.IncorrectTrackIndexError:
-            raise errors.NoPreviousTrackError()
+            raise errors.NoPreviousTrackError
 
     def play_by_index(self, index):
+        if self.state == State.Stopped:
+            raise errors.NothingIsPlayingError()
         if index >= 0 and index < len(self.track_list):
             self.track_index = index
             self.track = self.track_list[self.track_index]
@@ -146,7 +147,7 @@ class Player:
         if self.state != State.Stopped:
             return self._vlc_player.get_position() * 100
         else:
-            raise errors.NothingPlayingError()
+            raise errors.NothingIsPlayingError()
 
     def set_position(self, arg):
         if arg >= 0 and arg <= 100:
@@ -198,7 +199,7 @@ class PlayingThread(Thread):
         while True:
             if self.player.state == State.Playing and self.player._vlc_player.get_state() == vlc.State.Ended:
                 if self.player.mode == Mode.Single:
-                    self.player.state = State.Stopped
+                    self.player.stop()
                 elif self.player.mode == Mode.TrackList or self.player.mode == Mode.Random:
                     try:
                         self.player.next()
