@@ -1,11 +1,10 @@
-from enum import Enum
-import vlc
-from threading import Thread
-import time
 import random
+import vlc
 
-from . import errors
-from .track import Track
+from bot import errors
+from bot.track import Track
+from bot.player.enums import Mode, State
+from bot.player.thread import PlayerThread
 
 class Player:
     def __init__(self, ttclient, config):
@@ -32,9 +31,9 @@ class Player:
         self.track_index = -1
         self.state = State.Stopped
         self.mode = Mode.Single
-        self.playing_thread = PlayingThread(self)
         if self.config:
-            self.playing_thread.start()
+            self.player_thread = PlayerThread(self)
+            self.player_thread.start()
 
     def play(self, tracks=None):
         if tracks:
@@ -177,40 +176,3 @@ class Player:
     def initialize_devices(self):
         self._vlc_player.audio_output_device_set(None, self.output_devices[list(self.output_devices)[self.output_device]])
         self._ttclient.initSoundInputDevice(self.input_devices[list(self.input_devices)[self.input_device]])
-
-class State(Enum):
-    Stopped = 'Stopped'
-    Playing = 'Playing'
-    Paused = 'Paused'
-
-class Mode(Enum):
-    Single = 0
-    TrackList = 1
-    Random = 2
-
-
-
-class PlayingThread(Thread):
-    def __init__(self, player):
-        Thread.__init__(self)
-        self.player = player
-
-    def run(self):
-        while True:
-            if self.player.state == State.Playing and self.player._vlc_player.get_state() == vlc.State.Ended:
-                if self.player.mode == Mode.Single:
-                    self.player.stop()
-                elif self.player.mode == Mode.TrackList or self.player.mode == Mode.Random:
-                    try:
-                        self.player.next()
-                    except errors.NoNextTrackError:
-                        self.player.stop()
-            if self.player.state == State.Playing and self.player.track.from_url:
-                media = self.player._vlc_player.get_media()
-                media.parse_with_options(vlc.MediaParseFlag.do_interact, 0)
-                new_name = media.get_meta(12)
-                if not new_name:
-                    new_name = "{} - {}".format(media.get_meta(vlc.Meta.Title), media.get_meta(vlc.Meta.Artist))
-                if self.player.track.name != new_name:
-                    self.player.track.name = new_name
-            time.sleep(0.01)

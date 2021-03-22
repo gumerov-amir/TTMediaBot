@@ -1,11 +1,8 @@
-import sys
-from . import commands, event_handler, player, services, tt
-import json
 import gettext
-import time
-import sys
-from utils import Logger
+import json
+import logging
 
+from . import commands, connectors, player, services, TeamTalk
 
 
 class Bot(object):
@@ -13,23 +10,21 @@ class Bot(object):
         with open(config_file, 'r', encoding='utf-8') as f:
             self.config = json.load(f)
         if self.config['general']['log']:
-            sys.stdout = Logger(sys.stdout, self.config['general']['log_file_name'])
-            sys.stderr = Logger(sys.stderr, self.config['general']['log_file_name'])
+            logging.basicConfig(format='%(levelname)s [%(asctime)s]: %(message)s in %(threadName)s file: %(filename)s line %(lineno)d function %(funcName)s', level=logging.DEBUG, filename=self.config['general']['log_file_name'])
         self.translation = gettext.translation('TTMediaBot', 'locale', languages=[self.config['general']['language']])
         self.translation.install()
-        self.ttclient = tt.TeamTalk(self.config['teamtalk'], self.config['users'])
+        self.ttclient = TeamTalk.TeamTalk(self.config['teamtalk'], self.config['users'])
         self.player = player.Player(self.ttclient, self.config['player'])
         self.service_manager = services.ServiceManager(self.config['services'])
         self.command_processor = commands.CommandProcessor(self.player, self.ttclient, self.service_manager)
-        self.event_handler = event_handler.EventHandler(self.player, self.ttclient)
+        self.tt_player_connector = connectors.TTPlayerConnector(self.player, self.ttclient)
 
     def run(self):
-        self.event_handler.start()
+        self.tt_player_connector.start()
         while True:
             result, request_text, user = self.ttclient.get_private_message()
             if result:
-                s = time.time()
                 reply_text = self.command_processor(request_text, user)
-                print("{text} from ({username}) replied: {reply_text} tooked {time}".format(text=request_text, username=user.username, reply_text=reply_text, time=time.time() - s))
+                logging.info("{text} from ({username}) replied: {reply_text}".format(text=request_text, username=user.username, reply_text=reply_text))
                 if reply_text:
                     self.ttclient.send_message(reply_text, user)

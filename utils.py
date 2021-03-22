@@ -4,17 +4,6 @@ from bot.player import Player
 from TeamTalkPy import TeamTalk
 
 
-class Logger:
-    def __init__(self, origenal, config_file_name):
-        self.origenal = origenal
-        self.config_file_name = config_file_name
-
-    def write(self, text):
-        self.origenal.write(text)
-        if text != '\n':
-            text += '\n'
-            with open(self.config_file_name, "a", encoding='utf-8') as f:
-                f.write("{time}: {text}".format(time=datetime.datetime.now(), text=text))
 
 def echo_dict(d, indent_level=0):
     for n, k in enumerate(list(d)):

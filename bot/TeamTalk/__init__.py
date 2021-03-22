@@ -1,8 +1,9 @@
 import TeamTalkPy
 from TeamTalkPy import TTMessage, ClientEvent
-import textwrap
 import time
 import sys
+
+from bot import vars
 
 def _str(data):
     if isinstance(data, str):
@@ -13,30 +14,30 @@ def _str(data):
     elif isinstance(data, bytes):
         return str(data, 'utf-8')
 
-def split(text):
+def split(text, max_length=vars.max_message_length):
     lines = ['']
-    if len(text) <= 512:
+    if len(text) <= max_length:
         lines[0] = text
     else:
         for line in text.split('\n'):
-            if len(line) < 512:
-                if len(lines[-1]) + len(line) <= 512:
+            if len(line) < max_length:
+                if len(lines[-1]) + len(line) <= max_length:
                     lines[-1] += '\n' + line
                 else:
                     lines.append(line)
             else:
                 words = ['']
                 for word in line.split(' '):
-                    if len(word) <= 512:
-                        if len(words[-1]) + len(word) <= 512:
+                    if len(word) <= max_length:
+                        if len(words[-1]) + len(word) <= max_length:
                             words[-1] += ' ' + word
                         else:
                             words.append(word)
                     else:
                         chunc = word
-                        for i in range(0, int(len(word) / 512) + 1):
-                            words.append(chunc[0:512])
-                            chunc = chunc[512::]
+                        for i in range(0, int(len(word) / max_length) + 1):
+                            words.append(chunc[0:max_length])
+                            chunc = chunc[max_length::]
                 lines += words
     return lines
 
