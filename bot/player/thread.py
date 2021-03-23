@@ -1,7 +1,9 @@
 from threading import Thread
 import time
 
-from bot.player.enums import State
+import vlc
+
+from bot.player.enums import Mode, State
 
 class PlayerThread(Thread):
     def __init__(self, player):
