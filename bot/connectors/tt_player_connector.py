@@ -2,6 +2,7 @@ from threading import Thread
 import time
 
 from bot.player import State
+from bot import vars
 
 class TTPlayerConnector(Thread):
     def __init__(self, player, ttclient):
@@ -28,4 +29,4 @@ class TTPlayerConnector(Thread):
             if self.player.track.get_meta() != last_track_meta and last_player_state != State.Stopped:
                 last_track_meta = self.player.track.get_meta()
                 self.ttclient.change_status_text('{state}: {name}'.format(state=self.player.state.value, name=self.player.track.name))
-            time.sleep(0.01)
+            time.sleep(vars.loop_timeout)

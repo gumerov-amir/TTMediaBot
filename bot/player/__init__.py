@@ -3,7 +3,7 @@ import random
 import vlc
 
 from bot import errors
-from bot.track import Track
+from bot.player.track import Track
 from bot.player.enums import Mode, State
 from bot.player.thread import PlayerThread
 

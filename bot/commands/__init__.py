@@ -3,16 +3,15 @@ import time
 import traceback
 
 
-from bot.streamer import Streamer
 from .commands import *
 
 
 class CommandProcessor(object):
-    def __init__(self, player, ttclient, service_manager):
+    def __init__(self, player, ttclient, module_manager, service_manager):
         self.player = player
         self.ttclient = ttclient
         self.service_manager = service_manager
-        self.streamer = Streamer(self.service_manager)
+        self.module_manager = module_manager
         self.commands_dict = {
             'h': self.help,
             'a': AboutCommand(self),
@@ -37,22 +36,22 @@ class CommandProcessor(object):
         }
 
 
-    def __call__(self, message, user):
-        if user.is_banned:
+    def __call__(self, message):
+        if message.user.is_banned:
             return _('You are banned')
-        if not user.is_admin:
-            if user.channel_id != self.ttclient.get_my_channel_id():
+        if not message.user.is_admin:
+            if message.user.channel_id != self.ttclient.get_my_channel_id():
                 return _('You aren\'t in channel with bot')
         try:    
-            command = re.findall('[a-z]+', message.split(' ')[0].lower())[0]
+            command = re.findall('[a-z]+', message.text.split(' ')[0].lower())[0]
         except IndexError:
             return self.help()
-        arg = ' '.join(message.split(' ')[1::])
+        arg = ' '.join(message.text.split(' ')[1::])
         try:
             if command in self.commands_dict:
-                return self.commands_dict[command](arg, user)
-            elif user.is_admin and command in self.admin_commands_dict:
-                return self.admin_commands_dict[command](arg, user)
+                return self.commands_dict[command](arg, message.user)
+            elif message.user.is_admin and command in self.admin_commands_dict:
+                return self.admin_commands_dict[command](arg, message.user)
             else:
                 return _('Unknown command.\n') + self.help()
         except Exception as e:

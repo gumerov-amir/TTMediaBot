@@ -2,7 +2,7 @@ import gettext
 import json
 import logging
 
-from . import commands, connectors, player, services, TeamTalk
+from bot import commands, connectors, modules, player, services, TeamTalk
 
 
 class Bot(object):
@@ -16,21 +16,25 @@ class Bot(object):
         self.ttclient = TeamTalk.TeamTalk(self.config['teamtalk'], self.config['users'])
         self.player = player.Player(self.ttclient, self.config['player'])
         self.service_manager = services.ServiceManager(self.config['services'])
-        self.command_processor = commands.CommandProcessor(self.player, self.ttclient, self.service_manager)
+        self.module_manager = modules.ModuleManager(self.player, self.ttclient, self.service_manager)
+        self.command_processor = commands.CommandProcessor(self.player, self.ttclient, self.module_manager, self.service_manager)
         self.tt_player_connector = connectors.TTPlayerConnector(self.player, self.ttclient)
 
 
     def initialize(self):
+        logging.debug('Initializing')
         self.ttclient.initialize()
+        self.service_manager.initialize()
+        logging.debug('Initialized')
 
     def run(self):
-        logging.info('Started')
+        logging.debug('Starting')
         self.ttclient.run()
         self.tt_player_connector.start()
+        logging.debug('Started')
         while True:
-            result, request_text, user = self.ttclient.get_private_message()
-            if result:
-                reply_text = self.command_processor(request_text, user)
-                logging.info("{text} from ({username}) replied: {reply_text}".format(text=request_text, username=user.username, reply_text=reply_text))
-                if reply_text:
-                    self.ttclient.send_message(reply_text, user)
+            message = self.ttclient.message_queue.get()
+            reply_text = self.command_processor(message)
+            logging.info("{text} from ({username}) replied: {reply_text}".format(text=message.text, username=message.user.username, reply_text=reply_text))
+            if reply_text:
+                self.ttclient.send_message(reply_text, message.user)

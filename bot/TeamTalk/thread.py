@@ -2,7 +2,7 @@ import logging
 from threading import Thread
 import time
 
-from TeamTalkPy import ClientEvent
+import TeamTalkPy
 
 from bot import vars
 
@@ -13,16 +13,17 @@ class TeamTalkThread(Thread):
         self.ttclient = ttclient
 
     def run(self):
-        print('text')
+        empty_msg = TeamTalkPy.TTMessage()
         while True:
-            result, msg = self.ttclient.waitForEvent(ClientEvent.CLIENTEVENT_CMD_MYSELF_KICKED)
-            print(result, msg)
-            if result:
+            msg = self.ttclient.getMessage()
+            if msg == empty_msg:
+                continue
+            elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG and msg.textmessage.nMsgType == 1:
+                self.ttclient.message_queue.put(self.ttclient.get_message(msg.textmessage))
+            elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_MYSELF_KICKED:
                 logging.warning('Kicked')
+                self.ttclient.disconnect()
                 self.ttclient.initialize()
-            result, msg = self.ttclient.waitForEvent(ClientEvent.CLIENTEVENT_CON_LOST)
-            print(result, msg)
-            if result:
+            if msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CON_LOST:
                 logging.warning('Server lost')
                 self.ttclient.initialize()
-            time.sleep(vars.loop_timeout)

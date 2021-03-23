@@ -1,8 +1,12 @@
 {
     "general": {
-        "language": "ru",
-        "log": false,
-        "log_file_name": "log.txt"
+        "language": "ru"
+    },
+    "logger": {
+        "log": true,
+        "file_name": "TTMediaBot.log",
+        "level_name": "INFO",
+        "format": "%(levelname)s [%(asctime)s]: %(message)s in %(threadName)s file: %(filename)s line %(lineno)d function %(funcName)s"
     },
     "users": {
         "admins": ["admin"],
