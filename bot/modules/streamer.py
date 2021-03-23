@@ -1,12 +1,12 @@
 import os
 from urllib.parse import urlparse
 
-from bot.track import Track
+from bot.player.track import Track
 from bot import errors
 
 class Streamer:
     def __init__(self, service_manager):
-        self.allowed_schemes = ['http', 'https']
+        self.allowed_schemes = ['http', 'https', 'rtmp', 'rtsp']
         self.service_manager = service_manager
 
     def get(self, url, is_admin):

@@ -3,13 +3,16 @@ import pafy
 
 from urllib.parse import urljoin
 
-from bot.track import Track
+from bot.player.track import Track
 from bot import errors
 
 class Service:
     def __init__(self, config):
         self.name = 'yt'
         self.hostnames = ['www.youtube.com', 'youtube.com', 'youtu.be', 'www.youtu.be']
+
+    def initialize(self):
+        pass
 
     def get(self, url):
         video = pafy.new(url)

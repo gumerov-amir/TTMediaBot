@@ -1,7 +1,9 @@
+import logging
 import TeamTalkPy
 from TeamTalkPy import TTMessage, ClientEvent
 import time
 import sys
+import queue
 
 from bot import vars
 from bot.TeamTalk.thread import TeamTalkThread
@@ -52,8 +54,10 @@ class TeamTalk(TeamTalkPy.TeamTalk):
         self.admins = self.user_config['admins']
         self.banned_users = self.user_config['banned_users']
         self.teamtalk_thread = TeamTalkThread(self)
+        self.message_queue = queue.SimpleQueue()
 
     def initialize(self):
+        logging.debug('Initializing TeamTalk')
         self.connect(_str(self.config['hostname']), self.config['tcp'], self.config['udp'], self.config['encrypted'])
         result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CON_SUCCESS)
         if not result:
@@ -76,9 +80,12 @@ class TeamTalk(TeamTalkPy.TeamTalk):
         result, msg = self.waitForCmdSuccess(cmdid, 2000)
         if not result:
             sys.exit('Failed to join channel')
+        logging.debug('TeamTalk initialized')
 
     def run(self):
+        logging.debug('Starting TeamTalk')
         self.teamtalk_thread.start()
+        logging.debug('TeamTalk started')
 
     def waitForEvent(self, event, timeout=2000):
         msg = self.getMessage(timeout)
@@ -97,18 +104,6 @@ class TeamTalk(TeamTalkPy.TeamTalk):
             if result and msg.nSource == cmdid:
                 return result, msg
         return False, TTMessage()
-
-    def get_private_message(self):
-        result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG)
-        if result:
-            if msg.textmessage.nMsgType == 1:
-                return True, _str(msg.textmessage.szMessage), self.get_user(msg.textmessage.nFromUserID)
-            else:
-                return False, None, None
-        else:
-            return False, None, None
-
-
 
 
     def send_message(self, text, user=None, type=1):
@@ -129,20 +124,23 @@ class TeamTalk(TeamTalkPy.TeamTalk):
     def change_status_text(self, text):
         self.doChangeStatus(0, _str(split(text)[0][0:256]))
 
-
-
-
-
     def get_user(self, id):
         user = self.getUser(id)
         return User(user.nUserID, _str(user.szNickname), _str(user.szUsername), user.nChannelID, _str(user.szUsername) in self.admins, _str(user.szUsername) in self.banned_users)
+
+    def get_message(self, msg):
+        return Message(_str(msg.szMessage), self.get_user(msg.nFromUserID))
 
     def get_my_channel_id(self):
         return self.getMyChannelID()
 
 
+class Message:
+    def __init__(self, text, user):
+        self.text = text
+        self.user = user
 
-class User:
+class User: 
     def __init__(self, id, nickname, username, channel_id, is_admin, is_banned):
         self.id = id
         self.nickname = nickname
@@ -150,6 +148,4 @@ class User:
         self.channel_id = channel_id
         self.is_admin = is_admin
         self.is_banned = is_banned
-
-
 

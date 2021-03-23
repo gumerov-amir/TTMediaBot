@@ -7,7 +7,7 @@ class Command:
         self.player = command_processor.player
         self.ttclient = command_processor.ttclient
         self.service_manager = command_processor.service_manager
-        self.streamer = command_processor.streamer
+        self.module_manager = command_processor.module_manager
 
 
 
@@ -69,7 +69,7 @@ class PlayUrlCommand:
     def __call__(self, arg, user):
         if arg:
             try:
-                tracks = self.streamer.get(arg, user.is_admin)
+                tracks = self.module_manager.streamer.get(arg, user.is_admin)
                 self.player.play(tracks)
             except errors.IncorrectProtocolError:
                 return _('Неверный протокол')

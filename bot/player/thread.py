@@ -4,6 +4,7 @@ import time
 import vlc
 
 from bot.player.enums import Mode, State
+from bot import vars
 
 class PlayerThread(Thread):
     def __init__(self, player):
@@ -28,4 +29,4 @@ class PlayerThread(Thread):
                     new_name = "{} - {}".format(media.get_meta(vlc.Meta.Title), media.get_meta(vlc.Meta.Artist))
                 if self.player.track.name != new_name:
                     self.player.track.name = new_name
-            time.sleep(0.01)
+            time.sleep(vars.loop_timeout)
