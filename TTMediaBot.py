@@ -12,6 +12,7 @@ def cli(c="config.ini", devices=False):
         utils.echo_devices()
     else:
         bot = Bot(c)
+        bot.initialize()
         bot.run()
 
 

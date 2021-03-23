@@ -1,3 +1,4 @@
+import time
 import random
 import vlc
 
@@ -59,9 +60,9 @@ class Player:
     def stop(self):
         self.state = State.Stopped
         self._vlc_player.pause()
-        self.track_index = -1
-        self.track = Track()
         self.track_list = []
+        self.track = Track()
+        self.track_index = -1
 
 
     def _play_with_vlc(self, arg):

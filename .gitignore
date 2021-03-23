@@ -129,7 +129,8 @@ dmypy.json
 .pyre/
 
 *.dll
-TeamTalkPy
+TeamTalkPy/
 config.json
-log.txt
+*.log
+.*env/
 
