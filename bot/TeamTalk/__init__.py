@@ -5,8 +5,10 @@ import time
 import sys
 import queue
 
-from bot import vars
 from bot.TeamTalk.thread import TeamTalkThread
+from bot.sound_devices import SoundDevice, SoundDeviceType
+from bot import vars
+
 
 def _str(data):
     if isinstance(data, str):
@@ -16,6 +18,7 @@ def _str(data):
             return data
     elif isinstance(data, bytes):
         return str(data, 'utf-8')
+
 
 def split(text, max_length=vars.max_message_length):
     if len(text) <= max_length:
@@ -105,7 +108,6 @@ class TeamTalk(TeamTalkPy.TeamTalk):
                 return result, msg
         return False, TTMessage()
 
-
     def send_message(self, text, user=None, type=1):
         for string in split(text):
             message = TeamTalkPy.TextMessage()
@@ -134,13 +136,24 @@ class TeamTalk(TeamTalkPy.TeamTalk):
     def get_my_channel_id(self):
         return self.getMyChannelID()
 
+    def get_input_devices(self):
+        devices = []
+        device_list = [i for i in self.getSoundDevices()]
+        for device in device_list:
+            devices.append(SoundDevice(_str(device.szDeviceName), device.nDeviceID, SoundDeviceType.Input))
+        return devices
+
+    def set_input_device(self, id):
+        self.initSoundInputDevice(id)
+
 
 class Message:
     def __init__(self, text, user):
         self.text = text
         self.user = user
 
-class User: 
+
+class User:
     def __init__(self, id, nickname, username, channel_id, is_admin, is_banned):
         self.id = id
         self.nickname = nickname
@@ -148,4 +161,3 @@ class User:
         self.channel_id = channel_id
         self.is_admin = is_admin
         self.is_banned = is_banned
-

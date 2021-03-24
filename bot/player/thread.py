@@ -4,7 +4,8 @@ import time
 import vlc
 
 from bot.player.enums import Mode, State
-from bot import vars
+from bot import errors, vars
+
 
 class PlayerThread(Thread):
     def __init__(self, player):

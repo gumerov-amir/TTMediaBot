@@ -1,40 +1,37 @@
+import logging
 import time
 import random
+
 import vlc
 
 from bot import errors
-from bot.player.track import Track
 from bot.player.enums import Mode, State
+from bot.player.track import Track
 from bot.player.thread import PlayerThread
+from bot.sound_devices import SoundDevice, SoundDeviceType
+
 
 class Player:
-    def __init__(self, ttclient, config):
-        self._ttclient = ttclient
+    def __init__(self, config):
         self.config = config
         self._vlc_instance = vlc.Instance()
         self._vlc_player = self._vlc_instance.media_player_new()
-        if self.config:
-            self._vlc_player.audio_set_volume(self.config['default_volume'])
-            self.max_volume = self.config['max_volume']
-            self.faded_volume = self.config['faded_volume']
-            self.faded_volume_timestamp = self.config['faded_volume_timestamp']
-            self.seek_step = config['seek_step']
-            self.output_device = self.config['output_device']
-            self.input_device = self.config['input_device']
-        else:
-            self.output_device = 0
-            self.input_device = 0
-        self.output_devices = self.get_output_devices()
-        self.input_devices = self.get_input_devices()
-        self.initialize_devices()
+        self._vlc_player.audio_set_volume(self.config['default_volume'])
+        self.max_volume = self.config['max_volume']
+        self.faded_volume = self.config['faded_volume']
+        self.faded_volume_timestamp = self.config['faded_volume_timestamp']
+        self.seek_step = config['seek_step']
         self.track_list = []
         self.track = Track()
         self.track_index = -1
         self.state = State.Stopped
         self.mode = Mode.Single
-        if self.config:
-            self.player_thread = PlayerThread(self)
-            self.player_thread.start()
+        self.thread = PlayerThread(self)
+
+    def run(self):
+        logging.debug('Starting player thread')
+        self.thread.start()
+        logging.debug('Player thread started')
 
     def play(self, tracks=None):
         if tracks:
@@ -49,9 +46,8 @@ class Player:
         else:
             self._vlc_player.play()
         while self._vlc_player.get_state() != vlc.State.Playing and self._vlc_player.get_state() != vlc.State.Ended:
-            pass    
+            pass
         self.state = State.Playing
-
 
     def pause(self):
         self.state = State.Paused
@@ -63,7 +59,6 @@ class Player:
         self.track_list = []
         self.track = Track()
         self.track_index = -1
-
 
     def _play_with_vlc(self, arg):
         self._vlc_player.set_media(self._vlc_instance.media_new(arg))
@@ -100,14 +95,13 @@ class Player:
             self._play_with_vlc(self.track.url)
             if self.state == State.Paused:
                 while self._vlc_player.get_state() != vlc.State.Playing and self._vlc_player.get_state() != vlc.State.Ended:
-                    pass    
+                    pass
                 self.state = State.Playing
         else:
             raise errors.IncorrectTrackIndexError()
 
     def get_volume(self):
         return self._vlc_player.audio_get_volume()
-
 
     def set_volume(self, volume):
         volume = volume if volume <= self.max_volume else self.max_volume
@@ -156,24 +150,16 @@ class Player:
             raise errors.IncorrectPositionError()
 
     def get_output_devices(self):
-        devices = {}
+        devices = []
         mods = self._vlc_player.audio_output_device_enum()
         if mods:
             mod = mods
             while mod:
                 mod = mod.contents
-                devices[str(mod.description, 'utf-8')] = mod.device
+                devices.append(SoundDevice(str(mod.description, 'UTF-8'), mod.device, SoundDeviceType.Output))
                 mod = mod.next
         vlc.libvlc_audio_output_device_list_release(mods)
         return devices
 
-    def get_input_devices(self):
-        devices = {}
-        device_list = [i for i in self._ttclient.getSoundDevices()]
-        for device in device_list:
-            devices[device.szDeviceName] = device.nDeviceID
-        return devices
-
-    def initialize_devices(self):
-        self._vlc_player.audio_output_device_set(None, self.output_devices[list(self.output_devices)[self.output_device]])
-        self._ttclient.initSoundInputDevice(self.input_devices[list(self.input_devices)[self.input_device]])
+    def set_output_device(self, id):
+        self._vlc_player.audio_output_device_set(None, id)

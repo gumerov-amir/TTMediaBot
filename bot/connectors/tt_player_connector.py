@@ -4,6 +4,7 @@ import time
 from bot.player import State
 from bot import vars
 
+
 class TTPlayerConnector(Thread):
     def __init__(self, player, ttclient):
         Thread.__init__(self)

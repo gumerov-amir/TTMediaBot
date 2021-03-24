@@ -2,6 +2,7 @@ import logging
 
 from bot.services import vk, yt
 
+
 class ServiceManager:
     def __init__(self, config):
         self.available_services = {}

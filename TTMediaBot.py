@@ -1,20 +1,28 @@
 import click
 
 from bot import Bot
-import utils
 
 
 @click.command()
 @click.option("-c", help="config file", default="config.json")
 @click.option("--devices", is_flag=True)
 def cli(c="config.ini", devices=False):
+    bot = Bot(c)
     if devices:
-        utils.echo_devices()
+        echo_sound_devices(bot.sound_device_manager)
     else:
-        bot = Bot(c)
         bot.initialize()
         bot.run()
 
+
+def echo_sound_devices(sound_device_manager):
+    click.echo('Output devices:')
+    for i, device in enumerate(sound_device_manager.output_devices):
+        click.echo('\t{index}: {name}'.format(index=i, name=device.name))
+    click.echo()
+    click.echo('Input devices:')
+    for i, device in enumerate(sound_device_manager.input_devices):
+        click.echo('\t{index}: {name}'.format(index=i, name=device.name))
 
 
 if __name__ == "__main__":

@@ -10,8 +10,6 @@ class Command:
         self.module_manager = command_processor.module_manager
 
 
-
-
 class AboutCommand(Command):
     def __init__(self, command_processor):
         Command.__init__(self, command_processor)
@@ -20,11 +18,11 @@ class AboutCommand(Command):
     def __call__(self, arg, user):
         return _('It is the best TeamTalk bot of all blind world')
 
+
 class PlayPauseCommand(Command):
     def __init__(self, command_processor):
         Command.__init__(self, command_processor)
         self.help = _('Play first track from search by argument, if argument is not gived play or pause current track, if it is not stopped')
-
 
     def __call__(self, arg, user):
         if arg:
@@ -32,7 +30,7 @@ class PlayPauseCommand(Command):
             try:
                 track_list = self.service_manager.service.search(arg)
                 self.player.play(track_list)
-                self.ttclient.send_message(_("{} offered {}").format(user.nickname, track_list[0].name), type=2)
+                self.ttclient.send_message(_("{nickname} offered {track}").format(nickname=user.nickname, track=track_list[0].name), type=2)
                 return _('Playing {}').format(track_list[0].name)
             except errors.NotFoundError:
                 return _('not found')
