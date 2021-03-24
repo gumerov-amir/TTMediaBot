@@ -1,10 +1,7 @@
 import logging
 from threading import Thread
-import time
 
 import TeamTalkPy
-
-from bot import vars
 
 
 class TeamTalkThread(Thread):
@@ -19,6 +16,7 @@ class TeamTalkThread(Thread):
             if msg == empty_msg:
                 continue
             elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG and msg.textmessage.nMsgType == 1:
+                logging.info('Got a message from user')
                 self.ttclient.message_queue.put(self.ttclient.get_message(msg.textmessage))
             elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_MYSELF_KICKED:
                 logging.warning('Kicked')

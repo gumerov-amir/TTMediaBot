@@ -6,6 +6,7 @@ from urllib.parse import urljoin
 from bot.player.track import Track
 from bot import errors
 
+
 class Service:
     def __init__(self, config):
         self.name = 'yt'

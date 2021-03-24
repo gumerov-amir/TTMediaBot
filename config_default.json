@@ -12,9 +12,11 @@
         "admins": ["admin"],
         "banned_users": []
     },
-    "player": {
+    "sound_devices": {
         "output_device": 0,
         "input_device": 0,
+    },
+    "player": {
         "default_volume": 50,
         "max_volume": 100,
         "faded_volume": true,

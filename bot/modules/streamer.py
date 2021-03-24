@@ -1,8 +1,9 @@
 import os
 from urllib.parse import urlparse
 
-from bot.player.track import Track
 from bot import errors
+from bot.player.track import Track
+
 
 class Streamer:
     def __init__(self, service_manager):
@@ -17,12 +18,12 @@ class Streamer:
                 if parsed_url.hostname in service.hostnames:
                     track = service.get(url)
                     break
-            return [track,]
+            return [track, ]
         elif is_admin and parsed_url.scheme == 'file':
             local_path = '{}:{}'.format(parsed_url.hostname, parsed_url.path)
             if os.path.isfile(local_path):
                 track = Track(url=local_path, name='.'.join(os.path.split(local_path)[-1].split(".")[0:-1]))
-                return [track,]
+                return [track, ]
             elif os.path.isdir(local_path):
                 tracks = []
                 for path, dirs, files in os.walk(local_path):
