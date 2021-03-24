@@ -42,7 +42,7 @@ class CommandProcessor(object):
         try:
             command = re.findall('[a-z]+', message.text.split(' ')[0].lower())[0]
         except IndexError:
-            return self.help()
+            return self.help(None, None)
         arg = ' '.join(message.text.split(' ')[1::])
         try:
             if command in self.commands_dict:
@@ -50,7 +50,7 @@ class CommandProcessor(object):
             elif message.user.is_admin and command in self.admin_commands_dict:
                 return self.admin_commands_dict[command](arg, message.user)
             else:
-                return _('Unknown command.\n') + self.help()
+                return _('Unknown command.\n') + self.help(None)
         except Exception as e:
             logging.error(e)
             return f'error: {e}'
