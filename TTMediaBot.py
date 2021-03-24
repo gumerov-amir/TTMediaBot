@@ -16,13 +16,13 @@ def cli(c="config.ini", devices=False):
 
 
 def echo_sound_devices(sound_device_manager):
-    click.echo('Output devices:')
+    print('Output devices:')
     for i, device in enumerate(sound_device_manager.output_devices):
-        click.echo('\t{index}: {name}'.format(index=i, name=device.name))
-    click.echo()
-    click.echo('Input devices:')
+        print('\t{index}: {name}'.format(index=i, name=device.name))
+    print()
+    print('Input devices:')
     for i, device in enumerate(sound_device_manager.input_devices):
-        click.echo('\t{index}: {name}'.format(index=i, name=device.name))
+        print('\t{index}: {name}'.format(index=i, name=device.name))
 
 
 if __name__ == "__main__":

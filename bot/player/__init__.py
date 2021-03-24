@@ -156,7 +156,7 @@ class Player:
             mod = mods
             while mod:
                 mod = mod.contents
-                devices.append(SoundDevice(str(mod.description, 'UTF-8'), mod.device, SoundDeviceType.Output))
+                devices.append(SoundDevice(mod.description.decode('UTF-8'), mod.device, SoundDeviceType.Output))
                 mod = mod.next
         vlc.libvlc_audio_output_device_list_release(mods)
         return devices
