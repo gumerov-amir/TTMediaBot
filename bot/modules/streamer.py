@@ -1,4 +1,5 @@
 import os
+import sys
 from urllib.parse import urlparse
 
 from bot import errors
@@ -20,7 +21,10 @@ class Streamer:
                     break
             return [track, ]
         elif is_admin and parsed_url.scheme == 'file':
-            local_path = '{}:{}'.format(parsed_url.hostname, parsed_url.path)
+            if sys.platform == 'win32':
+                local_path = '{}:{}'.format(parsed_url.hostname, parsed_url.path)
+            else:
+                local_path = parsed_url.path
             if os.path.isfile(local_path):
                 track = Track(url=local_path, name='.'.join(os.path.split(local_path)[-1].split(".")[0:-1]))
                 return [track, ]

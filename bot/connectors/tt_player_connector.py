@@ -7,7 +7,8 @@ from bot import vars
 
 class TTPlayerConnector(Thread):
     def __init__(self, player, ttclient):
-        Thread.__init__(self)
+        Thread.__init__(self, daemon=True)
+        self.name = 'TTPlayerConnector'
         self.player = player
         self.ttclient = ttclient
 
