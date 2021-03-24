@@ -6,7 +6,8 @@ import TeamTalkPy
 
 class TeamTalkThread(Thread):
     def __init__(self, ttclient):
-        Thread.__init__(self)
+        Thread.__init__(self, daemon=True)
+        self.name = 'TeamTalkThread'
         self.ttclient = ttclient
 
     def run(self):

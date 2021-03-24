@@ -9,7 +9,8 @@ from bot import errors, vars
 
 class PlayerThread(Thread):
     def __init__(self, player):
-        Thread.__init__(self)
+        Thread.__init__(self, daemon=True)
+        self.name = 'PlayerThread'
         self.player = player
 
     def run(self):
