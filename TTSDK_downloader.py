@@ -23,9 +23,9 @@ def get_url_suffix_from_platform():
             else:
                 return 'win32'
         else:
-            sys.exit('Your system not supported')
+            sys.exit('Your system is not supported.')
     elif sys.platform == 'darwin':
-        sys.exit('Your platform not supported')
+        sys.exit('Your platform is not supported.')
     else:
         if platform.machine()[0:2] == 'AMD':
             return 'debian9_x86_64'
@@ -63,4 +63,5 @@ def install():
     move()
     clean()
 
-install()
+if __name__ == "__main__":
+    install()
