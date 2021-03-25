@@ -68,7 +68,7 @@ class CommandProcessor(object):
                 except AttributeError:
                     return _('Help text not found')
             else:
-                return _('Unknown command\n{help}').format(help=self.help('', message.user))
+                return _('Unknown command\n{help}').format(help=self.help('', user))
         else:
             help_strings = []
             for i in list(self.commands_dict)[1::]:
@@ -78,7 +78,7 @@ class CommandProcessor(object):
                     )
                 except AttributeError:
                     help_strings.append('{}: help text not found'.format(i))
-            if user and user.is_admin:
+            if user.is_admin:
                 for i in list(self.admin_commands_dict)[1::]:
                     try:
                         help_strings.append(

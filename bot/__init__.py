@@ -2,6 +2,7 @@ import gettext
 import json
 import logging
 import os
+import sys
 
 from bot import commands, connectors, modules, logger, player, services, sound_devices, TeamTalk
 
@@ -9,7 +10,13 @@ from bot import commands, connectors, modules, logger, player, services, sound_d
 class Bot(object):
     def __init__(self, config_file):
         self.directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        with open(os.path.join(self.directory, config_file), 'r', encoding='utf-8') as f:
+        if os.path.isfile(config_file):
+            config_path = config_file
+        elif os.path.isfile(os.path.join(self.directory, config_file)):
+            config_path = os.path.join(self.directory, config_file)
+        else:
+            sys.exit('Incorrect config file path')
+        with open(config_path, 'r', encoding='utf-8') as f:
             self.config = json.load(f)
         self.translation = gettext.translation('TTMediaBot', os.path.join(self.directory, 'locale'), languages=[self.config['general']['language']])
         self.translation.install()
