@@ -28,3 +28,15 @@ class NothingIsPlayingError(Exception):
 
 class IncorrectPositionError:
     pass
+
+
+class ConnectionError(Exception):
+    pass
+
+
+class LoginError(Exception):
+    pass
+
+
+class JoinChannelError(Exception):
+    pass

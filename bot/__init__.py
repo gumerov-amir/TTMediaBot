@@ -1,20 +1,20 @@
 import gettext
 import json
 import logging
+import os
 
-from bot import commands, connectors, modules, player, services, sound_devices, TeamTalk
+from bot import commands, connectors, modules, logger, player, services, sound_devices, TeamTalk
 
 
 class Bot(object):
     def __init__(self, config_file):
-        with open(config_file, 'r', encoding='utf-8') as f:
+        self.directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        with open(os.path.join(self.directory, config_file), 'r', encoding='utf-8') as f:
             self.config = json.load(f)
-        if self.config['logger']['log']:
-            logging.basicConfig(format=self.config['logger']['format'], level=logging.getLevelName(self.config['logger']['level_name']), filename=self.config['logger']['file_name'])
-        self.translation = gettext.translation('TTMediaBot', 'locale', languages=[self.config['general']['language']])
+        self.translation = gettext.translation('TTMediaBot', os.path.join(self.directory, 'locale'), languages=[self.config['general']['language']])
         self.translation.install()
         self.player = player.Player(self.config['player'])
-        self.ttclient = TeamTalk.TeamTalk(self.config['teamtalk'], self.config['users'])
+        self.ttclient = TeamTalk.TeamTalk(self.config['teamtalk'])
         self.tt_player_connector = connectors.TTPlayerConnector(self.player, self.ttclient)
         self.sound_device_manager = sound_devices.SoundDeviceManager(self.config['sound_devices'], self. player, self.ttclient)
         self.service_manager = services.ServiceManager(self.config['services'])
@@ -22,6 +22,8 @@ class Bot(object):
         self.command_processor = commands.CommandProcessor(self.player, self.ttclient, self.module_manager, self.service_manager)
 
     def initialize(self):
+        if self.config['logger']['log']:
+            logger.initialize_logger(self.config['logger'])
         logging.debug('Initializing')
         self.ttclient.initialize()
         self.sound_device_manager.initialize()
@@ -33,10 +35,11 @@ class Bot(object):
         self.ttclient.run()
         self.player.run()
         self.tt_player_connector.start()
-        logging.debug('Started')
+        logging.info('Started')
         while True:
             message = self.ttclient.message_queue.get()
+            logging.info("New message {text} from {username}".format(text=message.text, username=message.user.username))
             reply_text = self.command_processor(message)
-            logging.info("{text} from ({username}) replied: {reply_text}".format(text=message.text, username=message.user.username, reply_text=reply_text))
+            logging.info('replied {text}'.format(text=reply_text))
             if reply_text:
                 self.ttclient.send_message(reply_text, message.user)
