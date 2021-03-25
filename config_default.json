@@ -9,7 +9,7 @@
         "mode": 2,
         "file_name": "TTMediaBot.log",
         "max_file_size": 0,
-        "backup_count": 0,
+        "backup_count": 0
     },
     "sound_devices": {
         "output_device": 0,
