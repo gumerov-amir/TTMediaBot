@@ -12,8 +12,8 @@
         "backup_count": 0
     },
     "sound_devices": {
-        "output_device": 0,
-        "input_device": 0,
+        "output": 0,
+        "input": 0
     },
     "player": {
         "default_volume": 50,
@@ -35,7 +35,7 @@
         "license_name": "",
         "license_key": "",
         "reconnection_attempts": -1,
-        "reconnection_timeout": 0
+        "reconnection_timeout": 0,
         "users": {
             "admins": ["admin"],
             "banned_users": []
