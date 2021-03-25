@@ -1,13 +1,20 @@
 import logging
 from logging.handlers import RotatingFileHandler
+import sys
 
 
 def initialize_logger(config):
-    level = logging.getLevelName(config['level'])
-    formatter = logging.Formatter(config['format'])
-    handler = RotatingFileHandler(filename=config['file_name'], mode='a', maxBytes=config['max_file_size'] * 1024, backupCount=config['backup_count'])
-    handler.setFormatter(formatter)
-    handler.setLevel(level)
     root_logger = logging.getLogger('root')
+    level = logging.getLevelName(config['level'])
     root_logger.setLevel(level)
-    root_logger.addHandler(handler)
+    formatter = logging.Formatter(config['format'])
+    if config['mode'] >= 2:
+        rotating_file_handler = RotatingFileHandler(filename=config['file_name'], mode='a', maxBytes=config['max_file_size'] * 1024, backupCount=config['backup_count'])
+        rotating_file_handler.setFormatter(formatter)
+        rotating_file_handler.setLevel(level)
+        root_logger.addHandler(rotating_file_handler)
+    if config['mode'] == 1 or config['mode'] == 3:
+        stream_handler = logging.StreamHandler(sys.stdout)
+        stream_handler.setFormatter(formatter)
+        stream_handler.setLevel(level)
+        root_logger.addHandler(stream_handler)
