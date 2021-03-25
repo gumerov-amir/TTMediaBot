@@ -13,16 +13,14 @@ class TeamTalkThread(Thread):
     def run(self):
         empty_msg = TeamTalkPy.TTMessage()
         while True:
-            msg = self.ttclient.getMessage()
+            msg = self.ttclient.tt.getMessage()
             if msg == empty_msg:
                 continue
             elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG and msg.textmessage.nMsgType == 1:
-                logging.info('Got a message from user')
                 self.ttclient.message_queue.put(self.ttclient.get_message(msg.textmessage))
             elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_MYSELF_KICKED:
                 logging.warning('Kicked')
-                self.ttclient.disconnect()
-                self.ttclient.initialize()
+                self.ttclient.reconnect()
             if msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CON_LOST:
                 logging.warning('Server lost')
-                self.ttclient.initialize()
+                self.ttclient.reconnect()

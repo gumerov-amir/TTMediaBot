@@ -1,3 +1,4 @@
+import _thread
 import logging
 import TeamTalkPy
 from TeamTalkPy import TTMessage, ClientEvent
@@ -5,9 +6,9 @@ import time
 import sys
 import queue
 
-from bot.TeamTalk.thread import TeamTalkThread
+from bot.TeamTalk import thread
 from bot.sound_devices import SoundDevice, SoundDeviceType
-from bot import vars
+from bot import errors, vars
 
 
 def _str(data):
@@ -48,41 +49,19 @@ def split(text, max_length=vars.max_message_length):
     return lines
 
 
-class TeamTalk(TeamTalkPy.TeamTalk):
-    def __init__(self, tt_config, user_config):
-        TeamTalkPy.setLicense(_str(tt_config['license_name']), _str(tt_config['license_key']))
-        TeamTalkPy.TeamTalk.__init__(self)
-        self.config = tt_config
-        self.user_config = user_config
-        self.admins = self.user_config['admins']
-        self.banned_users = self.user_config['banned_users']
-        self.teamtalk_thread = TeamTalkThread(self)
+class TeamTalk:
+    def __init__(self, config):
+        TeamTalkPy.setLicense(_str(config['license_name']), _str(config['license_key']))
+        self.config = config
+        self.tt = TeamTalkPy.TeamTalk()
+        self.admins = self.config['users']['admins']
+        self.banned_users = self.config['users']['banned_users']
+        self.teamtalk_thread = thread.TeamTalkThread(self)
         self.message_queue = queue.SimpleQueue()
 
     def initialize(self):
         logging.debug('Initializing TeamTalk')
-        self.connect(_str(self.config['hostname']), self.config['tcp'], self.config['udp'], self.config['encrypted'])
-        result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CON_SUCCESS)
-        if not result:
-            sys.exit('Failed to connect')
-        cmdid = self.doLogin(_str(self.config['nickname']), _str(self.config['username']), _str(self.config['password']), _str(self.config['client_name']))
-        result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CMD_MYSELF_LOGGEDIN)
-        if not result:
-            sys.exit('Failed to log in')
-        result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CMD_SERVER_UPDATE)
-        if not result:
-            sys.exit('Failed to log in')
-        result, msg = self.waitForCmdSuccess(cmdid, 2000)
-        if isinstance(self.config['channel'], int):
-            channel_id = int(self.config['channel'])
-        else:
-            channel_id = self.getChannelIDFromPath(_str(self.config['channel']))
-            if channel_id == 0:
-                channel_id = 1
-        cmdid = self.doJoinChannelByID(channel_id, _str(self.config['channel_password']))
-        result, msg = self.waitForCmdSuccess(cmdid, 2000)
-        if not result:
-            sys.exit('Failed to join channel')
+        self.connect()
         logging.debug('TeamTalk initialized')
 
     def run(self):
@@ -90,14 +69,56 @@ class TeamTalk(TeamTalkPy.TeamTalk):
         self.teamtalk_thread.start()
         logging.debug('TeamTalk started')
 
+    def connect(self):
+        self.tt.connect(_str(self.config['hostname']), self.config['tcp'], self.config['udp'], self.config['encrypted'])
+        result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CON_SUCCESS)
+        if not result:
+            raise errors.ConnectionError()
+        cmdid = self.tt.doLogin(_str(self.config['nickname']), _str(self.config['username']), _str(self.config['password']), _str(self.config['client_name']))
+        result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CMD_MYSELF_LOGGEDIN)
+        if not result:
+            raise errors.LoginError()
+        result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CMD_SERVER_UPDATE)
+        if not result:
+            raise errors.LoginError()
+        result, msg = self.waitForCmdSuccess(cmdid, 2000)
+        if isinstance(self.config['channel'], int):
+            channel_id = int(self.config['channel'])
+        else:
+            channel_id = self.tt.getChannelIDFromPath(_str(self.config['channel']))
+            if channel_id == 0:
+                channel_id = 1
+        cmdid = self.tt.doJoinChannelByID(channel_id, _str(self.config['channel_password']))
+        result, msg = self.waitForCmdSuccess(cmdid, 2000)
+        if not result:
+            cmdid = self.tt.doJoinChannelByID(0, _str(''))
+            result, msg = self.waitForCmdSuccess(cmdid, 2000)
+            if not result:
+                raise errors.JoinChannelError()
+
+    def reconnect(self):
+        logging.info('Reconnecting')
+        self.tt.disconnect()
+        attempt = 0
+        while attempt != self.config['reconnection_attempts']:
+            try:
+                self.connect()
+                logging.info('Reconnected')
+                break
+            except errors.ConnectionError:
+                time.sleep(self.config['reconnection_timeout'])
+                attempt += 1
+        logging.error('Not reconnected')
+        _thread.interrupt_main()
+
     def waitForEvent(self, event, timeout=2000):
-        msg = self.getMessage(timeout)
+        msg = self.tt.getMessage(timeout)
         timestamp = lambda: int(round(time.time() * 1000))
         end = timestamp() + timeout
         while msg.nClientEvent != event:
             if timestamp() >= end:
                 return False, TTMessage()
-            msg = self.getMessage(timeout)
+            msg = self.tt.getMessage(timeout)
         return True, msg
 
     def waitForCmdSuccess(self, cmdid, timeout):
@@ -111,40 +132,46 @@ class TeamTalk(TeamTalkPy.TeamTalk):
     def send_message(self, text, user=None, type=1):
         for string in split(text):
             message = TeamTalkPy.TextMessage()
-            message.nFromUserID = self.getMyUserID()
+            message.nFromUserID = self.tt.getMyUserID()
             message.nMsgType = type
             message.szMessage = _str(string)
             if type == 1:
                 message.nToUserID = user.id
             elif type == 2:
-                message.nChannelID = self.getMyChannelID()
-            self.doTextMessage(message)
+                message.nChannelID = self.tt.getMyChannelID()
+            self.tt.doTextMessage(message)
 
     def change_nickname(self, nickname):
-        self.doChangeNickname(_str(nickname))
+        self.tt.doChangeNickname(_str(nickname))
 
     def change_status_text(self, text):
-        self.doChangeStatus(0, _str(split(text)[0][0:256]))
+        self.tt.doChangeStatus(0, _str(split(text)[0][0:256]))
 
     def get_user(self, id):
-        user = self.getUser(id)
+        user = self.tt.getUser(id)
         return User(user.nUserID, _str(user.szNickname), _str(user.szUsername), user.nChannelID, _str(user.szUsername) in self.admins, _str(user.szUsername) in self.banned_users)
 
     def get_message(self, msg):
         return Message(_str(msg.szMessage), self.get_user(msg.nFromUserID))
 
     def get_my_channel_id(self):
-        return self.getMyChannelID()
+        return self.tt.getMyChannelID()
 
     def get_input_devices(self):
         devices = []
-        device_list = [i for i in self.getSoundDevices()]
+        device_list = [i for i in self.tt.getSoundDevices()]
         for device in device_list:
             devices.append(SoundDevice(_str(device.szDeviceName), device.nDeviceID, SoundDeviceType.Input))
         return devices
 
     def set_input_device(self, id):
-        self.initSoundInputDevice(id)
+        self.tt.initSoundInputDevice(id)
+
+    def enable_voice_transmission(self):
+        self.tt.enableVoiceTransmission(True)
+
+    def disable_voice_transmission(self):
+        self.tt.enableVoiceTransmission(False)
 
 
 class Message:

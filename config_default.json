@@ -4,13 +4,11 @@
     },
     "logger": {
         "log": true,
+        "level": "INFO",
+        "format": "%(levelname)s [%(asctime)s]: %(message)s in %(threadName)s file: %(filename)s line %(lineno)d function %(funcName)s",
         "file_name": "TTMediaBot.log",
-        "level_name": "INFO",
-        "format": "%(levelname)s [%(asctime)s]: %(message)s in %(threadName)s file: %(filename)s line %(lineno)d function %(funcName)s"
-    },
-    "users": {
-        "admins": ["admin"],
-        "banned_users": []
+        "max_file_size": 0,
+        "backup_count": 0,
     },
     "sound_devices": {
         "output_device": 0,
@@ -35,7 +33,13 @@
         "channel": 1,
         "channel_password": "",
         "license_name": "",
-        "license_key": ""
+        "license_key": "",
+        "reconnection_attempts": -1,
+        "reconnection_timeout": 0
+        "users": {
+            "admins": ["admin"],
+            "banned_users": []
+        }
     },
     "services": {
         "available_services": {
