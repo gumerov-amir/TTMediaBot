@@ -67,7 +67,7 @@ class Player:
     def next(self):
         track_index = self.track_index
         if self.mode == Mode.Random:
-            track_index = random.randint(0, len(self.track_list))
+            track_index = random.randrange(0, len(self.track_list))
         else:
             track_index += 1
         try:
@@ -78,7 +78,7 @@ class Player:
     def previous(self):
         track_index = self.track_index
         if self.mode == Mode.Random:
-            track_index = random.randint(0, len(self.track_list))
+            track_index = random.randrange(0, len(self.track_list))
         else:
             track_index -= 1
         try:
