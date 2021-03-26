@@ -3,6 +3,11 @@ import time
 import random
 import sys
 
+if sys.platform == 'win32':
+    from ctypes import windll
+    windll.ole32.CoInitializeEx(None, 0)
+
+
 import vlc
 
 from bot import errors
@@ -13,9 +18,6 @@ from bot.sound_devices import SoundDevice, SoundDeviceType
 
 class Player:
     def __init__(self, config):
-        if sys.platform == 'win32':
-            from ctypes import windll
-            windll.ole32.CoInitializeEx(None)
         self.config = config
         self._vlc_instance = vlc.Instance()
         self._vlc_player = self._vlc_instance.media_player_new()
