@@ -1,6 +1,7 @@
 import logging
 import time
 import random
+import sys
 
 import vlc
 
@@ -150,6 +151,8 @@ class Player:
             raise errors.IncorrectPositionError()
 
     def get_output_devices(self):
+        if sys.platform == 'win32':
+            self._vlc_player.audio_output_set(b'waveout')
         devices = []
         mods = self._vlc_player.audio_output_device_enum()
         if mods:

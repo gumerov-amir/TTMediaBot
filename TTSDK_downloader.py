@@ -4,9 +4,8 @@ import shutil
 import sys
 from urllib import request
 
-import py7zr
-
 import bs4
+import pyunpack
 
 
 url = 'http://bearware.dk/teamtalksdk'
@@ -39,29 +38,53 @@ def download():
     versions = page.find_all('li')
     last_version = versions[-1].a.get('href')[0:-1]
     download_url = url + '/' + last_version + '/' + 'tt5sdk_{v}_{p}.7z'.format(v=last_version, p=get_url_suffix_from_platform())
-    print(download_url)
+    print('Collected. downloading sdk ', last_version)
     request.urlretrieve(download_url, os.path.join(cd, 'ttsdk.7z'))
 
 def extract():
-    py7zr.unpack_7zarchive(os.path.join(cd, 'ttsdk.7z'), os.path.join(cd, 'ttsdk'))
+    try:
+        os.mkdir(os.path.join(cd, 'ttsdk'))
+    except FileExistsError:
+        shutil.rmtree(os.path.join(cd, 'ttsdk'))
+        os.mkdir(os.path.join(cd, 'ttsdk'))
+    pyunpack.Archive(os.path.join(cd, 'ttsdk.7z')).extractall(os.path.join(cd, 'ttsdk'))
 
 def move():
     path = os.path.join(cd, 'ttsdk', os.listdir(os.path.join(cd, 'ttsdk'))[0])
+    try:
+        if sys.platform == 'win32':
+            shutil.move(os.path.join(path, 'Library/TeamTalk_DLL/TeamTalk5.dll'), os.path.join(cd, 'TeamTalk5.dll'))
+        else:
+            shutil.move(os.path.join(path, 'Library/TeamTalk_DLL/libTeamTalk5.so'), os.path.join(cd, 'libTeamTalk5.so'))
+        shutil.move(os.path.join(path, 'Library/TeamTalkPy'), os.path.join(cd, 'TeamTalkPy'))
+    except shutil.Error:
+        print('Found installed sdk, removing')
+        remove_existing_sdk()
+        print('Removed. Trying to move again')
+        move()
+
+def remove_existing_sdk():
+    shutil.rmtree(os.path.join(cd, 'TeamTalkPy'))
     if sys.platform == 'win32':
-        shutil.move(os.path.join(path, 'Library/TeamTalk_DLL/TeamTalk5.dll'), os.path.join(cd, 'TeamTalk5.dll'))
+        os.remove(os.path.join(cd, 'TeamTalk5.dll'))
     else:
-        shutil.move(os.path.join(path, 'Library/TeamTalk_DLL/libTeamTalk5.so'), os.path.join(cd, 'libTeamTalk5.so'))
-    shutil.move(os.path.join(path, 'Library/TeamTalkPy'), os.path.join(cd, 'TeamTalkPy'))
+        os.remove(os.path.join(cd, 'libTeamTalk5.so'))
 
 def clean():
     os.remove('ttsdk.7z')
     shutil.rmtree('ttsdk')
 
 def install():
+    print('Installing TeamTalk sdk')
+    print('Collecting last sdk version')
     download()
+    print('Downloaded. extracting')
     extract()
+    print('Extracted. moving')
     move()
+    print('moved. cleaning')
     clean()
+    print('cleaned.\nInstalled')
 
 if __name__ == "__main__":
     install()

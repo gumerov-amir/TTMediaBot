@@ -42,7 +42,7 @@ def split(text, max_length=vars.max_message_length):
                             words.append(word)
                     else:
                         chunc = word
-                        for i in range(0, int(len(word) / max_length) + 1):
+                        for i in range(0, int(len(chunc) / max_length) + 1):
                             words.append(chunc[0:max_length])
                             chunc = chunc[max_length::]
                 lines += words
@@ -161,7 +161,11 @@ class TeamTalk:
         devices = []
         device_list = [i for i in self.tt.getSoundDevices()]
         for device in device_list:
-            devices.append(SoundDevice(_str(device.szDeviceName), device.nDeviceID, SoundDeviceType.Input))
+            if sys.platform == 'win32':
+                if device.nSoundSystem == TeamTalkPy.SoundSystem.SOUNDSYSTEM_WASAPI:
+                    devices.append(SoundDevice(_str(device.szDeviceName), device.nDeviceID, SoundDeviceType.Input))
+            else:
+                devices.append(SoundDevice(_str(device.szDeviceName), device.nDeviceID, SoundDeviceType.Input))
         return devices
 
     def set_input_device(self, id):
