@@ -12,8 +12,8 @@ class Command:
 
 class AboutCommand(Command):
     def __init__(self, command_processor):
-        Command.__init__(self, command_processor)
-        self.help = _('Return information about bot')
+        super().__init__(command_processor)
+        self.help = _('Show information about this bot')
 
     def __call__(self, arg, user):
         return _('It is the best TeamTalk bot of all blind world')
@@ -21,12 +21,12 @@ class AboutCommand(Command):
 
 class PlayPauseCommand(Command):
     def __init__(self, command_processor):
-        Command.__init__(self, command_processor)
-        self.help = _('Play first track from search by argument, if argument is not gived play or pause current track, if it is not stopped')
+        super().__init__(command_processor)
+        self.help = _('')
 
     def __call__(self, arg, user):
         if arg:
-            self.ttclient.send_message(_('it is finding'), user)
+            self.ttclient.send_message(_('Searching...'), user)
             try:
                 track_list = self.service_manager.service.search(arg)
                 self.player.play(track_list)

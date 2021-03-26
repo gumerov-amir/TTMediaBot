@@ -70,7 +70,7 @@ class TeamTalk:
         logging.debug('TeamTalk started')
 
     def connect(self):
-        self.tt.connect(_str(self.config['hostname']), self.config['tcp'], self.config['udp'], self.config['encrypted'])
+        self.tt.connect(_str(self.config['hostname']), self.config['tcp_port'], self.config['udp_port'], self.config['encrypted'])
         result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CON_SUCCESS)
         if not result:
             raise errors.ConnectionError()
