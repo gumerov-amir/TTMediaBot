@@ -35,10 +35,10 @@ class CommandProcessor(object):
 
     def __call__(self, message):
         if message.user.is_banned:
-            return _('You are banned')
+            return _('You are banned.')
         if not message.user.is_admin:
             if message.user.channel_id != self.ttclient.get_my_channel_id():
-                return _('You aren\'t in channel with bot')
+                return _('You aren\'t in bot\'s channel.')
         try:
             command = re.findall('[a-z]+', message.text.split(' ')[0].lower())[0]
         except IndexError:
@@ -50,7 +50,7 @@ class CommandProcessor(object):
             elif message.user.is_admin and command in self.admin_commands_dict:
                 return self.admin_commands_dict[command](arg, message.user)
             else:
-                return _('Unknown command.\n') + self.help('', message.user)
+                return _('Unknown command') + ' "' + command + '".\n' + self.help('', message.user)
         except Exception as e:
             logging.error(e)
             return f'error: {e}'
@@ -68,7 +68,7 @@ class CommandProcessor(object):
                 except AttributeError:
                     return _('Help text not found')
             else:
-                return _('Unknown command\n{help}').format(help=self.help('', user))
+                return _('Unknown command "{command}".\n{help}').format(command=command, help=self.help('', user))
         else:
             help_strings = []
             for i in list(self.commands_dict)[1::]:

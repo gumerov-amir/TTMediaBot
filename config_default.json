@@ -12,8 +12,8 @@
         "backup_count": 0
     },
     "sound_devices": {
-        "output": 0,
-        "input": 0
+        "output_device": 0,
+        "input_device": 0
     },
     "player": {
         "default_volume": 50,
@@ -24,8 +24,8 @@
     },
     "teamtalk": {
         "hostname": "",
-        "tcp": 10333,
-        "udp": 10333,
+        "tcp_port": 10333,
+        "udp_port": 10333,
         "encrypted": false,
         "nickname": "TTMediaBot",
         "username": "",
