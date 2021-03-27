@@ -246,10 +246,12 @@ class VoiceTransmissionCommand(Command):
     def __call__(self, arg, user):
         if not self.ttclient.is_voice_transmission_enabled:
             self.ttclient.enable_voice_transmission()
-            return _('Enabled voice activation')
+            self.ttclient.change_status_text('Voice activation enabled')
+            return _('Voice activation enabled')
         else:
             self.ttclient.disable_voice_transmission()
-            return _('Disable voice activation')
+            self.ttclient.change_status_text('')
+            return _('Voice activation disabled')
 
 class QuitCommand(Command):
     def __init__(self, command_processor):
