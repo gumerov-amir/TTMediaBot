@@ -11,7 +11,9 @@ import pyunpack
 url = 'http://bearware.dk/teamtalksdk'
 user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'
 
-cd = os.path.dirname(os.path.abspath(__file__))
+cd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+print(cd)
 
 
 def get_url_suffix_from_platform():
@@ -53,28 +55,30 @@ def move():
     path = os.path.join(cd, 'ttsdk', os.listdir(os.path.join(cd, 'ttsdk'))[0])
     try:
         if sys.platform == 'win32':
-            shutil.move(os.path.join(path, 'Library/TeamTalk_DLL/TeamTalk5.dll'), os.path.join(cd, 'TeamTalk5.dll'))
+            os.rename(os.path.join(path, 'Library/TeamTalk_DLL/TeamTalk5.dll'), os.path.join(cd, 'TeamTalk5.dll'))
         else:
-            shutil.move(os.path.join(path, 'Library/TeamTalk_DLL/libTeamTalk5.so'), os.path.join(cd, 'libTeamTalk5.so'))
-        shutil.move(os.path.join(path, 'Library/TeamTalkPy'), os.path.join(cd, 'TeamTalkPy'))
-        shutil.move(os.path.join(path, 'License.txt'), os.path.join(cd, 'TTSDK_license.txt'))
-    except shutil.Error:
-        print('Found installed sdk, removing')
-        remove_existing_sdk()
-        print('Removed. Trying to move again')
-        move()
-
-def remove_existing_sdk():
-    shutil.rmtree(os.path.join(cd, 'TeamTalkPy'))
-    if sys.platform == 'win32':
-        os.remove(os.path.join(cd, 'TeamTalk5.dll'))
-    else:
-        os.remove(os.path.join(cd, 'libTeamTalk5.so'))
-
+            os.rename(os.path.join(path, 'Library/TeamTalk_DLL/libTeamTalk5.so'), os.path.join(cd, 'libTeamTalk5.so'))
+    except FileExistsError:
+        if sys.platform == 'win32':
+            os.remove(os.path.join(cd, 'TeamTalk5.dll'))
+            os.rename(os.path.join(path, 'Library/TeamTalk_DLL/TeamTalk5.dll'), os.path.join(cd, 'TeamTalk5.dll'))
+        else:
+            os.remove(os.path.join(cd, 'libTeamTalk5.so'))
+            os.rename(os.path.join(path, 'Library/TeamTalk_DLL/libTeamTalk5.so'), os.path.join(cd, 'libTeamTalk5.so'))
+    try:
+        os.rename(os.path.join(path, 'Library/TeamTalkPy'), os.path.join(cd, 'TeamTalkPy'))
+    except FileExistsError:
+        shutil.rmtree(os.path.join(cd, 'TeamTalkPy'))
+        os.rename(os.path.join(path, 'Library/TeamTalkPy'), os.path.join(cd, 'TeamTalkPy'))
+    try:
+        os.rename(os.path.join(path, 'License.txt'), os.path.join(cd, 'TTSDK_license.txt'))
+    except FileExistsError:
+        os.remove(os.path.join(cd, 'TTSDK_license.txt'))
+        os.rename(os.path.join(path, 'License.txt'), os.path.join(cd, 'TTSDK_license.txt'))
 
 def clean():
-    os.remove('ttsdk.7z')
-    shutil.rmtree('ttsdk')
+    os.remove(os.path.join(cd, 'ttsdk.7z'))
+    shutil.rmtree(os.path.join(cd, 'ttsdk'))
 
 def install():
     print('Installing TeamTalk sdk')
