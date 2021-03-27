@@ -1,5 +1,6 @@
 import logging
 import re
+import traceback
 
 from .commands import *
 
@@ -58,7 +59,7 @@ class CommandProcessor(object):
             else:
                 return _('Unknown command') + ' "' + command + '".\n' + self.help('', message.user)
         except Exception as e:
-            logging.error(e)
+            logging.error(traceback.format_exc())
             return f'error: {e}'
 
     def help(self, arg, user):
