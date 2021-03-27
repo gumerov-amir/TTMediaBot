@@ -1,6 +1,9 @@
 import logging
 from logging.handlers import RotatingFileHandler
+import os
 import sys
+
+from bot import vars
 
 
 def initialize_logger(config):
@@ -8,7 +11,7 @@ def initialize_logger(config):
     formatter = logging.Formatter(config['format'])
     handlers = []
     if config['mode'] >= 2:
-        rotating_file_handler = RotatingFileHandler(filename=config['file_name'], mode='a', maxBytes=config['max_file_size'] * 1024, backupCount=config['backup_count'])
+        rotating_file_handler = RotatingFileHandler(filename=os.path.join(vars.directory, config['file_name']), mode='a', maxBytes=config['max_file_size'] * 1024, backupCount=config['backup_count'])
         rotating_file_handler.setFormatter(formatter)
         rotating_file_handler.setLevel(level)
         handlers.append(rotating_file_handler)

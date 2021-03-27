@@ -1,14 +1,23 @@
 import _thread
 import logging
-import TeamTalkPy
-from TeamTalkPy import TTMessage, ClientEvent
 import time
+import os
 import sys
 import queue
 
-from bot.TeamTalk import thread
 from bot.sound_devices import SoundDevice, SoundDeviceType
 from bot import errors, vars
+
+if sys.platform == "win32":
+    if (sys.version_info.major == 3 and sys.version_info.minor >= 8):
+        os.add_dll_directory(vars.directory)
+    else:
+        os.chdir(vars.directory)
+
+from bot.TeamTalk import thread
+
+import TeamTalkPy
+from TeamTalkPy import TTMessage, ClientEvent
 
 
 def _str(data):
