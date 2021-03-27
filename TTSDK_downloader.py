@@ -70,6 +70,7 @@ def remove_existing_sdk():
     else:
         os.remove(os.path.join(cd, 'libTeamTalk5.so'))
 
+
 def clean():
     os.remove('ttsdk.7z')
     shutil.rmtree('ttsdk')

@@ -10,6 +10,7 @@ class CommandProcessor(object):
         self.ttclient = ttclient
         self.service_manager = service_manager
         self.module_manager = module_manager
+        self.locked = False
         self.commands_dict = {
             'h': self.help,
             'a': AboutCommand(self),
@@ -31,6 +32,7 @@ class CommandProcessor(object):
         self.admin_commands_dict = {
             'girl': lambda arg, user: 'Настенька',
             'cn': ChangeNicknameCommand(self),
+            'l': self.lock,
         }
 
     def __call__(self, message):
@@ -39,6 +41,8 @@ class CommandProcessor(object):
         if not message.user.is_admin:
             if message.user.channel_id != self.ttclient.get_my_channel_id():
                 return _('You aren\'t in bot\'s channel.')
+            if self.locked:
+                return _('Bot is locked')
         try:
             command = re.findall('[a-z]+', message.text.split(' ')[0].lower())[0]
         except IndexError:
@@ -87,3 +91,7 @@ class CommandProcessor(object):
                     except AttributeError:
                         help_strings.append('{}: help text not found'.format(i))
             return '\n'.join(help_strings)
+
+    def lock(self, arg, user):
+        self.locked = not self.locked
+        return _('Locked') if self.locked else _('Unlocked')
