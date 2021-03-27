@@ -1,3 +1,5 @@
+import _thread
+
 from bot.player.enums import Mode, State
 from bot import errors
 
@@ -236,3 +238,22 @@ class PositionCommand:
                 return str(round(self.player.get_position(), 2))
             except errors.NothingIsPlayingError:
                 return _('Now nothing is playing')
+
+class VoiceTransmissionCommand(Command):
+    def __init__(self, command_processor):
+        super().__init__(command_processor)
+
+    def __call__(self, arg, user):
+        if not self.ttclient.is_voice_transmission_enabled:
+            self.ttclient.enable_voice_transmission()
+            return _('Enabled voice activation')
+        else:
+            self.ttclient.disable_voice_transmission()
+            return _('Disable voice activation')
+
+class QuitCommand(Command):
+    def __init__(self, command_processor):
+        super().__init__(command_processor)
+
+    def __call__(self, arg, user):
+        _thread.interrupt_main()
