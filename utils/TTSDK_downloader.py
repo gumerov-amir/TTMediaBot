@@ -13,25 +13,26 @@ user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 F
 
 cd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-print(cd)
-
-
 def get_url_suffix_from_platform():
+    machine = platform.machine()
     if sys.platform == 'win32':
-        if platform.machine()[0:3] == 'AMD':
-            if platform.architecture()[0][0:2] == '64':
+        architecture = platform.architecture()
+        if machine == 'AMD64' or machine == 'x86':
+            if architecture[0] == '64bit':
                 return 'win64'
             else:
                 return 'win32'
         else:
-            sys.exit('Your system is not supported.')
+            sys.exit('Native Windows on ARM is not suported')
     elif sys.platform == 'darwin':
-        sys.exit('Your platform is not supported.')
+        sys.exit('Darwin is not supported')
     else:
-        if platform.machine() == 'AMD64' or platform.machine() == 'x86_64':
+        if machine == 'AMD64' or machine == 'x86_64':
             return 'debian9_x86_64'
-        else:
+        elif 'arm' in machine:
             return 'raspbian_armhf'
+        else:
+            sys.exit('Your architecture is not supported')
 
 def download():
     r = request.urlopen(url)
@@ -40,7 +41,7 @@ def download():
     versions = page.find_all('li')
     last_version = versions[-1].a.get('href')[0:-1]
     download_url = url + '/' + last_version + '/' + 'tt5sdk_{v}_{p}.7z'.format(v=last_version, p=get_url_suffix_from_platform())
-    print('Collected. downloading sdk ', last_version)
+    print('Downloading from ' + download_url)
     request.urlretrieve(download_url, os.path.join(cd, 'ttsdk.7z'))
 
 def extract():
@@ -81,8 +82,8 @@ def clean():
     shutil.rmtree(os.path.join(cd, 'ttsdk'))
 
 def install():
-    print('Installing TeamTalk sdk')
-    print('Collecting last sdk version')
+    print('Installing TeamTalk sdk components')
+    print('Downloading last sdk version')
     download()
     print('Downloaded. extracting')
     extract()
@@ -90,7 +91,8 @@ def install():
     move()
     print('moved. cleaning')
     clean()
-    print('cleaned.\nInstalled')
+    print('cleaned.')
+    print('Installed')
 
 if __name__ == "__main__":
     install()
