@@ -26,15 +26,15 @@ class Streamer:
             else:
                 local_path = parsed_url.path
             if os.path.isfile(local_path):
-                track = Track(url=local_path, name='.'.join(os.path.split(local_path)[-1].split(".")[0:-1]))
+                track = Track(url=local_path, name=os.path.split(local_path)[-1])
                 return [track, ]
             elif os.path.isdir(local_path):
                 tracks = []
                 for path, dirs, files in os.walk(local_path):
                     for file in files:
                         url = os.path.join(path, file)
-                        name = '.'.join(os.path.split(url)[-1].split(".")[0:-1])
-                        track = Track(url=url, name=name)
+                        name = os.path.split(url)[-1]
+                        track = Track(url=url, from_url=True)
                         tracks.append(track)
                 return tracks
             else:
