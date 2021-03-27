@@ -63,6 +63,7 @@ class TeamTalk:
         TeamTalkPy.setLicense(_str(config['license_name']), _str(config['license_key']))
         self.config = config
         self.tt = TeamTalkPy.TeamTalk()
+        self.is_voice_transmission_enabled = False
         self.admins = self.config['users']['admins']
         self.banned_users = self.config['users']['banned_users']
         self.teamtalk_thread = thread.TeamTalkThread(self)
@@ -182,9 +183,11 @@ class TeamTalk:
 
     def enable_voice_transmission(self):
         self.tt.enableVoiceTransmission(True)
+        self.is_voice_transmission_enabled = True
 
     def disable_voice_transmission(self):
         self.tt.enableVoiceTransmission(False)
+        self.is_voice_transmission_enabled = False
 
 
 class Message:

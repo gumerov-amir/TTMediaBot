@@ -33,6 +33,8 @@ class CommandProcessor(object):
             'girl': lambda arg, user: 'Настенька',
             'cn': ChangeNicknameCommand(self),
             'l': self.lock,
+            'va': VoiceTransmissionCommand(self),
+            'q': QuitCommand(self),
         }
 
     def __call__(self, message):
