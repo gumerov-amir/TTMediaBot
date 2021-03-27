@@ -21,7 +21,8 @@ class TTPlayerConnector(Thread):
                 if self.player.state == State.Playing:
                     self.ttclient.enable_voice_transmission()
                     last_track_meta = self.player.track.get_meta()
-                    self.ttclient.change_status_text('{state}: {name}'.format(state=self.player.state.value, name=self.player.track.name))
+                    if self.player.track.name:
+                        self.ttclient.change_status_text('{state}: {name}'.format(state=self.player.state.value, name=self.player.track.name))
                 elif self.player.state == State.Stopped:
                     self.ttclient.disable_voice_transmission()
                     self.ttclient.change_status_text('')

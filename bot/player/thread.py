@@ -25,10 +25,10 @@ class PlayerThread(Thread):
                         self.player.stop()
             if self.player.state == State.Playing and self.player.track.from_url:
                 media = self.player._vlc_player.get_media()
-                media.parse_with_options(vlc.MediaParseFlag.do_interact, 0)
-                new_name = media.get_meta(12)
-                if not new_name:
-                    new_name = "{} - {}".format(media.get_meta(vlc.Meta.Title), media.get_meta(vlc.Meta.Artist))
-                if self.player.track.name != new_name:
+                media.parse_with_options(vlc.MediaParseFlag.fetch_network, 0)
+                new_name = media.get_meta(vlc.Meta.Title)
+                if media.get_meta(12):
+                    new_name += ' - ' + media.get_meta(12)
+                if self.player.track.name != new_name and new_name:
                     self.player.track.name = new_name
             time.sleep(vars.loop_timeout)
