@@ -57,6 +57,7 @@ def move():
         else:
             shutil.move(os.path.join(path, 'Library/TeamTalk_DLL/libTeamTalk5.so'), os.path.join(cd, 'libTeamTalk5.so'))
         shutil.move(os.path.join(path, 'Library/TeamTalkPy'), os.path.join(cd, 'TeamTalkPy'))
+        shutil.move(os.path.join(path, 'License.txt'), os.path.join(cd, 'TTSDK_license.txt'))
     except shutil.Error:
         print('Found installed sdk, removing')
         remove_existing_sdk()
