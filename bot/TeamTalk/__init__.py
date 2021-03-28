@@ -64,6 +64,8 @@ class TeamTalk:
         self.config = config
         self.tt = TeamTalkPy.TeamTalk()
         self.is_voice_transmission_enabled = False
+        self.nickname = config['nickname']
+        self.status = ''
         self.admins = self.config['users']['admins']
         self.banned_users = self.config['users']['banned_users']
         self.teamtalk_thread = thread.TeamTalkThread(self)
@@ -152,10 +154,12 @@ class TeamTalk:
             self.tt.doTextMessage(message)
 
     def change_nickname(self, nickname):
-        self.tt.doChangeNickname(_str(nickname))
+        self.nickname = nickname
+        self.tt.doChangeNickname(_str(self.nickname))
 
     def change_status_text(self, text):
-        self.tt.doChangeStatus(0, _str(split(text)[0][0:256]))
+        self.status = split(text)[0]
+        self.tt.doChangeStatus(0, _str(self.status))
 
     def get_user(self, id):
         user = self.tt.getUser(id)
