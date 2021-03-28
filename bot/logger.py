@@ -11,7 +11,11 @@ def initialize_logger(config):
     formatter = logging.Formatter(config['format'])
     handlers = []
     if config['mode'] >= 2:
-        rotating_file_handler = RotatingFileHandler(filename=os.path.join(vars.directory, config['file_name']), mode='a', maxBytes=config['max_file_size'] * 1024, backupCount=config['backup_count'])
+        if os.path.isdir(os.path.join(*os.path.split(config['file_name'])[0:-1])):
+            file = config['file_name']
+        else:
+            file = os.path.join(vars.directory, config['file_name'])
+        rotating_file_handler = RotatingFileHandler(filename=file, mode='a', maxBytes=config['max_file_size'] * 1024, backupCount=config['backup_count'])
         rotating_file_handler.setFormatter(formatter)
         rotating_file_handler.setLevel(level)
         handlers.append(rotating_file_handler)
