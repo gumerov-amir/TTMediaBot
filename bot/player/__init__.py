@@ -30,7 +30,7 @@ class Player:
         self.track = Track()
         self.track_index = -1
         self.state = State.Stopped
-        self.mode = Mode.Single
+        self.mode = Mode.SingleTrack
         self.thread = PlayerThread(self)
 
     def run(self):
@@ -78,7 +78,10 @@ class Player:
         try:
             self.play_by_index(track_index)
         except errors.IncorrectTrackIndexError:
-            raise errors.NoNextTrackError()
+            if self.mode == Mode.RepeatTrackList:
+                self.play_by_index(0)
+            else:
+                raise errors.NoNextTrackError()
 
     def previous(self):
         track_index = self.track_index
@@ -89,12 +92,15 @@ class Player:
         try:
             self.play_by_index(track_index)
         except errors.IncorrectTrackIndexError:
-            raise errors.NoPreviousTrackError
+            if self.mode == Mode.RepeatTrackList:
+                self.play_by_index(len(self.track_list) - 1)
+            else:
+                raise errors.NoPreviousTrackError
 
     def play_by_index(self, index):
         if self.state == State.Stopped:
             raise errors.NothingIsPlayingError()
-        if index >= 0 and index < len(self.track_list):
+        if index < len(self.track_list) and index >= (0 - len(self.track_list)):
             self.track_index = index
             self.track = self.track_list[self.track_index]
             self._play_with_vlc(self.track.url)

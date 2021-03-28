@@ -164,7 +164,7 @@ class ModeCommand:
         Command.__init__(self, command_processor)
 
     def __call__(self, arg, user):
-        mode_help = 'current_ mode: {current_mode}\n{modes}'.format(current_mode=self.player.mode.name, modes='\n'.join(['{name} - {value}'.format(name=i.name, value=i.value) for i in [Mode.Single, Mode.TrackList, Mode.Random]]))
+        mode_help = 'current_ mode: {current_mode}\n{modes}'.format(current_mode=self.player.mode.name, modes='\n'.join(['{name} - {value}'.format(name=i.name, value=i.value) for i in [Mode.SingleTrack, Mode.RepeatTrack, Mode.TrackList, Mode.RepeatTrackList, Mode.Random]]))
         if arg:
             try:
                 mode = Mode(int(arg))
@@ -198,7 +198,14 @@ class SelectTrackCommand:
     def __call__(self, arg, user):
         if arg:
             try:
-                self.player.play_by_index(int(arg) - 1)
+                number = int(arg)
+                if number > 0:
+                    index = number - 1
+                elif number < 0:
+                    index = number
+                else:
+                    return _('Incorrect number')
+                self.player.play_by_index(index)
                 return _('now playing {} {}').format(arg, self.player.track.name)
             except errors.IncorrectTrackIndexError:
                 return _('Out of list')
