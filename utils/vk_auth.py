@@ -89,7 +89,7 @@ def main():
             password = getpass('Password: ')
         token = request_auth(login, password, scope=scope)
         validated_token = validate_token(token, receipt)
-        print('Yor VK token:')
+        print('Your VK token:')
         print(validated_token)
     except Exception as e:
         print(e)
