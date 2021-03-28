@@ -16,9 +16,11 @@ class PlayerThread(Thread):
     def run(self):
         while True:
             if self.player.state == State.Playing and self.player._vlc_player.get_state() == vlc.State.Ended:
-                if self.player.mode == Mode.Single:
+                if self.player.mode == Mode.SingleTrack:
                     self.player.stop()
-                elif self.player.mode == Mode.TrackList or self.player.mode == Mode.Random:
+                elif self.player.mode == Mode.RepeatTrack:
+                    self.player.play_by_index(self.player.track_index)
+                else:
                     try:
                         self.player.next()
                     except errors.NoNextTrackError:
