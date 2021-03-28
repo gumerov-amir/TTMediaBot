@@ -54,7 +54,7 @@ def handle_2fa(sid):
         code = ''
         while not code:
             code = input('SMS code: ')
-            if len(code) != 6 or not codde.isdigit():
+            if len(code) != 6 or not code.isdigit():
                 print('SMS code must be a string of 6 digits')
                 continue
             return code
@@ -84,9 +84,8 @@ def main():
         print('VK Authentication Helper for TTMediaBot')
         print()
         print('Enter your VK credentials to continue')
-        while not login:
+        while not (login and password):
             login = input('Phone, email or  login: ')
-        while not password:
             password = getpass('Password: ')
         token = request_auth(login, password, scope=scope)
         validated_token = validate_token(token, receipt)
