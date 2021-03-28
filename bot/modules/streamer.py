@@ -34,7 +34,7 @@ class Streamer:
                     for file in files:
                         url = os.path.join(path, file)
                         name = os.path.split(url)[-1]
-                        track = Track(url=url, from_url=True)
+                        track = Track(url=url, name=name)
                         tracks.append(track)
                 return tracks
             else:
