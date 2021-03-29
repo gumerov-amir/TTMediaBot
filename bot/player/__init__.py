@@ -101,8 +101,8 @@ class Player:
         if self.state == State.Stopped:
             raise errors.NothingIsPlayingError()
         if index < len(self.track_list) and index >= (0 - len(self.track_list)):
-            self.track_index = index
-            self.track = self.track_list[self.track_index]
+            self.track = self.track_list[index]
+            self.track_index = self.track_list.index(self.track)
             self._play_with_vlc(self.track.url)
             if self.state == State.Paused:
                 while self._vlc_player.get_state() != vlc.State.Playing and self._vlc_player.get_state() != vlc.State.Ended:
