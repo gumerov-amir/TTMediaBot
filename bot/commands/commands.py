@@ -12,6 +12,16 @@ class Command:
         self.module_manager = command_processor.module_manager
 
 
+class HelpCommand(Command):
+    def __init__(self, command_processor):
+        super().__init__(command_processor)
+        self.command_processor = command_processor
+        self.help = _('Shows command help')
+
+    def __call__(self, arg, user):
+        return self.command_processor.help(arg, user)
+
+
 class AboutCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
@@ -187,7 +197,7 @@ class ModeCommand(Command):
 class ServiceCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('SERVICE Selects a service to play from. If no service is given shows curent service and a list of available ones')
+        self.help = _('SERVICE Selects a service to play from. If no service is given shows current service and a list of available ones')
 
     def __call__(self, arg, user):
         service_help = 'Current service: {current_service}\nAvailable: {available_services}'.format(current_service=self.service_manager.service.name, available_services=', '.join([i for i in self.service_manager.available_services]))
@@ -234,7 +244,7 @@ class SelectTrackCommand(Command):
 class DownloadCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('Gets a direct link to the currentt track')
+        self.help = _('Gets a direct link to the current track')
 
     def __call__(self, arg, user):
         if self.player.track_index >= 0:
@@ -298,11 +308,8 @@ class LockCommand(Command):
         self.command_processor = command_processor
         self.help = _('Locks or unlocks the bot')
 
-    def __call__(self,  arg,  user):
-        locked = self.command_processor.locked
-        locked = not locked
-        self.command_processor.locked = locked
-        return _('Locked') if locked else _('Unlocked')
+    def __call__(self, arg, user):
+        return self.command_processor.lock(arg, user)
 
 
 class QuitCommand(Command):
@@ -310,5 +317,5 @@ class QuitCommand(Command):
         super().__init__(command_processor)
         self.help = _('Quits the bot')
 
-    def __call__(self,  arg,  user):
+    def __call__(self, arg, user):
         _thread.interrupt_main()
