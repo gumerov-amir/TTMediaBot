@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import requests
 from getpass import getpass
 

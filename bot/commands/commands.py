@@ -15,16 +15,17 @@ class Command:
 class AboutCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('Show information about this bot')
+        self.help = _('()Shows information about this bot)')
 
     def __call__(self, arg, user):
-        return _('It is the best TeamTalk bot of all blind world')
+        about_text = _('')
+        return about_text
 
 
 class PlayPauseCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('')
+        self.help = _('QUERY Plays tracks found for the query. If no query is given plays or pauses current track')
 
     def __call__(self, arg, user):
         if arg:
@@ -32,7 +33,7 @@ class PlayPauseCommand(Command):
             try:
                 track_list = self.service_manager.service.search(arg)
                 self.player.play(track_list)
-                self.ttclient.send_message(_("{nickname} offered {track}").format(nickname=user.nickname, track=track_list[0].name), type=2)
+                self.ttclient.send_message(_("{nickname} requested {track}").format(nickname=user.nickname, track=track_list[0].name), type=2)
                 return _('Playing {}').format(track_list[0].name)
             except errors.NotFoundError:
                 return _('not found')
@@ -45,26 +46,27 @@ class PlayPauseCommand(Command):
 
 class RateCommand(Command):
     def __init__(self, command_processor):
-        Command.__init__(self, command_processor)
-        self.help = _('Set rate from argument, if it is not gived, returns current rate')
+        super().__init__(command_processor)
+        self.help = _('RATE Sets rate to a value from 0.25 to 4. If no rate is given shows current rate')
 
     def __call__(self, arg, user):
         if arg:
             try:
                 rate_number = abs(float(arg))
-                if rate_number > 0 and rate_number <= 4:
+                if rate_number >= 0.25 and rate_number <= 4:
                     self.player.set_rate(rate_number)
                 else:
-                    return _('Speed must be from 1 to 4')
+                    raise ValueError
             except ValueError:
-                return _('Введите число, используйте .')
+                return self.help
         else:
             return str(self.player.get_rate())
 
 
-class PlayUrlCommand:
+class PlayUrlCommand(Command):
     def __init__(self, command_processor):
-        Command.__init__(self, command_processor)
+        super().__init__(command_processor)
+        self.help = _('URL Plays a stream from a given URL')
 
     def __call__(self, arg, user):
         if arg:
@@ -72,24 +74,26 @@ class PlayUrlCommand:
                 tracks = self.module_manager.streamer.get(arg, user.is_admin)
                 self.player.play(tracks)
             except errors.IncorrectProtocolError:
-                return _('Неверный протокол')
-            except errors.PathNotExistError:
-                return _('path not exist')
+                return _('Incorrect protocol')
+            except errors.PathNotFoundError:
+                return _('The path cannot be found')
         else:
             return self.help()
 
 
-class StopCommand:
+class StopCommand(Command):
     def __init__(self, command_processor):
-        Command.__init__(self, command_processor)
+        super().__init__(command_processor)
+        self.help = _('Stops playback')
 
     def __call__(self, arg, user):
         self.player.stop()
 
 
-class VolumeCommand:
+class VolumeCommand(Command):
     def __init__(self, command_processor):
-        Command.__init__(self, command_processor)
+        super().__init__(command_processor)
+        self.help = _('VOLUME Sets volume to a value from 0 to 100')
 
     def __call__(self, arg, user):
         if arg:
@@ -98,70 +102,75 @@ class VolumeCommand:
                 if volume >= 0 and volume <= 100:
                     self.player.set_volume(int(arg))
                 else:
-                    return _('Громкость в диапозоне 1 100')
+                    raise ValueError
             except ValueError:
-                return _('Недопустимое значение. Укажите число от 1 до 100.')
+                return self.help
         else:
             return str(self.player.get_volume())
 
 
-class SeekBackCommand:
+class SeekBackCommand(Command):
     def __init__(self, command_processor):
-        Command.__init__(self, command_processor)
+        super().__init__(command_processor)
+        self.help = _('[STEP] Seeks current track back. the optional step is specified in percents from 1 to 100')
 
     def __call__(self, arg, user):
         if arg:
             try:
                 self.player.seek_back(float(arg))
             except ValueError:
-                return _('Недопустимое значение. Укажите число от 1 до 100.')
+                return self.help
         else:
             self.player.seek_back()
 
 
-class SeekForwardCommand:
+class SeekForwardCommand(Command):
     def __init__(self, command_processor):
-        Command.__init__(self, command_processor)
+        super().__init__(command_processor)
+        self.help = _('[STEP] Seeks current track forward. the optional step is specified in percents from 1 to 100')
 
     def __call__(self, arg, user):
         if arg:
             try:
                 self.player.seek_forward(float(arg))
             except ValueError:
-                return _('Недопустимое значение. Укажите число от 1 до 100.')
+                return self.help
         else:
             self.player.seek_forward()
 
 
-class NextTrackCommand:
+class NextTrackCommand(Command):
     def __init__(self, command_processor):
-        Command.__init__(self, command_processor)
+        super().__init__(command_processor)
+        self.help = _('Plays next track')
 
     def __call__(self, arg, user):
         try:
             self.player.next()
         except errors.NoNextTrackError:
-            return _('это последний трек')
+            return _('No next track')
         except errors.NothingIsPlayingError:
-            return _('Now nothing is playing')
+            return _('Nothing is currently playing')
 
 
-class PreviousTrackCommand:
+class PreviousTrackCommand(Command):
     def __init__(self, command_processor):
-        Command.__init__(self, command_processor)
+        super().__init__(command_processor)
+        self.help = _('Plays previous track')
 
     def __call__(self, arg, user):
         try:
             self.player.previous()
         except errors.NoPreviousTrackError:
-            return _('Это первый трек')
+            return _('No previous track')
         except errors.NothingIsPlayingError:
             return _('Nothing is playing')
 
 
-class ModeCommand:
+class ModeCommand(Command):
     def __init__(self, command_processor):
-        Command.__init__(self, command_processor)
+        super().__init__(command_processor)
+        self.help = ('MODE_NUMBER Sets playback mode. Send this command without a number for more info')
 
     def __call__(self, arg, user):
         mode_help = 'current_ mode: {current_mode}\n{modes}'.format(current_mode=self.player.mode.name, modes='\n'.join(['{name} - {value}'.format(name=i.name, value=i.value) for i in [Mode.SingleTrack, Mode.RepeatTrack, Mode.TrackList, Mode.RepeatTrackList, Mode.Random]]))
@@ -175,12 +184,13 @@ class ModeCommand:
             return mode_help
 
 
-class ServiceCommand:
+class ServiceCommand(Command):
     def __init__(self, command_processor):
-        Command.__init__(self, command_processor)
+        super().__init__(command_processor)
+        self.help = _('SERVICE Selects a service to play from. If no service is given shows curent service and a list of available ones')
 
     def __call__(self, arg, user):
-        service_help = 'current service: {current_service}\nevailable: {available_services}'.format(current_service=self.service_manager.service.name, available_services=', '.join([i for i in self.service_manager.available_services]))
+        service_help = 'Current service: {current_service}\nAvailable: {available_services}'.format(current_service=self.service_manager.service.name, available_services=', '.join([i for i in self.service_manager.available_services]))
         if arg:
             arg = arg.lower()
             if arg in self.service_manager.available_services:
@@ -191,9 +201,10 @@ class ServiceCommand:
             return service_help
 
 
-class SelectTrackCommand:
+class SelectTrackCommand(Command):
     def __init__(self, command_processor):
-        Command.__init__(self, command_processor)
+        super().__init__(command_processor)
+        self.help = _('NUMBER Selects track by number from the list of current results')
 
     def __call__(self, arg, user):
         if arg:
@@ -210,27 +221,44 @@ class SelectTrackCommand:
             except errors.IncorrectTrackIndexError:
                 return _('Out of list')
             except errors.NothingIsPlayingError:
-                return _('Nothing is playing')
+                return _('Nothing is currently playing')
             except ValueError:
-                return _('Enter number')
+                return self.help
         else:
             if self.player.track and self.player.track_index >= 0:
                 return _('now playing {} {}').format(self.player.track_index + 1, self.player.track.name)
             else:
-                return _('now nothing is not playing')
+                return _('Nothing is currently playing')
 
 
-class ChangeNicknameCommand:
+class DownloadCommand(Command):
     def __init__(self, command_processor):
-        Command.__init__(self, command_processor)
+        super().__init__(command_processor)
+        self.help = _('Gets a direct link to the currentt track')
+
+    def __call__(self, arg, user):
+        if self.player.track_index >= 0:
+            url = self.player.track.url
+            if url:
+                return url
+            else:
+                return _('URL is not available')
+        else:
+            return _('Nothing is currently playing')
+
+
+class ChangeNicknameCommand(Command):
+    def __init__(self, command_processor):
+        super().__init__(command_processor)
+        self.help = _('NICKNAME Sets the bot\'s nickname')
 
     def __call__(self, arg, user):
         self.ttclient.change_nickname(arg)
 
 
-class PositionCommand:
+class PositionCommand(Command):
     def __init__(self, command_processor):
-        Command.__init__(self, command_processor)
+        super().__init__(command_processor)
 
     def __call__(self, arg, user):
         if arg:
@@ -244,27 +272,43 @@ class PositionCommand:
             try:
                 return str(round(self.player.get_position(), 2))
             except errors.NothingIsPlayingError:
-                return _('Now nothing is playing')
+                return _('Nothing is currently playing')
 
 class VoiceTransmissionCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
+        self.help = _('Enables or disables voice transmission')
 
     def __call__(self, arg, user):
         if not self.ttclient.is_voice_transmission_enabled:
             self.ttclient.enable_voice_transmission()
             if self.player.state == State.Stopped:
                 self.ttclient.change_status_text(_('Voice activation enabled'))
-            return _('Voice activation enabled')
+            return _('Voice transmission enabled')
         else:
             self.ttclient.disable_voice_transmission()
             if self.player.state == State.Stopped:
                 self.ttclient.change_status_text('')
-            return _('Voice activation disabled')
+            return _('Voice transmission disabled')
+
+
+class LockCommand(Command):
+    def __init__(self, command_processor):
+        super().__init__(command_processor)
+        self.command_processor = command_processor
+        self.help = _('Locks or unlocks the bot')
+
+    def __call__(self,  arg,  user):
+        locked = self.command_processor.locked
+        locked = not locked
+        self.command_processor.locked = locked
+        return _('Locked') if locked else _('Unlocked')
+
 
 class QuitCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
+        self.help = _('Quits the bot')
 
-    def __call__(self, arg, user):
+    def __call__(self,  arg,  user):
         _thread.interrupt_main()
