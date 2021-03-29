@@ -14,7 +14,7 @@ class IncorrectProtocolError(Exception):
     pass
 
 
-class PathNotExistError(Exception):
+class PathNotFoundError(Exception):
     pass
 
 
