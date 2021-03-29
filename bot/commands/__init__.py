@@ -13,18 +13,17 @@ class CommandProcessor(object):
         self.module_manager = module_manager
         self.locked = False
         self.commands_dict = {
-            'h': self.help,
+            'h': HelpCommand(self),
             'a': AboutCommand(self),
             'p': PlayPauseCommand(self),
             'u': PlayUrlCommand(self),
             'sv': ServiceCommand(self),
             's': StopCommand(self),
+            'b': PreviousTrackCommand(self),
             'n': NextTrackCommand(self),
             'c': SelectTrackCommand(self),
-            'b': PreviousTrackCommand(self),
-            'sf': SeekForwardCommand(self),
-            'ps': PositionCommand(self),
             'sb': SeekBackCommand(self),
+            'sf': SeekForwardCommand(self),
             'v': VolumeCommand(self),
             'r': RateCommand(self),
             'm': ModeCommand(self),
@@ -63,7 +62,6 @@ class CommandProcessor(object):
             return 'error: {}'.format(e)
 
     def help(self, arg, user):
-        help = _('Shows command help')
         if arg:
             if not user.is_admin and arg in self.commands_dict:
                 try:
@@ -78,8 +76,8 @@ class CommandProcessor(object):
             else:
                 return _('Unknown command "{command}"\n{help}').format(command=command, help=self.help('', user))
         else:
-            help_strings = [help]
-            for i in list(self.commands_dict)[1::]:
+            help_strings = []
+            for i in list(self.commands_dict):
                 try:
                     help_strings.append(
                         '{} {}'.format(i, self.commands_dict[i].help)
@@ -95,3 +93,7 @@ class CommandProcessor(object):
                     except AttributeError:
                         help_strings.append('{} help text not found'.format(i))
             return '\n'.join(help_strings)
+
+    def lock(self,  arg, user):
+        self.locked = not self.locked
+        return _('Locked') if self.locked else _('Unlocked')
