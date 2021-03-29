@@ -28,22 +28,22 @@ class CommandProcessor(object):
             'v': VolumeCommand(self),
             'r': RateCommand(self),
             'm': ModeCommand(self),
-            'dl': lambda arg, user: self.player.track.url,
+            'dl': DownloadCommand(self),
         }
         self.admin_commands_dict = {
             'girl': lambda arg, user: 'Настенька',
             'cn': ChangeNicknameCommand(self),
-            'l': self.lock,
+            'l': LockCommand(self),
             'va': VoiceTransmissionCommand(self),
             'q': QuitCommand(self),
         }
 
     def __call__(self, message):
         if message.user.is_banned:
-            return _('You are banned.')
+            return _('You are banned')
         if not message.user.is_admin:
             if message.user.channel_id != self.ttclient.get_my_channel_id():
-                return _('You aren\'t in bot\'s channel.')
+                return _('You are not in bot\'s channel')
             if self.locked:
                 return _('Bot is locked')
         try:
@@ -57,12 +57,13 @@ class CommandProcessor(object):
             elif message.user.is_admin and command in self.admin_commands_dict:
                 return self.admin_commands_dict[command](arg, message.user)
             else:
-                return _('Unknown command') + ' "' + command + '".\n' + self.help('', message.user)
+                return _('Unknown command') + ' "' + command + '"\n' + self.help('', message.user)
         except Exception as e:
             logging.error(traceback.format_exc())
-            return f'error: {e}'
+            return 'error: {}'.format(e)
 
     def help(self, arg, user):
+        help = _('Shows command help')
         if arg:
             if not user.is_admin and arg in self.commands_dict:
                 try:
@@ -75,26 +76,22 @@ class CommandProcessor(object):
                 except AttributeError:
                     return _('Help text not found')
             else:
-                return _('Unknown command "{command}".\n{help}').format(command=command, help=self.help('', user))
+                return _('Unknown command "{command}"\n{help}').format(command=command, help=self.help('', user))
         else:
-            help_strings = []
+            help_strings = [help]
             for i in list(self.commands_dict)[1::]:
                 try:
                     help_strings.append(
-                        '{}: {}'.format(i, self.commands_dict[i].help)
+                        '{} {}'.format(i, self.commands_dict[i].help)
                     )
                 except AttributeError:
-                    help_strings.append('{}: help text not found'.format(i))
+                    help_strings.append('{} help text not found'.format(i))
             if user.is_admin:
                 for i in list(self.admin_commands_dict)[1::]:
                     try:
                         help_strings.append(
-                            '{}: {}'.format(i, self.admin_commands_dict[i].help)
+                            '{} {}'.format(i, self.admin_commands_dict[i].help)
                         )
                     except AttributeError:
-                        help_strings.append('{}: help text not found'.format(i))
+                        help_strings.append('{} help text not found'.format(i))
             return '\n'.join(help_strings)
-
-    def lock(self, arg, user):
-        self.locked = not self.locked
-        return _('Locked') if self.locked else _('Unlocked')
