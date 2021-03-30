@@ -38,6 +38,6 @@ class Streamer:
                         tracks.append(track)
                 return tracks
             else:
-                raise errors.PathNotExistError('')
+                raise errors.PathNotFoundError('')
         else:
             raise errors.IncorrectProtocolError('')
