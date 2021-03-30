@@ -235,7 +235,7 @@ class SelectTrackCommand(Command):
             except ValueError:
                 return self.help
         else:
-            if self.player.track and self.player.track_index >= 0:
+            if self.player.state == State.Playing:
                 return _('now playing {} {}').format(self.player.track_index + 1, self.player.track.name)
             else:
                 return _('Nothing is currently playing')
@@ -247,7 +247,7 @@ class DownloadCommand(Command):
         self.help = _('Gets a direct link to the current track')
 
     def __call__(self, arg, user):
-        if self.player.track_index >= 0:
+        if self.player.state == State.Playing:
             url = self.player.track.url
             if url:
                 return url
