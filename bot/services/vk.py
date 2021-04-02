@@ -25,4 +25,4 @@ class Service:
         if results['count'] > 0:
             return [Track(url=i['url'], name='{artist} - {title}'.format(title=i['title'], artist=i['artist'])) for i in results['items']]
         else:
-            raise errors.NotFoundError
+            raise errors.NothingFoundError

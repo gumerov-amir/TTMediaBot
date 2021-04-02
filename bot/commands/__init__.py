@@ -3,7 +3,9 @@ import re
 import traceback
 
 from .commands import *
+from ..errors import InvalidArgumentError
 
+re_command = re.compile('[a-z]+')
 
 class CommandProcessor(object):
     def __init__(self, player, ttclient, module_manager, service_manager):
@@ -46,7 +48,7 @@ class CommandProcessor(object):
             if self.locked:
                 return _('Bot is locked')
         try:
-            command = re.findall('[a-z]+', message.text.split(' ')[0].lower())[0]
+            command = re.findall(re_command, message.text.split(' ')[0].lower())[0]
         except IndexError:
             return self.help('', message.user)
         arg = ' '.join(message.text.split(' ')[1::])
@@ -57,24 +59,26 @@ class CommandProcessor(object):
                 return self.admin_commands_dict[command](arg, message.user)
             else:
                 return _('Unknown command') + ' "' + command + '"\n' + self.help('', message.user)
+        except InvalidArgumentError as e:
+            return self.help(command, message.user)
         except Exception as e:
             logging.error(traceback.format_exc())
             return 'error: {}'.format(e)
 
     def help(self, arg, user):
         if arg:
-            if not user.is_admin and arg in self.commands_dict:
+            if arg in self.commands_dict:
                 try:
-                    return self.commands_dict[arg].help
+                    return '{command} {help}'.format(command=arg, help=self.commands_dict[arg].help)
                 except AttributeError:
-                    return _('Help text not found')
+                    return _('{command} Help text not found'.format(command=arg))
             elif user.is_admin and arg in self.admin_commands_dict:
                 try:
-                    return self.admin_commands_dict[arg].help
+                    return '{command} {help}'.format(command=arg, help=self.admin_commands_dict[arg].help)
                 except AttributeError:
-                    return _('Help text not found')
+                    return _('{command} Help text not found'.format(command=arg))
             else:
-                return _('Unknown command "{command}"\n{help}').format(command=command, help=self.help('', user))
+                return _('Unknown command "{command}"\n{help}').format(command=arg, help=self.help('', user))
         else:
             help_strings = []
             for i in list(self.commands_dict):
