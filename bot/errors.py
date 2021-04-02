@@ -1,4 +1,8 @@
-class NotFoundError(Exception):
+class InvalidArgumentError(Exception):
+    pass
+
+
+class NothingFoundError(Exception):
     pass
 
 
@@ -26,7 +30,7 @@ class NothingIsPlayingError(Exception):
     pass
 
 
-class IncorrectPositionError:
+class IncorrectPositionError(Exception):
     pass
 
 

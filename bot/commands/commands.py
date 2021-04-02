@@ -46,7 +46,7 @@ class PlayPauseCommand(Command):
                 self.ttclient.send_message(_("{nickname} requested {track}").format(nickname=user.nickname, track=track_list[0].name), type=2)
                 return _('Playing {}').format(track_list[0].name)
             except errors.NotFoundError:
-                return _('not found')
+                return _('Nothing is found for your query')
         else:
             if self.player.state == State.Playing:
                 self.player.pause()
@@ -68,7 +68,7 @@ class RateCommand(Command):
                 else:
                     raise ValueError
             except ValueError:
-                return self.help
+                raise errors.InvalidArgumentError
         else:
             return str(self.player.get_rate())
 
@@ -88,7 +88,7 @@ class PlayUrlCommand(Command):
             except errors.PathNotFoundError:
                 return _('The path cannot be found')
         else:
-            return self.help()
+            raise errors.InvalidArgumentError
 
 
 class StopCommand(Command):
@@ -97,7 +97,11 @@ class StopCommand(Command):
         self.help = _('Stops playback')
 
     def __call__(self, arg, user):
-        self.player.stop()
+        if self.player.state != State.Stopped:
+            self.player.stop()
+            self.ttclient.send_message(_("{nickname} stopped playback").format(nickname=user.nickname), type=2)
+        else:
+            return _('Nothing is playing')
 
 
 class VolumeCommand(Command):
@@ -114,7 +118,7 @@ class VolumeCommand(Command):
                 else:
                     raise ValueError
             except ValueError:
-                return self.help
+                raise errors.InvalidArgumentError
         else:
             return str(self.player.get_volume())
 
@@ -129,7 +133,7 @@ class SeekBackCommand(Command):
             try:
                 self.player.seek_back(float(arg))
             except ValueError:
-                return self.help
+                raise errors.InvalidArgumentError
         else:
             self.player.seek_back()
 
@@ -144,7 +148,7 @@ class SeekForwardCommand(Command):
             try:
                 self.player.seek_forward(float(arg))
             except ValueError:
-                return self.help
+                raise errors.InvalidArgumentError
         else:
             self.player.seek_forward()
 
@@ -233,7 +237,7 @@ class SelectTrackCommand(Command):
             except errors.NothingIsPlayingError:
                 return _('Nothing is currently playing')
             except ValueError:
-                return self.help
+                raise errors.InvalidArgumentError
         else:
             if self.player.state == State.Playing:
                 return _('now playing {} {}').format(self.player.track_index + 1, self.player.track.name)

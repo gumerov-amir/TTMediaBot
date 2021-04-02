@@ -38,4 +38,4 @@ class Service:
                     continue
             return tracks
         else:
-            raise errors.NotFoundError('')
+            raise errors.NothingFoundError('')
