@@ -29,7 +29,7 @@ class Player:
         self.track = Track()
         self.track_index = -1
         self.state = State.Stopped
-        self.mode = Mode.SingleTrack
+        self.mode = Mode.TrackList
         self.thread = PlayerThread(self)
 
     def run(self):

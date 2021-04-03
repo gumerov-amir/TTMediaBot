@@ -185,15 +185,17 @@ class ModeCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
         self.help = ('MODE_NUMBER Sets playback mode. Send this command without a number for more info')
+        self.mode_names = {Mode.SingleTrack: _('Single Track'), Mode.RepeatTrack: _('Repeat Track'), Mode.TrackList: _('Track list'), Mode.RepeatTrackList: _('Repeat track list'), Mode.Random: _('Random')}
 
     def __call__(self, arg, user):
-        mode_help = 'current_ mode: {current_mode}\n{modes}'.format(current_mode=self.player.mode.name, modes='\n'.join(['{name} - {value}'.format(name=i.name, value=i.value) for i in [Mode.SingleTrack, Mode.RepeatTrack, Mode.TrackList, Mode.RepeatTrackList, Mode.Random]]))
+        mode_help = 'current_ mode: {current_mode}\n{modes}'.format(current_mode=self.mode_names[self.player.mode], modes='\n'.join(['{value} {name}'.format(name=self.mode_names[i], value=i.value) for i in Mode.__members__.values()]))
         if arg:
             try:
-                mode = Mode(int(arg))
+                mode = Mode(arg.lower())
                 self.player.mode = Mode(mode)
-            except TypeError:
-                return mode_help
+                return 'Current mode: {mode}'.format(mode=self.mode_names[self.player.mode])
+            except ValueError:
+                return 'Incorrect mode\n' + mode_help
         else:
             return mode_help
 

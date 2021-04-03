@@ -1,0 +1,217 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2021-03-30 11:19+0300\n"
+"PO-Revision-Date: 2021-03-30 11:25+0300\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 2.4.2\n"
+"Last-Translator: Гумеров Амир Эдуардович <ar8200@bk.ru>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Language: ru\n"
+
+#: bot\TeamTalk\__init__.py:68
+msgid "Send \"h\" for help"
+msgstr "Напишите \"h\" для получения справки"
+
+#: bot\commands\__init__.py:42
+msgid "You are banned"
+msgstr "Вы заблокированы"
+
+#: bot\commands\__init__.py:45
+msgid "You are not in bot's channel"
+msgstr "Вы находитесь вне канала с ботом"
+
+#: bot\commands\__init__.py:47
+msgid "Bot is locked"
+msgstr "Бот заблокирован"
+
+#: bot\commands\__init__.py:59
+msgid "Unknown command"
+msgstr "Неизвестная команда"
+
+#: bot\commands\__init__.py:70 bot\commands\__init__.py:75
+msgid "Help text not found"
+msgstr "Текст справки не найден"
+
+#: bot\commands\__init__.py:77
+msgid ""
+"Unknown command \"{command}\"\n"
+"{help}"
+msgstr "Неизвестная команда \"{command}\" {help}"
+
+#: bot\commands\__init__.py:99
+msgid "Locked"
+msgstr "Заблокирован"
+
+#: bot\commands\__init__.py:99
+msgid "Unlocked"
+msgstr "Разблокирован"
+
+#: bot\commands\commands.py:19
+msgid "Shows command help"
+msgstr "Показывает справку по командам"
+
+#: bot\commands\commands.py:28
+msgid "()Shows information about this bot)"
+msgstr "Показывает информацию о боте"
+
+#: bot\commands\commands.py:38
+msgid ""
+"QUERY Plays tracks found for the query. If no query is given plays or pauses "
+"current track"
+msgstr ""
+
+#: bot\commands\commands.py:42
+msgid "Searching..."
+msgstr "Поиск..."
+
+#: bot\commands\commands.py:46
+msgid "{nickname} requested {track}"
+msgstr "Имя запрошеного трека"
+
+#: bot\commands\commands.py:47
+msgid "Playing {}"
+msgstr "Воиспроизведение"
+
+#: bot\commands\commands.py:49
+msgid "not found"
+msgstr "Не найдено"
+
+#: bot\commands\commands.py:60
+msgid ""
+"RATE Sets rate to a value from 0.25 to 4. If no rate is given shows current "
+"rate"
+msgstr ""
+
+#: bot\commands\commands.py:79
+msgid "URL Plays a stream from a given URL"
+msgstr ""
+
+#: bot\commands\commands.py:87
+msgid "Incorrect protocol"
+msgstr "Неверный протокол"
+
+#: bot\commands\commands.py:89
+msgid "The path cannot be found"
+msgstr ""
+
+#: bot\commands\commands.py:97
+msgid "Stops playback"
+msgstr ""
+
+#: bot\commands\commands.py:106
+msgid "VOLUME Sets volume to a value from 0 to 100"
+msgstr ""
+
+#: bot\commands\commands.py:125
+msgid ""
+"[STEP] Seeks current track back. the optional step is specified in percents "
+"from 1 to 100"
+msgstr ""
+
+#: bot\commands\commands.py:140
+msgid ""
+"[STEP] Seeks current track forward. the optional step is specified in "
+"percents from 1 to 100"
+msgstr ""
+
+#: bot\commands\commands.py:155
+msgid "Plays next track"
+msgstr ""
+
+#: bot\commands\commands.py:161
+msgid "No next track"
+msgstr ""
+
+#: bot\commands\commands.py:163 bot\commands\commands.py:234
+#: bot\commands\commands.py:241 bot\commands\commands.py:257
+#: bot\commands\commands.py:285
+msgid "Nothing is currently playing"
+msgstr ""
+
+#: bot\commands\commands.py:169
+msgid "Plays previous track"
+msgstr ""
+
+#: bot\commands\commands.py:175
+msgid "No previous track"
+msgstr ""
+
+#: bot\commands\commands.py:177
+msgid "Nothing is playing"
+msgstr ""
+
+#: bot\commands\commands.py:200
+msgid ""
+"SERVICE Selects a service to play from. If no service is given shows current "
+"service and a list of available ones"
+msgstr ""
+
+#: bot\commands\commands.py:217
+msgid "NUMBER Selects track by number from the list of current results"
+msgstr ""
+
+#: bot\commands\commands.py:228
+msgid "Incorrect number"
+msgstr ""
+
+#: bot\commands\commands.py:230 bot\commands\commands.py:239
+msgid "now playing {} {}"
+msgstr ""
+
+#: bot\commands\commands.py:232
+msgid "Out of list"
+msgstr ""
+
+#: bot\commands\commands.py:247
+msgid "Gets a direct link to the current track"
+msgstr ""
+
+#: bot\commands\commands.py:255
+msgid "URL is not available"
+msgstr ""
+
+#: bot\commands\commands.py:263
+msgid "NICKNAME Sets the bot's nickname"
+msgstr ""
+
+#: bot\commands\commands.py:278
+msgid "Incorrect position"
+msgstr ""
+
+#: bot\commands\commands.py:280
+msgid "Must be integer"
+msgstr ""
+
+#: bot\commands\commands.py:290
+msgid "Enables or disables voice transmission"
+msgstr ""
+
+#: bot\commands\commands.py:296
+msgid "Voice activation enabled"
+msgstr ""
+
+#: bot\commands\commands.py:297
+msgid "Voice transmission enabled"
+msgstr ""
+
+#: bot\commands\commands.py:302
+msgid "Voice transmission disabled"
+msgstr ""
+
+#: bot\commands\commands.py:309
+msgid "Locks or unlocks the bot"
+msgstr ""
+
+#: bot\commands\commands.py:318
+msgid "Quits the bot"
+msgstr ""
