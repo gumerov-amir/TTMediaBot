@@ -34,6 +34,7 @@ class CommandProcessor(object):
         self.admin_commands_dict = {
             'girl': lambda arg, user: 'Настенька',
             'cn': ChangeNicknameCommand(self),
+            'cs': ChangeStatusCommand(self),
             'l': LockCommand(self),
             'va': VoiceTransmissionCommand(self),
             'q': QuitCommand(self),
