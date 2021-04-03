@@ -27,7 +27,7 @@ class CommandProcessor(object):
             'sb': SeekBackCommand(self),
             'sf': SeekForwardCommand(self),
             'v': VolumeCommand(self),
-            'r': RateCommand(self),
+            # 'r': RateCommand(self),
             'm': ModeCommand(self),
             'dl': DownloadCommand(self),
         }
