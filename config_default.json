@@ -29,6 +29,7 @@
         "udp_port": 10333,
         "encrypted": false,
         "nickname": "TTMediaBot",
+        "default_status": "",
         "username": "",
         "password": "",
         "channel": "/",
