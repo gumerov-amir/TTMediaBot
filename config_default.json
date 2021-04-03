@@ -21,7 +21,7 @@
         "faded_volume": true,
         "faded_volume_timestamp": 0.025,
         "seek_step": 5,
-        "vlc_options": ""
+        "vlc_options": "--audio-resampler=none"
     },
     "teamtalk": {
         "hostname": "",
