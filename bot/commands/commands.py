@@ -318,6 +318,14 @@ class LockCommand(Command):
         return self.command_processor.lock(arg, user)
 
 
+
+class ChangeStatusCommand(Command):
+    def __init__(self, command_processor):
+        super().__init__(command_processor)
+
+    def __call__(self, arg, user):
+        self.ttclient.change_status_text(arg)
+
 class QuitCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)

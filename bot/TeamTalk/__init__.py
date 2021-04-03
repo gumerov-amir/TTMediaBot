@@ -73,7 +73,10 @@ class TeamTalk:
         self.tt = TeamTalkPy.TeamTalk()
         self.is_voice_transmission_enabled = False
         self.nickname = config['nickname']
-        self.help_status = _('Send "h" for help')
+        if self.config['default_status']:
+            self.default_status = self.config['default_status']
+        else:
+            self.default_status = _('Send "h" for help')
         self.status = ''
         self.admins = self.config['users']['admins']
         self.banned_users = self.config['users']['banned_users']
@@ -83,7 +86,7 @@ class TeamTalk:
     def initialize(self):
         logging.debug('Initializing TeamTalk')
         self.connect()
-        self.change_status_text(self.help_status)
+        self.change_status_text(self.default_status)
         logging.debug('TeamTalk initialized')
 
     def run(self):
@@ -171,7 +174,7 @@ class TeamTalk:
         if text:
             self.status = split(text)[0]
         else:
-            self.status = self.help_status
+            self.status = self.default_status
         self.tt.doChangeStatus(0, _str(self.status))
 
     def get_user(self, id):
