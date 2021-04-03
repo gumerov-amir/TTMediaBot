@@ -17,7 +17,7 @@ class Service:
 
     def get(self, url):
         video = pafy.new(url)
-        best_audio = video.getbestaudio()
+        best_audio = video.getbestaudio(preftype='m4a')
         return Track(url=best_audio.url, name="{} - {}".format(video.title, video.author))
 
     def search(self, text):
@@ -27,7 +27,7 @@ class Service:
             for video in search.videos:
                 try:
                     video = pafy.new(urljoin('https://www.youtube.com', video['url_suffix']))
-                    best_audio = video.getbestaudio()
+                    best_audio = video.getbestaudio(preftype='m4a')
                     real_url = best_audio.url
                     name = '{} - {}'.format(video.title, video.author)
                     track = Track(url=real_url, name=name)

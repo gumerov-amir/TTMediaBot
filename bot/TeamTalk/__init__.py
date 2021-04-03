@@ -1,7 +1,8 @@
 import _thread
 import logging
-import time
 import os
+import time
+import re
 import sys
 import queue
 
@@ -18,6 +19,9 @@ from bot.TeamTalk import thread
 
 import TeamTalkPy
 from TeamTalkPy import TTMessage, ClientEvent
+
+re_line_endings = re.compile('[\\r\\n]')
+
 
 
 def _str(data):
@@ -171,7 +175,7 @@ class TeamTalk:
         return User(user.nUserID, _str(user.szNickname), _str(user.szUsername), user.nChannelID, _str(user.szUsername) in self.admins, _str(user.szUsername) in self.banned_users)
 
     def get_message(self, msg):
-        return Message(_str(msg.szMessage), self.get_user(msg.nFromUserID))
+        return Message(re.sub(re_line_endings, '', _str(msg.szMessage)), self.get_user(msg.nFromUserID))
 
     def get_my_channel_id(self):
         return self.tt.getMyChannelID()

@@ -45,7 +45,7 @@ class PlayPauseCommand(Command):
                 self.player.play(track_list)
                 self.ttclient.send_message(_("{nickname} requested {track}").format(nickname=user.nickname, track=track_list[0].name), type=2)
                 return _('Playing {}').format(track_list[0].name)
-            except errors.NotFoundError:
+            except errors.NothingFoundError:
                 return _('Nothing is found for your query')
         else:
             if self.player.state == State.Playing:
