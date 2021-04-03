@@ -18,7 +18,7 @@ if sys.platform == 'win32':
 class Player:
     def __init__(self, config):
         self.config = config
-        self._vlc_instance = vlc.Instance()
+        self._vlc_instance = vlc.Instance('--audio-resampler=speex_resampler --speex-resampler-quality=1')
         self._vlc_player = self._vlc_instance.media_player_new()
         self._vlc_player.audio_set_volume(self.config['default_volume'])
         self.max_volume = self.config['max_volume']
