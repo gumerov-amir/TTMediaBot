@@ -40,17 +40,21 @@ def split(text, max_length=vars.max_message_length):
     else:
         lines = ['']
         for line in text.split('\n'):
-            if len(line) < max_length:
-                if len(lines[-1]) + len(line) + 1 <= max_length:
+            if len(line) <= max_length:
+                if len(lines[-1]) > 0 and len(lines[-1]) + len(line) + 1 <= max_length:
                     lines[-1] += '\n' + line
+                elif len(lines) == 1 and len(lines[0]) == 0:
+                    lines[0] = line
                 else:
                     lines.append(line)
             else:
                 words = ['']
                 for word in line.split(' '):
                     if len(word) <= max_length:
-                        if len(words[-1]) + len(word) + 1 <= max_length:
+                        if len(words[-1]) > 0 and len(words[-1]) + len(word) + 1 <= max_length:
                             words[-1] += ' ' + word
+                        elif len(words) == 1 and len(words[0]) == 0:
+                            words[0] == word
                         else:
                             words.append(word)
                     else:
