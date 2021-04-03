@@ -8,8 +8,8 @@ class State(Enum):
 
 
 class Mode(Enum):
-    SingleTrack = 0
-    RepeatTrack = 1
-    TrackList = 2
-    RepeatTrackList = 3
-    Random = 4
+    SingleTrack = 'st'
+    RepeatTrack = 'rt'
+    TrackList = 'tl'
+    RepeatTrackList = 'rtl'
+    Random = 'rnd'
