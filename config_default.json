@@ -20,7 +20,8 @@
         "max_volume": 100,
         "faded_volume": true,
         "faded_volume_timestamp": 0.025,
-        "seek_step": 5
+        "seek_step": 5,
+        "vlc_options": ""
     },
     "teamtalk": {
         "hostname": "",
