@@ -28,6 +28,7 @@ class CommandProcessor(object):
             'sf': SeekForwardCommand(self),
             'v': VolumeCommand(self),
             # 'r': RateCommand(self),
+            # It has bugs on windows
             'm': ModeCommand(self),
             'dl': DownloadCommand(self),
         }

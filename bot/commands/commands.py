@@ -43,8 +43,8 @@ class PlayPauseCommand(Command):
             try:
                 track_list = self.service_manager.service.search(arg)
                 self.player.play(track_list)
-                self.ttclient.send_message(_("{nickname} requested {track}").format(nickname=user.nickname, track=track_list[0].name), type=2)
-                return _('Playing {}').format(track_list[0].name)
+                self.ttclient.send_message(_("{nickname} requested {request}").format(nickname=user.nickname, request=arg), type=2)
+                return _('Playing {}').format(self.player.track.name)
             except errors.NothingFoundError:
                 return _('Nothing is found for your query')
         else:
@@ -83,6 +83,7 @@ class PlayUrlCommand(Command):
             try:
                 tracks = self.module_manager.streamer.get(arg, user.is_admin)
                 self.player.play(tracks)
+                self.ttclient.send_message(_('{nickname} requested playing from url').format(nickname=user.nickname), type=2)
             except errors.IncorrectProtocolError:
                 return _('Incorrect protocol')
             except errors.PathNotFoundError:
@@ -161,6 +162,7 @@ class NextTrackCommand(Command):
     def __call__(self, arg, user):
         try:
             self.player.next()
+            return _('Playing {}').format(self.player.track.name)
         except errors.NoNextTrackError:
             return _('No next track')
         except errors.NothingIsPlayingError:
@@ -175,6 +177,7 @@ class PreviousTrackCommand(Command):
     def __call__(self, arg, user):
         try:
             self.player.previous()
+            return _('Playing {}').format(self.player.track.name)
         except errors.NoPreviousTrackError:
             return _('No previous track')
         except errors.NothingIsPlayingError:
@@ -233,7 +236,7 @@ class SelectTrackCommand(Command):
                 else:
                     return _('Incorrect number')
                 self.player.play_by_index(index)
-                return _('now playing {} {}').format(arg, self.player.track.name)
+                return _('Playing {} {}').format(arg, self.player.track.name)
             except errors.IncorrectTrackIndexError:
                 return _('Out of list')
             except errors.NothingIsPlayingError:
@@ -242,7 +245,7 @@ class SelectTrackCommand(Command):
                 raise errors.InvalidArgumentError
         else:
             if self.player.state == State.Playing:
-                return _('now playing {} {}').format(self.player.track_index + 1, self.player.track.name)
+                return _('Playing {} {}').format(self.player.track_index + 1, self.player.track.name)
             else:
                 return _('Nothing is currently playing')
 
