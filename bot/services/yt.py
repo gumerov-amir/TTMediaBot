@@ -16,9 +16,12 @@ class Service:
         pass
 
     def get(self, url):
-        video = pafy.new(url)
-        best_audio = video.getbestaudio(preftype='m4a')
-        return Track(url=best_audio.url, name="{} - {}".format(video.title, video.author))
+        try:
+            video = pafy.new(url)
+            best_audio = video.getbestaudio(preftype='m4a')
+            return Track(url=best_audio.url, name="{} - {}".format(video.title, video.author))
+        except Exception as e:
+            raise errors.ServiceError(e)
 
     def search(self, text):
         search = youtube_search.YoutubeSearch(text, max_results=300)
@@ -32,10 +35,10 @@ class Service:
                     name = '{} - {}'.format(video.title, video.author)
                     track = Track(url=real_url, name=name)
                     tracks.append(track)
-                except KeyError:
+                except (AttributeError, KeyError):
                     continue
-                except AttributeError:
-                    continue
+                except Exception as e:
+                    raise errors.ServiceError(e)
             return tracks
         else:
             raise errors.NothingFoundError('')

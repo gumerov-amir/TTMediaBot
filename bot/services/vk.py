@@ -22,7 +22,10 @@ class Service:
 
     def search(self, text):
         results = self.api.audio.search(q=text, count=300, sort=0)
-        if results['count'] > 0:
-            return [Track(url=i['url'], name='{artist} - {title}'.format(title=i['title'], artist=i['artist'])) for i in results['items']]
-        else:
-            raise errors.NothingFoundError
+        try:
+            if results['count'] > 0:
+                return [Track(url=i['url'], name='{artist} - {title}'.format(title=i['title'], artist=i['artist'])) for i in results['items']]
+            else:
+                raise errors.NothingFoundError
+        except Exception as e:
+            raise errors.ServiceError(e)
