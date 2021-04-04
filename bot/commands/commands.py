@@ -108,20 +108,20 @@ class StopCommand(Command):
 class VolumeCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('VOLUME Sets volume to a value from 0 to 100')
+        self.help = _('VOLUME Sets volume to a value from 0 to {max_volume}').format(max_volume=self.player.max_volume)
 
     def __call__(self, arg, user):
         if arg:
             try:
                 volume = int(arg)
-                if volume >= 0 and volume <= 100:
+                if 0 <= volume <= self.player.max_volume:
                     self.player.set_volume(int(arg))
                 else:
                     raise ValueError
             except ValueError:
                 raise errors.InvalidArgumentError
         else:
-            return str(self.player.get_volume())
+            return str(self.player.volume)
 
 
 class SeekBackCommand(Command):
@@ -214,8 +214,9 @@ class ServiceCommand(Command):
             arg = arg.lower()
             if arg in self.service_manager.available_services:
                 self.service_manager.service = self.service_manager.available_services[arg]
+                return _('Current service: {}').format(self.service_manager.service.name)
             else:
-                return service_help
+                return _('Unknown service.\n{}').format(service_help)
         else:
             return service_help
 

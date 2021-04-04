@@ -17,7 +17,7 @@ class Player:
         self.config = config
         self._vlc_instance = vlc.Instance(self.config['vlc_options'])
         self._vlc_player = self._vlc_instance.media_player_new()
-        self._vlc_player.audio_set_volume(self.config['default_volume'])
+        self.volume = self.config['default_volume']
         self.max_volume = self.config['max_volume']
         self.faded_volume = self.config['faded_volume']
         self.faded_volume_timestamp = self.config['faded_volume_timestamp']
@@ -48,6 +48,9 @@ class Player:
             self._vlc_player.play()
         while self._vlc_player.get_state() != vlc.State.Playing and self._vlc_player.get_state() != vlc.State.Ended:
             pass
+        while self._vlc_player.audio_set_volume(self.volume) == -1:
+            pass
+        self._vlc_player.audio_set_volume(self.volume)
         self.state = State.Playing
 
     def pause(self):
@@ -107,11 +110,14 @@ class Player:
         else:
             raise errors.IncorrectTrackIndexError()
 
-    def get_volume(self):
-        return self._vlc_player.audio_get_volume()
-
     def set_volume(self, volume):
         volume = volume if volume <= self.max_volume else self.max_volume
+        self.volume = volume
+        if volume == 0:
+            self._vlc_player.audio_set_mute(True)
+        else:
+            if self._vlc_player.audio_get_mute():
+                self._vlc_player.audio_set_mute(False)
         if self.faded_volume:
             n = 1 if self._vlc_player.audio_get_volume() < volume else -1
             for i in range(self._vlc_player.audio_get_volume(), volume, n):
