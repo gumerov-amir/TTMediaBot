@@ -5,7 +5,7 @@ import sys
 
 import vlc
 
-from bot import errors
+from bot import errors, vars
 from bot.player.enums import Mode, State
 from bot.player.track import Track
 from bot.player.thread import PlayerThread
@@ -47,9 +47,9 @@ class Player:
         else:
             self._vlc_player.play()
         while self._vlc_player.get_state() != vlc.State.Playing and self._vlc_player.get_state() != vlc.State.Ended:
-            pass
+            time.sleep(vars.loop_timeout)
         while self._vlc_player.audio_set_volume(self.volume) == -1:
-            pass
+            time.sleep(vars.loop_timeout)
         self._vlc_player.audio_set_volume(self.volume)
         self.state = State.Playing
 
