@@ -18,8 +18,11 @@ class Service:
     def get(self, url):
         try:
             video = pafy.new(url)
-            best_audio = video.getbestaudio(preftype='m4a')
-            return Track(url=best_audio.url, name="{} - {}".format(video.title, video.author))
+            if video.audiostreams:
+                best = video.getbestaudio(preftype='m4a')
+            else:
+                best = video.getbest()
+            return Track(url=best.url, name="{} - {}".format(video.title, video.author))
         except Exception as e:
             raise errors.ServiceError(e)
 
@@ -30,7 +33,10 @@ class Service:
             for video in search.videos:
                 try:
                     video = pafy.new(urljoin('https://www.youtube.com', video['url_suffix']))
-                    best_audio = video.getbestaudio(preftype='m4a')
+                    if video.audiostreams:
+                        best = video.getbestaudio(preftype='m4a')
+                    else:
+                        best = video.getbest()
                     real_url = best_audio.url
                     name = '{} - {}'.format(video.title, video.author)
                     track = Track(url=real_url, name=name)
