@@ -48,7 +48,7 @@ class PlayPauseCommand(Command):
             except errors.NothingFoundError:
                 return _('Nothing is found for your query')
             except errors.ServiceError as e:
-                return e
+                return str(e)
         else:
             if self.player.state == State.Playing:
                 self.player.pause()
@@ -91,7 +91,7 @@ class PlayUrlCommand(Command):
             except errors.PathNotFoundError:
                 return _('The path cannot be found')
             except errors.ServiceError as e:
-                return e
+                return str(e)
         else:
             raise errors.InvalidArgumentError
 
