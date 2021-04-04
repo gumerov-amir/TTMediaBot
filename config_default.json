@@ -2,15 +2,6 @@
     "general": {
         "language": "ru"
     },
-    "logger": {
-        "log": true,
-        "level": "INFO",
-        "format": "%(levelname)s [%(asctime)s]: %(message)s in %(threadName)s file: %(filename)s line %(lineno)d function %(funcName)s",
-        "mode": 2,
-        "file_name": "TTMediaBot.log",
-        "max_file_size": 0,
-        "backup_count": 0
-    },
     "sound_devices": {
         "output_device": 0,
         "input_device": 0
@@ -51,5 +42,14 @@
             "yt": {}
         },
         "default_service": "vk"
+    },
+    "logger": {
+        "log": true,
+        "level": "INFO",
+        "format": "%(levelname)s [%(asctime)s]: %(message)s in %(threadName)s file: %(filename)s line %(lineno)d function %(funcName)s",
+        "mode": 2,
+        "file_name": "TTMediaBot.log",
+        "max_file_size": 0,
+        "backup_count": 0
     }
 }
