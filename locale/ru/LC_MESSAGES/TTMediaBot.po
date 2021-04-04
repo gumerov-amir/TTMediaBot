@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "POT-Creation-Date: 2021-03-30 11:19+0300\n"
-"PO-Revision-Date: 2021-03-30 11:25+0300\n"
+"PO-Revision-Date: 2021-04-04 10:48+0300\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -20,49 +20,49 @@ msgstr ""
 
 #: bot\TeamTalk\__init__.py:68
 msgid "Send \"h\" for help"
-msgstr "Напишите \"h\" для получения справки"
+msgstr ""
 
 #: bot\commands\__init__.py:42
 msgid "You are banned"
-msgstr "Вы заблокированы"
+msgstr ""
 
 #: bot\commands\__init__.py:45
 msgid "You are not in bot's channel"
-msgstr "Вы находитесь вне канала с ботом"
+msgstr ""
 
 #: bot\commands\__init__.py:47
 msgid "Bot is locked"
-msgstr "Бот заблокирован"
+msgstr ""
 
 #: bot\commands\__init__.py:59
 msgid "Unknown command"
-msgstr "Неизвестная команда"
+msgstr ""
 
 #: bot\commands\__init__.py:70 bot\commands\__init__.py:75
 msgid "Help text not found"
-msgstr "Текст справки не найден"
+msgstr ""
 
 #: bot\commands\__init__.py:77
 msgid ""
 "Unknown command \"{command}\"\n"
 "{help}"
-msgstr "Неизвестная команда \"{command}\" {help}"
+msgstr ""
 
 #: bot\commands\__init__.py:99
 msgid "Locked"
-msgstr "Заблокирован"
+msgstr ""
 
 #: bot\commands\__init__.py:99
 msgid "Unlocked"
-msgstr "Разблокирован"
+msgstr ""
 
 #: bot\commands\commands.py:19
 msgid "Shows command help"
-msgstr "Показывает справку по командам"
+msgstr ""
 
 #: bot\commands\commands.py:28
 msgid "()Shows information about this bot)"
-msgstr "Показывает информацию о боте"
+msgstr ""
 
 #: bot\commands\commands.py:38
 msgid ""
@@ -72,19 +72,19 @@ msgstr ""
 
 #: bot\commands\commands.py:42
 msgid "Searching..."
-msgstr "Поиск..."
+msgstr ""
 
 #: bot\commands\commands.py:46
 msgid "{nickname} requested {track}"
-msgstr "Имя запрошеного трека"
+msgstr ""
 
 #: bot\commands\commands.py:47
 msgid "Playing {}"
-msgstr "Воиспроизведение"
+msgstr ""
 
 #: bot\commands\commands.py:49
 msgid "not found"
-msgstr "Не найдено"
+msgstr ""
 
 #: bot\commands\commands.py:60
 msgid ""
@@ -98,7 +98,7 @@ msgstr ""
 
 #: bot\commands\commands.py:87
 msgid "Incorrect protocol"
-msgstr "Неверный протокол"
+msgstr ""
 
 #: bot\commands\commands.py:89
 msgid "The path cannot be found"

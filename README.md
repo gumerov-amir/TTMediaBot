@@ -3,4 +3,4 @@ Bot
 
 # contacts
 E-mail - TTMediaBot@gmail.com
-telegram channel: te.me/TTMediaBot_official
+telegram channel: https://t.me/TTMediaBot_official
