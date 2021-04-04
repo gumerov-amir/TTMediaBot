@@ -2,6 +2,10 @@ class InvalidArgumentError(Exception):
     pass
 
 
+class ServiceError(Exception):
+    pass
+
+
 class NothingFoundError(Exception):
     pass
 
