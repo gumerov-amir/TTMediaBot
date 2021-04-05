@@ -3,7 +3,6 @@ click
 pafy
 patool
 python-vlc
-pyunpack
 vk_api
 youtube-dl
 youtube-search
