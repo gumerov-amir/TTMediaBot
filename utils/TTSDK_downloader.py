@@ -7,7 +7,7 @@ import sys
 from urllib import request
 
 import bs4
-import pyunpack
+import patoolib
 
 
 url = 'http://bearware.dk/teamtalksdk'
@@ -39,7 +39,7 @@ def get_url_suffix_from_platform():
 def download():
     r = request.urlopen(url)
     html = r.read().decode('UTF-8')
-    page = bs4.BeautifulSoup(html)
+    page = bs4.BeautifulSoup(html, features='html.parser')
     versions = page.find_all('li')
     last_version = versions[-1].a.get('href')[0:-1]
     download_url = url + '/' + last_version + '/' + 'tt5sdk_{v}_{p}.7z'.format(v=last_version, p=get_url_suffix_from_platform())
@@ -52,7 +52,7 @@ def extract():
     except FileExistsError:
         shutil.rmtree(os.path.join(cd, 'ttsdk'))
         os.mkdir(os.path.join(cd, 'ttsdk'))
-    pyunpack.Archive(os.path.join(cd, 'ttsdk.7z')).extractall(os.path.join(cd, 'ttsdk'))
+    patoolib.extract_archive(os.path.join(cd, 'ttsdk.7z'), outdir=os.path.join(cd, 'ttsdk'))
 
 def move():
     path = os.path.join(cd, 'ttsdk', os.listdir(os.path.join(cd, 'ttsdk'))[0])
