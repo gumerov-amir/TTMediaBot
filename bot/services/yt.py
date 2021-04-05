@@ -37,7 +37,7 @@ class Service:
                         best = video.getbestaudio(preftype='m4a')
                     else:
                         best = video.getbest()
-                    real_url = best_audio.url
+                    real_url = best.url
                     name = '{} - {}'.format(video.title, video.author)
                     track = Track(url=real_url, name=name)
                     tracks.append(track)
