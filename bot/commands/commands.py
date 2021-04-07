@@ -47,6 +47,8 @@ class PlayPauseCommand(Command):
                 return _('Playing {}').format(self.player.track.name)
             except errors.NothingFoundError:
                 return _('Nothing is found for your query')
+            except errors.SearchError:
+                return _('Unable to perform a search. Please try again')
             except errors.ServiceError as e:
                 return _('The stream cannot be played\nAdditional error info:\n') + str(e)
         else:
