@@ -36,7 +36,10 @@ class Service:
             raise errors.ServiceError(e.__class__.__name__ + ': ' + str(e))
 
     def search(self, text):
-        search = VideosSearch(text, limit=300).result()
+        try:
+            search = VideosSearch(text, limit=300).result()
+        except:
+            raise errors.SearchError()
         if search['result']:
             tracks = []
             for video in search['result']:
