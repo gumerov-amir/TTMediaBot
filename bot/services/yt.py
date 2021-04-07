@@ -4,11 +4,10 @@ from youtubesearchpython import VideosSearch
 from bot.player.track import Track
 from bot import errors
 
-
 class Service:
     def __init__(self, config):
         self.name = 'yt'
-        self.hostnames = ['www.youtube.com', 'youtube.com', 'youtu.be', 'www.youtu.be']
+        self.hostnames = []
 
     def initialize(self):
         self._ydl_config = {
@@ -21,9 +20,20 @@ class Service:
         try:
             with YoutubeDL(self._ydl_config) as ydl:
                 video = ydl.extract_info(url)
-            return Track(url=video['url'], name="{} - {}".format(video['title'], video['uploader']))
+                if 'url' in video:
+                    url = video['url']
+                elif 'entries' in video:
+                    url = video['entries'][0]['url']
+                else:
+                    raise errors.ServiceError('Cannot fetch direct URL')
+                title = video['title']
+                if 'uploader' in video:
+                    uploader = video['uploader']
+                else:
+                    uploader = video['extractor']
+            return Track(url=url, name="{} - {}".format(title, uploader))
         except Exception as e:
-            raise errors.ServiceError(e)
+            raise errors.ServiceError(e.__class__.__name__ + ': ' + str(e))
 
     def search(self, text):
         search = VideosSearch(text, limit=300).result()
@@ -31,15 +41,12 @@ class Service:
             tracks = []
             for video in search['result']:
                 try:
-                    with YoutubeDL(self._ydl_config) as ydl:
-                        real_url = ydl.extract_info(video['link'])['url']
-                    name = '{} - {}'.format(video['title'], video['channel']['name'])
-                    track = Track(url=real_url, name=name)
+                    track = Track(url=video['link'], service=self)
                     tracks.append(track)
                 except (AttributeError, KeyError):
                     continue
                 except Exception as e:
-                    raise errors.ServiceError(e)
+                    raise errors.ServiceError(e.__class__.__name__ + ': ' + str(e))
             return tracks
         else:
             raise errors.NothingFoundError('')
