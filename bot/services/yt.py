@@ -1,7 +1,5 @@
-import youtube_search
-import pafy
-
-from urllib.parse import urljoin
+from youtube_dl import YoutubeDL
+from youtubesearchpython import VideosSearch
 
 from bot.player.track import Track
 from bot import errors
@@ -13,32 +11,29 @@ class Service:
         self.hostnames = ['www.youtube.com', 'youtube.com', 'youtu.be', 'www.youtu.be']
 
     def initialize(self):
-        pass
+        self._ydl_config = {
+        'skip_download': True,
+        'quiet': True,
+        'format': 'bestaudio/140/best'
+        }
 
     def get(self, url):
         try:
-            video = pafy.new(url)
-            if video.audiostreams:
-                best = video.getbestaudio(preftype='m4a')
-            else:
-                best = video.getbest()
-            return Track(url=best.url, name="{} - {}".format(video.title, video.author))
+            with YoutubeDL(self._ydl_config) as ydl:
+                video = ydl.extract_info(url)
+            return Track(url=video['url'], name="{} - {}".format(video['title'], video['uploader']))
         except Exception as e:
             raise errors.ServiceError(e)
 
     def search(self, text):
-        search = youtube_search.YoutubeSearch(text, max_results=300)
-        if search.videos:
+        search = VideosSearch(text, limit=300).result()
+        if search['result']:
             tracks = []
-            for video in search.videos:
+            for video in search['result']:
                 try:
-                    video = pafy.new(urljoin('https://www.youtube.com', video['url_suffix']))
-                    if video.audiostreams:
-                        best = video.getbestaudio(preftype='m4a')
-                    else:
-                        best = video.getbest()
-                    real_url = best.url
-                    name = '{} - {}'.format(video.title, video.author)
+                    with YoutubeDL(self._ydl_config) as ydl:
+                        real_url = ydl.extract_info(video['link'])['url']
+                    name = '{} - {}'.format(video['title'], video['channel']['name'])
                     track = Track(url=real_url, name=name)
                     tracks.append(track)
                 except (AttributeError, KeyError):
