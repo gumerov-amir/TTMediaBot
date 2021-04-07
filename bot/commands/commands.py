@@ -307,7 +307,7 @@ class VoiceTransmissionCommand(Command):
         if not self.ttclient.is_voice_transmission_enabled:
             self.ttclient.enable_voice_transmission()
             if self.player.state == State.Stopped:
-                self.ttclient.change_status_text(_('Voice activation enabled'))
+                self.ttclient.change_status_text(_('Voice transmission enabled'))
             return _('Voice transmission enabled')
         else:
             self.ttclient.disable_voice_transmission()

@@ -11,6 +11,9 @@ from bot.player.track import Track
 from bot.player.thread import PlayerThread
 from bot.sound_devices import SoundDevice, SoundDeviceType
 
+if sys.platform == 'win32':
+    from ctypes import windll
+    windll.ole32.CoInitializeEx(None, 0)
 
 class Player:
     def __init__(self, config):
@@ -164,7 +167,7 @@ class Player:
 
     def get_output_devices(self):
         if sys.platform == 'win32':
-            self._vlc_player.audio_output_set(b'waveout')
+            self._vlc_player.audio_output_set('waveout')
         devices = []
         mods = self._vlc_player.audio_output_device_enum()
         if mods:
