@@ -9,6 +9,7 @@ from bot import errors
 class Service:
     def __init__(self, config):
         self.name = 'vk'
+        self.hostnames = []
         self.config = config
 
     def initialize(self):
@@ -18,7 +19,6 @@ class Service:
         })
         self._session = vk_api.VkApi(token=self.config['token'], session=http)
         self.api = self._session.get_api()
-        self.hostnames = []
 
     def search(self, text):
         try:
