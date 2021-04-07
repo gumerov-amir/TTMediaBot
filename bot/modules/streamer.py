@@ -15,11 +15,15 @@ class Streamer:
         parsed_url = urlparse(url)
         if parsed_url.scheme in self.allowed_schemes:
             track = Track(url=url, from_url=True)
+            fetched_track = Track()
             for service in self.service_manager.available_services.values():
                 if parsed_url.hostname in service.hostnames or service.name == 'yt':
-                    track = service.get(url)
+                    fetched_track = service.get(url)
                     break
-            return [track, ]
+            if fetched_track.name.endswith('generic'):
+                return [track, ]
+            else:
+                return [fetched_track, ]
         elif is_admin and parsed_url.scheme == 'file':
             if sys.platform == 'win32':
                 local_path = '{}:{}'.format(parsed_url.hostname, parsed_url.path)
