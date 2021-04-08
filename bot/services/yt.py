@@ -13,24 +13,24 @@ class Service:
         self._ydl_config = {
         'skip_download': True,
         'quiet': True,
-        'format': 'bestaudio/140/best'
+        'format': '141/bestaudio/140/best'
         }
 
     def get(self, url):
         try:
             with YoutubeDL(self._ydl_config) as ydl:
                 video = ydl.extract_info(url)
-                if 'url' in video:
-                    url = video['url']
-                elif 'entries' in video:
-                    url = video['entries'][0]['url']
-                else:
-                    raise errors.ServiceError('Cannot fetch direct URL')
-                title = video['title']
-                if 'uploader' in video:
-                    uploader = video['uploader']
-                else:
-                    uploader = video['extractor']
+            if 'url' in video:
+                url = video['url']
+            elif 'entries' in video:
+                url = video['entries'][0]['url']
+            else:
+                raise errors.ServiceError('Cannot fetch direct URL')
+            title = video['title']
+            if 'uploader' in video:
+                uploader = video['uploader']
+            else:
+                uploader = video['extractor']
             return Track(url=url, name="{} - {}".format(title, uploader))
         except Exception as e:
             raise errors.ServiceError(e.__class__.__name__ + ': ' + str(e))
