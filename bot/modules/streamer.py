@@ -15,15 +15,16 @@ class Streamer:
         parsed_url = urlparse(url)
         if parsed_url.scheme in self.allowed_schemes:
             track = Track(url=url, from_url=True)
-            fetched_track = Track()
-            try:
-                for service in self.service_manager.available_services.values():
-                    if parsed_url.hostname in service.hostnames or service.name == 'yt':
+            fetched_track = None
+            for service in self.service_manager.available_services.values():
+                if parsed_url.hostname in service.hostnames or service.name == 'yt':
+                    try:
                         fetched_track = service.get(url)
                         break
-            except:
-                pass
-            if track.url and fetched_track.url.startswith(track.url):
+                    except:
+                        print(track)
+                        return [track, ]
+            if fetched_track and fetched_track.url.startswith(track.url):
                 return [track, ]
             else:
                 return [fetched_track, ]
