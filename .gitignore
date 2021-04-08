@@ -134,4 +134,3 @@ config.json
 *.log
 .*env/
 TTSDK_license.txt
-nativecacerts.pem
