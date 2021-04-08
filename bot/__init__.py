@@ -6,8 +6,6 @@ import sys
 
 from bot import commands, connectors, modules, logger, player, services, sound_devices, TeamTalk, vars
 
-from bot import _sslfixer
-
 class Bot:
     def __init__(self, config_file):
         if os.path.isfile(config_file):
