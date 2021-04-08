@@ -23,7 +23,7 @@ class Streamer:
                         break
             except:
                 pass
-            if fetched_track.url.startswith(track.url):
+            if track.url and fetched_track.url.startswith(track.url):
                 return [track, ]
             else:
                 return [fetched_track, ]
