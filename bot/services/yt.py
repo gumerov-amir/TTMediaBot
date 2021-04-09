@@ -11,27 +11,39 @@ class Service:
 
     def initialize(self):
         self._ydl_config = {
-        'skip_download': True,
-        'quiet': True,
-        'format': '141/bestaudio/140/best'
+            'skip_download': True,
+            'quiet': True,
+            'format': '141/bestaudio/140/best'
         }
 
-    def get(self, url):
+    def get(self, url, *args):
+        if not (url or args):
+            raise ValueError()
+        if args:
+            extra_info = args[0]
+        else:
+            extra_info = None
         try:
             with YoutubeDL(self._ydl_config) as ydl:
-                video = ydl.extract_info(url)
-            if 'url' in video:
-                url = video['url']
-            elif 'entries' in video:
-                url = video['entries'][0]['url']
-            else:
-                raise errors.ServiceError('Cannot fetch direct URL')
-            title = video['title']
-            if 'uploader' in video:
-                uploader = video['uploader']
-            else:
-                uploader = video['extractor']
-            return Track(url=url, name="{} - {}".format(title, uploader))
+                if not extra_info:
+                    info = ydl.extract_info(url, process=False)
+                else:
+                    info = extra_info
+                if '_type' in info and info['_type'] == 'playlist':
+                    tracks = []
+                    for entry in info['entries']:
+                        track = Track(service=self, extra_info=entry)
+                        tracks.append(track)
+                    return tracks
+                stream = ydl.process_ie_result(info)
+                if 'url' in stream:
+                    url = stream['url']
+                else:
+                    raise errors.ServiceError('Cannot fetch direct URL')
+                title = stream['title']
+                if 'uploader' in stream:
+                    title += ' - {}'.format(stream['uploader'])
+                return Track(url=url, name=title)
         except Exception as e:
             raise errors.ServiceError(e.__class__.__name__ + ': ' + str(e))
 
