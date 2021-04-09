@@ -1,15 +1,17 @@
 class Track:
-    def __init__(self, service=None, url=None, name=None, from_url=False):
+    def __init__(self, service=None, url=None, name=None, extra_info=None, from_url=False):
         self.service = service
         self.url = url
         self.name = name
+        self.extra_info = extra_info
         self.from_url = from_url
         self._is_fetched = False
 
     def _fetch_stream_data(self):
         if (not self.service) or self._is_fetched:
             return
-        track = self.service.get(self._url)
+
+        track = self.service.get(self._url, self.extra_info)
         self.url = track.url
         self.name = track.name
         self._is_fetched = True
@@ -36,10 +38,10 @@ class Track:
         return {'name': self.name, 'url': self.url}
 
     def __bool__(self):
-        if self.url:
+        if self.url or (self.service and self.extra_info):
             return True
         else:
             return False
 
     def __repr__(self):
-        return '{name} ({url})'.format(name=self.name, url=self.url)
+        return '{name} {url} {dynamic}'.format(name=self.name, url=self.url, dynamic=bool(self.service))

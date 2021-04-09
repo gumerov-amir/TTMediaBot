@@ -15,19 +15,20 @@ class Streamer:
         parsed_url = urlparse(url)
         if parsed_url.scheme in self.allowed_schemes:
             track = Track(url=url, from_url=True)
-            fetched_track = None
+            fetched_data = None
             for service in self.service_manager.available_services.values():
-                if parsed_url.hostname in service.hostnames or service.name == 'yt':
+                if parsed_url.hostname in service.hostnames or service.name == self.service_manager.fallback_service:
                     try:
-                        fetched_track = service.get(url)
+                        fetched_data = service.get(url)
                         break
                     except:
-                        print(track)
                         return [track, ]
-            if fetched_track and fetched_track.url.startswith(track.url):
+            if fetched_data and isinstance(fetched_data, Track) and fetched_data.url.startswith(track.url):
                 return [track, ]
+            elif isinstance(fetched_data, Track):
+                return [fetched_data, ]
             else:
-                return [fetched_track, ]
+                return fetched_data
         elif is_admin and parsed_url.scheme == 'file':
             if sys.platform == 'win32':
                 local_path = '{}:{}'.format(parsed_url.hostname, parsed_url.path)

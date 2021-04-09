@@ -6,6 +6,7 @@ from bot.services import vk, yt
 class ServiceManager:
     def __init__(self, config):
         self.available_services = {}
+        self.fallback_service = 'yt'
         for service_name in config['available_services']:
             service_class = globals()[service_name].Service
             self.available_services[service_name] = service_class(config['available_services'][service_name])
