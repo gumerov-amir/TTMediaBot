@@ -42,15 +42,13 @@ class PlayPauseCommand(Command):
             self.ttclient.send_message(_('Searching...'), user)
             try:
                 track_list = self.service_manager.service.search(arg)
-                self.player.play(track_list)
                 self.ttclient.send_message(_("{nickname} requested {request}").format(nickname=user.nickname, request=arg), type=2)
+                self.player.play(track_list)
                 return _('Playing {}').format(self.player.track.name)
             except errors.NothingFoundError:
                 return _('Nothing is found for your query')
             except errors.SearchError:
                 return _('Unable to perform a search. Please try again')
-            except errors.ServiceError as e:
-                return _('The stream cannot be played\nAdditional error info:\n') + str(e)
         else:
             if self.player.state == State.Playing:
                 self.player.pause()
@@ -86,14 +84,14 @@ class PlayUrlCommand(Command):
         if arg:
             try:
                 tracks = self.module_manager.streamer.get(arg, user.is_admin)
+                self.ttclient.send_message(_('{nickname} requested playing from a URL').format(nickname=user.nickname), type=2)
                 self.player.play(tracks)
-                self.ttclient.send_message(_('{nickname} requested playing from url').format(nickname=user.nickname), type=2)
             except errors.IncorrectProtocolError:
                 return _('Incorrect protocol')
+            except errors.ServiceError:
+                return _('Cannot get stream URL')
             except errors.PathNotFoundError:
                 return _('The path cannot be found')
-            except errors.ServiceError as e:
-                return _('The stream cannot be played\nAdditional error info:\n') + str(e)
         else:
             raise errors.InvalidArgumentError
 
@@ -193,7 +191,7 @@ class PreviousTrackCommand(Command):
 class ModeCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = ('MODE_NUMBER Sets playback mode. Send this command without a number for more info')
+        self.help = ('MODE Sets playback mode. If no MODE is given shows a list of modes')
         self.mode_names = {Mode.SingleTrack: _('Single Track'), Mode.RepeatTrack: _('Repeat Track'), Mode.TrackList: _('Track list'), Mode.RepeatTrackList: _('Repeat track list'), Mode.Random: _('Random')}
 
     def __call__(self, arg, user):

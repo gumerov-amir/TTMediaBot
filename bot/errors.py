@@ -2,10 +2,6 @@ class InvalidArgumentError(Exception):
     pass
 
 
-class SearchError(Exception):
-    pass
-
-
 class ServiceError(Exception):
     pass
 

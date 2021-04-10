@@ -3,11 +3,11 @@ import re
 import traceback
 
 from .commands import *
-from ..errors import InvalidArgumentError
+from bot import errors
 
 re_command = re.compile('[a-z]+')
 
-class CommandProcessor(object):
+class CommandProcessor:
     def __init__(self, player, ttclient, module_manager, service_manager):
         self.player = player
         self.ttclient = ttclient
@@ -61,7 +61,7 @@ class CommandProcessor(object):
                 return self.admin_commands_dict[command](arg, message.user)
             else:
                 return _('Unknown command') + ' "' + command + '"\n' + self.help('', message.user)
-        except InvalidArgumentError as e:
+        except errors.InvalidArgumentError as e:
             return self.help(command, message.user)
         except Exception as e:
             logging.error(traceback.format_exc())

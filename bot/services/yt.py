@@ -1,3 +1,5 @@
+import logging
+
 from youtube_dl import YoutubeDL
 from youtubesearchpython import VideosSearch
 
@@ -12,8 +14,8 @@ class Service:
     def initialize(self):
         self._ydl_config = {
             'skip_download': True,
-            #'quiet': True,
-            'format': '141/bestaudio/140/best'
+            'format': '141/bestaudio/140/best',
+            'logger': logging.getLogger('root')
         }
 
     def get(self, url, extra_info=None, defer=False):
@@ -41,17 +43,14 @@ class Service:
             if 'url' in stream:
                 url = stream['url']
             else:
-                raise errors.ServiceError('Cannot fetch direct URL')
+                raise errors.ServiceError()
             title = stream['title']
             if 'uploader' in stream:
                 title += ' - {}'.format(stream['uploader'])
             return [Track(url=url, name=title), ]
 
     def search(self, text):
-        try:
-            search = VideosSearch(text, limit=300).result()
-        except:
-            raise errors.SearchError()
+        search = VideosSearch(text, limit=300).result()
         if search['result']:
             tracks = []
             for video in search['result']:
