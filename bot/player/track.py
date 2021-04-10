@@ -10,8 +10,7 @@ class Track:
     def _fetch_stream_data(self):
         if (not self.service) or self._is_fetched:
             return
-
-        track = self.service.get(self._url, self.extra_info)
+        track = self.service.get(self._url, extra_info=self.extra_info)[0]
         self.url = track.url
         self.name = track.name
         self._is_fetched = True

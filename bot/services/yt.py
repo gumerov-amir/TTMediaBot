@@ -12,40 +12,40 @@ class Service:
     def initialize(self):
         self._ydl_config = {
             'skip_download': True,
-            'quiet': True,
+            #'quiet': True,
             'format': '141/bestaudio/140/best'
         }
 
-    def get(self, url, *args):
-        if not (url or args):
-            raise ValueError()
-        if args:
-            extra_info = args[0]
-        else:
-            extra_info = None
-        try:
-            with YoutubeDL(self._ydl_config) as ydl:
-                if not extra_info:
-                    info = ydl.extract_info(url, process=False)
-                else:
-                    info = extra_info
-                if '_type' in info and info['_type'] == 'playlist':
-                    tracks = []
-                    for entry in info['entries']:
-                        track = Track(service=self, extra_info=entry)
-                        tracks.append(track)
-                    return tracks
-                stream = ydl.process_ie_result(info)
-                if 'url' in stream:
-                    url = stream['url']
-                else:
-                    raise errors.ServiceError('Cannot fetch direct URL')
-                title = stream['title']
-                if 'uploader' in stream:
-                    title += ' - {}'.format(stream['uploader'])
-                return Track(url=url, name=title)
-        except Exception as e:
-            raise errors.ServiceError(e.__class__.__name__ + ': ' + str(e))
+    def get(self, url, extra_info=None, defer=False):
+        if not (url or extra_info):
+            raise errors.InvalidArgumentError()
+        with YoutubeDL(self._ydl_config) as ydl:
+            if not extra_info:
+                info = ydl.extract_info(url, process=False)
+            else:
+                info = extra_info
+            info_type = None
+            if '_type' in info:
+                info_type = info['_type']
+            if info_type == 'url':
+                return self.get(info['url'], defer=True)
+            elif info_type == 'playlist':
+                tracks = []
+                for entry in info['entries']:
+                    data = self.get(None, extra_info=entry, defer=True)
+                    tracks += data
+                return tracks
+            if defer:
+                return [Track(service=self, extra_info=info), ]
+            stream = ydl.process_ie_result(info)
+            if 'url' in stream:
+                url = stream['url']
+            else:
+                raise errors.ServiceError('Cannot fetch direct URL')
+            title = stream['title']
+            if 'uploader' in stream:
+                title += ' - {}'.format(stream['uploader'])
+            return [Track(url=url, name=title), ]
 
     def search(self, text):
         try:
@@ -55,13 +55,8 @@ class Service:
         if search['result']:
             tracks = []
             for video in search['result']:
-                try:
-                    track = Track(url=video['link'], service=self)
-                    tracks.append(track)
-                except (AttributeError, KeyError):
-                    continue
-                except Exception as e:
-                    raise errors.ServiceError(e.__class__.__name__ + ': ' + str(e))
+                track = Track(url=video['link'], service=self)
+                tracks.append(track)
             return tracks
         else:
             raise errors.NothingFoundError('')
