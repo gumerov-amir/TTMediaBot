@@ -4,9 +4,9 @@ from bot import Bot
 
 
 @click.command()
-@click.option("-c", help="config file", default="config.json")
-@click.option("--devices", is_flag=True)
-def cli(c="config.ini", devices=False):
+@click.option("-c", help='Path to the configuration file', default='config.json')
+@click.option("--devices", help='Show available devices and exit', is_flag=True)
+def main(c="config.ini", devices=False):
     bot = Bot(c)
     if devices:
         echo_sound_devices(bot.sound_device_manager)
@@ -26,4 +26,4 @@ def echo_sound_devices(sound_device_manager):
 
 
 if __name__ == "__main__":
-    cli()
+    main()
