@@ -23,10 +23,8 @@ class Streamer:
                         break
                     except:
                         return [track, ]
-            if fetched_data and isinstance(fetched_data, Track) and fetched_data.url.startswith(track.url):
+            if len(fetched_data) == 1 and fetched_data[0].url.startswith(track.url):
                 return [track, ]
-            elif isinstance(fetched_data, Track):
-                return [fetched_data, ]
             else:
                 return fetched_data
         elif is_admin and parsed_url.scheme == 'file':
