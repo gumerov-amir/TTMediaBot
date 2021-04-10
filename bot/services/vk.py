@@ -21,11 +21,18 @@ class Service:
         self.api = self._session.get_api()
 
     def search(self, text):
-        try:
-            results = self.api.audio.search(q=text, count=300, sort=0)
-        except Exception as e:
-            raise errors.ServiceError(e)
-        if results['count'] > 0:
-            return [Track(url=i['url'], name='{artist} - {title}'.format(title=i['title'], artist=i['artist'])) for i in results['items']]
+        results = self.api.audio.search(q=text, count=300, sort=0)
+        if 'count' in results and results['count'] > 0:
+            tracks = []
+            for track in results['items']:
+                print(type(track))
+                if 'url' not in track or not track['url']:
+                    continue
+                track = Track(url=track['url'], name='{} - {}'.format(track['artist'], track['title']))
+                tracks.append(track)
+            if tracks:
+                return tracks
+            else:
+                raise errors.NothingFoundError()
         else:
             raise errors.NothingFoundError()
