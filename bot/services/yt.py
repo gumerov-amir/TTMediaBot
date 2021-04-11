@@ -18,7 +18,7 @@ class Service:
             'logger': logging.getLogger('root')
         }
 
-    def get(self, url, extra_info=None, defer=False):
+    def get(self, url, extra_info=None, process=True):
         if not (url or extra_info):
             raise errors.InvalidArgumentError()
         with YoutubeDL(self._ydl_config) as ydl:
@@ -30,14 +30,14 @@ class Service:
             if '_type' in info:
                 info_type = info['_type']
             if info_type == 'url':
-                return self.get(info['url'], defer=True)
+                return self.get(info['url'], process=False)
             elif info_type == 'playlist':
                 tracks = []
                 for entry in info['entries']:
-                    data = self.get(None, extra_info=entry, defer=True)
+                    data = self.get(None, extra_info=entry, process=False)
                     tracks += data
                 return tracks
-            if defer:
+            if not process:
                 return [Track(service=self, extra_info=info), ]
             stream = ydl.process_ie_result(info)
             if 'url' in stream:

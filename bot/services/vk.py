@@ -1,5 +1,4 @@
 import requests
-
 import vk_api
 
 from bot.player.track import Track
