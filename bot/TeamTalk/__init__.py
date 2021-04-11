@@ -123,9 +123,9 @@ class TeamTalk:
 
     def reconnect(self):
         logging.info('Reconnecting')
-        self.tt.disconnect()
         attempt = 0
         while attempt != self.config['reconnection_attempts']:
+            self.tt.disconnect()
             try:
                 self.connect()
                 logging.info('Reconnected')
