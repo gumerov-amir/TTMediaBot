@@ -77,7 +77,7 @@ class TeamTalk:
             self.default_status = self.config['default_status']
         else:
             self.default_status = _('Send "h" for help')
-        self.status = ''
+        self.status = self.default_status
         self.admins = self.config['users']['admins']
         self.banned_users = self.config['users']['banned_users']
         self.teamtalk_thread = thread.TeamTalkThread(self)
@@ -86,7 +86,6 @@ class TeamTalk:
     def initialize(self):
         logging.debug('Initializing TeamTalk')
         self.connect()
-        self.change_status_text(self.default_status)
         logging.debug('TeamTalk initialized')
 
     def run(self):
@@ -120,6 +119,7 @@ class TeamTalk:
             result, msg = self.waitForCmdSuccess(cmdid, 2000)
             if not result:
                 raise errors.JoinChannelError()
+        self.change_status_text(self.status)
 
     def reconnect(self):
         logging.info('Reconnecting')
@@ -133,7 +133,7 @@ class TeamTalk:
             except errors.ConnectionError:
                 time.sleep(self.config['reconnection_timeout'])
                 attempt += 1
-        logging.error('Not reconnected')
+        logging.error('Cannot reconnect')
         _thread.interrupt_main()
 
     def waitForEvent(self, event, timeout=2000):
