@@ -29,7 +29,7 @@ class Service:
             info_type = None
             if '_type' in info:
                 info_type = info['_type']
-            if info_type == 'url':
+            if info_type == 'url' and not 'Track' in info['ie_key']:
                 return self.get(info['url'], process=False)
             elif info_type == 'playlist':
                 tracks = []
