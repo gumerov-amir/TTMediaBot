@@ -130,7 +130,7 @@ class TeamTalk:
                 self.connect()
                 logging.info('Reconnected')
                 return
-            except errors.ConnectionError:
+            except (errors.ConnectionError, errors.LoginError):
                 time.sleep(self.config['reconnection_timeout'])
                 attempt += 1
         logging.error('Cannot reconnect')
