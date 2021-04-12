@@ -15,6 +15,7 @@ class Service:
         self._ydl_config = {
             'skip_download': True,
             'format': '141/bestaudio/140/best',
+            'socket_timeout': 5,
             'logger': logging.getLogger('root')
         }
 
@@ -29,7 +30,7 @@ class Service:
             info_type = None
             if '_type' in info:
                 info_type = info['_type']
-            if info_type == 'url' and not 'Track' in info['ie_key']:
+            if info_type == 'url' and 'Track' not in info['ie_key']:
                 return self.get(info['url'], process=False)
             elif info_type == 'playlist':
                 tracks = []
