@@ -24,7 +24,6 @@ class Service:
         if 'count' in results and results['count'] > 0:
             tracks = []
             for track in results['items']:
-                print(type(track))
                 if 'url' not in track or not track['url']:
                     continue
                 track = Track(url=track['url'], name='{} - {}'.format(track['artist'], track['title']))
