@@ -255,7 +255,7 @@ class SelectTrackCommand(Command):
                 return _('Nothing is currently playing')
 
 
-class DownloadCommand(Command):
+class GetLinkCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
         self.help = _('Gets a direct link to the current track')

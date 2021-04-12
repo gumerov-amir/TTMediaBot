@@ -30,7 +30,7 @@ class CommandProcessor:
             # 'r': RateCommand(self),
             # It has bugs on windows
             'm': ModeCommand(self),
-            'dl': DownloadCommand(self),
+            'gl': GetLinkCommand(self),
         }
         self.admin_commands_dict = {
             'girl': lambda arg, user: 'Настенька',
@@ -65,7 +65,7 @@ class CommandProcessor:
             return self.help(command, message.user)
         except Exception as e:
             logging.error(traceback.format_exc())
-            return 'error: {}'.format(e)
+            return _('Error: {}'.format(e))
 
     def help(self, arg, user):
         if arg:
