@@ -58,10 +58,10 @@ def split(text, max_length=vars.max_message_length):
                         else:
                             words.append(word)
                     else:
-                        chunc = word
-                        for i in range(0, int(len(chunc) / max_length) + 1):
-                            words.append(chunc[0:max_length])
-                            chunc = chunc[max_length::]
+                        chunk = word
+                        for i in range(0, int(len(chunk) / max_length) + 1):
+                            words.append(chunk[0:max_length])
+                            chunk = chunk[max_length::]
                 lines += words
     return lines
 
