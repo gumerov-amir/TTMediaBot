@@ -261,7 +261,7 @@ class GetLinkCommand(Command):
         self.help = _('Gets a direct link to the current track')
 
     def __call__(self, arg, user):
-        if self.player.state == State.Playing:
+        if self.player.state != State.Stopped:
             url = self.player.track.url
             if url:
                 return url
