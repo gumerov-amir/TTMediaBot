@@ -81,7 +81,7 @@ class TeamTalk:
         self.admins = self.config['users']['admins']
         self.banned_users = self.config['users']['banned_users']
         self.teamtalk_thread = thread.TeamTalkThread(self)
-        self.message_queue = queue.SimpleQueue()
+        self.message_queue = queue.Queue()
 
     def initialize(self):
         logging.debug('Initializing TeamTalk')
