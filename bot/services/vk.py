@@ -1,6 +1,8 @@
 import requests
 import vk_api
 
+from urllib.parse import urlparse
+
 from bot.player.track import Track
 from bot import errors
 
@@ -8,7 +10,7 @@ from bot import errors
 class Service:
     def __init__(self, config):
         self.name = 'vk'
-        self.hostnames = []
+        self.hostnames = ['vk.com', 'www.vk.com', 'vkontakte.ru', 'www.vkontakte.ru', 'm.vk.com', 'm.vkontakte.ru']
         self.config = config
 
     def initialize(self):
@@ -18,6 +20,9 @@ class Service:
         })
         self._session = vk_api.VkApi(token=self.config['token'], session=http)
         self.api = self._session.get_api()
+
+    def get(self, url):
+        raise NotImplementedError()
 
     def search(self, text):
         results = self.api.audio.search(q=text, count=300, sort=0)
