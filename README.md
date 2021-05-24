@@ -20,6 +20,18 @@ A bot for music streaming to TeamTalk Servers.
 * On Linux run ./TTMediaBot.sh;
 * On Windows run python TTMediaBot.py directly.
 
+## Startup options
+* --devices - Shows list of all available input and output audio devices;
+* -c PATH - Sets path to config file.
+
+## Config file options
+* language - Sets bot interface language. Warning! to select some language you need appropriate language folder inside "locale" folder;
+* sound devices - Here you have to enter audio device numbers. Devices should be connected to each other (like Virtual audio cabble or pulseaudio);
+* player - Here are some defaults about playback;
+* teamtalk - here are main options for bot to connect and login to your TeamTalk server;
+* Services - Here you should configure available services for music search and playback;
+* logger - Here you can configure various logging related options.
+
 # contacts
 E-mail - TTMediaBot@gmail.com
 telegram channel: https://t.me/TTMediaBot_official
