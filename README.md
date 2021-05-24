@@ -5,7 +5,7 @@ A bot for music streaming to TeamTalk Servers.
 ### Requirements
 * To use this bot you will need Python3 installed;
 * You will need p7zip or p7zip-full on linux or 7zip on windows to install TeamTalk SDK;
-* You will need pulseaudio and VLC installed on linux (there is no pulseaudio on Windows, so only VLC is needed).
+* You will need pulseaudio and VLC installed on linux (there is no pulseaudio on Windows, so you need a virtual audio device driver such as VBCable for audio routing).
 ### Installation
 * Download TTMediaBot;
 * install all python requirements from requirements.txt with pip or pip3;
