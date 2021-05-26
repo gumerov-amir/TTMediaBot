@@ -25,7 +25,7 @@ class HelpCommand(Command):
 class AboutCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('()Shows information about this bot)')
+        self.help = _('Shows information about this bot')
 
     def __call__(self, arg, user):
         about_text = _('')
