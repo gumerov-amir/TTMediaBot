@@ -41,7 +41,7 @@ $pacmd load-module module-null-sink
 output should be null audio output, input should be pulse.
 * put this numbers to your config.json.
 ### windows variant
-* install VB-cable, run TTMediaBot.py --devices and check numbers of VB-cable devices 
+* install VB-cable, run "TTMediaBot.py --devices" and check numbers of VB-cable devices 
 * put this numbers to your config.json.
 
 # contacts
