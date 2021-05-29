@@ -20,6 +20,10 @@ class Service:
         })
         self._session = vk_api.VkApi(token=self.config['token'], session=http)
         self.api = self._session.get_api()
+        try:
+            self.api.account.getInfo()
+        except vk_api.exceptions.ApiError:
+            raise errors.ServiceError()
 
     def get(self, url):
         parsed_url = urlparse(url)
