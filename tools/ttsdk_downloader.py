@@ -10,7 +10,8 @@ import bs4
 import patoolib
 
 
-url = 'http://bearware.dk/teamtalksdk'
+test_url = 'http://bearware.dk/test/teamtalksdk'
+stable_url = 'http://bearware.dk/teamtalksdk'
 user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'
 
 cd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -36,7 +37,7 @@ def get_url_suffix_from_platform():
         else:
             sys.exit('Your architecture is not supported')
 
-def download():
+def download(url=test_url):
     r = request.urlopen(url)
     html = r.read().decode('UTF-8')
     page = bs4.BeautifulSoup(html, features='html.parser')
@@ -44,7 +45,12 @@ def download():
     last_version = versions[-1].a.get('href')[0:-1]
     download_url = url + '/' + last_version + '/' + 'tt5sdk_{v}_{p}.7z'.format(v=last_version, p=get_url_suffix_from_platform())
     print('Downloading from ' + download_url)
-    request.urlretrieve(download_url, os.path.join(cd, 'ttsdk.7z'))
+    try:
+        request.urlretrieve(download_url, os.path.join(cd, 'ttsdk.7z'))
+    except:
+        print('Test version for your platform not found. trying download stable version.')
+        download(url=stable_url)
+
 
 def extract():
     try:
