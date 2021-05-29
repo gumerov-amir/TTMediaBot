@@ -2,6 +2,6 @@ beautifulsoup4
 click
 patool
 python-vlc
-vk_api
+vk-api
 youtube-dl
 youtube-search-python
