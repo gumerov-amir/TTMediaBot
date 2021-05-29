@@ -31,6 +31,19 @@ A bot for music streaming to TeamTalk Servers.
 * Services - Here you should configure available services for music search and playback;
 * logger - Here you can configure various logging related options.
 
+## Pulse audio or VB cable settings
+### Linux variant
+* Install pulseaudio.
+* type $pulseaudio --start
+* Next command creates null sink and this sink can be monitored by default pulse input device. 
+$pacmd load-module module-null-sink
+* then run ./TTMediaBot.sh --devices and check its numbers. 
+output should be null audio output, input should be pulse.
+* put this numbers to your config.json.
+### windows variant
+* install VB-cable, run "TTMediaBot.py --devices" and check numbers of VB-cable devices 
+* put this numbers to your config.json.
+
 # contacts
 E-mail - TTMediaBot@gmail.com
 telegram channel: https://t.me/TTMediaBot_official
