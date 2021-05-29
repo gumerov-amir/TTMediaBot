@@ -1,5 +1,6 @@
 import logging
 
+from bot import errors
 from bot.services import vk, yt
 
 
@@ -14,6 +15,14 @@ class ServiceManager:
 
     def initialize(self):
         logging.debug('Initializing services')
+        unavailable_services = []
         for service in self.available_services.values():
-            service.initialize()
+            try:
+                service.initialize()
+            except errors.ServiceError:
+                unavailable_services.append(service)
+                if self.service == service:
+                    self.service = self.available_services[self.fallback_service]
+        for service in unavailable_services:
+            del self.available_services[service.name]
         logging.debug('Services initialized')
