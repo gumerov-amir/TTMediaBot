@@ -17,14 +17,14 @@ class Streamer:
             track = Track(url=url, from_url=True)
             fetched_data = None
             for service in self.service_manager.available_services.values():
-                if parsed_url.hostname in service.hostnames:
-                    fetched_data = service.get(url)
-                    break
-                elif service.name == self.service_manager.fallback_service:
-                    try:
+                try:
+                    if parsed_url.hostname in service.hostnames or service.name == self.service_manager.fallback_service:
                         fetched_data = service.get(url)
                         break
-                    except:
+                except errors.ServiceError:
+                    continue
+                except:
+                    if service.name == self.service_manager.fallback_service:
                         return [track, ]
             if len(fetched_data) == 1 and fetched_data[0].url.startswith(track.url):
                 return [track, ]

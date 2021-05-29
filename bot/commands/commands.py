@@ -189,7 +189,7 @@ class PreviousTrackCommand(Command):
 class ModeCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = ('MODE Sets playback mode. If no MODE is given shows a list of modes')
+        self.help = _('MODE Sets playback mode. If no MODE is given shows a list of modes')
         self.mode_names = {Mode.SingleTrack: _('Single Track'), Mode.RepeatTrack: _('Repeat Track'), Mode.TrackList: _('Track list'), Mode.RepeatTrackList: _('Repeat track list'), Mode.Random: _('Random')}
 
     def __call__(self, arg, user):
