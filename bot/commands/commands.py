@@ -47,8 +47,6 @@ class PlayPauseCommand(Command):
                 return _('Playing {}').format(self.player.track.name)
             except errors.NothingFoundError:
                 return _('Nothing is found for your query')
-            except errors.SearchError:
-                return _('Unable to perform a search. Please try again')
         else:
             if self.player.state == State.Playing:
                 self.player.pause()
