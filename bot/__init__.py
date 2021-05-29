@@ -16,7 +16,7 @@ class Bot:
             sys.exit('Incorrect config file path')
         with open(config_path, 'r', encoding='utf-8') as f:
             self.config = json.load(f)
-        self.translation = gettext.translation('TTMediaBot', os.path.join(vars.directory, 'locale'), languages=[self.config['general']['language']])
+        self.translation = gettext.translation('TTMediaBot', os.path.join(vars.directory, 'locale'), languages=[self.config['general']['language']], fallback=True)
         self.translation.install()
         self.player = player.Player(self.config['player'])
         self.ttclient = TeamTalk.TeamTalk(self.config['teamtalk'])
