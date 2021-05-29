@@ -28,6 +28,8 @@ class Service:
     def get(self, url):
         parsed_url = urlparse(url)
         path = parsed_url.path[1::]
+        if 'video' in path:
+            raise errors.ServiceError()
         try:
             if 'music/' in path:
                 id = path.split('/')[-1]
