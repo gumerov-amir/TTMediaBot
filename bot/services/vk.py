@@ -22,7 +22,34 @@ class Service:
         self.api = self._session.get_api()
 
     def get(self, url):
-        raise NotImplementedError()
+        parsed_url = urlparse(url)
+        path = parsed_url.path[1::]
+        try:
+            if 'music/' in path:
+                id = path.split('/')[-1]
+                ids = id.split('_')
+                o_id = ids[0]
+                p_id = ids[1]
+                audios = self.api.audio.get(owner_id=int(o_id), album_id=int(p_id))
+            else:
+                id = self.api.utils.resolveScreenName(screen_name=path)['object_id']
+                audios = self.api.audio.get(owner_id=id)
+            if 'count' in audios and audios['count'] > 0:
+                tracks = []
+                for audio in audios['items']:
+                    if 'url' not in audio or not audio['url']:
+                        continue
+                    track = Track(url=audio['url'], name='{} - {}'.format(audio['artist'], audio['title']))
+                    tracks.append(track)
+                if tracks:
+                    return tracks
+                else:
+                    raise errors.NothingFoundError()
+            else:
+                raise errors.NothingFoundError
+        except NotImplementedError as e:
+            print('vk get error')
+            print(e)
 
     def search(self, text):
         results = self.api.audio.search(q=text, count=300, sort=0)

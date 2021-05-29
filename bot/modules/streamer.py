@@ -17,7 +17,10 @@ class Streamer:
             track = Track(url=url, from_url=True)
             fetched_data = None
             for service in self.service_manager.available_services.values():
-                if parsed_url.hostname in service.hostnames or service.name == self.service_manager.fallback_service:
+                if parsed_url.hostname in service.hostnames:
+                    fetched_data = service.get(url)
+                    break
+                elif service.name == self.service_manager.fallback_service:
                     try:
                         fetched_data = service.get(url)
                         break

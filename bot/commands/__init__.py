@@ -33,7 +33,7 @@ class CommandProcessor:
             'gl': GetLinkCommand(self),
         }
         self.admin_commands_dict = {
-            'girl': lambda arg, user: 'Настенька',
+            'girl': lambda arg, user: 'Сонечка',
             'cn': ChangeNicknameCommand(self),
             'cs': ChangeStatusCommand(self),
             'l': LockCommand(self),
