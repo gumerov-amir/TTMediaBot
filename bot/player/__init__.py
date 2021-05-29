@@ -73,10 +73,13 @@ class Player:
 
     def next(self):
         track_index = self.track_index
-        if self.mode == Mode.Random:
-            track_index = random.randrange(0, len(self.track_list))
+        if len(self.track_list) > 0:
+            if self.mode == Mode.Random:
+                track_index = random.randrange(0, len(self.track_list))
+            else:
+                track_index += 1
         else:
-            track_index += 1
+            track_index = 0
         try:
             self.play_by_index(track_index)
         except errors.IncorrectTrackIndexError:
@@ -87,10 +90,13 @@ class Player:
 
     def previous(self):
         track_index = self.track_index
-        if self.mode == Mode.Random:
-            track_index = random.randrange(0, len(self.track_list))
+        if len(self.track_list) > 0:
+            if self.mode == Mode.Random:
+                track_index = random.randrange(0, len(self.track_list))
+            else:
+                track_index -= 1
         else:
-            track_index -= 1
+            track_index = 0
         try:
             self.play_by_index(track_index)
         except errors.IncorrectTrackIndexError:
