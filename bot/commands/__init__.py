@@ -8,12 +8,14 @@ from bot import errors
 re_command = re.compile('[a-z]+')
 
 class CommandProcessor:
-    def __init__(self, player, ttclient, module_manager, service_manager):
+    def __init__(self, config, player, ttclient, module_manager, service_manager):
+        self.config = config
         self.player = player
         self.ttclient = ttclient
         self.service_manager = service_manager
         self.module_manager = module_manager
         self.locked = False
+        self.volume_locked = False
         self.commands_dict = {
             'h': HelpCommand(self),
             'a': AboutCommand(self),
@@ -37,6 +39,10 @@ class CommandProcessor:
             'cn': ChangeNicknameCommand(self),
             'cs': ChangeStatusCommand(self),
             'l': LockCommand(self),
+            'vl': VolumeLockCommand(self),
+            'ua': AdminUsersCommand(self),
+            'ub': BannedUsersCommand(self),
+            'sc': SaveConfigCommand(self),
             'va': VoiceTransmissionCommand(self),
             'q': QuitCommand(self),
         }
@@ -54,6 +60,8 @@ class CommandProcessor:
         except IndexError:
             return self.help('', message.user)
         arg = ' '.join(message.text.split(' ')[1::])
+        if not message.user.is_admin and self.volume_locked and command == 'v':
+            return _('Volume is locked')
         try:
             if command in self.commands_dict:
                 return self.commands_dict[command](arg, message.user)
@@ -103,3 +111,8 @@ class CommandProcessor:
     def lock(self,  arg, user):
         self.locked = not self.locked
         return _('Locked') if self.locked else _('Unlocked')
+
+    def volume_lock(self,  arg, user):
+        self.volume_locked = not self.volume_locked
+        return _('Volume is locked') if self.volume_locked else _('Volume is unlocked')
+
