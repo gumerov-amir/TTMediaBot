@@ -247,7 +247,7 @@ class SelectTrackCommand(Command):
             except ValueError:
                 raise errors.InvalidArgumentError
         else:
-            if self.player.state == State.Playing:
+            if self.player.state != State.Stopped:
                 return _('Playing {} {}').format(self.player.track_index + 1, self.player.track.name)
             else:
                 return _('Nothing is currently playing')
@@ -323,6 +323,14 @@ class LockCommand(Command):
     def __call__(self, arg, user):
         return self.command_processor.lock(arg, user)
 
+class VolumeLockCommand(Command):
+    def __init__(self, command_processor):
+        super().__init__(command_processor)
+        self.command_processor = command_processor
+        self.help = _('Locks or unlocks volume')
+
+    def __call__(self, arg, user):
+        return self.command_processor.volume_lock(arg, user)
 
 
 class ChangeStatusCommand(Command):
@@ -331,6 +339,74 @@ class ChangeStatusCommand(Command):
 
     def __call__(self, arg, user):
         self.ttclient.change_status_text(arg)
+
+
+
+class SaveConfigCommand(Command):
+    def __init__(self, command_processor):
+        super().__init__(command_processor)
+        self.command_processor = command_processor
+        self.help = _('saves config to file')
+
+    def __call__(self, arg, user):
+        self.command_processor.config.save()
+        return _('Config saved')
+
+class AdminUsersCommand(Command):
+    def __init__(self, command_processor):
+        super().__init__(command_processor)
+        self.command_processor = command_processor
+        self.help = _('shows list of admin users, if user_name is given adds it to list')
+
+    def __call__(self, arg, user):
+        admin_users = self.command_processor.config['teamtalk']['users']['admins']
+        if arg:
+            if arg[0] == '+':
+                admin_users.append(arg[1::])
+                return _('Added')
+            elif arg[0] == '-':
+                try:
+                    del admin_users[admin_users.index(arg[1::])]
+                    return _('Deleted')
+                except ValueError:
+                    return _('This user is not admin')
+        else:
+            admin_users = admin_users.copy()
+            if len(admin_users) > 0:
+                if '' in admin_users:
+                    admin_users[admin_users.index('')] = '<Anonymous>'
+                return ', '.join(self.command_processor.config['teamtalk']['users']['admins'])
+            else:
+                return _('List is emty')
+
+
+class BannedUsersCommand(Command):
+    def __init__(self, command_processor):
+        super().__init__(command_processor)
+        self.command_processor = command_processor
+        self.help = _('shows list of banned users, if user_name is given adds to/deletes from list')
+
+    def __call__(self, arg, user):
+        banned_users = self.command_processor.config['teamtalk']['users']['banned_users']
+        if arg:
+            if arg[0] == '+':
+                banned_users.append(arg[1::])
+                return _('Added')
+            elif arg[0] == '-':
+                try:
+                    del banned_users[banned_users.index(arg[1::])]
+                    return _('Deleted')
+                except ValueError:
+                    return _('This user is not banned')
+        else:
+            banned_users = banned_users.copy()
+            if len(banned_users) > 0:
+                if '' in banned_users:
+                    banned_users[banned_users.index('')] = '<Anonymous>'
+                return ', '.join(banned_users)
+            else:
+                return _('List is emty')
+
 
 class QuitCommand(Command):
     def __init__(self, command_processor):
