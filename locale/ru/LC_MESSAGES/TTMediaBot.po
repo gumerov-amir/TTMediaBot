@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2021-05-29 21:47+0300\n"
-"PO-Revision-Date: 2021-05-29 23:54+0500\n"
+"POT-Creation-Date: 2021-05-31 11:07+0300\n"
+"PO-Revision-Date: 2021-05-31 11:10+0300\n"
 "Last-Translator: Гумеров Амир Эдуардович <ar8200@bk.ru>\n"
 "Language-Team: \n"
 "Language: ru\n"
@@ -14,42 +14,46 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
-"X-Generator: Poedit 2.4.3\n"
+"X-Generator: Poedit 2.4.2\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Poedit-Basepath: ../../../bot\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: TeamTalk/__init__.py:79
+#: TeamTalk/__init__.py:158
 msgid "Send \"h\" for help"
 msgstr "Отправьте \"h\" для справки"
 
-#: commands/__init__.py:46
+#: commands/__init__.py:54
 msgid "You are banned"
 msgstr "Вы заблокированы"
 
-#: commands/__init__.py:49
+#: commands/__init__.py:57
 msgid "You are not in bot's channel"
 msgstr "Вы не в канале бота"
 
-#: commands/__init__.py:51
+#: commands/__init__.py:59
 msgid "Bot is locked"
 msgstr "Бот заблокирован"
 
-#: commands/__init__.py:63
+#: commands/__init__.py:66 commands/__init__.py:119
+msgid "Volume is locked"
+msgstr "Громкость заблокирована"
+
+#: commands/__init__.py:73
 msgid "Unknown command"
 msgstr "Неизвестная команда"
 
-#: commands/__init__.py:68
+#: commands/__init__.py:78
 msgid "Error: {}"
 msgstr "Ошибка: {}"
 
-#: commands/__init__.py:76 commands/__init__.py:81
+#: commands/__init__.py:86 commands/__init__.py:91
 #, python-brace-format
 msgid "{command} Help text not found"
 msgstr "{command} Справка не найдена"
 
-#: commands/__init__.py:83
+#: commands/__init__.py:93
 #, python-brace-format
 msgid ""
 "Unknown command \"{command}\"\n"
@@ -58,13 +62,17 @@ msgstr ""
 "Неизвестная команда \"{command}\"\n"
 "{help}"
 
-#: commands/__init__.py:105
+#: commands/__init__.py:115
 msgid "Locked"
 msgstr "Заблокирован"
 
-#: commands/__init__.py:105
+#: commands/__init__.py:115
 msgid "Unlocked"
 msgstr "Разблокирован"
+
+#: commands/__init__.py:119
+msgid "Volume is unlocked"
+msgstr "Громкость разблокирована"
 
 #: commands/commands.py:19
 msgid "Shows command help"
@@ -239,7 +247,7 @@ msgstr "Неверный номер"
 msgid "Playing {} {}"
 msgstr "Воспроизводится {} {}"
 
-#: commands/commands.py:244
+#: commands/commands.py:244 commands/commands.py:423
 msgid "Out of list"
 msgstr "Вне списка"
 
@@ -279,7 +287,70 @@ msgstr "Передача речи отключена"
 msgid "Locks or unlocks the bot"
 msgstr "Блокирует или разблокирует бота"
 
-#: commands/commands.py:338
+#: commands/commands.py:330
+msgid "Locks or unlocks volume"
+msgstr "блокирует или разблокирует громкость"
+
+#: commands/commands.py:349
+msgid "saves config to file"
+msgstr "Сохраняет конфиг в файл"
+
+#: commands/commands.py:353
+msgid "Config saved"
+msgstr "Конфиг сохранён"
+
+#: commands/commands.py:359
+msgid "shows list of admin users, if user_name is given adds it to list"
+msgstr ""
+
+#: commands/commands.py:366 commands/commands.py:394
+msgid "Added"
+msgstr ""
+
+#: commands/commands.py:370 commands/commands.py:398
+msgid "Deleted"
+msgstr ""
+
+#: commands/commands.py:372
+msgid "This user is not admin"
+msgstr ""
+
+#: commands/commands.py:380 commands/commands.py:408 commands/commands.py:431
+msgid "List is empty"
+msgstr ""
+
+#: commands/commands.py:387
+msgid ""
+"shows list of banned users, if user_name is given adds to/deletes from list"
+msgstr ""
+
+#: commands/commands.py:400
+msgid "This user is not banned"
+msgstr ""
+
+#: commands/commands.py:414
+msgid "shows history of playing (64 last tracks)"
+msgstr ""
+
+#: commands/commands.py:421
+msgid "must be integer"
+msgstr ""
+
+#: commands/commands.py:438
+msgid "changes language of bot"
+msgstr ""
+
+#: commands/commands.py:445
+msgid "language has been changed"
+msgstr "Язык изменён"
+
+#: commands/commands.py:447
+#, fuzzy
+#| msgid "Incorrect protocol"
+msgid "Incorrect locale"
+msgstr "Неверный протокол"
+
+#: commands/commands.py:453
 msgid "Quits the bot"
 msgstr "Закрывает бот"
 

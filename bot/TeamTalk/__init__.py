@@ -73,10 +73,6 @@ class TeamTalk:
         self.tt = TeamTalkPy.TeamTalk()
         self.is_voice_transmission_enabled = False
         self.nickname = config['nickname']
-        if self.config['default_status']:
-            self.default_status = self.config['default_status']
-        else:
-            self.default_status = _('Send "h" for help')
         self.status = self.default_status
         self.admins = self.config['users']['admins']
         self.banned_users = self.config['users']['banned_users']
@@ -153,6 +149,13 @@ class TeamTalk:
             if result and msg.nSource == cmdid:
                 return result, msg
         return False, TTMessage()
+
+    @property
+    def default_status(self):
+        if self.config['default_status']:
+            return self.config['default_status']
+        else:
+            return _('Send "h" for help')
 
     def send_message(self, text, user=None, type=1):
         for string in split(text):

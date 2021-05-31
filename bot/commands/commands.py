@@ -1,7 +1,7 @@
 import _thread
 
 from bot.player.enums import Mode, State
-from bot import errors
+from bot import errors, translator
 
 
 class Command:
@@ -377,7 +377,7 @@ class AdminUsersCommand(Command):
                     admin_users[admin_users.index('')] = '<Anonymous>'
                 return ', '.join(self.command_processor.config['teamtalk']['users']['admins'])
             else:
-                return _('List is emty')
+                return _('List is empty')
 
 
 class BannedUsersCommand(Command):
@@ -405,10 +405,49 @@ class BannedUsersCommand(Command):
                     banned_users[banned_users.index('')] = '<Anonymous>'
                 return ', '.join(banned_users)
             else:
-                return _('List is emty')
+                return _('List is empty')
 
 
-class QuitCommand(Command):
+class HistoryCommand(Command):
+    def __init__(self, command_processor):
+        super().__init__(command_processor)
+        self.help = _('shows history of playing (64 last tracks)')
+
+    def __call__(self, arg, user):
+        if arg:
+            try:
+                self.player.play(list(self.player.history), start_track_index=int(arg))
+            except ValueError:
+                return _('must be integer')
+            except IndexError:
+                return _('Out of list')
+        else:
+            track_names = []
+            for number, track in enumerate(self.player.history):
+                if track.name:
+                    track_names.append(f'{number}: {track.name}')
+                else:
+                    track_names.append(f'{number}: {track.url}')
+            return '\n'.join(track_names) if track_names else _('List is empty')
+
+
+class LanguageCommand(Command):
+    def __init__(self, command_processor):
+        super().__init__(command_processor)
+        self.command_processor = command_processor
+        self.help = _('changes language of bot')
+
+    def __call__(self, arg, user):
+        try:
+            translator.install_locale(arg)
+            self.command_processor.config['general']['language'] = arg
+            self.ttclient.change_status_text('')
+            return _('language has been changed')
+        except:
+            return _('Incorrect locale')
+
+
+class QuitCommand   (Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
         self.help = _('Quits the bot')
