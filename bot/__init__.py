@@ -1,18 +1,10 @@
 import logging
-import os
-import sys
 
-from bot import commands, config, connectors, logger, modules, player, services, sound_devices, TeamTalk, translator, vars
+from bot import commands, config, connectors, logger, modules, player, services, sound_devices, TeamTalk, translator
 
 class Bot:
-    def __init__(self, config_file):
-        if os.path.isfile(config_file):
-            config_path = config_file
-        elif os.path.isfile(os.path.join(vars.directory, config_file)):
-            config_path = os.path.join(vars.directory, config_file)
-        else:
-            sys.exit('Incorrect config file path')
-        self.config = config.Config(config_path)
+    def __init__(self, config_file_name):
+        self.config = config.Config(config_file_name)
         translator.install_locale(self.config['general']['language'])
         self.player = player.Player(self.config['player'])
         self.ttclient = TeamTalk.TeamTalk(self.config['teamtalk'])

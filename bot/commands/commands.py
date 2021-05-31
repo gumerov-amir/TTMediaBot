@@ -440,14 +440,14 @@ class LanguageCommand(Command):
     def __call__(self, arg, user):
         if arg:
             try:
-                translator.install_locale(arg, fallback=False)
+                translator.install_locale(arg, fallback=arg == 'en')
                 self.command_processor.config['general']['language'] = arg
                 self.ttclient.change_status_text('')
                 return _('language has been changed')
             except:
                 return _('Incorrect locale')
         else:
-            return self.command_processor.config['general']['language']
+            return _('Current locale is {current_locale}. available locales: {available_locales}').format(current_locale=self.command_processor.config['general']['language'], available_locales=', '.join(translator.get_locales()))
 
 
 class QuitCommand   (Command):
