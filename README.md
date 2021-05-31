@@ -25,7 +25,7 @@ A bot for music streaming to TeamTalk Servers.
 
 ## Config file options
 * language - Sets bot interface language. Warning! to select some language you need appropriate language folder inside "locale" folder;
-* sound devices - Here you have to enter audio device numbers. Devices should be connected to each other (like Virtual audio cabble or pulseaudio);
+* sound devices - Here you have to enter audio device numbers. Devices should be connected to each other (like Virtual audio cable or pulseaudio);
 * player - Here are some defaults about playback;
 * teamtalk - here are main options for bot to connect and login to your TeamTalk server;
 * Services - Here you should configure available services for music search and playback;
@@ -43,7 +43,10 @@ output should be null audio output, input should be pulse.
 ### windows variant
 * install VB-cable, run "TTMediaBot.py --devices" and check numbers of VB-cable devices 
 * put this numbers to your config.json.
-
+## Some notes about the Windows variant
+* When listing input and output devices in the Windows variant of TTMediaBot, please note, that the input device will be doubled, i.e., if the output device is line 1 with number 3, the input device for line 1 will be listed twice, at number 5 and, for example, at number 7.
+* The correct number will be the last one as input, that is, if we selected the output as line 1 with the number 3, the input device would be line 1 with number 7 of the two options, number 5 and number 7..
+* The same method applies to all numbers and all Input / Outputs.
 # contacts
 E-mail - TTMediaBot@gmail.com
 telegram channel: https://t.me/TTMediaBot_official
