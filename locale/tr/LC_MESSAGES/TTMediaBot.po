@@ -1,0 +1,316 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2021-05-29 21:47+0300\n"
+"PO-Revision-Date: 2021-05-31 11:09+0400\n"
+"Last-Translator: Гумеров Амир Эдуардович <ar8200@bk.ru>\n"
+"Language-Team: Shaban Mamedov <shabanmamedov1@gmail.com>\n"
+"Language: tr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 3.0\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"X-Poedit-Basepath: ../../../bot\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#: TeamTalk/__init__.py:79
+msgid "Send \"h\" for help"
+msgstr "Yardım için \"h\" gönderin"
+
+#: commands/__init__.py:46
+msgid "You are banned"
+msgstr "Siz engellendiniz"
+
+#: commands/__init__.py:49
+msgid "You are not in bot's channel"
+msgstr "Botun kanalında değilsiniz"
+
+#: commands/__init__.py:51
+msgid "Bot is locked"
+msgstr "Bot kilitli"
+
+#: commands/__init__.py:63
+msgid "Unknown command"
+msgstr "Bilinmeyen komut"
+
+#: commands/__init__.py:68
+msgid "Error: {}"
+msgstr "Hata: {}"
+
+#: commands/__init__.py:76 commands/__init__.py:81
+#, python-brace-format
+msgid "{command} Help text not found"
+msgstr "{command} Yardım metni bulunamadı"
+
+#: commands/__init__.py:83
+#, python-brace-format
+msgid ""
+"Unknown command \"{command}\"\n"
+"{help}"
+msgstr ""
+"Bilinmeyen komut \"{command}\"\n"
+"{help}"
+
+#: commands/__init__.py:105
+msgid "Locked"
+msgstr "Kilitlendi"
+
+#: commands/__init__.py:105
+msgid "Unlocked"
+msgstr "kilit açıldı"
+
+#: commands/commands.py:19
+msgid "Shows command help"
+msgstr "Komut yardımını gösterir"
+
+#: commands/commands.py:28
+msgid "Shows information about this bot"
+msgstr "Bu bot hakkında bilgi gösterir"
+
+#: commands/commands.py:38
+msgid ""
+"QUERY Plays tracks found for the query. If no query is given plays or pauses "
+"current track"
+msgstr ""
+"SORGU Sorgu için bulunan parçaları oynatır. Herhangi bir sorgu verilmezse, "
+"mevcut parçayı oynatır veya duraklatır"
+
+#: commands/commands.py:42
+msgid "Searching..."
+msgstr "Aranıyor..."
+
+#: commands/commands.py:45
+#, python-brace-format
+msgid "{nickname} requested {request}"
+msgstr "{nickname} {request} istedi"
+
+#: commands/commands.py:47 commands/commands.py:167 commands/commands.py:182
+msgid "Playing {}"
+msgstr "Oynatılıyor {}"
+
+#: commands/commands.py:49
+msgid "Nothing is found for your query"
+msgstr "Sorgunuz için hiçbir şey bulunamadı"
+
+#: commands/commands.py:60
+msgid ""
+"RATE Sets rate to a value from 0.25 to 4. If no rate is given shows current "
+"rate"
+msgstr ""
+
+#: commands/commands.py:79
+msgid "URL Plays a stream from a given URL"
+msgstr "URL Belirli bir URL'den bir akış oynatır"
+
+#: commands/commands.py:85
+#, python-brace-format
+msgid "{nickname} requested playing from a URL"
+msgstr "{nickname} URL'den oynatma istedi"
+
+#: commands/commands.py:88
+msgid "Incorrect protocol"
+msgstr "Yanlış protokol"
+
+#: commands/commands.py:90
+msgid "Cannot get stream URL"
+msgstr "Akış URL'si alınamıyor"
+
+#: commands/commands.py:92
+msgid "The path cannot be found"
+msgstr "Yol bulunamıyor"
+
+#: commands/commands.py:100
+msgid "Stops playback"
+msgstr "Oynatmayı durdurur"
+
+#: commands/commands.py:105
+#, python-brace-format
+msgid "{nickname} stopped playback"
+msgstr "{nickname} oynatmayı durdurdu"
+
+#: commands/commands.py:107 commands/commands.py:186
+msgid "Nothing is playing"
+msgstr "Hiçbir şey çalmıyor"
+
+#: commands/commands.py:113
+#, python-brace-format
+msgid "VOLUME Sets volume to a value from 0 to {max_volume}"
+msgstr "SES Sesi 0 ile {max_volume} arasında bir değere ayarlar"
+
+#: commands/commands.py:132
+msgid ""
+"[STEP] Seeks current track back. the optional step is specified in percents "
+"from 1 to 100"
+msgstr ""
+"[ADIM] Geçerli parçayı geri arar. isteğe bağlı adım, 1'den 100'e kadar "
+"yüzdelerle belirtilir"
+
+#: commands/commands.py:147
+msgid ""
+"[STEP] Seeks current track forward. the optional step is specified in "
+"percents from 1 to 100"
+msgstr ""
+"[ADIM] Mevcut parçayı ileriye doğru arar. isteğe bağlı adım, 1'den 100'e "
+"kadar yüzdelerle belirtilir"
+
+#: commands/commands.py:162
+msgid "Plays next track"
+msgstr "Sonraki parçayı çalar"
+
+#: commands/commands.py:169
+msgid "No next track"
+msgstr "Sonraki parça yok"
+
+#: commands/commands.py:171 commands/commands.py:246 commands/commands.py:253
+#: commands/commands.py:269 commands/commands.py:297
+msgid "Nothing is currently playing"
+msgstr "Şu anda hiçbir şey çalmıyor"
+
+#: commands/commands.py:177
+msgid "Plays previous track"
+msgstr "Önceki parçayı oynatır"
+
+#: commands/commands.py:184
+msgid "No previous track"
+msgstr "Önceki parça yok"
+
+#: commands/commands.py:192
+msgid "MODE Sets playback mode. If no MODE is given shows a list of modes"
+msgstr ""
+"MOD Oynatma modunu ayarlar. MODE verilmezse modların bir listesini gösterir"
+
+#: commands/commands.py:193
+msgid "Single Track"
+msgstr "Tek Parça"
+
+#: commands/commands.py:193
+msgid "Repeat Track"
+msgstr "Parçayı Tekrarlama modu"
+
+#: commands/commands.py:193
+msgid "Track list"
+msgstr "Parça listesi"
+
+#: commands/commands.py:193
+msgid "Repeat track list"
+msgstr "Parça listesini tekrarlama modu"
+
+#: commands/commands.py:193
+msgid "Random"
+msgstr "rastgele"
+
+#: commands/commands.py:211
+msgid ""
+"SERVICE Selects a service to play from. If no service is given shows current "
+"service and a list of available ones"
+msgstr ""
+"HİZMET Oynatmak için bir hizmet seçer. Herhangi bir hizmet verilmemişse şu "
+"anki hizmeti ve mevcut olanların bir listesini gösterir"
+
+#: commands/commands.py:219
+msgid "Current service: {}"
+msgstr "Şu anki hizmet: {}"
+
+#: commands/commands.py:221
+msgid ""
+"Unknown service.\n"
+"{}"
+msgstr ""
+"Bilinmeyen hizmet.\n"
+"{}"
+
+#: commands/commands.py:229
+msgid "NUMBER Selects track by number from the list of current results"
+msgstr "NUMARA Mevcut sonuçlar listesinden numaraya göre parça seçer"
+
+#: commands/commands.py:240
+msgid "Incorrect number"
+msgstr "Yanlış numara"
+
+#: commands/commands.py:242 commands/commands.py:251
+msgid "Playing {} {}"
+msgstr "Oynatılıyor {} {}"
+
+#: commands/commands.py:244
+msgid "Out of list"
+msgstr "liste dışı"
+
+#: commands/commands.py:259
+msgid "Gets a direct link to the current track"
+msgstr "Geçerli parçaya doğrudan bir bağlantı alır"
+
+#: commands/commands.py:267
+msgid "URL is not available"
+msgstr "URL mevcut değil"
+
+#: commands/commands.py:275
+msgid "NICKNAME Sets the bot's nickname"
+msgstr "TAKMA AD Botun takma adını belirler"
+
+#: commands/commands.py:290
+msgid "Incorrect position"
+msgstr "Yanlış konum"
+
+#: commands/commands.py:292
+msgid "Must be integer"
+msgstr "Tamsayı olmalıdır"
+
+#: commands/commands.py:302
+msgid "Enables or disables voice transmission"
+msgstr "Ses iletimini etkinleştirir veya devre dışı bırakır"
+
+#: commands/commands.py:308 commands/commands.py:309
+msgid "Voice transmission enabled"
+msgstr "Ses iletimi etkin"
+
+#: commands/commands.py:314
+msgid "Voice transmission disabled"
+msgstr "Ses iletimi devre dışı"
+
+#: commands/commands.py:321
+msgid "Locks or unlocks the bot"
+msgstr "Botu kilitler veya kilidini açar"
+
+#: commands/commands.py:338
+msgid "Quits the bot"
+msgstr "Bottan çıkar"
+
+#: connectors/tt_player_connector.py:25
+#, python-brace-format
+msgid "Playing: {track_name}"
+msgstr "Oynatılıyor: {track_name}"
+
+#: connectors/tt_player_connector.py:27
+#, python-brace-format
+msgid "Playing: {stream_url}"
+msgstr "Oynatılıyor: {stream_url}"
+
+#: connectors/tt_player_connector.py:34
+#, python-brace-format
+msgid "Paused: {track_name}"
+msgstr "Duraklatıldı: {track_name}"
+
+#: connectors/tt_player_connector.py:36
+#, python-brace-format
+msgid "Paused: {stream_url}"
+msgstr "Duraklatıldı: {stream_url}"
+
+#~ msgid "Unable to perform a search. Please try again"
+#~ msgstr "Поиск не удался. Попробуйте снова"
+
+#~ msgid ""
+#~ "The stream cannot be played\n"
+#~ "Additional error info:\n"
+#~ msgstr ""
+#~ "Поток не может быть проигран\n"
+#~ "Дополнительная информация об ошибке\n"
+
+#~ msgid "not found"
+#~ msgstr "Не найдено"
