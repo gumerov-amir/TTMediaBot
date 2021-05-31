@@ -5,15 +5,11 @@ import sys
 from bot import vars
 
 
-
-
-
-
 class Config(dict):
     def __init__(self, file_name):
-        if os.path.isfile(config_file):
+        if os.path.isfile(file_name):
             self.file_name = file_name
-        elif os.path.isfile(os.path.join(vars.directory, config_file)):
+        elif os.path.isfile(os.path.join(vars.directory, file_name)):
             self.file_name = os.path.join(vars.directory, file_name)
         else:
             sys.exit('Incorrect config file path')
