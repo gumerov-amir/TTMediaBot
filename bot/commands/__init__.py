@@ -33,6 +33,8 @@ class CommandProcessor:
             # It has bugs on windows
             'm': ModeCommand(self),
             'gl': GetLinkCommand(self),
+            'r': HistoryCommand(self),
+            'lng': LanguageCommand(self),
         }
         self.admin_commands_dict = {
             'girl': lambda arg, user: 'Сонечка',

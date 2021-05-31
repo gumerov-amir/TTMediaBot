@@ -1,3 +1,4 @@
+from collections import deque
 import logging
 import time
 import random
@@ -30,6 +31,7 @@ class Player:
         self.track_index = -1
         self.state = State.Stopped
         self.mode = Mode.TrackList
+        self.history = deque(maxlen=vars.history_max_lenth)
         self.thread = PlayerThread(self)
 
     def run(self):
@@ -37,14 +39,14 @@ class Player:
         self.thread.start()
         logging.debug('Player thread started')
 
-    def play(self, tracks=None):
+    def play(self, tracks=None, start_track_index=None):
         if tracks:
             self.track_list = tracks
-            if self.mode == Mode.Random:
+            if not start_track_index and self.mode == Mode.Random:
                 self.track = random.choice(self.track_list)
                 self.track_index = self.track_list.index(self.track)
             else:
-                self.track_index = 0
+                self.track_index = start_track_index if start_track_index else 0
                 self.track = tracks[self.track_index]
             self._play_with_vlc(self.track.url)
         else:
@@ -68,6 +70,11 @@ class Player:
         self.track_index = -1
 
     def _play_with_vlc(self, arg):
+        try:
+            if self.history[-1] != self.track_list[self.track_index]:
+                self.history.append(self.track_list[self.track_index])
+        except:
+            self.history.append(self.track_list[self.track_index])
         self._vlc_player.set_media(self._vlc_instance.media_new(arg))
         self._vlc_player.play()
 
