@@ -34,6 +34,9 @@ class Player:
         self.history = deque(maxlen=vars.history_max_lenth)
         self.thread = PlayerThread(self)
 
+    def initialize(self):
+        self._vlc_instance.log_set(self.log_callback, None)
+
     def run(self):
         logging.debug('Starting player thread')
         self.thread.start()
@@ -201,3 +204,13 @@ class Player:
 
     def set_output_device(self, id):
         self._vlc_player.audio_output_device_set(None, id)
+
+    @vlc.CallbackDecorators.LogCb
+    def log_callback(data, level, ctx, fmt, args):
+        try:
+            logging.log(level * 10, str(fmt, 'UTF-8') % args)
+        except TypeError:
+            logging.log(level * 10, str(fmt, 'UTF-8'))
+        except ValueError:
+            logging.log(level * 10, fmt)
+
