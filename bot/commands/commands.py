@@ -438,13 +438,16 @@ class LanguageCommand(Command):
         self.help = _('changes language of bot')
 
     def __call__(self, arg, user):
-        try:
-            translator.install_locale(arg)
-            self.command_processor.config['general']['language'] = arg
-            self.ttclient.change_status_text('')
-            return _('language has been changed')
-        except:
-            return _('Incorrect locale')
+        if arg:
+            try:
+                translator.install_locale(arg, fallback=False)
+                self.command_processor.config['general']['language'] = arg
+                self.ttclient.change_status_text('')
+                return _('language has been changed')
+            except:
+                return _('Incorrect locale')
+        else:
+            return self.command_processor.config['general']['language']
 
 
 class QuitCommand   (Command):
