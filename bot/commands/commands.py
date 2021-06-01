@@ -394,6 +394,11 @@ class ChangeStatusCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
 
+    @property
+    def help(self):
+        return _('changes status of bot')
+
+
     def __call__(self, arg, user):
         self.ttclient.change_status_text(arg)
 
