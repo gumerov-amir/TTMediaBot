@@ -3,12 +3,12 @@ A bot for music streaming to TeamTalk Servers.
 
 ## Installation and usage
 ### Requirements
-* To use this bot you will need Python3 installed;
-* You will need p7zip or p7zip-full on linux or 7zip on windows to install TeamTalk SDK;
-* You will need pulseaudio and VLC installed on linux (there is no pulseaudio on Windows, so you need a virtual audio device driver such as VBCable for audio routing).
+* To use the bot, you need to install Python on your computer;
+* The bot requires the TeamTalk SDK component to be downloaded using the integrated tool from the command line. In order to download and extract the mentioned component, on Linux, you need to install p7zip or p7zip-full, or if you want to run the bot on Windows, 7Zip must be installed;
+* If you are going to use Linux as your main system for a bot, you will need pulseaudio and a vlc player to route audio, but if you plan to run a bot on Windows, PulseAudio is not available, so you will need a virtual audio cable driver, such as VBCable and of course, the vlc player must also be installed on Windows.
 ### Installation
 * Download TTMediaBot;
-* install all python requirements from requirements.txt with pip or pip3;
+* install all python requirements from requirements.txt, using the "pip3 install -r requirements.txt" or just "pip install -r requirements.txt" command, without quotes;;
 * Run ttsdk_downloader.py from tools folder;
 * Copy or rename config_default.json to config.json;
 * Fill in all required fields in config.json (Config description will be there later);
@@ -26,7 +26,7 @@ A bot for music streaming to TeamTalk Servers.
 ## Config file options
 * language - Sets bot interface language. Warning! to select some language you need appropriate language folder inside "locale" folder;
 * sound devices - Here you have to enter audio device numbers. Devices should be connected to each other (like Virtual audio cable or pulseaudio);
-* player - Here are some defaults about playback;
+* player - This section sets the configuration for the player such as default volume, maximum volume, etc;
 * teamtalk - here are main options for bot to connect and login to your TeamTalk server;
 * Services - Here you should configure available services for music search and playback;
 * logger - Here you can configure various logging related options.
@@ -45,7 +45,7 @@ output should be null audio output, input should be pulse.
 * put this numbers to your config.json.
 ## Some notes about the Windows variant
 * When listing input and output devices in the Windows variant of TTMediaBot, please note, that the input device will be doubled, i.e., if the output device is line 1 with number 3, the input device for line 1 will be listed twice, at number 5 and, for example, at number 7.
-* The correct number will be the last one as input, that is, if we selected the output as line 1 with the number 3, the input device would be line 1 with number 7 of the two options, number 5 and number 7..
+* The correct number will be the last one as input, that is, if we selected the output as line 1 with the number 3, the input device would be line 1 with number 7 of the two options, number 5 and number 7.
 * The same method applies to all numbers and all Input / Outputs.
 # contacts
 E-mail - TTMediaBot@gmail.com
