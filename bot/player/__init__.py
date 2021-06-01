@@ -11,10 +11,20 @@ from bot.player.enums import Mode, State
 from bot.player.track import Track
 from bot.player.thread import PlayerThread
 from bot.sound_devices import SoundDevice, SoundDeviceType
+import ctypes
 
 if sys.platform == 'win32':
     from ctypes import windll
     windll.ole32.CoInitializeEx(None, 0)
+
+if sys.platform == 'win32':
+    vsnprintf = ctypes.cdll.msvcrt.vsnprintf
+else:
+    libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library('c'))
+    vsnprintf = libc.vsnprintf
+
+vsnprintf.restype = ctypes.c_int
+vsnprintf.argtypes = (ctypes.c_char_p, ctypes.c_size_t, ctypes.c_char_p, ctypes.c_void_p)
 
 class Player:
     def __init__(self, config):
@@ -207,10 +217,9 @@ class Player:
 
     @vlc.CallbackDecorators.LogCb
     def log_callback(data, level, ctx, fmt, args):
-        try:
-            logging.log(level * 10, str(fmt, 'UTF-8') % args)
-        except TypeError:
-            logging.log(level * 10, str(fmt, 'UTF-8'))
-        except ValueError:
-            logging.log(level * 10, fmt)
+        levels = {0: 10, 2: 20, 3: 30, 4: 40}
+        BUF_LEN = 1024
+        outBuf = ctypes.create_string_buffer(BUF_LEN)
+        vsnprintf(outBuf, BUF_LEN, fmt, args)
+        logging.log(levels.get(level), str(outBuf.value.decode()))
 
