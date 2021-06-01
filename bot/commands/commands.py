@@ -16,7 +16,10 @@ class HelpCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
         self.command_processor = command_processor
-        self.help = _('Shows command help')
+
+    @property
+    def help(self):
+        return _('Shows command help')
 
     def __call__(self, arg, user):
         return self.command_processor.help(arg, user)
@@ -25,7 +28,10 @@ class HelpCommand(Command):
 class AboutCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('Shows information about this bot')
+
+    @property
+    def help(self):
+        return _('Shows information about this bot')
 
     def __call__(self, arg, user):
         about_text = _('')
@@ -35,7 +41,10 @@ class AboutCommand(Command):
 class PlayPauseCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('QUERY Plays tracks found for the query. If no query is given plays or pauses current track')
+
+    @property
+    def help(self):
+        return _('QUERY Plays tracks found for the query. If no query is given plays or pauses current track')
 
     def __call__(self, arg, user):
         if arg:
@@ -57,7 +66,10 @@ class PlayPauseCommand(Command):
 class RateCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('RATE Sets rate to a value from 0.25 to 4. If no rate is given shows current rate')
+
+    @property
+    def help(self):
+        return _('RATE Sets rate to a value from 0.25 to 4. If no rate is given shows current rate')
 
     def __call__(self, arg, user):
         if arg:
@@ -76,7 +88,10 @@ class RateCommand(Command):
 class PlayUrlCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('URL Plays a stream from a given URL')
+
+    @property
+    def help(self):
+        return _('URL Plays a stream from a given URL')
 
     def __call__(self, arg, user):
         if arg:
@@ -97,7 +112,10 @@ class PlayUrlCommand(Command):
 class StopCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('Stops playback')
+
+    @property
+    def help(self):
+        return _('Stops playback')
 
     def __call__(self, arg, user):
         if self.player.state != State.Stopped:
@@ -110,7 +128,10 @@ class StopCommand(Command):
 class VolumeCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('VOLUME Sets volume to a value from 0 to {max_volume}').format(max_volume=self.player.max_volume)
+
+    @property
+    def help(self):
+        return _('VOLUME Sets volume to a value from 0 to {max_volume}').format(max_volume=self.player.max_volume)
 
     def __call__(self, arg, user):
         if arg:
@@ -129,7 +150,10 @@ class VolumeCommand(Command):
 class SeekBackCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('[STEP] Seeks current track back. the optional step is specified in percents from 1 to 100')
+
+    @property
+    def help(self):
+        return _('[STEP] Seeks current track back. the optional step is specified in percents from 1 to 100')
 
     def __call__(self, arg, user):
         if arg:
@@ -144,7 +168,10 @@ class SeekBackCommand(Command):
 class SeekForwardCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('[STEP] Seeks current track forward. the optional step is specified in percents from 1 to 100')
+
+    @property
+    def help(self):
+        return _('[STEP] Seeks current track forward. the optional step is specified in percents from 1 to 100')
 
     def __call__(self, arg, user):
         if arg:
@@ -159,7 +186,10 @@ class SeekForwardCommand(Command):
 class NextTrackCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('Plays next track')
+
+    @property
+    def help(self):
+        return _('Plays next track')
 
     def __call__(self, arg, user):
         try:
@@ -174,7 +204,10 @@ class NextTrackCommand(Command):
 class PreviousTrackCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('Plays previous track')
+
+    @property
+    def help(self):
+        return _('Plays previous track')
 
     def __call__(self, arg, user):
         try:
@@ -189,7 +222,10 @@ class PreviousTrackCommand(Command):
 class ModeCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('MODE Sets playback mode. If no MODE is given shows a list of modes')
+
+    @property
+    def help(self):
+        return _('MODE Sets playback mode. If no MODE is given shows a list of modes')
         self.mode_names = {Mode.SingleTrack: _('Single Track'), Mode.RepeatTrack: _('Repeat Track'), Mode.TrackList: _('Track list'), Mode.RepeatTrackList: _('Repeat track list'), Mode.Random: _('Random')}
 
     def __call__(self, arg, user):
@@ -208,7 +244,10 @@ class ModeCommand(Command):
 class ServiceCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('SERVICE Selects a service to play from. If no service is given shows current service and a list of available ones')
+
+    @property
+    def help(self):
+        return _('SERVICE Selects a service to play from. If no service is given shows current service and a list of available ones')
 
     def __call__(self, arg, user):
         service_help = 'Current service: {current_service}\nAvailable: {available_services}'.format(current_service=self.service_manager.service.name, available_services=', '.join([i for i in self.service_manager.available_services]))
@@ -226,7 +265,10 @@ class ServiceCommand(Command):
 class SelectTrackCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('NUMBER Selects track by number from the list of current results')
+
+    @property
+    def help(self):
+        return _('NUMBER Selects track by number from the list of current results')
 
     def __call__(self, arg, user):
         if arg:
@@ -256,7 +298,10 @@ class SelectTrackCommand(Command):
 class GetLinkCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('Gets a direct link to the current track')
+
+    @property
+    def help(self):
+        return _('Gets a direct link to the current track')
 
     def __call__(self, arg, user):
         if self.player.state != State.Stopped:
@@ -272,7 +317,10 @@ class GetLinkCommand(Command):
 class ChangeNicknameCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('NICKNAME Sets the bot\'s nickname')
+
+    @property
+    def help(self):
+        return _('NICKNAME Sets the bot\'s nickname')
 
     def __call__(self, arg, user):
         self.ttclient.change_nickname(arg)
@@ -299,7 +347,10 @@ class PositionCommand(Command):
 class VoiceTransmissionCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('Enables or disables voice transmission')
+
+    @property
+    def help(self):
+        return _('Enables or disables voice transmission')
 
     def __call__(self, arg, user):
         if not self.ttclient.is_voice_transmission_enabled:
@@ -318,7 +369,10 @@ class LockCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
         self.command_processor = command_processor
-        self.help = _('Locks or unlocks the bot')
+
+    @property
+    def help(self):
+        return _('Locks or unlocks the bot')
 
     def __call__(self, arg, user):
         return self.command_processor.lock(arg, user)
@@ -327,7 +381,10 @@ class VolumeLockCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
         self.command_processor = command_processor
-        self.help = _('Locks or unlocks volume')
+
+    @property
+    def help(self):
+        return _('Locks or unlocks volume')
 
     def __call__(self, arg, user):
         return self.command_processor.volume_lock(arg, user)
@@ -346,7 +403,10 @@ class SaveConfigCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
         self.command_processor = command_processor
-        self.help = _('saves config to file')
+
+    @property
+    def help(self):
+        return _('saves config to file')
 
     def __call__(self, arg, user):
         self.command_processor.config.save()
@@ -356,7 +416,10 @@ class AdminUsersCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
         self.command_processor = command_processor
-        self.help = _('shows list of admin users, if user_name is given adds it to list')
+
+    @property
+    def help(self):
+        return _('shows list of admin users, if user_name is given adds it to list')
 
     def __call__(self, arg, user):
         admin_users = self.command_processor.config['teamtalk']['users']['admins']
@@ -384,7 +447,10 @@ class BannedUsersCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
         self.command_processor = command_processor
-        self.help = _('shows list of banned users, if user_name is given adds to/deletes from list')
+
+    @property
+    def help(self):
+        return _('shows list of banned users, if user_name is given adds to/deletes from list')
 
     def __call__(self, arg, user):
         banned_users = self.command_processor.config['teamtalk']['users']['banned_users']
@@ -411,7 +477,10 @@ class BannedUsersCommand(Command):
 class HistoryCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('shows history of playing (64 last tracks)')
+
+    @property
+    def help(self):
+        return _('shows history of playing (64 last tracks)')
 
     def __call__(self, arg, user):
         if arg:
@@ -435,7 +504,10 @@ class LanguageCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
         self.command_processor = command_processor
-        self.help = _('changes language of bot')
+
+    @property
+    def help(self):
+        return _('changes language of bot')
 
     def __call__(self, arg, user):
         if arg:
@@ -453,7 +525,10 @@ class LanguageCommand(Command):
 class QuitCommand   (Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
-        self.help = _('Quits the bot')
+
+    @property
+    def help(self):
+        return _('Quits the bot')
 
     def __call__(self, arg, user):
         _thread.interrupt_main()
