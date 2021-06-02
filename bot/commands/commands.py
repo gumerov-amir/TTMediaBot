@@ -550,5 +550,8 @@ class RestartCommand(Command):
         return _('restarts bot')
 
     def __call__(self, arg, user):
-        subprocess.Popen('"{exec_path}" {args}'.format(exec_path=sys.executable, args=' '.join(sys.argv)))
+        if sys.platform == 'win32':
+            subprocess.Popen('"{exec_path}" {args}'.format(exec_path=sys.executable, args=' '.join(sys.argv)))
+        else:
+            subprocess.Popen("{exec_path} {args}'.format(exec_path=os.path.join(vars.directory, 'TTMediaBot.sh'), args=sys.argv[1::]))
         sys.exit()
