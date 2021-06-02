@@ -41,7 +41,7 @@ class Streamer:
             elif os.path.isdir(local_path):
                 tracks = []
                 for path, dirs, files in os.walk(local_path):
-                    for file in files:
+                    for file in sorted(files):
                         url = os.path.join(path, file)
                         name = os.path.split(url)[-1]
                         track = Track(url=url, name=name)
