@@ -1,10 +1,11 @@
 import _thread
-import sys
+import os
 import subprocess
+import sys
 
 
 from bot.player.enums import Mode, State
-from bot import errors, translator
+from bot import errors, translator, vars
 
 
 class Command:
@@ -553,5 +554,5 @@ class RestartCommand(Command):
         if sys.platform == 'win32':
             subprocess.Popen('"{exec_path}" {args}'.format(exec_path=sys.executable, args=' '.join(sys.argv)))
         else:
-            subprocess.Popen("{exec_path} {args}'.format(exec_path=os.path.join(vars.directory, 'TTMediaBot.sh'), args=sys.argv[1::]))
+            subprocess.Popen('{exec_path} {args}'.format(exec_path=os.path.join(vars.directory, 'TTMediaBot.sh'), args=sys.argv[1::]))
         sys.exit()
