@@ -554,5 +554,5 @@ class RestartCommand(Command):
         if sys.platform == 'win32':
             subprocess.Popen('"{exec_path}" {args}'.format(exec_path=sys.executable, args=' '.join(sys.argv)))
         else:
-            subprocess.Popen('{exec_path} {args}'.format(exec_path=os.path.join(vars.directory, 'TTMediaBot.sh'), args=sys.argv[1::]))
+            subprocess.Popen('"{exec_path}" {args}'.format(exec_path=os.path.join(vars.directory, 'TTMediaBot.sh'), args=' '.join(sys.argv[1::])), shell=True)
         sys.exit()
