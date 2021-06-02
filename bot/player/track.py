@@ -34,7 +34,10 @@ class Track:
         self._name = value
 
     def get_meta(self):
-        return {'name': self.name, 'url': self.url}
+        try:
+            return {'name': self.name, 'url': self.url}
+        except:
+            return {'name': None, 'url': ''}
 
     def __bool__(self):
         if self.url or (self.service and self.extra_info):
