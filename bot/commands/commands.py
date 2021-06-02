@@ -1,4 +1,7 @@
 import _thread
+import sys
+import subprocess
+
 
 from bot.player.enums import Mode, State
 from bot import errors, translator
@@ -537,3 +540,15 @@ class QuitCommand   (Command):
 
     def __call__(self, arg, user):
         _thread.interrupt_main()
+
+class RestartCommand(Command):
+    def __init__(self, command_processor):
+        super().__init__(command_processor)
+
+    @property
+    def help(self):
+        return _('restarts bot')
+
+    def __call__(self, arg, user):
+        subprocess.Popen('"{exec_path}" {args}'.format(exec_path=sys.executable, args=' '.join(sys.argv)))
+        sys.exit()
