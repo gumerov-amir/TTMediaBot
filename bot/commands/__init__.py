@@ -46,6 +46,7 @@ class CommandProcessor:
             'ub': BannedUsersCommand(self),
             'sc': SaveConfigCommand(self),
             'va': VoiceTransmissionCommand(self),
+            'restart': RestartCommand(self),
             'q': QuitCommand(self),
         }
 
