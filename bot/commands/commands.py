@@ -5,7 +5,7 @@ import sys
 
 
 from bot.player.enums import Mode, State
-from bot import errors, translator
+from bot import errors, translator, vars
 
 
 class Command:
