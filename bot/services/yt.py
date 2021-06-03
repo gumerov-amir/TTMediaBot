@@ -39,7 +39,8 @@ class Service:
                     tracks += data
                 return tracks
             if not process:
-                return [Track(service=self, extra_info=info), ]
+                if 'video' not in info_type: print(info_type)
+                return [Track(service=self, extra_info=info)]
             stream = ydl.process_ie_result(info)
             if 'url' in stream:
                 url = stream['url']
@@ -48,7 +49,7 @@ class Service:
             title = stream['title']
             if 'uploader' in stream:
                 title += ' - {}'.format(stream['uploader'])
-            return [Track(url=url, name=title), ]
+            return [Track(url=url, name=title)]
 
     def search(self, text):
         search = VideosSearch(text, limit=300).result()
