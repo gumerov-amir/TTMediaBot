@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TTMediaBot\n"
-"POT-Creation-Date: 2021-05-31 11:07+0300\n"
-"PO-Revision-Date: 2021-05-31 20:55+0300\n"
+"POT-Creation-Date: 2021-06-02 21:13+0400\n"
+"PO-Revision-Date: 2021-06-02 21:22+0400\n"
 "Last-Translator: Гумеров Амир Эдуардович <ar8200@bk.ru>\n"
 "Language-Team: TTMediaBot's developers\n"
 "Language: ru\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: pygettext.py 1.5\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
 "X-Poedit-Basepath: ../../../bot\n"
@@ -24,36 +24,36 @@ msgstr ""
 msgid "Send \"h\" for help"
 msgstr "Отправьте \"h\" для справки"
 
-#: commands/__init__.py:54
+#: commands/__init__.py:55
 msgid "You are banned"
 msgstr "Вы заблокированы"
 
-#: commands/__init__.py:57
+#: commands/__init__.py:58
 msgid "You are not in bot's channel"
 msgstr "Вы не в канале бота"
 
-#: commands/__init__.py:59
+#: commands/__init__.py:60
 msgid "Bot is locked"
 msgstr "Бот заблокирован"
 
-#: commands/__init__.py:66 commands/__init__.py:119
+#: commands/__init__.py:67 commands/__init__.py:120
 msgid "Volume is locked"
 msgstr "Громкость заблокирована"
 
-#: commands/__init__.py:73
+#: commands/__init__.py:74
 msgid "Unknown command"
 msgstr "Неизвестная команда"
 
-#: commands/__init__.py:78
+#: commands/__init__.py:79
 msgid "Error: {}"
 msgstr "Ошибка: {}"
 
-#: commands/__init__.py:86 commands/__init__.py:91
+#: commands/__init__.py:87 commands/__init__.py:92
 #, python-brace-format
 msgid "{command} Help text not found"
 msgstr "{command} Справка не найдена"
 
-#: commands/__init__.py:93
+#: commands/__init__.py:94
 #, python-brace-format
 msgid ""
 "Unknown command \"{command}\"\n"
@@ -62,27 +62,27 @@ msgstr ""
 "Неизвестная команда \"{command}\"\n"
 "{help}"
 
-#: commands/__init__.py:115
+#: commands/__init__.py:116
 msgid "Locked"
 msgstr "Заблокирован"
 
-#: commands/__init__.py:115
+#: commands/__init__.py:116
 msgid "Unlocked"
 msgstr "Разблокирован"
 
-#: commands/__init__.py:119
+#: commands/__init__.py:120
 msgid "Volume is unlocked"
 msgstr "Громкость разблокирована"
 
-#: commands/commands.py:19
+#: commands/commands.py:26
 msgid "Shows command help"
 msgstr "Показывает справку по командам"
 
-#: commands/commands.py:28
+#: commands/commands.py:38
 msgid "Shows information about this bot"
 msgstr "Показывает информацию о боте"
 
-#: commands/commands.py:38
+#: commands/commands.py:51
 msgid ""
 "QUERY Plays tracks found for the query. If no query is given plays or pauses "
 "current track"
@@ -90,69 +90,69 @@ msgstr ""
 "ЗАПРОС Воспроизводит найденные по запросу треки. Если запрос не указан, "
 "запускает или приостанавливает  воспроизведение текущего трека"
 
-#: commands/commands.py:42
+#: commands/commands.py:55
 msgid "Searching..."
 msgstr "Поиск..."
 
-#: commands/commands.py:45
+#: commands/commands.py:58
 #, python-brace-format
 msgid "{nickname} requested {request}"
 msgstr "{nickname} запросил {request}"
 
-#: commands/commands.py:47 commands/commands.py:167 commands/commands.py:182
+#: commands/commands.py:60 commands/commands.py:201 commands/commands.py:219
 msgid "Playing {}"
 msgstr "Воспроизводится {}"
 
-#: commands/commands.py:49
+#: commands/commands.py:62
 msgid "Nothing is found for your query"
 msgstr "По вашему запросу ничего не найдено"
 
-#: commands/commands.py:60
+#: commands/commands.py:76
 msgid ""
 "RATE Sets rate to a value from 0.25 to 4. If no rate is given shows current "
 "rate"
 msgstr ""
 
-#: commands/commands.py:79
+#: commands/commands.py:98
 msgid "URL Plays a stream from a given URL"
 msgstr "АДРЕс Воспроизводит поток по заданному адресу"
 
-#: commands/commands.py:85
+#: commands/commands.py:104
 #, python-brace-format
 msgid "{nickname} requested playing from a URL"
 msgstr "{nickname} запросил воспроизведение потока"
 
-#: commands/commands.py:88
+#: commands/commands.py:107
 msgid "Incorrect protocol"
 msgstr "Неверный протокол"
 
-#: commands/commands.py:90
+#: commands/commands.py:109
 msgid "Cannot get stream URL"
 msgstr "Невозможно получить адрес потока"
 
-#: commands/commands.py:92
+#: commands/commands.py:111
 msgid "The path cannot be found"
 msgstr "Путь не найден"
 
-#: commands/commands.py:100
+#: commands/commands.py:122
 msgid "Stops playback"
 msgstr "Останавливает воспроизведение"
 
-#: commands/commands.py:105
+#: commands/commands.py:127
 #, python-brace-format
 msgid "{nickname} stopped playback"
 msgstr "{nickname} остановил воспроизведение"
 
-#: commands/commands.py:107 commands/commands.py:186
+#: commands/commands.py:129 commands/commands.py:223
 msgid "Nothing is playing"
 msgstr "Ничего не воспроизводится"
 
-#: commands/commands.py:113
+#: commands/commands.py:138
 #, python-brace-format
 msgid "VOLUME Sets volume to a value from 0 to {max_volume}"
 msgstr "ГРОМКОСТЬ Устанавливает громкость в процентах от 0 до {max_volume}"
 
-#: commands/commands.py:132
+#: commands/commands.py:160
 msgid ""
 "[STEP] Seeks current track back. the optional step is specified in percents "
 "from 1 to 100"
@@ -160,7 +160,7 @@ msgstr ""
 "[ШАГ] Прокручивает текущий трек назад. Опциональный шаг указывается в "
 "процентах от 0 до 100"
 
-#: commands/commands.py:147
+#: commands/commands.py:178
 msgid ""
 "[STEP] Seeks current track forward. the optional step is specified in "
 "percents from 1 to 100"
@@ -168,54 +168,54 @@ msgstr ""
 "[ШАГ] Прокручивает текущий трек вперед. Опциональный шаг указывается в "
 "процентах от 0 до 100"
 
-#: commands/commands.py:162
+#: commands/commands.py:196
 msgid "Plays next track"
 msgstr "Воспроизводит следующий трек"
 
-#: commands/commands.py:169
+#: commands/commands.py:203
 msgid "No next track"
 msgstr "Нет следующего трека"
 
-#: commands/commands.py:171 commands/commands.py:246 commands/commands.py:253
-#: commands/commands.py:269 commands/commands.py:297
+#: commands/commands.py:205 commands/commands.py:292 commands/commands.py:299
+#: commands/commands.py:318 commands/commands.py:349
 msgid "Nothing is currently playing"
 msgstr "В данный момент ничего не Воспроизводится"
 
-#: commands/commands.py:177
+#: commands/commands.py:214
 msgid "Plays previous track"
 msgstr "Воспроизводит предыдущий трек"
 
-#: commands/commands.py:184
+#: commands/commands.py:221
 msgid "No previous track"
 msgstr "Нет предыдущего трека"
 
-#: commands/commands.py:192
+#: commands/commands.py:232
 msgid "MODE Sets playback mode. If no MODE is given shows a list of modes"
 msgstr ""
 "РЕЖИМ Устанавливает режим воспроизведения, если режим не указан, выводит "
 "список всех режимов"
 
-#: commands/commands.py:193
+#: commands/commands.py:233
 msgid "Single Track"
 msgstr "Один трек"
 
-#: commands/commands.py:193
+#: commands/commands.py:233
 msgid "Repeat Track"
 msgstr "Повтор трека"
 
-#: commands/commands.py:193
+#: commands/commands.py:233
 msgid "Track list"
 msgstr "Список треков"
 
-#: commands/commands.py:193
+#: commands/commands.py:233
 msgid "Repeat track list"
 msgstr "Повтор списка треков"
 
-#: commands/commands.py:193
+#: commands/commands.py:233
 msgid "Random"
 msgstr "Случайный трек"
 
-#: commands/commands.py:211
+#: commands/commands.py:254
 msgid ""
 "SERVICE Selects a service to play from. If no service is given shows current "
 "service and a list of available ones"
@@ -223,11 +223,11 @@ msgstr ""
 "СЕРВИС Выбрать сервис для воспроизведения. Если сервис не указан, показывает "
 "текущий сервис и список доступных"
 
-#: commands/commands.py:219
+#: commands/commands.py:262
 msgid "Current service: {}"
 msgstr "Текущий сервис: {}"
 
-#: commands/commands.py:221
+#: commands/commands.py:264
 msgid ""
 "Unknown service.\n"
 "{}"
@@ -235,124 +235,142 @@ msgstr ""
 "Неизвестный сервис.\n"
 "{}"
 
-#: commands/commands.py:229
+#: commands/commands.py:275
 msgid "NUMBER Selects track by number from the list of current results"
 msgstr "НОМЕР выберает трек по номеру в списке результатов"
 
-#: commands/commands.py:240
+#: commands/commands.py:286
 msgid "Incorrect number"
 msgstr "Неверный номер"
 
-#: commands/commands.py:242 commands/commands.py:251
+#: commands/commands.py:288 commands/commands.py:297
 msgid "Playing {} {}"
 msgstr "Воспроизводится {} {}"
 
-#: commands/commands.py:244 commands/commands.py:423
+#: commands/commands.py:290 commands/commands.py:501
 msgid "Out of list"
 msgstr "Вне списка"
 
-#: commands/commands.py:259
+#: commands/commands.py:308
 msgid "Gets a direct link to the current track"
 msgstr "Получает прямую ссылку на текущий трек"
 
-#: commands/commands.py:267
+#: commands/commands.py:316
 msgid "URL is not available"
 msgstr "Поток не доступен"
 
-#: commands/commands.py:275
+#: commands/commands.py:327
 msgid "NICKNAME Sets the bot's nickname"
 msgstr "НИК Устанавливает ник бота"
 
-#: commands/commands.py:290
+#: commands/commands.py:342
 msgid "Incorrect position"
 msgstr "Не верная позиция"
 
-#: commands/commands.py:292
+#: commands/commands.py:344
 msgid "Must be integer"
 msgstr ""
 
-#: commands/commands.py:302
+#: commands/commands.py:357
 msgid "Enables or disables voice transmission"
 msgstr "Включает или отключает передачу речи"
 
-#: commands/commands.py:308 commands/commands.py:309
+#: commands/commands.py:363 commands/commands.py:364
 msgid "Voice transmission enabled"
 msgstr "Передача речи включена"
 
-#: commands/commands.py:314
+#: commands/commands.py:369
 msgid "Voice transmission disabled"
 msgstr "Передача речи отключена"
 
-#: commands/commands.py:321
+#: commands/commands.py:379
 msgid "Locks or unlocks the bot"
 msgstr "Блокирует или разблокирует бота"
 
-#: commands/commands.py:330
+#: commands/commands.py:391
 msgid "Locks or unlocks volume"
 msgstr "блокирует или разблокирует громкость"
 
-#: commands/commands.py:349
+#: commands/commands.py:403
+msgid "changes status of bot"
+msgstr "Меняет статус бота"
+
+#: commands/commands.py:418
 msgid "saves config to file"
 msgstr "Сохраняет конфиг в файл"
 
-#: commands/commands.py:353
+#: commands/commands.py:422
 msgid "Config saved"
 msgstr "Конфиг сохранён"
 
-#: commands/commands.py:359
+#: commands/commands.py:431
 msgid "shows list of admin users, if user_name is given adds it to list"
 msgstr ""
+"показывает список администраторов, если имя пользователя указано, добавляет "
+"его в список"
 
-#: commands/commands.py:366 commands/commands.py:394
+#: commands/commands.py:438 commands/commands.py:469
 msgid "Added"
-msgstr ""
+msgstr "Добавлен"
 
-#: commands/commands.py:370 commands/commands.py:398
+#: commands/commands.py:442 commands/commands.py:473
 msgid "Deleted"
-msgstr ""
+msgstr "Удалено"
 
-#: commands/commands.py:372
+#: commands/commands.py:444
 msgid "This user is not admin"
-msgstr ""
+msgstr "Этот пользователь не администратор"
 
-#: commands/commands.py:380 commands/commands.py:408 commands/commands.py:431
+#: commands/commands.py:452 commands/commands.py:483 commands/commands.py:509
 msgid "List is empty"
-msgstr ""
+msgstr "Список пуст"
 
-#: commands/commands.py:387
+#: commands/commands.py:462
 msgid ""
 "shows list of banned users, if user_name is given adds to/deletes from list"
 msgstr ""
+"Показывает список забаненных пользователей, если имя пользователя задано, "
+"добавляет/удаляет из списка"
 
-#: commands/commands.py:400
+#: commands/commands.py:475
 msgid "This user is not banned"
-msgstr ""
+msgstr "Этот пользователь не забанен"
 
-#: commands/commands.py:414
+#: commands/commands.py:492
 msgid "shows history of playing (64 last tracks)"
-msgstr ""
+msgstr "Показывает историю воспроизведения (64 последних трека)"
 
-#: commands/commands.py:421
+#: commands/commands.py:499
 msgid "must be integer"
-msgstr ""
+msgstr "Должно быть целым числом"
 
-#: commands/commands.py:438
+#: commands/commands.py:519
 msgid "changes language of bot"
-msgstr ""
+msgstr "Меняет язык бота"
 
-#: commands/commands.py:445
+#: commands/commands.py:527
 msgid "language has been changed"
 msgstr "Язык изменён"
 
-#: commands/commands.py:447
-#, fuzzy
-#| msgid "Incorrect protocol"
+#: commands/commands.py:529
 msgid "Incorrect locale"
-msgstr "Неверный протокол"
+msgstr "Неправильная локализация"
 
-#: commands/commands.py:453
+#: commands/commands.py:531
+#, python-brace-format
+msgid ""
+"Current locale is {current_locale}. available locales: {available_locales}"
+msgstr ""
+"Текущая локализация {current_locale}. Доступные локализации: "
+"{available_locales}"
+
+#: commands/commands.py:540
 msgid "Quits the bot"
 msgstr "Закрывает бот"
+
+#: commands/commands.py:551
+msgid "restarts bot"
+msgstr "Перезапускает бота"
 
 #: connectors/tt_player_connector.py:25
 #, python-brace-format
