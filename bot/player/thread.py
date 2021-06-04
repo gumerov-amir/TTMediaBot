@@ -14,7 +14,10 @@ class PlayerThread(Thread):
         self.player = player
 
     def run(self):
+        self._close = False
         while True:
+            if self._close:
+                break
             if self.player.state == State.Playing and self.player._vlc_player.get_state() == vlc.State.Ended:
                 if self.player.mode == Mode.SingleTrack:
                     self.player.stop()
@@ -34,3 +37,6 @@ class PlayerThread(Thread):
                 if self.player.track.name != new_name and new_name:
                     self.player.track.name = new_name
             time.sleep(vars.loop_timeout)
+
+    def close(self):
+        self.__close = True
