@@ -134,3 +134,4 @@ config.json
 *.log
 .*env/
 TTSDK_license.txt
+TTMediaBotCache.dat

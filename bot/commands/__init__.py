@@ -2,18 +2,23 @@ import logging
 import re
 import traceback
 
-from .commands import *
 from bot import errors
+from bot.commands.admin_commands import *
+from bot.commands.internal_commands import *
+from bot.commands.user_commands import *
+
 
 re_command = re.compile('[a-z]+')
 
 class CommandProcessor:
-    def __init__(self, config, player, ttclient, module_manager, service_manager):
+    def __init__(self, bot, config, player, ttclient, module_manager, service_manager, cache):
+        self.bot = bot
+        self.cache = cache
         self.config = config
-        self.player = player
-        self.ttclient = ttclient
-        self.service_manager = service_manager
         self.module_manager = module_manager
+        self.player = player
+        self.service_manager = service_manager
+        self.ttclient = ttclient
         self.locked = False
         self.volume_locked = False
         self.commands_dict = {
@@ -29,8 +34,7 @@ class CommandProcessor:
             'sb': SeekBackCommand(self),
             'sf': SeekForwardCommand(self),
             'v': VolumeCommand(self),
-            # 'r': RateCommand(self),
-            # It has bugs on windows
+            'f': FavoritesCommand(self),
             'm': ModeCommand(self),
             'gl': GetLinkCommand(self),
             'r': HistoryCommand(self),
@@ -46,9 +50,14 @@ class CommandProcessor:
             'ub': BannedUsersCommand(self),
             'sc': SaveConfigCommand(self),
             'va': VoiceTransmissionCommand(self),
-            'restart': RestartCommand(self),
+            'rs': RestartCommand(self),
             'q': QuitCommand(self),
         }
+        self.internal_commands_dict = {
+         'ism': SendMessageCommand(self),   
+        }
+
+
 
     def __call__(self, message):
         if message.user.is_banned:
@@ -70,6 +79,8 @@ class CommandProcessor:
                 return self.commands_dict[command](arg, message.user)
             elif message.user.is_admin and command in self.admin_commands_dict:
                 return self.admin_commands_dict[command](arg, message.user)
+            elif command in self.internal_commands_dict and 'dev_mode' in self.config['general']:
+                return self.internal_commands_dict[command](arg, message.user)
             else:
                 return _('Unknown command') + ' "' + command + '"\n' + self.help('', message.user)
         except errors.InvalidArgumentError as e:
