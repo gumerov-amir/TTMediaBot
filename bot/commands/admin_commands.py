@@ -4,10 +4,10 @@ import sys
 
 from bot.commands.command import AdminCommand
 from bot.player.enums import State
-from bot import vars
+from bot import translator, vars
 
 
-class LanguageCommand(Command):
+class LanguageCommand(AdminCommand):
     @property
     def help(self):
         return _('changes language of bot')
