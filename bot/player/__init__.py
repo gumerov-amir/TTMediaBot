@@ -27,7 +27,7 @@ vsnprintf.restype = ctypes.c_int
 vsnprintf.argtypes = (ctypes.c_char_p, ctypes.c_size_t, ctypes.c_char_p, ctypes.c_void_p)
 
 class Player:
-    def __init__(self, config):
+    def __init__(self, config, cache):
         self.config = config
         self._vlc_instance = vlc.Instance(self.config['vlc_options'])
         self._vlc_player = self._vlc_instance.media_player_new()
@@ -41,19 +41,26 @@ class Player:
         self.track_index = -1
         self.state = State.Stopped
         self.mode = Mode.TrackList
-        self.history = deque(maxlen=vars.history_max_lenth)
-        self.thread = PlayerThread(self)
+        self.cache = cache
+        self.player_thread = PlayerThread(self)
 
     def initialize(self):
+        logging.debug('Initializing player')
         self._vlc_instance.log_set(self.log_callback, None)
+        logging.debug('Player initialized')
 
     def run(self):
         logging.debug('Starting player thread')
-        self.thread.start()
+        self.player_thread.start()
         logging.debug('Player thread started')
 
+    def close(self):
+        logging.debug('Closing player thread')
+        self.player_thread.close()
+        logging.debug('Player thread closed')
+
     def play(self, tracks=None, start_track_index=None):
-        if tracks:
+        if tracks != None:
             self.track_list = tracks
             if not start_track_index and self.mode == Mode.Random:
                 self.track = random.choice(self.track_list)
@@ -84,10 +91,11 @@ class Player:
 
     def _play_with_vlc(self, arg):
         try:
-            if self.history[-1] != self.track_list[self.track_index]:
-                self.history.append(self.track_list[self.track_index])
+            if self.cache.history[-1] != self.track_list[self.track_index]:
+                self.cache.history.append(self.track_list[self.track_index])
         except:
-            self.history.append(self.track_list[self.track_index])
+            self.cache.history.append(self.track_list[self.track_index])
+        self.cache.save()
         self._vlc_player.set_media(self._vlc_instance.media_new(arg))
         self._vlc_player.play()
 

@@ -15,7 +15,10 @@ class TTPlayerConnector(Thread):
     def run(self):
         last_player_state = State.Stopped
         last_track_meta = {'name': None, 'url': None}
+        self._close = False
         while True:
+            if self._close:
+                break
             if self.player.state != last_player_state:
                 last_player_state = self.player.state
                 if self.player.state == State.Playing:
@@ -38,3 +41,6 @@ class TTPlayerConnector(Thread):
                 last_track_meta = self.player.track.get_meta()
                 self.ttclient.change_status_text('{state}: {name}'.format(state=self.ttclient.status.split(':')[0], name=self.player.track.name))
             time.sleep(vars.loop_timeout)
+
+    def close(self):
+        self._close = True

@@ -12,7 +12,10 @@ class TeamTalkThread(Thread):
 
     def run(self):
         empty_msg = TeamTalkPy.TTMessage()
+        self._close = False
         while True:
+            if self._close:
+                break
             msg = self.ttclient.tt.getMessage()
             if msg == empty_msg:
                 continue
@@ -24,3 +27,6 @@ class TeamTalkThread(Thread):
             if msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CON_LOST:
                 logging.warning('Server lost')
                 self.ttclient.reconnect()
+
+    def close(self):
+        self._close = True
