@@ -343,10 +343,6 @@ class HistoryCommand(Command):
 
 
 class LanguageCommand(Command):
-    def __init__(self, command_processor):
-        super().__init__(command_processor)
-        self.command_processor = command_processor
-
     @property
     def help(self):
         return _('changes language of bot')
