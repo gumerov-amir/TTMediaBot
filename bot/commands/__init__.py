@@ -79,7 +79,7 @@ class CommandProcessor:
                 return self.commands_dict[command](arg, message.user)
             elif message.user.is_admin and command in self.admin_commands_dict:
                 return self.admin_commands_dict[command](arg, message.user)
-            elif command in self.internal_commands_dict and 'dev_mode' in self.config['general']:
+            elif user.is_admin and command in self.internal_commands_dict and 'dev_mode' in self.config['general']:
                 return self.internal_commands_dict[command](arg, message.user)
             else:
                 return _('Unknown command') + ' "' + command + '"\n' + self.help('', message.user)
