@@ -177,7 +177,9 @@ class RestartCommand(AdminCommand):
 
     def __call__(self, arg, user):
         self.bot.close()
+        args = sys.argv
         if sys.platform == 'win32':
-            subprocess.run([sys.executable] + sys.argv)
+            subprocess.run([sys.executable] + args)
         else:
-            os.execv(sys.executable, sys.argv)
+            args.insert(0, sys.executable)
+            os.execv(sys.executable, args)
