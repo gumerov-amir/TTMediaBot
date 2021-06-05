@@ -39,7 +39,7 @@ class Service:
                 audios = self.api.audio.get(owner_id=int(o_id), album_id=int(p_id))
             else:
                 id = self.api.utils.resolveScreenName(screen_name=path)['object_id']
-                audios = self.api.audio.get(owner_id=id)
+                audios = self.api.audio.get(owner_id=id, count=6000)
             if 'count' in audios and audios['count'] > 0:
                 tracks = []
                 for audio in audios['items']:

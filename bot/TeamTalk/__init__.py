@@ -89,6 +89,12 @@ class TeamTalk:
         self.teamtalk_thread.start()
         logging.debug('TeamTalk started')
 
+    def close(self):
+        logging.debug('Closing teamtalk')
+        self.tt.disconnect()
+        self.teamtalk_thread.close()
+        logging.debug('Teamtalk closed')
+
     def connect(self):
         self.tt.connect(_str(self.config['hostname']), self.config['tcp_port'], self.config['udp_port'], self.config['encrypted'])
         result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CON_SUCCESS)
@@ -164,7 +170,11 @@ class TeamTalk:
             message.nMsgType = type
             message.szMessage = _str(string)
             if type == 1:
-                message.nToUserID = user.id
+                if isinstance(user, str):
+                    user = self.tt.getUserByUsername(user)
+                    message.nToUserID = user.nUserID
+                else:
+                    message.nToUserID = user.id
             elif type == 2:
                 message.nChannelID = self.tt.getMyChannelID()
             self.tt.doTextMessage(message)
