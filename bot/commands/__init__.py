@@ -38,10 +38,10 @@ class CommandProcessor:
             'm': ModeCommand(self),
             'gl': GetLinkCommand(self),
             'r': HistoryCommand(self),
-            'cl': LanguageCommand(self),
         }
         self.admin_commands_dict = {
             'girl': lambda arg, user: 'Сонечка',
+            'cl': LanguageCommand(self),
             'cn': ChangeNicknameCommand(self),
             'cs': ChangeStatusCommand(self),
             'l': LockCommand(self),
