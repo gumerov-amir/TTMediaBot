@@ -1,6 +1,6 @@
 from bot.commands.command import Command
 from bot.player.enums import Mode, State
-from bot import errors, translator
+from bot import errors
 
 
 class HelpCommand(Command):
