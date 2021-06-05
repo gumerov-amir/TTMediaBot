@@ -1,6 +1,6 @@
 from bot.commands.command import Command
 from bot.player.enums import Mode, State
-from bot import errors, translator
+from bot import errors
 
 
 class HelpCommand(Command):
@@ -340,21 +340,3 @@ class HistoryCommand(Command):
                 else:
                     track_names.append(f'{number + 1}: {track.url}')
             return '\n'.join(track_names) if track_names else _('List is empty')
-
-
-class LanguageCommand(Command):
-    @property
-    def help(self):
-        return _('changes language of bot')
-
-    def __call__(self, arg, user):
-        if arg:
-            try:
-                translator.install_locale(arg, fallback=arg == 'en')
-                self.command_processor.config['general']['language'] = arg
-                self.ttclient.change_status_text('')
-                return _('language has been changed')
-            except:
-                return _('Incorrect locale')
-        else:
-            return _('Current locale is {current_locale}. available locales: {available_locales}').format(current_locale=self.command_processor.config['general']['language'], available_locales=', '.join(translator.get_locales()))
