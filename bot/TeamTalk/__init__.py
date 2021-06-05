@@ -170,9 +170,8 @@ class TeamTalk:
             message.nMsgType = type
             message.szMessage = _str(string)
             if type == 1:
-                if isinstance(user, str):
-                    user = self.tt.getUserByUsername(user)
-                    message.nToUserID = user.nUserID
+                if isinstance(user, int):
+                    message.nToUserID = user
                 else:
                     message.nToUserID = user.id
             elif type == 2:
