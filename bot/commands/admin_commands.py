@@ -4,7 +4,25 @@ import sys
 
 from bot.commands.command import AdminCommand
 from bot.player.enums import State
-from bot import vars
+from bot import translator, vars
+
+
+class LanguageCommand(AdminCommand):
+    @property
+    def help(self):
+        return _('changes language of bot')
+
+    def __call__(self, arg, user):
+        if arg:
+            try:
+                translator.install_locale(arg, fallback=arg == 'en')
+                self.config['general']['language'] = arg
+                self.ttclient.change_status_text('')
+                return _('language has been changed')
+            except:
+                return _('Incorrect locale')
+        else:
+            return _('Current locale is {current_locale}. available locales: {available_locales}').format(current_locale=self.config['general']['language'], available_locales=', '.join(translator.get_locales()))
 
 
 class ChangeNicknameCommand(AdminCommand):
