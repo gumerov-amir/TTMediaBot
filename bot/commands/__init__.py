@@ -41,7 +41,8 @@ class CommandProcessor:
         }
         self.admin_commands_dict = {
             'girl': lambda arg, user: 'Сонечка',
-            'cl': LanguageCommand(self),
+            'cg': ChangeGenderCommand(self),
+            'cl': ChangeLanguageCommand(self),
             'cn': ChangeNicknameCommand(self),
             'cs': ChangeStatusCommand(self),
             'l': LockCommand(self),
@@ -54,9 +55,8 @@ class CommandProcessor:
             'q': QuitCommand(self),
         }
         self.internal_commands_dict = {
-         'ism': SendMessageCommand(self),   
+            'ism': SendMessageCommand(self),
         }
-
 
 
     def __call__(self, message):

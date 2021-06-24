@@ -18,10 +18,10 @@ if sys.platform == "win32":
 from bot.TeamTalk import thread
 
 import TeamTalkPy
-from TeamTalkPy import TTMessage, ClientEvent
+from TeamTalkPy import TTMessage, ClientEvent, ClientFlags
 
 re_line_endings = re.compile('[\\r\\n]')
-
+genders = {'m': 0, 'f': 256, 'n': 4096}
 
 
 def _str(data):
@@ -73,6 +73,10 @@ class TeamTalk:
         self.tt = TeamTalkPy.TeamTalk()
         self.is_voice_transmission_enabled = False
         self.nickname = config['nickname']
+        if 'gender' in self.config:
+            self.gender = genders[self.config['gender']]
+        else:
+            self.gender = genders['n']
         self.status = self.default_status
         self.admins = self.config['users']['admins']
         self.banned_users = self.config['users']['banned_users']
@@ -96,10 +100,48 @@ class TeamTalk:
         logging.debug('Teamtalk closed')
 
     def connect(self):
+        if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTING:
+            connecting_attempt = 0
+            while connecting_attempt != self.config['reconnection_attempts']:
+                try:
+                    self._connect()
+                    break
+                except:
+                    time.sleep(self.config['reconnection_timeout'])
+                    attempt += 1
+        if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED:
+            raise errors.ConnectionError()
+        if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED | ClientFlags.CLIENT_AUTHORIZED:
+            login_attempt = 0
+            while login_attempt != self.config['reconnection_attempts']:
+                try:
+                    self._login()
+                    break
+                except:
+                    time.sleep(self.config['reconnection_timeout'])
+                    login_attempt += 1
+        if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED | ClientFlags.CLIENT_AUTHORIZED:
+            raise errors.LoginError()
+        if self.tt.getMyChannelID() == 0:
+            join_attempt = 0
+            while join_attempt != self.config['reconnection_attempts']:
+                try:
+                    self._join()
+                    break
+                except:
+                    time.sleep(self.config['reconnection_timeout'])
+                    join_attempt += 1
+        if self.tt.getMyChannelID() == 0:
+            raise errors.JoinChannelError()
+
+
+    def _connect(self):
         self.tt.connect(_str(self.config['hostname']), self.config['tcp_port'], self.config['udp_port'], self.config['encrypted'])
         result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CON_SUCCESS)
         if not result:
             raise errors.ConnectionError()
+
+    def _login(self):
         cmdid = self.tt.doLogin(_str(self.config['nickname']), _str(self.config['username']), _str(self.config['password']), _str('TTMediaBot-V{ver}'.format(ver=vars.version)))
         result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CMD_MYSELF_LOGGEDIN)
         if not result:
@@ -108,6 +150,8 @@ class TeamTalk:
         if not result:
             raise errors.LoginError()
         result, msg = self.waitForCmdSuccess(cmdid, 2000)
+
+    def _join(self):
         if isinstance(self.config['channel'], int):
             channel_id = int(self.config['channel'])
         else:
@@ -125,18 +169,15 @@ class TeamTalk:
 
     def reconnect(self):
         logging.info('Reconnecting')
-        attempt = 0
-        while attempt != self.config['reconnection_attempts']:
+        if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED | ClientFlags.CLIENT_AUTHORIZED:
             self.tt.disconnect()
-            try:
-                self.connect()
-                logging.info('Reconnected')
-                return
-            except (errors.ConnectionError, errors.LoginError):
-                time.sleep(self.config['reconnection_timeout'])
-                attempt += 1
-        logging.error('Cannot reconnect')
-        _thread.interrupt_main()
+        try:
+            self.connect()
+            logging.info('Reconnected')
+            return
+        except:
+            logging.error('Cannot reconnect')
+            _thread.interrupt_main()
 
     def waitForEvent(self, event, timeout=2000):
         msg = self.tt.getMessage(timeout)
@@ -178,6 +219,15 @@ class TeamTalk:
                 message.nChannelID = self.tt.getMyChannelID()
             self.tt.doTextMessage(message)
 
+    def join_channel(self, channel, password):
+        if isinstance(channel, int):
+            channel_id = channel
+        else:
+            channel_id = self.tt.getChannelIDFromPath(_str(channel))
+            if channel_id == 0:
+                raise NameError()
+        cmdid = self.tt.doJoinChannelByID(channel_id, _str(password))
+
     def change_nickname(self, nickname):
         self.nickname = nickname
         self.tt.doChangeNickname(_str(self.nickname))
@@ -187,7 +237,11 @@ class TeamTalk:
             self.status = split(text)[0]
         else:
             self.status = self.default_status
-        self.tt.doChangeStatus(0, _str(self.status))
+        self.tt.doChangeStatus(self.gender, _str(self.status))
+
+    def change_gender(self, gender):
+        self.gender = genders[gender]
+        self.tt.doChangeStatus(self.gender, _str(self.status))
 
     def get_user(self, id):
         user = self.tt.getUser(id)

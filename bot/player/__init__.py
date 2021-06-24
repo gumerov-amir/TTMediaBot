@@ -57,6 +57,7 @@ class Player:
     def close(self):
         logging.debug('Closing player thread')
         self.player_thread.close()
+        self._vlc_player.release()
         logging.debug('Player thread closed')
 
     def play(self, tracks=None, start_track_index=None):

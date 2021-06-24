@@ -1,6 +1,7 @@
 {
     "general": {
-        "language": "ru"
+        "language": "ru",
+        "default_cache_file_name": "TTMediaBotCache.dat"
     },
     "sound_devices": {
         "output_device": 0,
@@ -21,6 +22,7 @@
         "encrypted": false,
         "nickname": "TTMediaBot",
         "default_status": "",
+        "gender": "n",
         "username": "",
         "password": "",
         "channel": "/",
