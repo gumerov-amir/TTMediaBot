@@ -4,10 +4,23 @@ import sys
 
 from bot.commands.command import AdminCommand
 from bot.player.enums import State
-from bot import translator, vars
+from bot import errors, translator, vars
 
 
-class LanguageCommand(AdminCommand):
+class ChangeGenderCommand(AdminCommand):
+    @property
+    def help(self):
+        return _('changes gender of bot')
+
+    def __call__(self, arg, user):
+        try:
+            self.ttclient.change_gender(arg)
+            self.config['teamtalk']['gender'] = arg
+        except KeyError:
+            raise errors.InvalidArgumentError()
+
+
+class ChangeLanguageCommand(AdminCommand):
     @property
     def help(self):
         return _('changes language of bot')
