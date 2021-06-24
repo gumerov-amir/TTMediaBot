@@ -9,7 +9,7 @@ class Bot:
         try:
             self.cache = cache.Cache(self.config)
         except PermissionError:
-            raise RuntimeError(_('The cache file $cachefile is already used by another instance of the bot.'))
+            raise RuntimeError(_('The cache file is already used by another instance of the bot.'))
         self.player = player.Player(self.config['player'], self.cache)
         self.ttclient = TeamTalk.TeamTalk(self.config['teamtalk'])
         self.tt_player_connector = connectors.TTPlayerConnector(self.player, self.ttclient)
