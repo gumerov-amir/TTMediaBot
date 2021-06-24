@@ -8,4 +8,3 @@ class SendMessageCommand(InternalCommand):
             self.ttclient.send_message(' | '.join(cs[2::]), user=int(cs[1]))
         else:
             self.ttclient.send_message(' | '.join(cs[1::]), type=int(cs[0]))
-

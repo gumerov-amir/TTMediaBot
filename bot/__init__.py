@@ -5,8 +5,11 @@ from bot import cache, commands, config, connectors, logger, modules, player, se
 class Bot:
     def __init__(self, config_file_name):
         self.config = config.Config(config_file_name)
-        self.cache = cache.Cache(self.config)
         translator.install_locale(self.config['general']['language'])
+        try:
+            self.cache = cache.Cache(self.config)
+        except PermissionError:
+            raise RuntimeError(_('The cache file is already used by another instance of the bot.'))
         self.player = player.Player(self.config['player'], self.cache)
         self.ttclient = TeamTalk.TeamTalk(self.config['teamtalk'])
         self.tt_player_connector = connectors.TTPlayerConnector(self.player, self.ttclient)
@@ -47,5 +50,6 @@ class Bot:
         self.player.close()
         self.ttclient.close()
         self.tt_player_connector.close()
+        self.cache.close()
         self._close = True
         logging.debug('Bot closed')
