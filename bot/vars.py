@@ -8,5 +8,5 @@ history_max_lenth = 128
 
 directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-cache_file_name = os.path.join(directory, 'TTMediaBotCache.dat')
+default_cache_file_name = os.path.join(directory, "TTMediaBotCache.dat")
 
