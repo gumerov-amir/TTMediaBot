@@ -22,7 +22,7 @@ class Cache(dict):
                 os.mkdir(os.path.dirname(self.file_name))
             with open(self.file_name, 'wb') as f:
                 pickle.dump(self.data, f)
-        self.file_locker = portalocker.Lock(self.file_name, flags=portalocker.LOCK_EX)
+        self.file_locker = portalocker.Lock(self.file_name, flags=portalocker.LOCK_EX, fail_when_locked=True)
         self.fa = self.file_locker.acquire()
         self.history = self.data['history']
         self.favorites = self.data['favorites']
