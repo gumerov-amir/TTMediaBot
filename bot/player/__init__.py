@@ -90,12 +90,13 @@ class Player:
         self.track = Track()
         self.track_index = -1
 
-    def _play_with_vlc(self, arg):
-        try:
-            if self.cache.history[-1] != self.track_list[self.track_index]:
+    def _play_with_vlc(self, arg, save_to_history=True):
+        if save_to_history:
+            try:
+                if self.cache.history[-1] != self.track_list[self.track_index]:
+                    self.cache.history.append(self.track_list[self.track_index])
+            except:
                 self.cache.history.append(self.track_list[self.track_index])
-        except:
-            self.cache.history.append(self.track_list[self.track_index])
         self.cache.save()
         self._vlc_player.set_media(self._vlc_instance.media_new(arg))
         self._vlc_player.play()

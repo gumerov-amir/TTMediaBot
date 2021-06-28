@@ -4,7 +4,6 @@ import traceback
 
 from bot import errors
 from bot.commands.admin_commands import *
-from bot.commands.internal_commands import *
 from bot.commands.user_commands import *
 
 
@@ -37,6 +36,7 @@ class CommandProcessor:
             'f': FavoritesCommand(self),
             'm': ModeCommand(self),
             'gl': GetLinkCommand(self),
+            "dl": DownloadCommand(self),
             'r': HistoryCommand(self),
         }
         self.admin_commands_dict = {
@@ -53,9 +53,6 @@ class CommandProcessor:
             'va': VoiceTransmissionCommand(self),
             'rs': RestartCommand(self),
             'q': QuitCommand(self),
-        }
-        self.internal_commands_dict = {
-            'ism': SendMessageCommand(self),
         }
 
 
@@ -79,8 +76,6 @@ class CommandProcessor:
                 return self.commands_dict[command](arg, message.user)
             elif message.user.is_admin and command in self.admin_commands_dict:
                 return self.admin_commands_dict[command](arg, message.user)
-            elif message.user.is_admin and command in self.internal_commands_dict and 'dev_mode' in self.config['general']:
-                return self.internal_commands_dict[command](arg, message.user)
             else:
                 return _('Unknown command') + ' "' + command + '"\n' + self.help('', message.user)
         except errors.InvalidArgumentError as e:
