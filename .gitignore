@@ -135,3 +135,4 @@ config.json
 .*env/
 TTSDK_license.txt
 TTMediaBotCache.dat
+event_handlers.py

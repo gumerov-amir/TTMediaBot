@@ -30,7 +30,7 @@ def get_url_suffix_from_platform():
         sys.exit('Darwin is not supported')
     else:
         if machine == 'AMD64' or machine == 'x86_64':
-            return 'debian9_x86_64'
+            return 'ubuntu18_x86_64'
         elif 'arm' in machine:
             return 'raspbian_armhf'
         else:

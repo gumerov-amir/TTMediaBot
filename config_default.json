@@ -1,7 +1,10 @@
 {
     "general": {
-        "language": "ru",
-        "default_cache_file_name": "TTMediaBotCache.dat"
+        "language": "en",
+        "cache_file_name": "TTMediaBotCache.dat",
+        "delete_uploaded_files_after": 300,
+        "load_event_handlers": false,
+        "event_handlers_file_name": "event_handlers.py",
     },
     "sound_devices": {
         "output_device": 0,
@@ -16,12 +19,12 @@
         "vlc_options": "--audio-resampler=none --no-video"
     },
     "teamtalk": {
-        "hostname": "",
+        "hostname": "localhost",
         "tcp_port": 10333,
         "udp_port": 10333,
         "encrypted": false,
         "nickname": "TTMediaBot",
-        "default_status": "",
+        "status": "",
         "gender": "n",
         "username": "",
         "password": "",

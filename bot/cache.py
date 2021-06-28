@@ -1,18 +1,14 @@
 from collections import deque
 import portalocker
-import hashlib
 import os
 import pickle
 
 from bot import vars
 
 
-class Cache(dict):
-    def __init__(self, config):
-        try:
-            self.file_name = config["general"]["cache_file_name"]
-        except KeyError:
-            self.file_name = vars.default_cache_file_name
+class Cache:
+    def __init__(self, file_name):
+        self.file_name = file_name
         try:
             with open(self.file_name, 'rb') as f:
                 self.data = pickle.load(f)

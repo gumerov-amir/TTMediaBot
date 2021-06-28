@@ -6,6 +6,7 @@ import re
 import sys
 import queue
 
+from bot.TeamTalk.enums import ChannelType
 from bot.sound_devices import SoundDevice, SoundDeviceType
 from bot import errors, vars
 
@@ -67,29 +68,28 @@ def split(text, max_length=vars.max_message_length):
 
 
 class TeamTalk:
-    def __init__(self, config):
-        TeamTalkPy.setLicense(_str(config['license_name']), _str(config['license_key']))
-        self.config = config
+    def __init__(self, bot, config):
+        self.config = config["teamtalk"]
+        TeamTalkPy.setLicense(_str(self.config['license_name']), _str(self.config['license_key']))
         self.tt = TeamTalkPy.TeamTalk()
         self.is_voice_transmission_enabled = False
-        self.nickname = config['nickname']
-        if 'gender' in self.config:
-            self.gender = genders[self.config['gender']]
-        else:
-            self.gender = genders['n']
+        self.nickname = self.config['nickname']
+        self.gender = genders[self.config['gender']]
         self.status = self.default_status
         self.admins = self.config['users']['admins']
         self.banned_users = self.config['users']['banned_users']
-        self.teamtalk_thread = thread.TeamTalkThread(self)
+        self.teamtalk_thread = thread.TeamTalkThread(bot, config, self)
         self.message_queue = queue.Queue()
+        self.uploaded_files_queue = queue.Queue()
 
     def initialize(self):
         logging.debug('Initializing TeamTalk')
         self.connect()
         logging.debug('TeamTalk initialized')
 
-    def run(self):
+    def run(self, command_processor):
         logging.debug('Starting TeamTalk')
+        self.teamtalk_thread.command_processor = command_processor
         self.teamtalk_thread.start()
         logging.debug('TeamTalk started')
 
@@ -199,8 +199,8 @@ class TeamTalk:
 
     @property
     def default_status(self):
-        if self.config['default_status']:
-            return self.config['default_status']
+        if self.config['status']:
+            return self.config['status']
         else:
             return _('Send "h" for help')
 
@@ -245,10 +245,24 @@ class TeamTalk:
 
     def get_user(self, id):
         user = self.tt.getUser(id)
-        return User(user.nUserID, _str(user.szNickname), _str(user.szUsername), user.nChannelID, _str(user.szUsername) in self.admins, _str(user.szUsername) in self.banned_users)
+        return User(user.nUserID, _str(user.szNickname), _str(user.szUsername), user.nChannelID, list(genders.keys())[list(genders.values()).index(user.nStatusMode)], user.szStatusMsg, _str(user.szUsername) in self.admins, _str(user.szUsername) in self.banned_users)
+
+    def get_channel(self, channel_id):
+        channel = self.tt.getChannel(channel_id)
+        return Channel(channel.nChannelID, channel.szName, channel.szTopic, channel.nMaxUsers, ChannelType(channel.uChannelType))
+
 
     def get_message(self, msg):
         return Message(re.sub(re_line_endings, '', _str(msg.szMessage)), self.get_user(msg.nFromUserID))
+
+    def get_file(self, file):
+        return File(file.nFileID, file.szFileName, self.get_channel(file.nChannelID), file.nFileSize, file.szUsername)
+
+
+
+
+    def get_my_user_id(self):
+        return self.tt.getMyUserID()
 
     def get_my_channel_id(self):
         return self.tt.getMyChannelID()
@@ -282,11 +296,29 @@ class Message:
         self.user = user
 
 
+class Channel:
+    def __init__(self, id, name, topic, max_users, type):
+        self.id = id
+        self.name = name
+        topic = topic
+        self.max_users = max_users
+        self.type = type
+
 class User:
-    def __init__(self, id, nickname, username, channel_id, is_admin, is_banned):
+    def __init__(self, id, nickname, username, channel_id, gender, status, is_admin, is_banned):
         self.id = id
         self.nickname = nickname
         self.username = username
         self.channel_id = channel_id
+        self.gender = gender
+        self.status = status
         self.is_admin = is_admin
         self.is_banned = is_banned
+
+class File:
+    def __init__(self, id, name, channel, size, username):
+        self.id = id
+        self.name = name
+        self.channel = channel
+        self.size = size
+        self.username = username

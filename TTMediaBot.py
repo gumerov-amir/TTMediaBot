@@ -4,13 +4,16 @@ from bot import Bot
 
 
 @click.command()
-@click.option("-c", help='Path to the configuration file', default='config.json')
+@click.option("-c", "--config", help='Path to the configuration file', default='config.json')
+@click.option("--cache", help='Path to the cache file', default=None)
+@click.option("--log", help='Path to the log file', default=None)
 @click.option("--devices", help='Show available devices and exit', is_flag=True)
-def main(c="config.ini", devices=False):
-    bot = Bot(c)
+def main(config, cache, log, devices):
     if devices:
+        bot = Bot(None, None, None)
         echo_sound_devices(bot.sound_device_manager)
     else:
+        bot = Bot(config, cache, log)
         bot.initialize()
         bot.run()
 

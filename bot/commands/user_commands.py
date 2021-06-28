@@ -340,3 +340,19 @@ class HistoryCommand(Command):
                 else:
                     track_names.append(f'{number + 1}: {track.url}')
             return '\n'.join(track_names) if track_names else _('List is empty')
+
+class DownloadCommand(Command):
+    @property
+    def help(self):
+        return _("Download file")
+
+    def __call__(self, arg, user):
+        if self.player.state != State.Stopped:
+            url = self.player.track.url
+            if url and not self.player.track.from_url:
+                self.module_manager.downloader(self.player.track)
+                return _("Requested file is uploading")
+            else:
+                return _('URL is not available')
+        else:
+            return _('Nothing is currently playing')
