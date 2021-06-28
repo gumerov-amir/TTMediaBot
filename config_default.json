@@ -4,7 +4,7 @@
         "cache_file_name": "TTMediaBotCache.dat",
         "delete_uploaded_files_after": 300,
         "load_event_handlers": false,
-        "event_handlers_file_name": "event_handlers.py",
+        "event_handlers_file_name": "event_handlers.py"
     },
     "sound_devices": {
         "output_device": 0,
