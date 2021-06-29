@@ -19,7 +19,6 @@ class Downloader:
         t.start()
 
     def run(self,  track):
-        is_local = True
         if not os.path.exists(track.url):
             is_local = False
             response = requests.get(track.url)
@@ -33,6 +32,9 @@ class Downloader:
             file_name = file_name.strip()
             file_path = os.path.join(os.path.dirname(temp_file_name), file_name)
             os.rename(temp_file_name, file_path)
+        else:
+            is_local = True
+            file_path = track.url
         self.ttclient.send_file(self.ttclient.get_my_channel_id(), file_path)
         file = self.ttclient.uploaded_files_queue.get()
         time.sleep(vars.loop_timeout)
