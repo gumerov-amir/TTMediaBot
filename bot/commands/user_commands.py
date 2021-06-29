@@ -10,7 +10,7 @@ class HelpCommand(Command):
 
     @property
     def help(self):
-        return _('Shows command help')
+        return _('Shows help for commands')
 
     def __call__(self, arg, user):
         return self.command_processor.help(arg, user)
@@ -29,7 +29,7 @@ class AboutCommand(Command):
 class PlayPauseCommand(Command):
     @property
     def help(self):
-        return _('QUERY Plays tracks found for the query. If no query is given plays or pauses current track')
+        return _('QUERY Plays tracks found for the query. If no query is given, plays or pauses current track')
 
     def __call__(self, arg, user):
         if arg:
@@ -106,7 +106,7 @@ class VolumeCommand(Command):
 class SeekBackCommand(Command):
     @property
     def help(self):
-        return _('[STEP] Seeks current track back. the optional step is specified in percents from 1 to 100')
+        return _('[STEP] Seeks the current track backward. The optional step is specified as a percentage from 1 to 100')
 
     def __call__(self, arg, user):
         if arg:
@@ -121,7 +121,7 @@ class SeekBackCommand(Command):
 class SeekForwardCommand(Command):
     @property
     def help(self):
-        return _('[STEP] Seeks current track forward. the optional step is specified in percents from 1 to 100')
+        return _('[STEP] Seeks the current track forward. The optional step is specified as a percentage from 1 to 100')
 
     def __call__(self, arg, user):
         if arg:
@@ -170,7 +170,7 @@ class ModeCommand(Command):
 
     @property
     def help(self):
-        return _('MODE Sets playback mode. If no MODE is given shows a list of modes')
+        return _('MODE Sets the playback mode. If no mode is specified, the current mode and the list of modes are displayed')
 
     def __call__(self, arg, user):
         mode_help = 'current_ mode: {current_mode}\n{modes}'.format(current_mode=self.mode_names[self.player.mode], modes='\n'.join(['{value} {name}'.format(name=self.mode_names[i], value=i.value) for i in Mode.__members__.values()]))
@@ -188,7 +188,7 @@ class ModeCommand(Command):
 class ServiceCommand(Command):
     @property
     def help(self):
-        return _('SERVICE Selects a service to play from. If no service is given shows current service and a list of available ones')
+        return _('SERVICE Selects the service to play from. If no service is specified, the current service and a list of available services are displayed')
 
     def __call__(self, arg, user):
         service_help = _('Current service: {current_service}\nAvailable: {available_services}').format(current_service=self.service_manager.service.name, available_services=', '.join([i for i in self.service_manager.available_services]))
@@ -236,7 +236,7 @@ class SelectTrackCommand(Command):
 class FavoritesCommand(Command):
     @property
     def help(self):
-        return _('returns list of favorites tracks, number is given plays from track under this number in favorites')
+        return _('Shows a list of favorite tracks. If an argument is specified, adds or removes the currently playing tracks to the list and if a number is specified, plays a track available for that number from the list')
 
     def __call__(self, arg, user):
         if user.username == '':
@@ -322,14 +322,14 @@ class GetLinkCommand(Command):
 class HistoryCommand(Command):
     @property
     def help(self):
-        return _('shows history of playing (64 last tracks)')
+        return _('Shows history of playing (64 last tracks)')
 
     def __call__(self, arg, user):
         if arg:
             try:
                 self.player.play(list(reversed(list(self.cache.history))), start_track_index=int(arg) - 1)
             except ValueError:
-                return _('must be integer')
+                return _('Must be integer')
             except IndexError:
                 return _('Out of list')
         else:
@@ -344,7 +344,7 @@ class HistoryCommand(Command):
 class DownloadCommand(Command):
     @property
     def help(self):
-        return _("Download file")
+        return _("Downloads the track being played and uploads it to the channel")
 
     def __call__(self, arg, user):
         if self.player.state != State.Stopped:
