@@ -10,7 +10,7 @@ from bot import errors, translator, vars
 class ChangeGenderCommand(AdminCommand):
     @property
     def help(self):
-        return _('changes gender of bot')
+        return _('Changes the gender of the bot')
 
     def __call__(self, arg, user):
         try:
@@ -23,7 +23,7 @@ class ChangeGenderCommand(AdminCommand):
 class ChangeLanguageCommand(AdminCommand):
     @property
     def help(self):
-        return _('changes language of bot')
+        return _('Changes the bot language')
 
     def __call__(self, arg, user):
         if arg:
@@ -31,11 +31,11 @@ class ChangeLanguageCommand(AdminCommand):
                 translator.install_locale(arg, fallback=arg == 'en')
                 self.config['general']['language'] = arg
                 self.ttclient.change_status_text('')
-                return _('language has been changed')
+                return _('Language has been changed')
             except:
                 return _('Incorrect locale')
         else:
-            return _('Current locale is {current_locale}. available locales: {available_locales}').format(current_locale=self.config['general']['language'], available_locales=', '.join(translator.get_locales()))
+            return _('Current locale is {current_locale}. Available locales: {available_locales}').format(current_locale=self.config['general']['language'], available_locales=', '.join(translator.get_locales()))
 
 
 class ChangeNicknameCommand(AdminCommand):
@@ -94,7 +94,7 @@ class VolumeLockCommand(AdminCommand):
 class ChangeStatusCommand(AdminCommand):
     @property
     def help(self):
-        return _('changes status of bot')
+        return _('Changes bot status')
 
 
     def __call__(self, arg, user):
@@ -106,11 +106,11 @@ class ChangeStatusCommand(AdminCommand):
 class SaveConfigCommand(AdminCommand):
     @property
     def help(self):
-        return _('saves config to file')
+        return _('Saves the configuration to a file')
 
     def __call__(self, arg, user):
         self.config.save()
-        return _('Config saved')
+        return _('Configuration saved')
 
 class AdminUsersCommand(AdminCommand):
     def __init__(self, command_processor):
@@ -119,7 +119,7 @@ class AdminUsersCommand(AdminCommand):
 
     @property
     def help(self):
-        return _('shows list of admin users, if user_name is given adds it to list')
+        return _('Shows a list of administrators. If username is specified with a specific command argument, adds or removes it from the list')
 
     def __call__(self, arg, user):
         admin_users = self.command_processor.config['teamtalk']['users']['admins']
@@ -132,7 +132,7 @@ class AdminUsersCommand(AdminCommand):
                     del admin_users[admin_users.index(arg[1::])]
                     return _('Deleted')
                 except ValueError:
-                    return _('This user is not admin')
+                    return _('This user is not an admin')
         else:
             admin_users = admin_users.copy()
             if len(admin_users) > 0:
@@ -150,7 +150,7 @@ class BannedUsersCommand(AdminCommand):
 
     @property
     def help(self):
-        return _('shows list of banned users, if user_name is given adds to/deletes from list')
+        return _('Shows a list of banned users. If username is specified with a specific command argument, adds or removes it from the list')
 
     def __call__(self, arg, user):
         banned_users = self.command_processor.config['teamtalk']['users']['banned_users']
@@ -186,7 +186,7 @@ class QuitCommand(AdminCommand):
 class RestartCommand(AdminCommand):
     @property
     def help(self):
-        return _('restarts bot')
+        return _('Restarts the bot')
 
     def __call__(self, arg, user):
         self.bot.close()

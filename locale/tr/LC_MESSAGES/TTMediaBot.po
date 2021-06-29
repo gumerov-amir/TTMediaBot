@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TTMediaBot\n"
-"POT-Creation-Date: 2021-06-02 15:17+0400\n"
-"PO-Revision-Date: 2021-06-03 10:57+0400\n"
+"POT-Creation-Date: 2021-06-29 13:57+0400\n"
+"PO-Revision-Date: 2021-06-29 14:04+0400\n"
 "Last-Translator: Shaban Mamedov <shabanmamedov1@gmail.com>\n"
 "Language-Team: TTMediaBot's developers\n"
 "Language: tr\n"
@@ -19,40 +19,44 @@ msgstr ""
 "X-Poedit-Basepath: ../../../bot\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: TeamTalk/__init__.py:158
+#: TeamTalk/__init__.py:205
 msgid "Send \"h\" for help"
 msgstr "Yardım için \"h\" gönderin"
 
-#: commands/__init__.py:55
+#: __init__.py:20
+msgid "The cache file is already used by another instance of the bot."
+msgstr "Önbellek dosyası, botun başka bir örneği tarafından zaten kullanılıyor"
+
+#: commands/__init__.py:61
 msgid "You are banned"
 msgstr "Siz engellendiniz"
 
-#: commands/__init__.py:58
+#: commands/__init__.py:64
 msgid "You are not in bot's channel"
 msgstr "Botun kanalında değilsiniz"
 
-#: commands/__init__.py:60
+#: commands/__init__.py:66
 msgid "Bot is locked"
 msgstr "Bot kilitli"
 
-#: commands/__init__.py:67 commands/__init__.py:120
+#: commands/__init__.py:73 commands/__init__.py:126
 msgid "Volume is locked"
 msgstr "Ses kontrolü kilitli"
 
-#: commands/__init__.py:74
+#: commands/__init__.py:80
 msgid "Unknown command"
 msgstr "Bilinmeyen komut"
 
-#: commands/__init__.py:79
+#: commands/__init__.py:85
 msgid "Error: {}"
 msgstr "Hata: {}"
 
-#: commands/__init__.py:87 commands/__init__.py:92
+#: commands/__init__.py:93 commands/__init__.py:98
 #, python-brace-format
 msgid "{command} Help text not found"
 msgstr "{command} Yardım metni bulunamadı"
 
-#: commands/__init__.py:94
+#: commands/__init__.py:100
 #, python-brace-format
 msgid ""
 "Unknown command \"{command}\"\n"
@@ -61,174 +65,320 @@ msgstr ""
 "Bilinmeyen komut \"{command}\"\n"
 "{help}"
 
-#: commands/__init__.py:116
+#: commands/__init__.py:122
 msgid "Locked"
 msgstr "Kilitlendi"
 
-#: commands/__init__.py:116
+#: commands/__init__.py:122
 msgid "Unlocked"
 msgstr "kilit açıldı"
 
-#: commands/__init__.py:120
+#: commands/__init__.py:126
 msgid "Volume is unlocked"
 msgstr "Ses kontrolünün kilidi açıldı"
 
-#: commands/commands.py:26
-msgid "Shows command help"
-msgstr "Komut yardımını gösterir"
+#: commands/admin_commands.py:13
+msgid "Changes the gender of the bot"
+msgstr "Botun cinsiyetini değiştirir"
 
-#: commands/commands.py:38
+#: commands/admin_commands.py:26
+#, fuzzy
+#| msgid "changes language of bot"
+msgid "Changes the bot language"
+msgstr "Botun dilini değiştirir"
+
+#: commands/admin_commands.py:34
+#, fuzzy
+#| msgid "language has been changed"
+msgid "Language has been changed"
+msgstr "Dil değiştirildi"
+
+#: commands/admin_commands.py:36
+msgid "Incorrect locale"
+msgstr "Yanlış yerelleştirme"
+
+#: commands/admin_commands.py:38
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "Current locale is {current_locale}. available locales: {available_locales}"
+msgid ""
+"Current locale is {current_locale}. Available locales: {available_locales}"
+msgstr ""
+"Mevcut yerelleştirme {current_locale}. Kullanılabilir yerelleştirmeler: "
+"{available_locales}"
+
+#: commands/admin_commands.py:44
+msgid "NICKNAME Sets the bot's nickname"
+msgstr "TAKMA AD Botun takma adını belirler"
+
+#: commands/admin_commands.py:54
+msgid "Enables or disables voice transmission"
+msgstr "Ses iletimini etkinleştirir veya devre dışı bırakır"
+
+#: commands/admin_commands.py:60 commands/admin_commands.py:61
+msgid "Voice transmission enabled"
+msgstr "Ses iletimi etkin"
+
+#: commands/admin_commands.py:66
+msgid "Voice transmission disabled"
+msgstr "Ses iletimi devre dışı"
+
+#: commands/admin_commands.py:76
+msgid "Locks or unlocks the bot"
+msgstr "Botu kilitler veya kilidini açar"
+
+#: commands/admin_commands.py:88
+msgid "Locks or unlocks volume"
+msgstr "Ses kontrolünü kilitler veya kilidini açar"
+
+#: commands/admin_commands.py:97
+#, fuzzy
+#| msgid "changes status of bot"
+msgid "Changes bot status"
+msgstr "Botun durumunu değiştirir"
+
+#: commands/admin_commands.py:109
+#, fuzzy
+#| msgid "saves config to file"
+msgid "Saves the configuration to a file"
+msgstr "Konfigurasyonu dosyaya kaydeder"
+
+#: commands/admin_commands.py:113
+#, fuzzy
+#| msgid "Config saved"
+msgid "Configuration saved"
+msgstr "Konfigurasyon kaydedildi"
+
+#: commands/admin_commands.py:122
+msgid ""
+"Shows a list of administrators. If username is specified with a specific "
+"command argument, adds or removes it from the list"
+msgstr ""
+"Yöneticilerin listesini gösterir. Kullanıcı adı belirli bir komut "
+"argümanıyla belirtilmişse, onu listeye ekler veya listeden kaldırır."
+
+#: commands/admin_commands.py:129 commands/admin_commands.py:160
+#: commands/user_commands.py:261
+msgid "Added"
+msgstr "Eklendi"
+
+#: commands/admin_commands.py:133 commands/admin_commands.py:164
+#: commands/user_commands.py:273
+msgid "Deleted"
+msgstr "Silindi"
+
+#: commands/admin_commands.py:135
+#, fuzzy
+#| msgid "This user is not admin"
+msgid "This user is not an admin"
+msgstr "Bu kullanıcı yönetici değil"
+
+#: commands/admin_commands.py:143 commands/admin_commands.py:174
+#: commands/user_commands.py:293 commands/user_commands.py:303
+#: commands/user_commands.py:342
+msgid "List is empty"
+msgstr "Liste boş"
+
+#: commands/admin_commands.py:153
+msgid ""
+"Shows a list of banned users. If username is specified with a specific "
+"command argument, adds or removes it from the list"
+msgstr ""
+"Engellenen kullanıcıların listesini gösterir. Kullanıcı adı belirli bir "
+"komut argümanıyla belirtilmişse, onu listeye ekler veya listeden kaldırır"
+
+#: commands/admin_commands.py:166
+msgid "This user is not banned"
+msgstr "Bu kullanıcı engellenmemiş"
+
+#: commands/admin_commands.py:181
+msgid "Quits the bot"
+msgstr "Botu kapatıyor"
+
+#: commands/admin_commands.py:189
+#, fuzzy
+#| msgid "restarts bot"
+msgid "Restarts the bot"
+msgstr "Botu yeniden başlatır"
+
+#: commands/user_commands.py:13
+msgid "Shows help for commands"
+msgstr "Komutlar için yardım gösterir"
+
+#: commands/user_commands.py:22
 msgid "Shows information about this bot"
 msgstr "Bu bot hakkında bilgi gösterir"
 
-#: commands/commands.py:51
+#: commands/user_commands.py:32
+#, fuzzy
+#| msgid ""
+#| "QUERY Plays tracks found for the query. If no query is given plays or "
+#| "pauses current track"
 msgid ""
-"QUERY Plays tracks found for the query. If no query is given plays or pauses "
-"current track"
+"QUERY Plays tracks found for the query. If no query is given, plays or "
+"pauses current track"
 msgstr ""
 "SORGU Sorgu için bulunan parçaları çalar. Herhangi bir sorgu verilmezse, "
 "mevcut parçayı oynatır veya duraklatır"
 
-#: commands/commands.py:55
+#: commands/user_commands.py:36
 msgid "Searching..."
 msgstr "Aranıyor..."
 
-#: commands/commands.py:58
+#: commands/user_commands.py:39
 #, python-brace-format
 msgid "{nickname} requested {request}"
 msgstr "{nickname} {request} istedi"
 
-#: commands/commands.py:60 commands/commands.py:201 commands/commands.py:219
+#: commands/user_commands.py:41 commands/user_commands.py:144
+#: commands/user_commands.py:159
 msgid "Playing {}"
 msgstr "Oynatılıyor {}"
 
-#: commands/commands.py:62
+#: commands/user_commands.py:43
 msgid "Nothing is found for your query"
 msgstr "Sorgunuz için hiçbir şey bulunamadı"
 
-#: commands/commands.py:76
-msgid ""
-"RATE Sets rate to a value from 0.25 to 4. If no rate is given shows current "
-"rate"
-msgstr ""
-"HIZ Hızı 0,25 ile 4 arasında bir değere ayarlar. Herhangi bir oran "
-"verilmezse mevcut oranı gösterir."
-
-#: commands/commands.py:98
+#: commands/user_commands.py:56
 msgid "URL Plays a stream from a given URL"
 msgstr "URL Belirli bir URL'den akış oynatır"
 
-#: commands/commands.py:104
+#: commands/user_commands.py:62
 #, python-brace-format
 msgid "{nickname} requested playing from a URL"
 msgstr "{nickname} URL'den oynatma istedi"
 
-#: commands/commands.py:107
+#: commands/user_commands.py:65
 msgid "Incorrect protocol"
 msgstr "Yanlış protokol"
 
-#: commands/commands.py:109
+#: commands/user_commands.py:67
 msgid "Cannot get stream URL"
 msgstr "Akış URL'si alınamıyor"
 
-#: commands/commands.py:111
+#: commands/user_commands.py:69
 msgid "The path cannot be found"
 msgstr "Yol bulunamıyor"
 
-#: commands/commands.py:122
+#: commands/user_commands.py:77
 msgid "Stops playback"
 msgstr "Oynatmayı durdurur"
 
-#: commands/commands.py:127
+#: commands/user_commands.py:82
 #, python-brace-format
 msgid "{nickname} stopped playback"
 msgstr "{nickname} oynatmayı durdurdu"
 
-#: commands/commands.py:129 commands/commands.py:223
+#: commands/user_commands.py:84 commands/user_commands.py:163
+#: commands/user_commands.py:263 commands/user_commands.py:281
 msgid "Nothing is playing"
 msgstr "Hiçbir şey çalmıyor"
 
-#: commands/commands.py:138
+#: commands/user_commands.py:90
 #, python-brace-format
 msgid "VOLUME Sets volume to a value from 0 to {max_volume}"
 msgstr "SES Sesi 0 ile {max_volume} arasında bir değere ayarlar"
 
-#: commands/commands.py:160
+#: commands/user_commands.py:109
+#, fuzzy
+#| msgid ""
+#| "[STEP] Seeks current track back. the optional step is specified in "
+#| "percents from 1 to 100"
 msgid ""
-"[STEP] Seeks current track back. the optional step is specified in percents "
-"from 1 to 100"
+"[STEP] Seeks the current track backward. The optional step is specified as a "
+"percentage from 1 to 100"
 msgstr ""
 "ADIM Geçerli parçayı geri arar. Isteğe bağlı adım, 1'den 100'e kadar "
 "yüzdelerle belirtilir"
 
-#: commands/commands.py:178
+#: commands/user_commands.py:124
+#, fuzzy
+#| msgid ""
+#| "[STEP] Seeks current track forward. the optional step is specified in "
+#| "percents from 1 to 100"
 msgid ""
-"[STEP] Seeks current track forward. the optional step is specified in "
-"percents from 1 to 100"
+"[STEP] Seeks the current track forward. The optional step is specified as a "
+"percentage from 1 to 100"
 msgstr ""
 "ADIM Mevcut parçayı ileriye doğru arar. Isteğe bağlı adım, 1'den 100'e kadar "
 "yüzdelerle belirtilir"
 
-#: commands/commands.py:196
+#: commands/user_commands.py:139
 msgid "Plays next track"
 msgstr "Sonraki parçayı oynatır"
 
-#: commands/commands.py:203
+#: commands/user_commands.py:146
 msgid "No next track"
 msgstr "Sonraki parça yok"
 
-#: commands/commands.py:205 commands/commands.py:292 commands/commands.py:299
-#: commands/commands.py:318 commands/commands.py:349
+#: commands/user_commands.py:148 commands/user_commands.py:226
+#: commands/user_commands.py:233 commands/user_commands.py:319
+#: commands/user_commands.py:358
 msgid "Nothing is currently playing"
 msgstr "Şu anda hiçbir şey çalmıyor"
 
-#: commands/commands.py:214
+#: commands/user_commands.py:154
 msgid "Plays previous track"
 msgstr "Önceki parçayı oynatır"
 
-#: commands/commands.py:221
+#: commands/user_commands.py:161
 msgid "No previous track"
 msgstr "Önceki parça yok"
 
-#: commands/commands.py:232
-msgid "MODE Sets playback mode. If no MODE is given shows a list of modes"
-msgstr ""
-"MOD Oynatma modunu ayarlar. Herhangi bir MODE verilmezse modların bir "
-"listesini gösterir"
-
-#: commands/commands.py:233
+#: commands/user_commands.py:169
 msgid "Single Track"
 msgstr "Tek Parça"
 
-#: commands/commands.py:233
+#: commands/user_commands.py:169
 msgid "Repeat Track"
 msgstr "Parçayı Tekrarlama modu"
 
-#: commands/commands.py:233
+#: commands/user_commands.py:169
 msgid "Track list"
 msgstr "Parça listesi"
 
-#: commands/commands.py:233
+#: commands/user_commands.py:169
 msgid "Repeat track list"
 msgstr "Parça listesini tekrarlama modu"
 
-#: commands/commands.py:233
+#: commands/user_commands.py:169
 msgid "Random"
 msgstr "rastgele"
 
-#: commands/commands.py:254
+#: commands/user_commands.py:173
 msgid ""
-"SERVICE Selects a service to play from. If no service is given shows current "
-"service and a list of available ones"
+"MODE Sets the playback mode. If no mode is specified, the current mode and "
+"the list of modes are displayed"
+msgstr ""
+"MODE Oynatma modunu ayarlar. Mod belirtilmemişse, geçerli mod ve modların "
+"listesi görüntülenir."
+
+#: commands/user_commands.py:191
+#, fuzzy
+#| msgid ""
+#| "SERVICE Selects a service to play from. If no service is given shows "
+#| "current service and a list of available ones"
+msgid ""
+"SERVICE Selects the service to play from. If no service is specified, the "
+"current service and a list of available services are displayed"
 msgstr ""
 "HIZMET Oynatmak için bir hizmet seçer. Herhangi bir hizmet verilmemişse, şu "
 "anki hizmeti ve mevcut olanların listesini gösterir"
 
-#: commands/commands.py:262
+#: commands/user_commands.py:194
+#, python-brace-format
+msgid ""
+"Current service: {current_service}\n"
+"Available: {available_services}"
+msgstr ""
+"Şu anki hizmet: {current_service}\n"
+"Mevcut: {available_services}"
+
+#: commands/user_commands.py:199
 msgid "Current service: {}"
 msgstr "Şu anki hizmet: {}"
 
-#: commands/commands.py:264
+#: commands/user_commands.py:201
 msgid ""
 "Unknown service.\n"
 "{}"
@@ -236,162 +386,104 @@ msgstr ""
 "Bilinmeyen hizmet.\n"
 "{}"
 
-#: commands/commands.py:275
+#: commands/user_commands.py:209
 msgid "NUMBER Selects track by number from the list of current results"
 msgstr "NUMARA Geçerli sonuçlar listesinden parçayı numaraya göre seçer"
 
-#: commands/commands.py:286
+#: commands/user_commands.py:220
 msgid "Incorrect number"
 msgstr "Yanlış numara"
 
-#: commands/commands.py:288 commands/commands.py:297
+#: commands/user_commands.py:222 commands/user_commands.py:231
 msgid "Playing {} {}"
 msgstr "Oynatılıyor {} {}"
 
-#: commands/commands.py:290 commands/commands.py:501
+#: commands/user_commands.py:224 commands/user_commands.py:275
+#: commands/user_commands.py:301 commands/user_commands.py:334
 msgid "Out of list"
 msgstr "Liste dışı"
 
-#: commands/commands.py:308
+#: commands/user_commands.py:239
+msgid ""
+"Shows a list of favorite tracks. If an argument is specified, adds or "
+"removes the currently playing tracks to the list and if a number is "
+"specified, plays a track available for that number from the list"
+msgstr ""
+"Favori parçaların listesini gösterir. Eğer argüman belirtilirse, o anda "
+"çalmakta olan parçaları listeye ekler veya listeden çıkarır ve bir numara "
+"belirtilirse, o numara için mevcut bir parçayı listeden çalar"
+
+#: commands/user_commands.py:243
+msgid "Sorry, guest users can not use this command"
+msgstr "Üzgünüz, konuk kullanıcılar bu komutu kullanamaz"
+
+#: commands/user_commands.py:279
+msgid "This track is not in favorites"
+msgstr "Bu parça favorilerde değil"
+
+#: commands/user_commands.py:309
 msgid "Gets a direct link to the current track"
 msgstr "Geçerli parçaya doğrudan bir bağlantı alır"
 
-#: commands/commands.py:316
+#: commands/user_commands.py:317 commands/user_commands.py:356
 msgid "URL is not available"
 msgstr "URL mevcut değil"
 
-#: commands/commands.py:327
-msgid "NICKNAME Sets the bot's nickname"
-msgstr "TAKMA AD Botun takma adını belirler"
+#: commands/user_commands.py:325
+#, fuzzy
+#| msgid "shows history of playing (64 last tracks)"
+msgid "Shows history of playing (64 last tracks)"
+msgstr "(64 son parça)için çalma geçmişini gösterir"
 
-#: commands/commands.py:342
-msgid "Incorrect position"
-msgstr "Yanlış konum"
-
-#: commands/commands.py:344
+#: commands/user_commands.py:332
 msgid "Must be integer"
 msgstr "Tamsayı olmalı"
 
-#: commands/commands.py:357
-msgid "Enables or disables voice transmission"
-msgstr "Ses iletimini etkinleştirir veya devre dışı bırakır"
+#: commands/user_commands.py:347
+msgid "Downloads the track being played and uploads it to the channel"
+msgstr "Oynatılmakta olan parçayı indirir ve kanala yükler"
 
-#: commands/commands.py:363 commands/commands.py:364
-msgid "Voice transmission enabled"
-msgstr "Ses iletimi etkin"
+#: commands/user_commands.py:354
+msgid "Requested file is uploading"
+msgstr "İstenen dosya yükleniyor"
 
-#: commands/commands.py:369
-msgid "Voice transmission disabled"
-msgstr "Ses iletimi devre dışı"
-
-#: commands/commands.py:379
-msgid "Locks or unlocks the bot"
-msgstr "Botu kilitler veya kilidini açar"
-
-#: commands/commands.py:391
-msgid "Locks or unlocks volume"
-msgstr "Ses kontrolünü kilitler veya kilidini açar"
-
-#: commands/commands.py:403
-msgid "changes status of bot"
-msgstr "Botun durumunu değiştirir"
-
-#: commands/commands.py:418
-msgid "saves config to file"
-msgstr "Konfigurasyonu dosyaya kaydeder"
-
-#: commands/commands.py:422
-msgid "Config saved"
-msgstr "Konfigurasyon kaydedildi"
-
-#: commands/commands.py:431
-msgid "shows list of admin users, if user_name is given adds it to list"
-msgstr ""
-"Yönetici kullanıcıların listesini gösterir, eğer kullanıcı adı verilirse "
-"listeye ekler"
-
-#: commands/commands.py:438 commands/commands.py:469
-msgid "Added"
-msgstr "Eklendi"
-
-#: commands/commands.py:442 commands/commands.py:473
-msgid "Deleted"
-msgstr "Silindi"
-
-#: commands/commands.py:444
-msgid "This user is not admin"
-msgstr "Bu kullanıcı yönetici değil"
-
-#: commands/commands.py:452 commands/commands.py:483 commands/commands.py:509
-msgid "List is empty"
-msgstr "Liste boş"
-
-#: commands/commands.py:462
-msgid ""
-"shows list of banned users, if user_name is given adds to/deletes from list"
-msgstr ""
-"Engellenmiş kullanıcıların listesini gösterir, eğer kullanıcı adı verilmişse "
-"listeye ekler/listeden siler"
-
-#: commands/commands.py:475
-msgid "This user is not banned"
-msgstr "Bu kullanıcı engellenmemiş"
-
-#: commands/commands.py:492
-msgid "shows history of playing (64 last tracks)"
-msgstr "(64 son parça)için çalma geçmişini gösterir"
-
-#: commands/commands.py:499
-msgid "must be integer"
-msgstr "Tamsayı olmalı"
-
-#: commands/commands.py:519
-msgid "changes language of bot"
-msgstr "Botun dilini değiştirir"
-
-#: commands/commands.py:527
-msgid "language has been changed"
-msgstr "Dil değiştirildi"
-
-#: commands/commands.py:529
-msgid "Incorrect locale"
-msgstr "Yanlış yerelleştirme"
-
-#: commands/commands.py:531
-#, python-brace-format
-msgid ""
-"Current locale is {current_locale}. available locales: {available_locales}"
-msgstr ""
-"Mevcut yerelleştirme {current_locale}. Kullanılabilir yerelleştirmeler: "
-"{available_locales}"
-
-#: commands/commands.py:540
-msgid "Quits the bot"
-msgstr "Botu kapatıyor"
-
-#: commands/commands.py:551
-msgid "restarts bot"
-msgstr "Botu yeniden başlatır"
-
-#: connectors/tt_player_connector.py:25
+#: connectors/tt_player_connector.py:28
 #, python-brace-format
 msgid "Playing: {track_name}"
 msgstr "Oynatılıyor: {track_name}"
 
-#: connectors/tt_player_connector.py:27
+#: connectors/tt_player_connector.py:30
 #, python-brace-format
 msgid "Playing: {stream_url}"
 msgstr "Oynatılıyor: {stream_url}"
 
-#: connectors/tt_player_connector.py:34
+#: connectors/tt_player_connector.py:37
 #, python-brace-format
 msgid "Paused: {track_name}"
 msgstr "Duraklatıldı: {track_name}"
 
-#: connectors/tt_player_connector.py:36
+#: connectors/tt_player_connector.py:39
 #, python-brace-format
 msgid "Paused: {stream_url}"
 msgstr "Duraklatıldı: {stream_url}"
+
+#~ msgid ""
+#~ "RATE Sets rate to a value from 0.25 to 4. If no rate is given shows "
+#~ "current rate"
+#~ msgstr ""
+#~ "HIZ Hızı 0,25 ile 4 arasında bir değere ayarlar. Herhangi bir oran "
+#~ "verilmezse mevcut oranı gösterir."
+
+#~ msgid "Incorrect position"
+#~ msgstr "Yanlış konum"
+
+#~ msgid "shows list of admin users, if user_name is given adds it to list"
+#~ msgstr ""
+#~ "Yönetici kullanıcıların listesini gösterir, eğer kullanıcı adı verilirse "
+#~ "listeye ekler"
+
+#~ msgid "must be integer"
+#~ msgstr "Tamsayı olmalı"
 
 #~ msgid "Unable to perform a search. Please try again"
 #~ msgstr "Поиск не удался. Попробуйте снова"
