@@ -36,7 +36,7 @@ class Downloader:
         except Exception as e:
             logging.fatal(response.headers)
             raise ValueError()
-        self.ttclient.tt.doSendFile(self.ttclient.get_my_channel_id(), file_path)
+        self.ttclient.send_file(self.ttclient.get_my_channel_id(), file_path)
         file = self.ttclient.uploaded_files_queue.get()
         time.sleep(vars.loop_timeout)
         os.remove(file_path)
@@ -47,4 +47,4 @@ class Downloader:
         else:
             return
         time.sleep(timeout)
-        self.ttclient.tt.doDeleteFile(file.channel.id, file.id)
+        self.ttclient.delete_file(file.channel.id, file.id)
