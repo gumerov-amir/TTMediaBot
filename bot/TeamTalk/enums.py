@@ -15,5 +15,5 @@ class ChannelType(Enum):
     NoRecording = TeamTalkPy.ChannelType.CHANNEL_NO_RECORDING
     NoVoiceActivation = TeamTalkPy.ChannelType.CHANNEL_NO_VOICEACTIVATION
     OperatorRecnvOnly = TeamTalkPy.ChannelType.CHANNEL_OPERATOR_RECVONLY
-    Permament = TeamTalkPy.ChannelType.CHANNEL_PERMANENT
+    Permanent = TeamTalkPy.ChannelType.CHANNEL_PERMANENT
     SoloTransmit = TeamTalkPy.ChannelType.CHANNEL_SOLO_TRANSMIT
