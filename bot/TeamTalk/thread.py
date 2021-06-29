@@ -3,7 +3,6 @@ from threading import Thread
 
 import TeamTalkPy
 
-
 class TeamTalkThread(Thread):
     def __init__(self, bot, config, ttclient):
         Thread.__init__(self, daemon=True)
@@ -27,6 +26,7 @@ class TeamTalkThread(Thread):
         }
 
     def run(self):
+        from . import _str
         if self.load_event_handlers:
             event_handlers = __import__(".".join(self.event_handlers_file_name.split(".")[0:-1]))
         self._close = False
@@ -38,7 +38,7 @@ class TeamTalkThread(Thread):
                 continue
             elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG and msg.textmessage.nMsgType == 1:
                 self.ttclient.message_queue.put(self.ttclient.get_message(msg.textmessage))
-            elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_NEW and msg.remotefile.szUsername == self.ttclient.config["username"] and msg.remotefile.nChannelID == self.ttclient.get_my_channel_id():
+            elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_NEW and _str(msg.remotefile.szUsername) == self.ttclient.config["username"] and msg.remotefile.nChannelID == self.ttclient.get_my_channel_id():
                 self.ttclient.uploaded_files_queue.put(self.ttclient.get_file(msg.remotefile))
             elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_MYSELF_KICKED:
                 logging.warning('Kicked')
