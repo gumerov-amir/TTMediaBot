@@ -134,7 +134,6 @@ class TeamTalk:
         if self.tt.getMyChannelID() == 0:
             raise errors.JoinChannelError()
 
-
     def _connect(self):
         self.tt.connect(_str(self.config['hostname']), self.config['tcp_port'], self.config['udp_port'], self.config['encrypted'])
         result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CON_SUCCESS)
@@ -219,13 +218,31 @@ class TeamTalk:
                 message.nChannelID = self.tt.getMyChannelID()
             self.tt.doTextMessage(message)
 
+    def send_file(self, channel, file_path):
+        if isinstance(channel, int):
+            channel_id = channel
+        else:
+            channel_id = self.tt.getChannelIDFromPath(_str(channel))
+            if channel_id == 0:
+                raise ValueError()
+        self.tt.doSendFile(channel_id, _str(file_path))
+
+    def delete_file(self, channel, file_id):
+        if isinstance(channel, int):
+            channel_id = channel
+        else:
+            channel_id = self.tt.getChannelIDFromPath(_str(channel))
+            if channel_id == 0 or not isinstance(file_id, int) or file_id == 0:
+                raise ValueError()
+        self.tt.doDeleteFile(channel_id, file_id)
+
     def join_channel(self, channel, password):
         if isinstance(channel, int):
             channel_id = channel
         else:
             channel_id = self.tt.getChannelIDFromPath(_str(channel))
             if channel_id == 0:
-                raise NameError()
+                raise ValueError()
         cmdid = self.tt.doJoinChannelByID(channel_id, _str(password))
 
     def change_nickname(self, nickname):
@@ -251,15 +268,11 @@ class TeamTalk:
         channel = self.tt.getChannel(channel_id)
         return Channel(channel.nChannelID, channel.szName, channel.szTopic, channel.nMaxUsers, ChannelType(channel.uChannelType))
 
-
     def get_message(self, msg):
         return Message(re.sub(re_line_endings, '', _str(msg.szMessage)), self.get_user(msg.nFromUserID))
 
     def get_file(self, file):
-        return File(file.nFileID, file.szFileName, self.get_channel(file.nChannelID), file.nFileSize, file.szUsername)
-
-
-
+        return File(file.nFileID, _str(file.szFileName), self.get_channel(file.nChannelID), file.nFileSize, _str(file.szUsername))
 
     def get_my_user_id(self):
         return self.tt.getMyUserID()
