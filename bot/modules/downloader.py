@@ -24,9 +24,7 @@ class Downloader:
             with tempfile.NamedTemporaryFile(delete=False) as f:
                 temp_file_name = f.name
                 f.write(response.content)
-            extension = filetype.guess_extension(temp_file_name)
-            if extension == None:
-                extension = filetype.guess_mime(temp_file_name).split("/")[1]
+            extension = track.format
             file_name = track.name + "." + extension
             for     char in ["\\", "/", "%", "*", "?", ":", "\""]:
                 file_name = file_name.replace(char, "_")

@@ -1,9 +1,11 @@
 class Track:
-    def __init__(self, service=None, url=None, name=None, extra_info=None, from_url=False):
+    def __init__(self, service=None, url=None, name=None, format=None, extra_info=None, is_live=False, from_url=False):
         self.service = service
         self.url = url
         self.name = name
+        self.format = format
         self.extra_info = extra_info
+        self.is_live = is_live
         self.from_url = from_url
         self._is_fetched = False
 
@@ -13,6 +15,8 @@ class Track:
         track = self.service.get(self._url, extra_info=self.extra_info)[0]
         self.url = track.url
         self.name = track.name
+        self.format = track.format
+        self.is_live = track.is_live
         self._is_fetched = True
 
     @property
@@ -46,4 +50,4 @@ class Track:
             return False
 
     def __repr__(self):
-        return '{name} {url} {dynamic}'.format(name=self.name, url=self.url, dynamic=bool(self.service))
+        return '{name} {url} {format} {dynamic}'.format(name=self.name, url=self.url, format=self.format, dynamic=bool(self.service))

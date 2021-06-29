@@ -1,6 +1,5 @@
 beautifulsoup4
 click
-filetype
 patool
 portalocker
 python-vlc

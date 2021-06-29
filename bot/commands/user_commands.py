@@ -348,11 +348,11 @@ class DownloadCommand(Command):
 
     def __call__(self, arg, user):
         if self.player.state != State.Stopped:
-            url = self.player.track.url
-            if url and not self.player.track.from_url:
+            track = self.player.track
+            if track.url and not (track.from_url or track.is_live):
                 self.module_manager.downloader(self.player.track)
-                return _("Requested file is uploading")
+                return _("Downloading...")
             else:
-                return _('URL is not available')
+                return _('Live streams cannot be downloaded')
         else:
             return _('Nothing is currently playing')
