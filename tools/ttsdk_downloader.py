@@ -70,7 +70,7 @@ def move():
             os.rename(os.path.join(path, 'Library/TeamTalk_DLL/libTeamTalk5.so'), os.path.join(cd, 'libTeamTalk5.so'))
     try:
         os.rename(os.path.join(path, 'Library/TeamTalkPy'), os.path.join(cd, 'TeamTalkPy'))
-    except FileExistsError:
+    except OSError:
         shutil.rmtree(os.path.join(cd, 'TeamTalkPy'))
         os.rename(os.path.join(path, 'Library/TeamTalkPy'), os.path.join(cd, 'TeamTalkPy'))
     try:
