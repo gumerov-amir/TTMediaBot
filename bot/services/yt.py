@@ -14,7 +14,7 @@ class Service:
     def initialize(self):
         self._ydl_config = {
             'skip_download': True,
-            'format': '141/bestaudio/140/best',
+            'format': '141/140/bestaudio/best',
             'socket_timeout': 5,
             'logger': logging.getLogger('root')
         }
@@ -39,7 +39,6 @@ class Service:
                     tracks += data
                 return tracks
             if not process:
-                if 'video' not in info_type: print(info_type)
                 return [Track(service=self, extra_info=info)]
             stream = ydl.process_ie_result(info)
             if 'url' in stream:
@@ -49,7 +48,12 @@ class Service:
             title = stream['title']
             if 'uploader' in stream:
                 title += ' - {}'.format(stream['uploader'])
-            return [Track(url=url, name=title)]
+            format = stream['ext']
+            if 'is_live' in stream and stream['is_live']:
+                is_live = True
+            else:
+                is_live = False
+            return [Track(url=url, name=title, format=format, is_live=is_live)]
 
     def search(self, text):
         search = VideosSearch(text, limit=300).result()

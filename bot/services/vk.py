@@ -64,7 +64,7 @@ class Service:
             for track in results['items']:
                 if 'url' not in track or not track['url']:
                     continue
-                track = Track(url=track['url'], name='{} - {}'.format(track['artist'], track['title']))
+                track = Track(url=track['url'], name='{} - {}'.format(track['artist'], track['title']), format='mp3')
                 tracks.append(track)
             if tracks:
                 return tracks
