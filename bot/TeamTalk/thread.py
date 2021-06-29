@@ -30,8 +30,8 @@ class TeamTalkThread(Thread):
         if self.load_event_handlers:
             try:
                 event_handlers = __import__(".".join(self.event_handlers_file_name.split(".")[0:-1]))
-            except:
-                logging.error("Can't load specified event handlers")
+            except Exception as e:
+                logging.error("Can't load specified event handlers." + e)
         self._close = False
         while True:
             if self._close:
