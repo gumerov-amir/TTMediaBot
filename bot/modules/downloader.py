@@ -19,7 +19,9 @@ class Downloader:
         t.start()
 
     def run(self,  track):
-        try:
+        is_local = True
+        if not os.path.exists(track.url):
+            is_local = False
             response = requests.get(track.url)
             with tempfile.NamedTemporaryFile(delete=False) as f:
                 temp_file_name = f.name
@@ -31,13 +33,11 @@ class Downloader:
             file_name = file_name.strip()
             file_path = os.path.join(os.path.dirname(temp_file_name), file_name)
             os.rename(temp_file_name, file_path)
-        except Exception as e:
-            logging.fatal(response.headers)
-            raise ValueError()
         self.ttclient.send_file(self.ttclient.get_my_channel_id(), file_path)
         file = self.ttclient.uploaded_files_queue.get()
         time.sleep(vars.loop_timeout)
-        os.remove(file_path)
+        if not is_local:
+            os.remove(file_path)
         if "delete_uploaded_files_after" in self.config["general"] and self.config["general"]["delete_uploaded_files_after"] > 0:
             timeout = self.config["general"]["delete_uploaded_files_after"]
         elif not "delete_uploaded_files_after" in self.config["general"]:
