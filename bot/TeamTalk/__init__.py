@@ -141,7 +141,7 @@ class TeamTalk:
             raise errors.ConnectionError()
 
     def _login(self):
-        cmdid = self.tt.doLogin(_str(self.config['nickname']), _str(self.config['username']), _str(self.config['password']), _str('TTMediaBot-V{ver}'.format(ver=vars.version)))
+        cmdid = self.tt.doLogin(_str(self.config['nickname']), _str(self.config['username']), _str(self.config['password']), _str(vars.client_name))
         result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CMD_MYSELF_LOGGEDIN)
         if not result:
             raise errors.LoginError()
