@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import Enum, Flag
 
 import TeamTalkPy
 
@@ -8,7 +8,7 @@ class MessageType(Enum):
     Broadcast = TeamTalkPy.TextMsgType.MSGTYPE_BROADCAST
     Custom = TeamTalkPy.TextMsgType.MSGTYPE_CUSTOM
 
-class ChannelType(Enum):
+class ChannelType(Flag):
     ClassRoom = TeamTalkPy.ChannelType.CHANNEL_CLASSROOM
     Default = TeamTalkPy.ChannelType.CHANNEL_DEFAULT
     Hidden = TeamTalkPy.ChannelType.CHANNEL_HIDDEN
