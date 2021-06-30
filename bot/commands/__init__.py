@@ -82,7 +82,7 @@ class CommandProcessor:
             return self.help(command, message.user)
         except Exception as e:
             logging.error(traceback.format_exc())
-            return _('Error: {}'.format(e))
+            return _("Error: {}").format(e)
 
     def help(self, arg, user):
         if arg:
@@ -90,12 +90,12 @@ class CommandProcessor:
                 try:
                     return '{command} {help}'.format(command=arg, help=self.commands_dict[arg].help)
                 except AttributeError:
-                    return _('{command} Help text not found'.format(command=arg))
+                    return _("{command} Help text not found").format(command=arg)
             elif user.is_admin and arg in self.admin_commands_dict:
                 try:
                     return '{command} {help}'.format(command=arg, help=self.admin_commands_dict[arg].help)
                 except AttributeError:
-                    return _('{command} Help text not found'.format(command=arg))
+                    return _("{command} Help text not found").format(command=arg)
             else:
                 return _('Unknown command "{command}"\n{help}').format(command=arg, help=self.help('', user))
         else:

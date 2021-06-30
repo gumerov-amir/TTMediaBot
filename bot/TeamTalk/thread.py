@@ -54,6 +54,8 @@ class TeamTalkThread(Thread):
                     event_handler = getattr(event_handlers, self.event_names[msg.nClientEvent])
                     try:
                         event_handler(*self.parse_event(msg), self.bot)
+                    except KeyError:
+                        pass
                     except Exception as e:
                         logging.error(e)
                 except AttributeError:
