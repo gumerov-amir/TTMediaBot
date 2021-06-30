@@ -4,9 +4,8 @@ import time
 import os
 import tempfile
 
-import filetype
 import requests
-from bot import vars
+from bot import utils, vars
 
 
 class Downloader:
@@ -27,9 +26,7 @@ class Downloader:
                 f.write(response.content)
             extension = track.format
             file_name = track.name + "." + extension
-            for     char in ["\\", "/", "%", "*", "?", ":", "\""]:
-                file_name = file_name.replace(char, "_")
-            file_name = file_name.strip()
+            file_name= utils.clean_file_name(file_name)
             file_path = os.path.join(os.path.dirname(temp_file_name), file_name)
             os.rename(temp_file_name, file_path)
         else:
