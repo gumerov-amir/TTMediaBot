@@ -12,6 +12,7 @@ class Service:
         self.name = 'vk'
         self.hostnames = ['vk.com', 'www.vk.com', 'vkontakte.ru', 'www.vkontakte.ru', 'm.vk.com', 'm.vkontakte.ru']
         self.config = config
+        self.format = "mp3"
 
     def initialize(self):
         http = requests.Session()
@@ -45,7 +46,7 @@ class Service:
                 for audio in audios['items']:
                     if 'url' not in audio or not audio['url']:
                         continue
-                    track = Track(url=audio['url'], name='{} - {}'.format(audio['artist'], audio['title']))
+                    track = Track(url=audio['url'], name='{} - {}'.format(audio['artist'], audio['title']), format=self.format)
                     tracks.append(track)
                 if tracks:
                     return tracks
@@ -64,7 +65,7 @@ class Service:
             for track in results['items']:
                 if 'url' not in track or not track['url']:
                     continue
-                track = Track(url=track['url'], name='{} - {}'.format(track['artist'], track['title']), format='mp3')
+                track = Track(url=track['url'], name='{} - {}'.format(track['artist'], track['title']), format=self.format)
                 tracks.append(track)
             if tracks:
                 return tracks
