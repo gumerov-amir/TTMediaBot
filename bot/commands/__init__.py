@@ -40,7 +40,7 @@ class CommandProcessor:
             'r': HistoryCommand(self),
         }
         self.admin_commands_dict = {
-            'girl': lambda arg, user: 'Сонечка',
+            'girl': lambda arg, user: "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 20))) for i in "𐱁🼄🚉𛋹𤮱𝴤𘤀"]),
             'cg': ChangeGenderCommand(self),
             'cl': ChangeLanguageCommand(self),
             'cn': ChangeNicknameCommand(self),
