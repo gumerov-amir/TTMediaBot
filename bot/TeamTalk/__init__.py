@@ -78,7 +78,9 @@ class TeamTalk:
         self.status = self.default_status
         self.admins = self.config['users']['admins']
         self.banned_users = self.config['users']['banned_users']
-        self.teamtalk_thread = thread.TeamTalkThread(bot, config, self)
+        self.load_event_handlers = config["general"]["load_event_handlers"]
+        self.event_handlers_file_name = config["general"]["event_handlers_file_name"]
+        self.teamtalk_thread = thread.TeamTalkThread(bot, self)
         self.message_queue = queue.Queue()
         self.uploaded_files_queue = queue.Queue()
 
