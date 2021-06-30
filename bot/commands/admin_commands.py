@@ -134,6 +134,16 @@ class ChangeStatusCommand(AdminCommand):
         self.config['teamtalk']['default_status'] = self.ttclient.status
 
 
+class EventHandlingCommand(AdminCommand):
+    @property
+    def help(self):
+            return _("Enables or disables event handling")
+
+    def __call__(self, arg, user):
+        self.ttclient.load_event_handlers = not self.ttclient.load_event_handlers
+        self.config["general"]["load_event_handlers"] = not self.config["general"]["load_event_handlers"]
+        return "Event handling is enabled" if self.config["general"]["load_event_handlers"] else "Event handling is disabled"
+
 
 class SaveConfigCommand(AdminCommand):
     @property
