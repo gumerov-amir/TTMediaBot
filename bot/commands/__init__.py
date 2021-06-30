@@ -19,7 +19,7 @@ class CommandProcessor:
         self.service_manager = service_manager
         self.ttclient = ttclient
         self.locked = False
-        self.volume_locked = False
+        self.blocked_commands = self.config["general"]["blocked_commands"]
         self.commands_dict = {
             'h': HelpCommand(self),
             'a': AboutCommand(self),
@@ -41,12 +41,13 @@ class CommandProcessor:
         }
         self.admin_commands_dict = {
             'girl': lambda arg, user: "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 20))) for i in "𐱁🼄🚉𛋹𤮱𝴤𘤀"]),
+            "bc": BlockCommandCommand(self),
             'cg': ChangeGenderCommand(self),
             'cl': ChangeLanguageCommand(self),
             'cn': ChangeNicknameCommand(self),
             'cs': ChangeStatusCommand(self),
             'l': LockCommand(self),
-            'vl': VolumeLockCommand(self),
+            #'vl': VolumeLockCommand(self),
             'ua': AdminUsersCommand(self),
             'ub': BannedUsersCommand(self),
             'sc': SaveConfigCommand(self),
@@ -69,8 +70,8 @@ class CommandProcessor:
         except IndexError:
             return self.help('', message.user)
         arg = ' '.join(message.text.split(' ')[1::])
-        if not message.user.is_admin and self.volume_locked and command == 'v':
-            return _('Volume is locked')
+        if not message.user.is_admin and command in self.blocked_commands:
+            return _('This command is blocked')
         try:
             if command in self.commands_dict:
                 return self.commands_dict[command](arg, message.user)
