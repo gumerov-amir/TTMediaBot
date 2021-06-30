@@ -9,6 +9,7 @@ default_config = {
     "general": {
         "language": "en",
         "cache_file_name": "TTMediaBotCache.dat",
+        "blocked_commands": [],
         "delete_uploaded_files_after": 300,
         "load_event_handlers": False,
         "event_handlers_file_name": "event_handlers.py",

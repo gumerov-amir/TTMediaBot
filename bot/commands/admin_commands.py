@@ -7,6 +7,38 @@ from bot.player.enums import State
 from bot import errors, translator, vars
 
 
+class BlockCommandCommand(AdminCommand):
+    def __init__(self, command_processor):
+        super().__init__(command_processor)
+        self.command_processor = command_processor
+
+    @property
+    def help(self):
+
+            return _("Blocks or unblocks commands.")
+
+    def __call__(self, arg, user):
+        arg = arg.lower()
+        if len(arg) > 1 and not arg[1::] in self.command_processor.commands_dict:
+            return _("Unknown user command")
+        if not arg:
+            return ", ".join(self.command_processor.blocked_commands) if self.command_processor.blocked_commands else _("List is empty")
+        if arg[0] == "+":
+            if not arg[1::] in self.command_processor.blocked_commands:
+                self.command_processor.blocked_commands.append(arg[1::])
+                return _("Added")
+            else:
+                return _("This command is already added")
+        elif arg[0] == "-":
+            if arg[1::] in self.command_processor.blocked_commands:
+                del self.command_processor.blocked_commands[self.command_processor.blocked_commands.index(arg[1::])]
+                return _("Deleted")
+            else:
+                return _("This command is not blocked")
+        else:
+            raise errors.InvalidArgumentError()
+
+
 class ChangeGenderCommand(AdminCommand):
     @property
     def help(self):
