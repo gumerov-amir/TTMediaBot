@@ -87,7 +87,7 @@ class StopCommand(Command):
 class VolumeCommand(Command):
     @property
     def help(self):
-        return _('VOLUME Sets volume to a value from 0 to {max_volume}').format(max_volume=self.player.max_volume)
+        return _('VOLUME Sets the volume to a value between 0 and {max_volume}. If no volume is specified, the current volume level is displayed').format(max_volume=self.player.max_volume)
 
     def __call__(self, arg, user):
         if arg:
