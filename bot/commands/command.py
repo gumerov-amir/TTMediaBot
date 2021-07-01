@@ -12,7 +12,3 @@ class AdminCommand(Command):
     def __init__(self, command_processor):
         super().__init__(command_processor)
         self.bot = command_processor.bot
-
-
-class InternalCommand(AdminCommand):
-    pass

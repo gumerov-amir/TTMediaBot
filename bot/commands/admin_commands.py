@@ -80,6 +80,27 @@ class ChangeNicknameCommand(AdminCommand):
         self.config['teamtalk']['nickname'] = arg
 
 
+class ClearCacheCommand(AdminCommand):
+    @property
+    def help(self):
+        return _("Clears cache")
+
+    def __call__(self, arg, user):
+        if not arg:
+            self.cache.history.clear()
+            self.cache.favorites.clear()
+            self.cache.save()
+            return _("Cache cleared")
+        elif arg == "r":
+            self.cache.history.clear()
+            self.cache.save()
+            return _("History cleared")
+        elif arg == "f":
+            self.cache.favorites.clear()
+            self.cache.save()
+            return _("Favourites cleared")
+
+
 class VoiceTransmissionCommand(AdminCommand):
     @property
     def help(self):
@@ -110,18 +131,6 @@ class LockCommand(AdminCommand):
     def __call__(self, arg, user):
         return self.command_processor.lock(arg, user)
 
-class VolumeLockCommand(AdminCommand):
-    def __init__(self, command_processor):
-        super().__init__(command_processor)
-        self.command_processor = command_processor
-
-    @property
-    def help(self):
-        return _('Locks or unlocks volume')
-
-    def __call__(self, arg, user):
-        return self.command_processor.volume_lock(arg, user)
-
 
 class ChangeStatusCommand(AdminCommand):
     @property
@@ -142,7 +151,7 @@ class EventHandlingCommand(AdminCommand):
     def __call__(self, arg, user):
         self.ttclient.load_event_handlers = not self.ttclient.load_event_handlers
         self.config["general"]["load_event_handlers"] = not self.config["general"]["load_event_handlers"]
-        return "Event handling is enabled" if self.config["general"]["load_event_handlers"] else "Event handling is disabled"
+        return _("Event handling is enabled") if self.config["general"]["load_event_handlers"] else _("Event handling is disabled")
 
 
 class SaveConfigCommand(AdminCommand):
