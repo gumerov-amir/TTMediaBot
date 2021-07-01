@@ -41,21 +41,21 @@ class CommandProcessor:
         }
         self.admin_commands_dict = {
             'girl': lambda arg, user: "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 20))) for i in "𐱁🼄🚉𛋹𤮱𝴤𘤀"]),
-            "bc": BlockCommandCommand(self),
             'cg': ChangeGenderCommand(self),
             'cl': ChangeLanguageCommand(self),
             'cn': ChangeNicknameCommand(self),
             'cs': ChangeStatusCommand(self),
-            "eh": EventHandlingCommand(self),
+            "cc": ClearCacheCommand(self),
+            "bc": BlockCommandCommand(self),
             'l': LockCommand(self),
             'ua': AdminUsersCommand(self),
             'ub': BannedUsersCommand(self),
+            "eh": EventHandlingCommand(self),
             'sc': SaveConfigCommand(self),
             'va': VoiceTransmissionCommand(self),
             'rs': RestartCommand(self),
             'q': QuitCommand(self),
         }
-
 
     def __call__(self, message):
         if message.user.is_banned:
@@ -121,8 +121,3 @@ class CommandProcessor:
     def lock(self,  arg, user):
         self.locked = not self.locked
         return _('Locked') if self.locked else _('Unlocked')
-
-    def volume_lock(self,  arg, user):
-        self.volume_locked = not self.volume_locked
-        return _('Volume is locked') if self.volume_locked else _('Volume is unlocked')
-
