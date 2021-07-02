@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TTMediaBot\n"
-"POT-Creation-Date: 2021-07-01 20:35+0400\n"
-"PO-Revision-Date: 2021-07-01 20:37+0400\n"
+"POT-Creation-Date: 2021-07-01 22:37+0400\n"
+"PO-Revision-Date: 2021-07-01 22:38+0400\n"
 "Last-Translator: \n"
 "Language-Team: TTMediaBot's developers\n"
 "Language: tr\n"
@@ -32,6 +32,7 @@ msgstr ""
 "X-Poedit-SearchPath-12: commands/command.py\n"
 "X-Poedit-SearchPath-13: commands/user_commands.py\n"
 "X-Poedit-SearchPath-14: commands\n"
+"X-Poedit-SearchPath-15: commands\n"
 
 #: TeamTalk/__init__.py:206
 msgid "Send \"h\" for help"
@@ -149,8 +150,12 @@ msgid "NICKNAME Sets the bot's nickname"
 msgstr "TAKMA AD Botun takma adını belirler"
 
 #: commands/admin_commands.py:86
-msgid "Clears cache"
-msgstr "Önbelleği temizler"
+msgid ""
+"Clears the entire cache. If an argument is specified, only favorites or the "
+"history of recently played tracks are deleted"
+msgstr ""
+"Tüm önbelleği temizler. Bir argüman belirtilirse, yalnızca favoriler veya en "
+"son çalınan parçaların geçmişi silinir"
 
 #: commands/admin_commands.py:93
 msgid "Cache cleared"
@@ -491,6 +496,9 @@ msgstr "Duraklatıldı: {track_name}"
 #, python-brace-format
 msgid "Paused: {stream_url}"
 msgstr "Duraklatıldı: {stream_url}"
+
+#~ msgid "Clears cache"
+#~ msgstr "Önbelleği temizler"
 
 #~ msgid "Volume is locked"
 #~ msgstr "Ses kontrolü kilitli"
