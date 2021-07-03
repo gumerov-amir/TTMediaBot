@@ -46,7 +46,7 @@ class CommandProcessor:
             'cn': ChangeNicknameCommand(self),
             'cs': ChangeStatusCommand(self),
             "cc": ClearCacheCommand(self),
-            "bc": BlockCommandCommand(self),
+            "bc": CommandblockingCommand(self),
             'l': LockCommand(self),
             'ua': AdminUsersCommand(self),
             'ub': BannedUsersCommand(self),
