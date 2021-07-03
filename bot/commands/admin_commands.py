@@ -78,7 +78,7 @@ class ChangeNicknameCommand(AdminCommand):
 class ClearCacheCommand(AdminCommand):
     @property
     def help(self):
-        return _("Clears cache")
+        return _("Clears the entire cache. If an argument is specified, only favorites or the history of recently played tracks are deleted")
 
     def __call__(self, arg, user):
         if not arg:
