@@ -9,6 +9,7 @@ default_config = {
     "general": {
         "language": "en",
         "cache_file_name": "TTMediaBotCache.dat",
+        "blocked_commands": [],
         "delete_uploaded_files_after": 300,
         "load_event_handlers": False,
         "event_handlers_file_name": "event_handlers.py",
@@ -72,7 +73,11 @@ class Config(dict):
             if utils.check_file_path(file_name):
                 self.file_name = file_name
                 with open(self.file_name, 'r', encoding='UTF-8') as f:
-                    config_dict = json.load(f)
+                    try:
+                        config_dict = json.load(f)
+                    except json.decoder.JSONDecodeError as e:
+                        print("Syntax error in configuration file:", e)
+                        sys.exit(1)
                 self.file_locker = portalocker.Lock(self.file_name, timeout=0, flags=portalocker.LOCK_EX|portalocker.LOCK_NB)
                 try:
                     self.file_locker.acquire()
