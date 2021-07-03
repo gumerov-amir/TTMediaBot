@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TTMediaBot\n"
-"POT-Creation-Date: 2021-06-30 21:28+0400\n"
-"PO-Revision-Date: 2021-06-30 21:30+0400\n"
+"POT-Creation-Date: 2021-07-01 22:37+0400\n"
+"PO-Revision-Date: 2021-07-01 22:38+0400\n"
 "Last-Translator: \n"
 "Language-Team: TTMediaBot's developers\n"
 "Language: tr\n"
@@ -31,8 +31,10 @@ msgstr ""
 "X-Poedit-SearchPath-11: commands/admin_commands.py\n"
 "X-Poedit-SearchPath-12: commands/command.py\n"
 "X-Poedit-SearchPath-13: commands/user_commands.py\n"
+"X-Poedit-SearchPath-14: commands\n"
+"X-Poedit-SearchPath-15: commands\n"
 
-#: TeamTalk/__init__.py:204
+#: TeamTalk/__init__.py:206
 msgid "Send \"h\" for help"
 msgstr "Yardım için \"h\" gönderin"
 
@@ -87,14 +89,6 @@ msgstr "Kilitlendi"
 msgid "Unlocked"
 msgstr "Kilid açıldı"
 
-#: commands/__init__.py:127
-msgid "Volume is locked"
-msgstr "Ses kontrolü kilitli"
-
-#: commands/__init__.py:127
-msgid "Volume is unlocked"
-msgstr "Ses kontrolünün kilidi açıldı"
-
 #: commands/admin_commands.py:18
 msgid "Blocks or unblocks commands."
 msgstr "Komutları kilitler veya kilidini açar"
@@ -103,14 +97,14 @@ msgstr "Komutları kilitler veya kilidini açar"
 msgid "Unknown user command"
 msgstr "Bilinmeyen kullanıcı komutu"
 
-#: commands/admin_commands.py:25 commands/admin_commands.py:175
-#: commands/admin_commands.py:206 commands/user_commands.py:293
+#: commands/admin_commands.py:25 commands/admin_commands.py:194
+#: commands/admin_commands.py:225 commands/user_commands.py:293
 #: commands/user_commands.py:303 commands/user_commands.py:342
 msgid "List is empty"
 msgstr "Liste boş"
 
-#: commands/admin_commands.py:29 commands/admin_commands.py:161
-#: commands/admin_commands.py:192 commands/user_commands.py:261
+#: commands/admin_commands.py:29 commands/admin_commands.py:180
+#: commands/admin_commands.py:211 commands/user_commands.py:261
 msgid "Added"
 msgstr "Eklendi"
 
@@ -118,8 +112,8 @@ msgstr "Eklendi"
 msgid "This command is already added"
 msgstr "Bu komut zaten eklendi"
 
-#: commands/admin_commands.py:35 commands/admin_commands.py:165
-#: commands/admin_commands.py:196 commands/user_commands.py:273
+#: commands/admin_commands.py:35 commands/admin_commands.py:184
+#: commands/admin_commands.py:215 commands/user_commands.py:273
 msgid "Deleted"
 msgstr "Silindi"
 
@@ -156,38 +150,66 @@ msgid "NICKNAME Sets the bot's nickname"
 msgstr "TAKMA AD Botun takma adını belirler"
 
 #: commands/admin_commands.py:86
+msgid ""
+"Clears the entire cache. If an argument is specified, only favorites or the "
+"history of recently played tracks are deleted"
+msgstr ""
+"Tüm önbelleği temizler. Bir argüman belirtilirse, yalnızca favoriler veya en "
+"son çalınan parçaların geçmişi silinir"
+
+#: commands/admin_commands.py:93
+msgid "Cache cleared"
+msgstr "Önbellek temizlendi"
+
+#: commands/admin_commands.py:97
+msgid "History cleared"
+msgstr "Geçmiş temizlendi"
+
+#: commands/admin_commands.py:101
+msgid "Favourites cleared"
+msgstr "Favoriler temizlendi"
+
+#: commands/admin_commands.py:107
 msgid "Enables or disables voice transmission"
 msgstr "Ses iletimini etkinleştirir veya devre dışı bırakır"
 
-#: commands/admin_commands.py:92 commands/admin_commands.py:93
+#: commands/admin_commands.py:113 commands/admin_commands.py:114
 msgid "Voice transmission enabled"
 msgstr "Ses iletimi etkin"
 
-#: commands/admin_commands.py:98
+#: commands/admin_commands.py:119
 msgid "Voice transmission disabled"
 msgstr "Ses iletimi devre dışı"
 
-#: commands/admin_commands.py:108
+#: commands/admin_commands.py:129
 msgid "Locks or unlocks the bot"
 msgstr "Botu kilitler veya kilidini açar"
 
-#: commands/admin_commands.py:120
-msgid "Locks or unlocks volume"
-msgstr "Ses kontrolünü kilitler veya kilidini açar"
-
-#: commands/admin_commands.py:129
+#: commands/admin_commands.py:138
 msgid "Changes bot status"
 msgstr "Botun durumunu değiştirir"
 
-#: commands/admin_commands.py:141
+#: commands/admin_commands.py:149
+msgid "Enables or disables event handling"
+msgstr "Olay işlemeyi etkinleştirir veya devre dışı bırakır"
+
+#: commands/admin_commands.py:154
+msgid "Event handling is enabled"
+msgstr "Olay işleme etkin"
+
+#: commands/admin_commands.py:154
+msgid "Event handling is disabled"
+msgstr "Olay işleme devre dışı"
+
+#: commands/admin_commands.py:160
 msgid "Saves the configuration to a file"
 msgstr "Konfigurasyonu dosyaya kaydeder"
 
-#: commands/admin_commands.py:145
+#: commands/admin_commands.py:164
 msgid "Configuration saved"
 msgstr "Konfigurasyon kaydedildi"
 
-#: commands/admin_commands.py:154
+#: commands/admin_commands.py:173
 msgid ""
 "Shows a list of administrators. If username is specified with a specific "
 "command argument, adds or removes it from the list"
@@ -195,11 +217,11 @@ msgstr ""
 "Yöneticilerin listesini gösterir. Kullanıcı adı belirli bir komut "
 "argümanıyla belirtilmişse, onu listeye ekler veya listeden kaldırır"
 
-#: commands/admin_commands.py:167
+#: commands/admin_commands.py:186
 msgid "This user is not an admin"
 msgstr "Bu kullanıcı yönetici değil"
 
-#: commands/admin_commands.py:185
+#: commands/admin_commands.py:204
 msgid ""
 "Shows a list of banned users. If username is specified with a specific "
 "command argument, adds or removes it from the list"
@@ -207,15 +229,15 @@ msgstr ""
 "Engellenen kullanıcıların bir listesini gösterir. Kullanıcı adı belirli bir "
 "komut argümanıyla belirtilmişse, onu listeye ekler veya listeden kaldırır"
 
-#: commands/admin_commands.py:198
+#: commands/admin_commands.py:217
 msgid "This user is not banned"
 msgstr "Bu kullanıcı engellenmemiştir"
 
-#: commands/admin_commands.py:213
+#: commands/admin_commands.py:232
 msgid "Quits the bot"
 msgstr "Botu kapatır"
 
-#: commands/admin_commands.py:221
+#: commands/admin_commands.py:240
 msgid "Restarts the bot"
 msgstr "Botu yeniden başlatır"
 
@@ -474,6 +496,18 @@ msgstr "Duraklatıldı: {track_name}"
 #, python-brace-format
 msgid "Paused: {stream_url}"
 msgstr "Duraklatıldı: {stream_url}"
+
+#~ msgid "Clears cache"
+#~ msgstr "Önbelleği temizler"
+
+#~ msgid "Volume is locked"
+#~ msgstr "Ses kontrolü kilitli"
+
+#~ msgid "Volume is unlocked"
+#~ msgstr "Ses kontrolünün kilidi açıldı"
+
+#~ msgid "Locks or unlocks volume"
+#~ msgstr "Ses kontrolünü kilitler veya kilidini açar"
 
 #, python-brace-format
 #~ msgid "VOLUME Sets volume to a value from 0 to {max_volume}"

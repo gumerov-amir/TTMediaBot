@@ -103,14 +103,14 @@ class TeamTalk:
 
     def connect(self):
         if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTING:
-            connecting_attempt = 0
-            while connecting_attempt != self.config['reconnection_attempts']:
+            connection_attempt = 0
+            while connection_attempt != self.config['reconnection_attempts']:
                 try:
                     self._connect()
                     break
                 except:
                     time.sleep(self.config['reconnection_timeout'])
-                    attempt += 1
+                    connection_attempt += 1
         if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED:
             raise errors.ConnectionError()
         if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED | ClientFlags.CLIENT_AUTHORIZED:
