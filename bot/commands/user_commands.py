@@ -1,13 +1,9 @@
 from bot.commands.command import Command
 from bot.player.enums import Mode, State
-from bot import errors
+from bot import errors, vars
 
 
 class HelpCommand(Command):
-    def __init__(self, command_processor):
-        super().__init__(command_processor)
-        self.command_processor = command_processor
-
     @property
     def help(self):
         return _('Shows help for commands')
@@ -22,8 +18,7 @@ class AboutCommand(Command):
         return _('Shows information about this bot')
 
     def __call__(self, arg, user):
-        about_text = _('')
-        return about_text
+        return vars.about_text()
 
 
 class PlayPauseCommand(Command):
@@ -36,7 +31,8 @@ class PlayPauseCommand(Command):
             self.ttclient.send_message(_('Searching...'), user)
             try:
                 track_list = self.service_manager.service.search(arg)
-                self.ttclient.send_message(_("{nickname} requested {request}").format(nickname=user.nickname, request=arg), type=2)
+                if self.command_processor.send_channel_messages:
+                    self.ttclient.send_message(_("{nickname} requested {request}").format(nickname=user.nickname, request=arg), type=2)
                 self.player.play(track_list)
                 return _('Playing {}').format(self.player.track.name)
             except errors.NothingFoundError:
@@ -48,8 +44,6 @@ class PlayPauseCommand(Command):
                 self.player.play()
 
 
-
-
 class PlayUrlCommand(Command):
     @property
     def help(self):
@@ -59,7 +53,8 @@ class PlayUrlCommand(Command):
         if arg:
             try:
                 tracks = self.module_manager.streamer.get(arg, user.is_admin)
-                self.ttclient.send_message(_('{nickname} requested playing from a URL').format(nickname=user.nickname), type=2)
+                if self.command_processor.send_channel_messages:
+                    self.ttclient.send_message(_('{nickname} requested playing from a URL').format(nickname=user.nickname), type=2)
                 self.player.play(tracks)
             except errors.IncorrectProtocolError:
                 return _('Incorrect protocol')
@@ -79,7 +74,8 @@ class StopCommand(Command):
     def __call__(self, arg, user):
         if self.player.state != State.Stopped:
             self.player.stop()
-            self.ttclient.send_message(_("{nickname} stopped playback").format(nickname=user.nickname), type=2)
+            if self.command_processor.send_channel_messages:
+                self.ttclient.send_message(_("{nickname} stopped playback").format(nickname=user.nickname), type=2)
         else:
             return _('Nothing is playing')
 
