@@ -1,3 +1,5 @@
+import logging
+
 import requests
 import vk_api
 
@@ -23,7 +25,11 @@ class Service:
         self.api = self._session.get_api()
         try:
             self.api.account.getInfo()
-        except vk_api.exceptions.ApiError:
+        except vk_api.exceptions.ApiError as e:
+            logging.error(e)
+            raise errors.ServiceError()
+        except vk_api.exceptions.ApiHttpError as e:
+            logging.error(e)
             raise errors.ServiceError()
 
     def get(self, url):

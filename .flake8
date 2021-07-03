@@ -1,0 +1,5 @@
+[flake8]
+ignore = F821
+exclude = TeamTalkPy
+inline-quotes = "
+max-line-length = 88

@@ -19,7 +19,7 @@ class CommandProcessor:
         self.service_manager = service_manager
         self.ttclient = ttclient
         self.locked = False
-        self.volume_locked = False
+        self.blocked_commands = self.config["general"]["blocked_commands"]
         self.commands_dict = {
             'h': HelpCommand(self),
             'a': AboutCommand(self),
@@ -45,16 +45,17 @@ class CommandProcessor:
             'cl': ChangeLanguageCommand(self),
             'cn': ChangeNicknameCommand(self),
             'cs': ChangeStatusCommand(self),
+            "cc": ClearCacheCommand(self),
+            "bc": BlockCommandCommand(self),
             'l': LockCommand(self),
-            'vl': VolumeLockCommand(self),
             'ua': AdminUsersCommand(self),
             'ub': BannedUsersCommand(self),
+            "eh": EventHandlingCommand(self),
             'sc': SaveConfigCommand(self),
             'va': VoiceTransmissionCommand(self),
             'rs': RestartCommand(self),
             'q': QuitCommand(self),
         }
-
 
     def __call__(self, message):
         if message.user.is_banned:
@@ -69,8 +70,8 @@ class CommandProcessor:
         except IndexError:
             return self.help('', message.user)
         arg = ' '.join(message.text.split(' ')[1::])
-        if not message.user.is_admin and self.volume_locked and command == 'v':
-            return _('Volume is locked')
+        if not message.user.is_admin and command in self.blocked_commands:
+            return _('This command is blocked')
         try:
             if command in self.commands_dict:
                 return self.commands_dict[command](arg, message.user)
@@ -120,8 +121,3 @@ class CommandProcessor:
     def lock(self,  arg, user):
         self.locked = not self.locked
         return _('Locked') if self.locked else _('Unlocked')
-
-    def volume_lock(self,  arg, user):
-        self.volume_locked = not self.volume_locked
-        return _('Volume is locked') if self.volume_locked else _('Volume is unlocked')
-
