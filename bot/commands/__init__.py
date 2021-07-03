@@ -18,6 +18,7 @@ class CommandProcessor:
         self.player = player
         self.service_manager = service_manager
         self.ttclient = ttclient
+        self.send_channel_messages = self.config["general"]["send_channel_messages"]
         self.locked = False
         self.blocked_commands = self.config["general"]["blocked_commands"]
         self.commands_dict = {
@@ -46,6 +47,7 @@ class CommandProcessor:
             'cn': ChangeNicknameCommand(self),
             'cs': ChangeStatusCommand(self),
             "cc": ClearCacheCommand(self),
+            "cm": ChannelMessagesCommand(self),
             "bc": BlockCommandCommand(self),
             'l': LockCommand(self),
             'ua': AdminUsersCommand(self),
@@ -68,7 +70,7 @@ class CommandProcessor:
         try:
             command = re.findall(re_command, message.text.split(' ')[0].lower())[0]
         except IndexError:
-            return self.help('', message.user)
+            command = ""
         arg = ' '.join(message.text.split(' ')[1::])
         if not message.user.is_admin and command in self.blocked_commands:
             return _('This command is blocked')
@@ -78,8 +80,8 @@ class CommandProcessor:
             elif message.user.is_admin and command in self.admin_commands_dict:
                 return self.admin_commands_dict[command](arg, message.user)
             else:
-                return _('Unknown command') + ' "' + command + '"\n' + self.help('', message.user)
-        except errors.InvalidArgumentError as e:
+                return _("Unknown command. Send \"h\" for help.")
+        except errors.InvalidArgumentError:
             return self.help(command, message.user)
         except Exception as e:
             logging.error(traceback.format_exc())
@@ -88,36 +90,20 @@ class CommandProcessor:
     def help(self, arg, user):
         if arg:
             if arg in self.commands_dict:
-                try:
-                    return '{command} {help}'.format(command=arg, help=self.commands_dict[arg].help)
-                except AttributeError:
-                    return _("{command} Help text not found").format(command=arg)
+                return self.commands_dict[arg].help
             elif user.is_admin and arg in self.admin_commands_dict:
-                try:
-                    return '{command} {help}'.format(command=arg, help=self.admin_commands_dict[arg].help)
-                except AttributeError:
-                    return _("{command} Help text not found").format(command=arg)
+                return self.admin_commands_dict[arg].help
             else:
-                return _('Unknown command "{command}"\n{help}').format(command=arg, help=self.help('', user))
+                return _("Unknown command")
         else:
             help_strings = []
             for i in list(self.commands_dict):
-                try:
-                    help_strings.append(
-                        '{} {}'.format(i, self.commands_dict[i].help)
-                    )
-                except AttributeError:
-                    help_strings.append('{} help text not found'.format(i))
+                help_strings.append(
+                    "{} {}".format(i, self.help(i, user))
+                )
             if user.is_admin:
                 for i in list(self.admin_commands_dict)[1::]:
-                    try:
-                        help_strings.append(
-                            '{} {}'.format(i, self.admin_commands_dict[i].help)
-                        )
-                    except AttributeError:
-                        help_strings.append('{} help text not found'.format(i))
+                    help_strings.append(
+                        "{} {}".format(i, self.help(i, user))
+                    )
             return '\n'.join(help_strings)
-
-    def lock(self,  arg, user):
-        self.locked = not self.locked
-        return _('Locked') if self.locked else _('Unlocked')

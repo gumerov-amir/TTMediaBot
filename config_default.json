@@ -1,6 +1,7 @@
 {
     "general": {
         "language": "en",
+        "send_channel_messages": true,
         "cache_file_name": "TTMediaBotCache.dat",
         "blocked_commands": [],
         "delete_uploaded_files_after": 300,

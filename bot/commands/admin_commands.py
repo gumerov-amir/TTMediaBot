@@ -8,13 +8,8 @@ from bot import errors, translator, vars
 
 
 class BlockCommandCommand(AdminCommand):
-    def __init__(self, command_processor):
-        super().__init__(command_processor)
-        self.command_processor = command_processor
-
     @property
     def help(self):
-
             return _("Blocks or unblocks commands.")
 
     def __call__(self, arg, user):
@@ -120,16 +115,14 @@ class VoiceTransmissionCommand(AdminCommand):
 
 
 class LockCommand(AdminCommand):
-    def __init__(self, command_processor):
-        super().__init__(command_processor)
-        self.command_processor = command_processor
-
     @property
     def help(self):
         return _('Locks or unlocks the bot')
 
-    def __call__(self, arg, user):
-        return self.command_processor.lock(arg, user)
+
+    def __call__(self,  arg, user):
+        self.command_processor.locked = not self.command_processor.locked
+        return _('Locked') if self.command_processor.locked else _('Unlocked')
 
 
 class ChangeStatusCommand(AdminCommand):
@@ -150,8 +143,19 @@ class EventHandlingCommand(AdminCommand):
 
     def __call__(self, arg, user):
         self.ttclient.load_event_handlers = not self.ttclient.load_event_handlers
-        self.config["general"]["load_event_handlers"] = not self.config["general"]["load_event_handlers"]
+        self.config["general"]["load_event_handlers"] = self.ttclient.load_event_handlers
         return _("Event handling is enabled") if self.config["general"]["load_event_handlers"] else _("Event handling is disabled")
+
+
+class ChannelMessagesCommand(AdminCommand):
+    @property
+    def help(self):
+        return _("Enables or disables channel messages")
+
+    def __call__(self, arg, user):
+        self.command_processor.send_channel_messages = not self.command_processor.send_channel_messages
+        self.config["general"]["send_channel_messages"] = self.command_processor.send_channel_messages
+        return _("Channel messages enabled") if self.command_processor.send_channel_messages else _("Channel messages disabled")
 
 
 class SaveConfigCommand(AdminCommand):
@@ -164,10 +168,6 @@ class SaveConfigCommand(AdminCommand):
         return _('Configuration saved')
 
 class AdminUsersCommand(AdminCommand):
-    def __init__(self, command_processor):
-        super().__init__(command_processor)
-        self.command_processor = command_processor
-
     @property
     def help(self):
         return _('Shows a list of administrators. If username is specified with a specific command argument, adds or removes it from the list')
@@ -195,10 +195,6 @@ class AdminUsersCommand(AdminCommand):
 
 
 class BannedUsersCommand(AdminCommand):
-    def __init__(self, command_processor):
-        super().__init__(command_processor)
-        self.command_processor = command_processor
-
     @property
     def help(self):
         return _('Shows a list of banned users. If username is specified with a specific command argument, adds or removes it from the list')
