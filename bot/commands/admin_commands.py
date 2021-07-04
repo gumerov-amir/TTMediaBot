@@ -150,7 +150,7 @@ class EventHandlingCommand(AdminCommand):
 class ChannelMessagesCommand(AdminCommand):
     @property
     def help(self):
-        return _("Enables or disables channel messages")
+        return _("Enables or disables channel messages sent by the bot when requesting to play music, stop current music, and other events")
 
     def __call__(self, arg, user):
         self.command_processor.send_channel_messages = not self.command_processor.send_channel_messages
