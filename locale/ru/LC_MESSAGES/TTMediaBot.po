@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TTMediaBot\n"
-"POT-Creation-Date: 2021-07-04 10:41+0400\n"
-"PO-Revision-Date: 2021-07-04 10:44+0400\n"
+"POT-Creation-Date: 2021-07-05 22:48+0400\n"
+"PO-Revision-Date: 2021-07-05 22:52+0400\n"
 "Last-Translator: Гумеров Амир Эдуардович <ar8200@bk.ru>\n"
 "Language-Team: TTMediaBot's developers\n"
 "Language: ru\n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Poedit-Basepath: ../../../bot\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: TeamTalk/__init__.py:206
+#: TeamTalk/__init__.py:220
 msgid "Send \"h\" for help"
 msgstr "Отправьте \"h\" для справки"
 
@@ -434,13 +434,13 @@ msgstr "Вне списка"
 
 #: commands/user_commands.py:235
 msgid ""
-"Shows a list of favorite tracks. If an argument is specified, adds or "
-"removes the currently playing tracks to the list and if a number is "
-"specified, plays a track available for that number from the list"
+"Shows a list of favorite tracks. \"f +\" adds current track to the list. \"f "
+"-\" removes track requested from favorite list. If a number is specified, "
+"plays a track available for that number from the list"
 msgstr ""
-"Показывает список избранных треков. Если аргумент указан, добавляет или "
-"удаляет треки, воспроизводимые в данный момент в список, а если указан "
-"номер, воспроизводит трек, доступный для этого номера из списка"
+"Показывает список избранных треков. \"f +\" добавляет текущий трек в список. "
+"\"f -\" удаляет запрошенный трек из списка избранного. Если номер указан, "
+"воспроизводит дорожку, доступную для этого номера из списка"
 
 #: commands/user_commands.py:239
 msgid "Sorry, guest users can not use this command"
