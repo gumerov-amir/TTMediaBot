@@ -232,7 +232,7 @@ class SelectTrackCommand(Command):
 class FavoritesCommand(Command):
     @property
     def help(self):
-        return _('Shows a list of favorite tracks. If an argument is specified, adds or removes the currently playing tracks to the list and if a number is specified, plays a track available for that number from the list')
+        return _('Shows a list of favorite tracks. "f +" adds current track to the list. "f -" removes track requested from favorite list. If a number is specified, plays a track available for that number from the list')
 
     def __call__(self, arg, user):
         if user.username == '':
