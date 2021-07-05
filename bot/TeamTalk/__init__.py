@@ -87,11 +87,11 @@ class TeamTalk:
     def initialize(self):
         logging.debug('Initializing TeamTalk')
         self.connect()
+        self.change_status_text(self.status)
         logging.debug('TeamTalk initialized')
 
-    def run(self, command_processor):
+    def run(self):
         logging.debug('Starting TeamTalk')
-        self.teamtalk_thread.command_processor = command_processor
         self.teamtalk_thread.start()
         logging.debug('TeamTalk started')
 
@@ -101,56 +101,81 @@ class TeamTalk:
         self.teamtalk_thread.close()
         logging.debug('Teamtalk closed')
 
-    def connect(self):
+    def connect(self, reconnect=False):
+        if reconnect:
+            logging.info('Reconnecting')
+            if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED | ClientFlags.CLIENT_AUTHORIZED:
+                self.tt.disconnect()
         if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTING:
             connection_attempt = 0
             while connection_attempt != self.config['reconnection_attempts']:
                 try:
                     self._connect()
+                    logging.debug("connected")
                     break
-                except:
-                    time.sleep(self.config['reconnection_timeout'])
-                    connection_attempt += 1
+                except errors.ConnectionError:
+                    if not reconnect:
+                        logging.error("Cannot connect")
+                        sys.exit(1)
+                    else:
+                        time.sleep(self.config['reconnection_timeout'])
+                        connection_attempt += 1
         if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED:
-            raise errors.ConnectionError()
+            logging.error("ConnectionError")
+            sys.exit(1)
         if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED | ClientFlags.CLIENT_AUTHORIZED:
             login_attempt = 0
             while login_attempt != self.config['reconnection_attempts']:
                 try:
                     self._login()
+                    logging.debug("Logged in")
                     break
-                except:
-                    time.sleep(self.config['reconnection_timeout'])
-                    login_attempt += 1
+                except errors.LoginError as e:
+                    if not reconnect:
+                        logging.error("Cannot log in: {}".format(e))
+                        sys.exit(1)
+                    else:
+                        time.sleep(self.config['reconnection_timeout'])
+                        login_attempt += 1
         if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED | ClientFlags.CLIENT_AUTHORIZED:
-            raise errors.LoginError()
+            logging.error("LoginError")
+            sys.exit(1)
         if self.tt.getMyChannelID() == 0:
             join_attempt = 0
             while join_attempt != self.config['reconnection_attempts']:
                 try:
                     self._join()
+                    logging.debug("Joined channel")
                     break
-                except:
-                    time.sleep(self.config['reconnection_timeout'])
-                    join_attempt += 1
+                except errors.JoinChannelError:
+                    if not reconnect:
+                        logging.error("Cannot joined channel")
+                        sys.exit(1)
+                    else:
+                        time.sleep(self.config['reconnection_timeout'])
+                        join_attempt += 1
         if self.tt.getMyChannelID() == 0:
-            raise errors.JoinChannelError()
+                logging.error("Cannot joined channel")
+                sys.exit(1)
 
     def _connect(self):
         self.tt.connect(_str(self.config['hostname']), self.config['tcp_port'], self.config['udp_port'], self.config['encrypted'])
-        result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CON_SUCCESS)
-        if not result:
-            raise errors.ConnectionError()
+        try:
+            self.wait_for_event(ClientEvent.CLIENTEVENT_CON_SUCCESS, error_events=[ClientEvent.CLIENTEVENT_CON_FAILED])
+        except errors.TTEventError as e:
+            raise errors.ConnectionError(e)
 
     def _login(self):
         cmdid = self.tt.doLogin(_str(self.config['nickname']), _str(self.config['username']), _str(self.config['password']), _str(vars.client_name))
-        result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CMD_MYSELF_LOGGEDIN)
-        if not result:
-            raise errors.LoginError()
-        result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CMD_SERVER_UPDATE)
-        if not result:
-            raise errors.LoginError()
-        result, msg = self.waitForCmdSuccess(cmdid, 2000)
+        try:
+            self.wait_for_event(ClientEvent.CLIENTEVENT_CMD_MYSELF_LOGGEDIN, error_events=[ClientEvent.CLIENTEVENT_CMD_ERROR])
+        except errors.TTEventError as e:
+            raise errors.LoginError(e)
+        try:
+            self.wait_for_event(ClientEvent.CLIENTEVENT_CMD_SERVER_UPDATE)
+        except errors.TTEventError as e:
+            raise errors.LoginError(e)
+        self.wait_for_cmd_success(cmdid)
 
     def _join(self):
         if isinstance(self.config['channel'], int):
@@ -160,43 +185,32 @@ class TeamTalk:
             if channel_id == 0:
                 channel_id = 1
         cmdid = self.tt.doJoinChannelByID(channel_id, _str(self.config['channel_password']))
-        result, msg = self.waitForCmdSuccess(cmdid, 2000)
-        if not result:
-            cmdid = self.tt.doJoinChannelByID(0, _str(''))
-            result, msg = self.waitForCmdSuccess(cmdid, 2000)
-            if not result:
-                raise errors.JoinChannelError()
-        self.change_status_text(self.status)
-
-    def reconnect(self):
-        logging.info('Reconnecting')
-        if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED | ClientFlags.CLIENT_AUTHORIZED:
-            self.tt.disconnect()
         try:
-            self.connect()
-            logging.info('Reconnected')
-            return
-        except:
-            logging.error('Cannot reconnect')
-            _thread.interrupt_main()
+            msg = self.wait_for_cmd_success(cmdid)
+        except errors.TTEventError:
+            cmdid = self.tt.doJoinChannelByID(0, _str(''))
+            try:
+                msg = self.wait_for_cmd_success(cmdid)
+            except errors.TTEventError:
+                raise errors.JoinChannelError()
 
-    def waitForEvent(self, event, timeout=2000):
-        msg = self.tt.getMessage(timeout)
-        timestamp = lambda: int(round(time.time() * 1000))
-        end = timestamp() + timeout
+    def wait_for_event(self, event, error_events=[]):
+        get_time = lambda: int(round(time.time()))
+        end = get_time() + vars.tt_event_timeout
+        msg = self.tt.getMessage(vars.tt_event_timeout * 1000)
         while msg.nClientEvent != event:
-            if timestamp() >= end:
-                return False, TTMessage()
-            msg = self.tt.getMessage(timeout)
-        return True, msg
+            if get_time() >= end:
+                raise errors.TTEventError()
+            if msg.nClientEvent in error_events:
+                raise errors.TTEventError(_str(msg.clienterrormsg.szErrorMsg))
+            msg = self.tt.getMessage(vars.tt_event_timeout * 1000)
+        return msg
 
-    def waitForCmdSuccess(self, cmdid, timeout):
-        result = True
-        while result:
-            result, msg = self.waitForEvent(ClientEvent.CLIENTEVENT_CMD_SUCCESS, timeout)
-            if result and msg.nSource == cmdid:
-                return result, msg
-        return False, TTMessage()
+    def wait_for_cmd_success(self, cmdid):
+        while True:
+            msg = self.wait_for_event(ClientEvent.CLIENTEVENT_CMD_SUCCESS)
+            if msg.nSource == cmdid:
+                return
 
     @property
     def default_status(self):

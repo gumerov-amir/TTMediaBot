@@ -43,10 +43,10 @@ class TeamTalkThread(Thread):
                 self.ttclient.uploaded_files_queue.put(self.ttclient.get_file(msg.remotefile))
             elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_MYSELF_KICKED:
                 logging.warning('Kicked')
-                self.ttclient.reconnect()
+                self.ttclient.connect(reconnect=True)
             elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CON_LOST:
                 logging.warning('Server lost')
-                self.ttclient.reconnect()
+                self.ttclient.connect(reconnect=True)
             elif msg.nClientEvent in self.event_names and self.ttclient.load_event_handlers:
                 self.run_event_handler(msg)
 

@@ -38,6 +38,10 @@ class IncorrectPositionError(Exception):
     pass
 
 
+class TTEventError(Exception):
+    pass
+
+
 class ConnectionError(Exception):
     pass
 

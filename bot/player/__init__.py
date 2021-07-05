@@ -227,7 +227,7 @@ class Player:
 
     @vlc.CallbackDecorators.LogCb
     def log_callback(data, level, ctx, fmt, args):
-        levels = {0: 10, 2: 20, 3: 30, 4: 40}
+        levels = {0: 5, 2: 20, 3: 30, 4: 40}
         BUF_LEN = 1024
         outBuf = ctypes.create_string_buffer(BUF_LEN)
         vsnprintf(outBuf, BUF_LEN, fmt, args)
