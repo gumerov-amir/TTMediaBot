@@ -10,5 +10,6 @@ Authors: Gumerov_amir, A11CF0.\
 loop_timeout = 0.01
 max_message_length = 256
 history_max_lenth = 128
+tt_event_timeout = 2
 
 directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

@@ -7,6 +7,7 @@ from bot import vars
 
 
 def initialize_logger(config, file_name):
+    logging.addLevelName(5, "PLAYER_DEBUG")
     level = logging.getLevelName(config['level'])
     formatter = logging.Formatter(config['format'])
     handlers = []
