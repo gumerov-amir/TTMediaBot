@@ -14,7 +14,7 @@ class Service:
     def initialize(self):
         self._ydl_config = {
             'skip_download': True,
-            'format': '141/140/bestaudio/best',
+            'format': 'm4a/bestaudio/best',
             'socket_timeout': 5,
             'logger': logging.getLogger('root')
         }

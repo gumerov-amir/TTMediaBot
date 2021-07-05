@@ -15,7 +15,7 @@ class Streamer:
         parsed_url = urlparse(url)
         if parsed_url.scheme in self.allowed_schemes:
             track = Track(url=url, from_url=True)
-            fetched_data = None
+            fetched_data = [track]
             for service in self.service_manager.available_services.values():
                 try:
                     if parsed_url.hostname in service.hostnames or service.name == self.service_manager.fallback_service:
