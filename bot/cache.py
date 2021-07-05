@@ -12,7 +12,9 @@ class Cache:
         try:
             with open(self.file_name, 'rb') as f:
                 self.data = pickle.load(f)
-        except FileNotFoundError:
+                self.history = self.data['history']
+                self.favorites = self.data['favorites']
+        except (FileNotFoundError, KeyError):
             self.data = {'history': deque(maxlen=vars.history_max_lenth), 'favorites':  {}}
             with open(self.file_name, 'wb') as f:
                 pickle.dump(self.data, f)
@@ -21,8 +23,6 @@ class Cache:
             self.file_locker.acquire()
         except portalocker.exceptions.LockException:
             raise PermissionError()
-        self.history = self.data['history']
-        self.favorites = self.data['favorites']
 
     def close(self):
         self.file_locker.release()
