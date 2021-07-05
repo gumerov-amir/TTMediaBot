@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TTMediaBot\n"
-"POT-Creation-Date: 2021-07-04 10:55+0400\n"
-"PO-Revision-Date: 2021-07-04 10:58+0400\n"
+"POT-Creation-Date: 2021-07-05 22:50+0400\n"
+"PO-Revision-Date: 2021-07-05 22:51+0400\n"
 "Last-Translator: \n"
 "Language-Team: TTMediaBot's developers\n"
 "Language: tr\n"
@@ -34,7 +34,7 @@ msgstr ""
 "X-Poedit-SearchPath-14: commands\n"
 "X-Poedit-SearchPath-15: commands\n"
 
-#: TeamTalk/__init__.py:206
+#: TeamTalk/__init__.py:220
 msgid "Send \"h\" for help"
 msgstr "Yardım için \"h\" gönderin"
 
@@ -452,13 +452,13 @@ msgstr "Liste dışı"
 
 #: commands/user_commands.py:235
 msgid ""
-"Shows a list of favorite tracks. If an argument is specified, adds or "
-"removes the currently playing tracks to the list and if a number is "
-"specified, plays a track available for that number from the list"
+"Shows a list of favorite tracks. \"f +\" adds current track to the list. \"f "
+"-\" removes track requested from favorite list. If a number is specified, "
+"plays a track available for that number from the list"
 msgstr ""
-"Favori parçaların listesini gösterir. Bir argüman belirtilirse, o anda "
-"çalmakta olan parçaları listeye ekler veya listeden çıkarır ve bir sayı "
-"belirtilirse, o numara için mevcut bir parçayı listeden çalar"
+"Favori parçaların listesini gösterir. \"f +\", geçerli parçayı listeye "
+"ekler. \"f -\", geçerli parçayı favori listesinden kaldırır. Bir numara "
+"belirtilirse, listeden o numara için mevcut olan parçayı çalar"
 
 #: commands/user_commands.py:239
 msgid "Sorry, guest users can not use this command"
