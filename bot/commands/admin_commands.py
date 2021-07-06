@@ -10,7 +10,7 @@ from bot import errors, translator, vars
 class BlockCommandCommand(AdminCommand):
     @property
     def help(self):
-            return _("Blocks or unblocks commands.")
+            return _("Blocks or unblocks commands.\nbc +command adds command in blocklist.\nbc -command removes command from blocklist.")
 
     def __call__(self, arg, user):
         arg = arg.lower()
@@ -37,7 +37,7 @@ class BlockCommandCommand(AdminCommand):
 class ChangeGenderCommand(AdminCommand):
     @property
     def help(self):
-        return _('Changes the gender of the bot')
+        return _('Changes the gender of the bot.\ncg n changes to neutral.\ncg m changes to male.\ncg f changes to female.')
 
     def __call__(self, arg, user):
         try:
@@ -78,7 +78,7 @@ class ChangeNicknameCommand(AdminCommand):
 class ClearCacheCommand(AdminCommand):
     @property
     def help(self):
-        return _("Clears the entire cache. If an argument is specified, only favorites or the history of recently played tracks are deleted")
+        return _("cc without arguments clears the entire cache.\ncc r cleares only recent tracks.\ncc f cleares only favorites.")
 
     def __call__(self, arg, user):
         if not arg:
@@ -93,7 +93,7 @@ class ClearCacheCommand(AdminCommand):
         elif arg == "f":
             self.cache.favorites.clear()
             self.cache.save()
-            return _("Favourites cleared")
+            return _("Favorites cleared")
 
 
 class VoiceTransmissionCommand(AdminCommand):
@@ -170,7 +170,7 @@ class SaveConfigCommand(AdminCommand):
 class AdminUsersCommand(AdminCommand):
     @property
     def help(self):
-        return _('Shows a list of administrators. If username is specified with a specific command argument, adds or removes it from the list')
+        return _('Shows a list of administrators.\nua +username adds this username in adminlist.\nua -username removes its username from adminlist.')
 
     def __call__(self, arg, user):
         admin_users = self.command_processor.config['teamtalk']['users']['admins']
@@ -197,7 +197,7 @@ class AdminUsersCommand(AdminCommand):
 class BannedUsersCommand(AdminCommand):
     @property
     def help(self):
-        return _('Shows a list of banned users. If username is specified with a specific command argument, adds or removes it from the list')
+        return _('Shows a list of banned users.\nub +username add this user to banlist.\nub -username removes this user from banlist.')
 
     def __call__(self, arg, user):
         banned_users = self.command_processor.config['teamtalk']['users']['banned_users']
