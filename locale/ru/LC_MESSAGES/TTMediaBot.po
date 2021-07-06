@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TTMediaBot\n"
-"POT-Creation-Date: 2021-07-05 22:48+0400\n"
-"PO-Revision-Date: 2021-07-05 22:52+0400\n"
+"POT-Creation-Date: 2021-07-06 18:25+0300\n"
+"PO-Revision-Date: 2021-07-06 19:00+0300\n"
 "Last-Translator: Гумеров Амир Эдуардович <ar8200@bk.ru>\n"
 "Language-Team: TTMediaBot's developers\n"
 "Language: ru\n"
@@ -45,14 +45,8 @@ msgid "This command is blocked"
 msgstr "Эта команда заблокирована"
 
 #: commands/__init__.py:83
-#, fuzzy
-#| msgid ""
-#| "Unknown command \"{command}\"\n"
-#| "{help}"
 msgid "Unknown command. Send \"h\" for help."
-msgstr ""
-"Неизвестная команда \"{command}\"\n"
-"{help}"
+msgstr "Неизвестная команда. Отправьте h для справки."
 
 #: commands/__init__.py:88
 msgid "Error: {}"
@@ -63,8 +57,14 @@ msgid "Unknown command"
 msgstr "Неизвестная команда"
 
 #: commands/admin_commands.py:13
-msgid "Blocks or unblocks commands."
-msgstr "Блокирует или разблокирует команды"
+msgid ""
+"Blocks or unblocks commands.\n"
+"bc +command adds command in blocklist.\n"
+"bc -command removes command from blocklist."
+msgstr ""
+"Блокирует и разблокирует команды бота.\n"
+"bc +команда - добавляет команду в список блокировки.\n"
+"bc -команда - удаляет команду из списка блокировки."
 
 #: commands/admin_commands.py:18
 msgid "Unknown user command"
@@ -95,8 +95,16 @@ msgid "This command is not blocked"
 msgstr "Эта команда не заблокирована"
 
 #: commands/admin_commands.py:40
-msgid "Changes the gender of the bot"
-msgstr "Меняет пол бота"
+msgid ""
+"Changes the gender of the bot.\n"
+"cg n changes to neutral.\n"
+"cg m changes to male.\n"
+"cg f changes to female."
+msgstr ""
+"Меняет пол у бота.\n"
+"cg n - меняет на нейтральный.\n"
+"cg m - меняет на мужской.\n"
+"cg f - меняет на женский."
 
 #: commands/admin_commands.py:53
 msgid "Changes the bot language"
@@ -124,11 +132,13 @@ msgstr "НИК Устанавливает ник бота"
 
 #: commands/admin_commands.py:81
 msgid ""
-"Clears the entire cache. If an argument is specified, only favorites or the "
-"history of recently played tracks are deleted"
+"cc without arguments clears the entire cache.\n"
+"cc r cleares only recent tracks.\n"
+"cc f cleares only favorites."
 msgstr ""
-"Очищает весь кеш. Если указан аргумент, удаляются только избранное или "
-"история недавно воспроизведенных треков"
+"cc без аргументов удаляет весь кэш.\n"
+"cc r - удаляет историю последних проигранных треков.\n"
+"cc f - удаляет список избранного."
 
 #: commands/admin_commands.py:88
 msgid "Cache cleared"
@@ -139,7 +149,9 @@ msgid "History cleared"
 msgstr "История очищена"
 
 #: commands/admin_commands.py:96
-msgid "Favourites cleared"
+#, fuzzy
+#| msgid "Favourites cleared"
+msgid "Favorites cleared"
 msgstr "Избранное удалено"
 
 #: commands/admin_commands.py:102
@@ -208,11 +220,13 @@ msgstr "Конфиг сохранён"
 
 #: commands/admin_commands.py:173
 msgid ""
-"Shows a list of administrators. If username is specified with a specific "
-"command argument, adds or removes it from the list"
+"Shows a list of administrators.\n"
+"ua +username adds this username in adminlist.\n"
+"ua -username removes its username from adminlist."
 msgstr ""
-"Показывает список администраторов. Если имя пользователя указано с "
-"конкретным аргументом команды, добавляет или удаляет его из списка"
+"Показывает список администраторов.\n"
+"ua +имяпользователя добавляет имя пользователя в список администраторов.\n"
+"ua -имяпользователя - удаляет имя пользователя из списка администраторов."
 
 #: commands/admin_commands.py:186
 msgid "This user is not an admin"
@@ -220,11 +234,13 @@ msgstr "Этот пользователь не является админист
 
 #: commands/admin_commands.py:200
 msgid ""
-"Shows a list of banned users. If username is specified with a specific "
-"command argument, adds or removes it from the list"
+"Shows a list of banned users.\n"
+"ub +username add this user to banlist.\n"
+"ub -username removes this user from banlist."
 msgstr ""
-"Показывает список заблокированных пользователей. Если имя пользователя "
-"указано с конкретным аргументом команды, добавляет или удаляет его из списка"
+"Показывает список заблокированных пользователей.\n"
+"ub +имяпользователя - добавляет имя пользователя в банлист.\n"
+"ub -имяпользователя - удаляет имя пользователя из банлиста."
 
 #: commands/admin_commands.py:213
 msgid "This user is not banned"
@@ -505,6 +521,19 @@ msgid ""
 msgstr ""
 "TTMediaBot - бот для потоковой передачи музыки в TeamTalk.\n"
 "Авторы: Гумеров_амир, A11CF0."
+
+#~ msgid "Blocks or unblocks commands."
+#~ msgstr "Блокирует или разблокирует команды"
+
+#~ msgid "Changes the gender of the bot"
+#~ msgstr "Меняет пол бота"
+
+#~ msgid ""
+#~ "Clears the entire cache. If an argument is specified, only favorites or "
+#~ "the history of recently played tracks are deleted"
+#~ msgstr ""
+#~ "Очищает весь кеш. Если указан аргумент, удаляются только избранное или "
+#~ "история недавно воспроизведенных треков"
 
 #~ msgid "Volume is unlocked"
 #~ msgstr "Громкость разблокирована"
