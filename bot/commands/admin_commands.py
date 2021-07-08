@@ -78,7 +78,7 @@ class ChangeNicknameCommand(AdminCommand):
 class ClearCacheCommand(AdminCommand):
     @property
     def help(self):
-        return _("cc without arguments clears the entire cache.\ncc r cleares only recent tracks.\ncc f cleares only favorites.")
+        return _("without arguments clears the entire cache.\ncc r cleares only recent tracks.\ncc f cleares only favorites.")
 
     def __call__(self, arg, user):
         if not arg:

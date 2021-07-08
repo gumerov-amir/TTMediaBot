@@ -234,7 +234,7 @@ class SelectTrackCommand(Command):
 class SpeedCommand(Command):
     @property
     def help(self):
-        return _("returns current rate, if argument is not given, sets rate in float type bitween 0.25 and 4.0, if argument is given")
+        return _("returns current speed.\n Type sp and number between 0.25 and 4.0")
 
     def __call__(self, arg, user):
         if not arg:
