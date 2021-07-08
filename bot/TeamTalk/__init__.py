@@ -6,7 +6,6 @@ import re
 import sys
 import queue
 
-from bot.TeamTalk.enums import ChannelType
 from bot.sound_devices import SoundDevice, SoundDeviceType
 from bot import errors, vars
 
@@ -17,6 +16,7 @@ if sys.platform == "win32":
         os.chdir(vars.directory)
 
 from bot.TeamTalk import thread
+from bot.TeamTalk.structs import *
 
 import TeamTalkPy
 from TeamTalkPy import TTMessage, ClientEvent, ClientFlags
@@ -81,6 +81,7 @@ class TeamTalk:
         self.load_event_handlers = config["general"]["load_event_handlers"]
         self.event_handlers_file_name = config["general"]["event_handlers_file_name"]
         self.teamtalk_thread = thread.TeamTalkThread(bot, self)
+        self.errors_queue = queue.Queue()
         self.message_queue = queue.Queue()
         self.uploaded_files_queue = queue.Queue()
 
@@ -120,6 +121,7 @@ class TeamTalk:
                     else:
                         time.sleep(self.config['reconnection_timeout'])
                         connection_attempt += 1
+                        self.tt.disconnect()
         if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED:
             logging.error("ConnectionError")
             sys.exit(1)
@@ -168,7 +170,8 @@ class TeamTalk:
     def _login(self):
         cmdid = self.tt.doLogin(_str(self.config['nickname']), _str(self.config['username']), _str(self.config['password']), _str(vars.client_name))
         try:
-            self.wait_for_event(ClientEvent.CLIENTEVENT_CMD_MYSELF_LOGGEDIN, error_events=[ClientEvent.CLIENTEVENT_CMD_ERROR])
+            msg = self.wait_for_event(ClientEvent.CLIENTEVENT_CMD_MYSELF_LOGGEDIN, error_events=[ClientEvent.CLIENTEVENT_CMD_ERROR])
+            self._user_account = self.get_user_account_by_tt_obj(msg.useraccount)
         except errors.TTEventError as e:
             raise errors.LoginError(e)
         try:
@@ -241,7 +244,7 @@ class TeamTalk:
             channel_id = self.tt.getChannelIDFromPath(_str(channel))
             if channel_id == 0:
                 raise ValueError()
-        self.tt.doSendFile(channel_id, _str(file_path))
+        return self.tt.doSendFile(channel_id, _str(file_path))
 
     def delete_file(self, channel, file_id):
         if isinstance(channel, int):
@@ -276,25 +279,45 @@ class TeamTalk:
         self.gender = genders[gender]
         self.tt.doChangeStatus(self.gender, _str(self.status))
 
-    def get_user(self, id):
-        user = self.tt.getUser(id)
-        return User(user.nUserID, _str(user.szNickname), _str(user.szUsername), user.nChannelID, list(genders.keys())[list(genders.values()).index(user.nStatusMode)], user.szStatusMsg, _str(user.szUsername) in self.admins, _str(user.szUsername) in self.banned_users)
-
     def get_channel(self, channel_id):
         channel = self.tt.getChannel(channel_id)
         return Channel(channel.nChannelID, channel.szName, channel.szTopic, channel.nMaxUsers, ChannelType(channel.uChannelType))
 
+    def get_error(self, error_no, cmdid):
+        return Error(_str(self.tt.getErrorMessage(error_no)), ErrorType(error_no), cmdid)
+
     def get_message(self, msg):
-        return Message(re.sub(re_line_endings, '', _str(msg.szMessage)), self.get_user(msg.nFromUserID))
+        return Message(re.sub(re_line_endings, '', _str(msg.szMessage)), self.get_user(msg.nFromUserID), self.get_channel(msg.nChannelID), MessageType(msg.nMsgType))
 
     def get_file(self, file):
         return File(file.nFileID, _str(file.szFileName), self.get_channel(file.nChannelID), file.nFileSize, _str(file.szUsername))
 
-    def get_my_user_id(self):
-        return self.tt.getMyUserID()
+    @property
+    def user(self):
+        user = self.get_user(self.tt.getMyUserID())
+        user.user_account = self._user_account
+        return user
 
-    def get_my_channel_id(self):
-        return self.tt.getMyChannelID()
+    @property
+    def channel(self):
+        return self.get_channel(self.tt.getMyChannelID())
+
+    def get_user(self, id):
+        user = self.tt.getUser(id)
+        gender = list(genders.keys())[list(genders.values()).index(user.nStatusMode)]
+        return User(
+            user.nUserID, _str(user.szNickname), _str(user.szUsername),
+            _str(user.szStatusMsg), gender, UserState(user.uUserState),
+            self.get_channel(user.nChannelID), _str(user.szClientName), user.uVersion,
+            self.get_user_account(_str(user.szUsername)), UserType(user.uUserType),
+            _str(user.szUsername) in self.admins, _str(user.szUsername) in self.banned_users
+        )
+
+    def get_user_account(self, username):
+        return UserAccount(username, "", "", "", "", "")
+
+    def get_user_account_by_tt_obj(self, obj):
+        return UserAccount(_str(obj.szUsername), _str(obj.szPassword), _str(obj.szNote), UserType(obj.uUserType), UserRight(obj.uUserRights), _str(obj.szInitChannel))
 
     def get_input_devices(self):
         devices = []
@@ -317,37 +340,3 @@ class TeamTalk:
     def disable_voice_transmission(self):
         self.tt.enableVoiceTransmission(False)
         self.is_voice_transmission_enabled = False
-
-
-class Message:
-    def __init__(self, text, user):
-        self.text = text
-        self.user = user
-
-
-class Channel:
-    def __init__(self, id, name, topic, max_users, type):
-        self.id = id
-        self.name = name
-        topic = topic
-        self.max_users = max_users
-        self.type = type
-
-class User:
-    def __init__(self, id, nickname, username, channel_id, gender, status, is_admin, is_banned):
-        self.id = id
-        self.nickname = nickname
-        self.username = username
-        self.channel_id = channel_id
-        self.gender = gender
-        self.status = status
-        self.is_admin = is_admin
-        self.is_banned = is_banned
-
-class File:
-    def __init__(self, id, name, channel, size, username):
-        self.id = id
-        self.name = name
-        self.channel = channel
-        self.size = size
-        self.username = username

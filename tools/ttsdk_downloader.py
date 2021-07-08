@@ -9,9 +9,7 @@ from urllib import request
 import bs4
 import patoolib
 
-
 url = 'http://bearware.dk/teamtalksdk'
-user_agent = 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0'
 
 cd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -85,7 +83,7 @@ def clean():
 
 def install():
     print('Installing TeamTalk sdk components')
-    print('Downloading last sdk version')
+    print('Downloading latest sdk version')
     download()
     print('Downloaded. extracting')
     extract()

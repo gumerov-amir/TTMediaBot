@@ -3,6 +3,7 @@ import sys
 from urllib.parse import urlparse
 
 from bot import errors
+from bot.player.enums import TrackType
 from bot.player.track import Track
 
 
@@ -14,7 +15,7 @@ class Streamer:
     def get(self, url, is_admin):
         parsed_url = urlparse(url)
         if parsed_url.scheme in self.allowed_schemes:
-            track = Track(url=url, from_url=True)
+            track = Track(url=url, type=TrackType.Direct)
             fetched_data = [track]
             for service in self.service_manager.available_services.values():
                 try:
@@ -32,7 +33,7 @@ class Streamer:
                 return fetched_data
         elif is_admin:
             if os.path.isfile(url):
-                track = Track(url=url, name=os.path.split(url)[-1], format=os.path.splitext(url)[1])
+                track = Track(url=url, name=os.path.split(url)[-1], format=os.path.splitext(url)[1], type=TrackType.Local)
                 return [track, ]
             elif os.path.isdir(url):
                 tracks = []
@@ -41,7 +42,7 @@ class Streamer:
                         url = os.path.join(path, file)
                         name = os.path.split(url)[-1]
                         format = os.path.splitext(url)[1]
-                        track = Track(url=url, name=name, format=format)
+                        track = Track(url=url, name=name, format=format, type=TrackType.Local)
                         tracks.append(track)
                 return tracks
             else:
