@@ -13,3 +13,11 @@ class Mode(Enum):
     TrackList = 'tl'
     RepeatTrackList = 'rtl'
     Random = 'rnd'
+
+
+class TrackType(Enum):
+    Default = 0
+    Live = 1
+    Local = 2
+    Direct = 3
+    Dynamic = 4

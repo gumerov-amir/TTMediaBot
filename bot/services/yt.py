@@ -3,6 +3,7 @@ import logging
 from youtube_dl import YoutubeDL
 from youtubesearchpython import VideosSearch
 
+from bot.player.enums import TrackType
 from bot.player.track import Track
 from bot import errors
 
@@ -50,10 +51,10 @@ class Service:
                 title += ' - {}'.format(stream['uploader'])
             format = stream['ext']
             if 'is_live' in stream and stream['is_live']:
-                is_live = True
+                type = TrackType.Live
             else:
-                is_live = False
-            return [Track(url=url, name=title, format=format, is_live=is_live)]
+                type = TrackType.Default
+            return [Track(url=url, name=title, format=format, type=type)]
 
     def search(self, text):
         search = VideosSearch(text, limit=300).result()

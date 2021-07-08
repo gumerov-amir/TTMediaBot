@@ -12,6 +12,7 @@ default_config = {
         "blocked_commands": [],
         "send_channel_messages": True,
         "delete_uploaded_files_after": 300,
+        "time_format": r"%H:%M",
         "load_event_handlers": False,
         "event_handlers_file_name": "event_handlers.py",
     },
@@ -22,10 +23,12 @@ default_config = {
     "player": {
         "default_volume": 50,
         "max_volume": 100,
-        "faded_volume": True,
-        "faded_volume_timestamp": 0.025,
+        "volume_fading": True,
+        "volume_fading_interval": 0.025,
         "seek_step": 5,
-        "vlc_options": "--audio-resampler=none --no-video"
+        "player_options": {
+            "video": False,
+        },
     },
     "teamtalk": {
         "hostname": "localhost",

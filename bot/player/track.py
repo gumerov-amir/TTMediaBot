@@ -1,12 +1,15 @@
+from bot.player.enums import TrackType
+
 class Track:
-    def __init__(self, service=None, url=None, name=None, format=None, extra_info=None, is_live=False, from_url=False):
+    def __init__(self, service=None, url=None, name=None, format=None, extra_info=None, type=TrackType.Default):
         self.service = service
         self.url = url
         self.name = name
         self.format = format
         self.extra_info = extra_info
-        self.is_live = is_live
-        self.from_url = from_url
+        self.type = type
+        if service:
+            self.type = TrackType.Dynamic
         self._is_fetched = False
 
     def _fetch_stream_data(self):
@@ -16,7 +19,7 @@ class Track:
         self.url = track.url
         self.name = track.name
         self.format = track.format
-        self.is_live = track.is_live
+        self.type = track.type
         self._is_fetched = True
 
     @property
@@ -48,6 +51,3 @@ class Track:
             return True
         else:
             return False
-
-    def __repr__(self):
-        return '{name} {url} {format} {dynamic}'.format(name=self.name, url=self.url, format=self.format, dynamic=bool(self.service))

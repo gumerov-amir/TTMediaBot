@@ -37,16 +37,23 @@ class TeamTalkThread(Thread):
             msg = self.ttclient.tt.getMessage()
             if msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_NONE:
                 continue
+            elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_ERROR:
+                self.ttclient.errors_queue.put(self.ttclient.get_error(msg.clienterrormsg.nErrorNo, msg.nSource))
             elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG and msg.textmessage.nMsgType == 1:
                 self.ttclient.message_queue.put(self.ttclient.get_message(msg.textmessage))
-            elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_NEW and _str(msg.remotefile.szUsername) == self.ttclient.config["username"] and msg.remotefile.nChannelID == self.ttclient.get_my_channel_id():
+            elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_NEW and _str(msg.remotefile.szUsername) == self.ttclient.config["username"] and msg.remotefile.nChannelID == self.ttclient.channel.id:
                 self.ttclient.uploaded_files_queue.put(self.ttclient.get_file(msg.remotefile))
             elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_MYSELF_KICKED:
                 logging.warning('Kicked')
                 self.ttclient.connect(reconnect=True)
             elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CON_LOST:
                 logging.warning('Server lost')
-                self.ttclient.connect(reconnect=True)
+                print("ah")
+                try:
+                    self.ttclient.connect(reconnect=True)
+                except Exception as e:
+                    logging.fatal(e)
+                print("bh")
             elif msg.nClientEvent in self.event_names and self.ttclient.load_event_handlers:
                 self.run_event_handler(msg)
 

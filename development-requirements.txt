@@ -10,7 +10,6 @@ flake8-import-order
 flake8-quotes
 patool
 portalocker
-python-vlc
 requests
 vk-api
 youtube-dl
