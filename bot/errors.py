@@ -1,3 +1,15 @@
+class ParseCommandError(Exception):
+    pass
+
+
+class AccessDeniedError(Exception):
+    pass
+
+
+class UnknownCommandError(Exception):
+    pass
+
+
 class InvalidArgumentError(Exception):
     pass
 

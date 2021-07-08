@@ -2,7 +2,6 @@ beautifulsoup4
 click
 patool
 portalocker
-python-vlc
 requests
 vk-api
 youtube-dl

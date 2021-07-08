@@ -14,7 +14,7 @@ class BlockCommandCommand(AdminCommand):
 
     def __call__(self, arg, user):
         arg = arg.lower()
-        if len(arg) > 1 and not arg[1::] in self.command_processor.commands_dict:
+        if len(arg) >= 1 and not arg[1::] in self.command_processor.commands_dict:
             return _("Unknown user command")
         if not arg:
             return ", ".join(self.command_processor.blocked_commands) if self.command_processor.blocked_commands else _("List is empty")
@@ -82,18 +82,53 @@ class ClearCacheCommand(AdminCommand):
 
     def __call__(self, arg, user):
         if not arg:
-            self.cache.history.clear()
+            self.cache.recents.clear()
             self.cache.favorites.clear()
             self.cache.save()
             return _("Cache cleared")
         elif arg == "r":
-            self.cache.history.clear()
+            self.cache.recents.clear()
             self.cache.save()
-            return _("History cleared")
+            return _("Recents cleared")
         elif arg == "f":
             self.cache.favorites.clear()
             self.cache.save()
             return _("Favorites cleared")
+
+
+class TaskSchedulerCommand(AdminCommand):
+    @property
+    def help(self):
+        return _("Sets task on time")
+
+    def __call__(self, arg, user):
+        if arg[0] == "+":
+            self._add(arg[1::])
+
+    def _add(self, arg):
+        args = arg.split("|")
+        timestamp = self._get_timestamp(args[0])
+        task = []
+        for arg in args[1::]:
+            try:
+                command, arg = self.parse_command(message.text)
+                if self.check_access(message.user, command):
+                    command = self.get_command(command, message.user)
+                    task.append((command, arg))
+            except errors.AccessDeniedError as e:
+                return e
+            except (errors.ParseCommandError, errors.UnknownCommandError):
+                return _("Unknown command. Send \"h\" for help.")
+            except errors.InvalidArgumentError:
+                return self.help(command, message.user)
+        if timestamp in self.module_manager.task_scheduler.tasks:
+            self.module_manager.task_scheduler[timestamp].append(task)
+        else:
+            self.module_manager.task_scheduler.tasks[timestamp] = [task,]
+
+
+    def _get_timestamp(self, t):
+        return int(datetime.combine(datetime.today(), datetime.strptime(t, self.config["general"]["time_format"]).time()).timestamp())
 
 
 class VoiceTransmissionCommand(AdminCommand):

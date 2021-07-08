@@ -1,5 +1,6 @@
 from bot.commands.command import Command
-from bot.player.enums import Mode, State
+from bot.player.enums import Mode, State, TrackType
+from bot.TeamTalk.structs import UserRight
 from bot import errors, vars
 
 
@@ -169,7 +170,7 @@ class ModeCommand(Command):
         return _('MODE Sets the playback mode. If no mode is specified, the current mode and the list of modes are displayed')
 
     def __call__(self, arg, user):
-        mode_help = 'current_ mode: {current_mode}\n{modes}'.format(current_mode=self.mode_names[self.player.mode], modes='\n'.join(['{value} {name}'.format(name=self.mode_names[i], value=i.value) for i in Mode.__members__.values()]))
+        mode_help = _("Current_ mode: {current_mode}\n{modes}").format(current_mode=self.mode_names[self.player.mode], modes='\n'.join(['{value} {name}'.format(name=self.mode_names[i], value=i.value) for i in Mode.__members__.values()]))
         if arg:
             try:
                 mode = Mode(arg.lower())
@@ -227,6 +228,25 @@ class SelectTrackCommand(Command):
                 return _('Playing {} {}').format(self.player.track_index + 1, self.player.track.name)
             else:
                 return _('Nothing is currently playing')
+
+
+
+class SpeedCommand(Command):
+    @property
+    def help(self):
+        return _("returns current rate, if argument is not given, sets rate in float type bitween 0.25 and 4.0, if argument is given")
+
+    def __call__(self, arg, user):
+        if not arg:
+            return _("Current rate: {}").format(str(self.player.get_speed()))
+        else:
+            try:
+                if 0.25 <= float(arg) <= 4.0:
+                    self.player.set_speed(float(arg))
+                else:
+                    raise errors.InvalidArgumentError()
+            except ValueError:
+                raise errors.InvalidArgumentError()
 
 
 class FavoritesCommand(Command):
@@ -315,7 +335,7 @@ class GetLinkCommand(Command):
             return _('Nothing is currently playing')
 
 
-class HistoryCommand(Command):
+class RecentsCommand(Command):
     @property
     def help(self):
         return _('Shows history of playing (64 last tracks)')
@@ -323,14 +343,14 @@ class HistoryCommand(Command):
     def __call__(self, arg, user):
         if arg:
             try:
-                self.player.play(list(reversed(list(self.cache.history))), start_track_index=int(arg) - 1)
+                self.player.play(list(reversed(list(self.cache.recents))), start_track_index=int(arg) - 1)
             except ValueError:
                 return _('Must be integer')
             except IndexError:
                 return _('Out of list')
         else:
             track_names = []
-            for number, track in enumerate(reversed(self.cache.history)):
+            for number, track in enumerate(reversed(self.cache.recents)):
                 if track.name:
                     track_names.append(f'{number + 1}: {track.name}')
                 else:
@@ -343,10 +363,12 @@ class DownloadCommand(Command):
         return _("Downloads the track being played and uploads it to the channel")
 
     def __call__(self, arg, user):
+        if not (self.ttclient.user.user_account.rights & UserRight.UploadFiles == UserRight.UploadFiles):
+            raise PermissionError(_("Cannot upload file to channel"))
         if self.player.state != State.Stopped:
             track = self.player.track
-            if track.url and not (track.from_url or track.is_live):
-                self.module_manager.downloader(self.player.track)
+            if track.url and (track.type == TrackType.Default or track.type == TrackType.Local):
+                self.module_manager.downloader(self.player.track, user)
                 return _("Downloading...")
             else:
                 return _('Live streams cannot be downloaded')
