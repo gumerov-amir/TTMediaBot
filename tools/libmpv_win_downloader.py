@@ -9,9 +9,9 @@ from urllib import request
 import bs4
 import patoolib
 
-cd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 url = "https://sourceforge.net/projects/mpv-player-windows/files/libmpv/"
+
+cd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def download():
     r = request.urlopen(url)
@@ -21,7 +21,7 @@ def download():
         download_url = trs[2].a.get("href")
     else:
         download_url = trs[3].a.get("href")
-    request.urlretrieve(download_url, "libmpv.7z")
+    request.urlretrieve(download_url, os.path.join(cd, "libmpv.7z"))
 
 def extract():
     try:
@@ -44,7 +44,7 @@ def clean():
 
 def install():
     print('Installing mpv components')
-    print('Downloading last lib version')
+    print('Downloading latest library version')
     download()
     print('Downloaded. extracting')
     extract()
@@ -56,4 +56,4 @@ def install():
     print('Installed')
 
 if __name__ == "__main__":
-    main()
+    install()
