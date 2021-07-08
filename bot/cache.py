@@ -12,7 +12,7 @@ class Cache:
         try:
             with open(self.file_name, 'rb') as f:
                 self.data = pickle.load(f)
-                if 'recents' and 'favorites' not in self.data:
+                if 'recents' not in self.data or 'favorites' not in self.data:
                     raise KeyError()
         except (FileNotFoundError, KeyError):
             self.data = {'recents': deque(maxlen=vars.recents_max_lenth), 'favorites':  {}}
