@@ -5,7 +5,7 @@ A bot for music streaming to TeamTalk Servers.
 ### Requirements
 * To use the bot, you need to install Python on your computer;
 * The bot requires the TeamTalk SDK component to be downloaded using the integrated tool from the command line. In order to download and extract the mentioned component, on Linux, you need to install p7zip or p7zip-full, or if you want to run the bot on Windows, 7Zip must be installed;
-* If you are going to use Linux as your main system for a bot, you will need pulseaudio and libmpv  to route and play audio, but if you're planing to run a bot on Windows, PulseAudio is not available, so you will need a virtual audio cable driver, such as VBCable and of course, the mpv player library must also be installed. on Windows this library can be installed using an integrated tool. On Debian-based systems the required package is libmpv1.
+* If you are going to use Linux as your main system for a bot, you will need pulseaudio and libmpv  to route and play audio, but if you re using Windows, PulseAudio is not available, so you will need a virtual audio cable driver, such as VBCable and of course, the mpv player library must also be installed. on Windows this library can be installed using an integrated tool. On Debian-based systems the required package is libmpv1.
 ### Installation
 * Download TTMediaBot;
 * install all python requirements from requirements.txt, using the "pip3 install -r requirements.txt" or just "pip install -r requirements.txt" command, without quotes;;
@@ -20,26 +20,26 @@ A bot for music streaming to TeamTalk Servers.
 * On Linux run ./TTMediaBot.sh;
 * On Windows run python TTMediaBot.py directly.
 ### Running in Docker
-You can also run a bot in Docker container.
-First of all, You should build an image from Dockerfile:
+You can also run a bot in a Docker container.
+First of all, You should build an image from the provided Dockerfile:
 ```sh
 docker build -t ttmediabot .
 ```
-Note: first run could take some time.
+Note: The first run could take some time.
 
-Then you can run a Docker container with the following command:
+Then you can run the Docker container with the following command:
 ```sh
 docker run --rm --name ttmb_1 -dv <path/to/data/directory>:/home/ttbot/data ttmediabot
 ```
-<path/to/data/directory> here means a directory where config.json file will be stored. It should not contain any other non-related data.
-All cache and logs will be stored in the specified directory.
+<path/to/data/directory> here means a directory where config.json file will be stored. It should not contain any other unrelated data.
+The cache and  log files will be stored in the specified directory.
 
 ## Startup options
-* --devices - Shows list of all available input and output audio devices;
-* -c PATH - Sets path to config file.
+* --devices - Shows the list of all available input and output audio devices;
+* -c PATH - Sets the path to the configuration file.
 
 ## Config file options
-* language - Sets bot interface language. Warning! to select some language you need appropriate language folder inside "locale" folder;
+* language - Sets the bot's interface language. Warning! to select a language you need an appropriate language folder inside the "locale" folder;
 * sound devices - Here you have to enter audio device numbers. Devices should be connected to each other (like Virtual audio cable or pulseaudio);
 * player - This section sets the configuration for the player such as default volume, maximum volume, etc;
 * teamtalk - here are main options for bot to connect and login to your TeamTalk server;

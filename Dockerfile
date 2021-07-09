@@ -1,5 +1,5 @@
 FROM debian:bullseye-slim
-RUN apt-get update && apt-get upgrade -y && apt-get install -y pulseaudio libmpv1 p7zip python3 python3-pip python3-setuptools gettext --no-install-recommends && apt autoclean && apt clean && rm -rf /var/lib/apt/list
+RUN apt update && apt upgrade -y && apt install -y pulseaudio libmpv1 p7zip python3 python3-pip python3-setuptools gettext --no-install-recommends && apt autoclean && apt clean && rm -rf /var/lib/apt/list
 RUN useradd -ms /bin/bash ttbot
 USER ttbot
 WORKDIR /home/ttbot
