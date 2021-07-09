@@ -7,7 +7,7 @@ from bot import errors, vars
 class HelpCommand(Command):
     @property
     def help(self):
-        return _('Shows help for commands')
+        return _('Shows command help')
 
     def __call__(self, arg, user):
         return self.command_processor.help(arg, user)
@@ -16,7 +16,7 @@ class HelpCommand(Command):
 class AboutCommand(Command):
     @property
     def help(self):
-        return _('Shows information about this bot')
+        return _('Shows information about the bot')
 
     def __call__(self, arg, user):
         return vars.about_text()
@@ -103,7 +103,7 @@ class VolumeCommand(Command):
 class SeekBackCommand(Command):
     @property
     def help(self):
-        return _('[STEP] Seeks the current track backward. The optional step is specified as a percentage from 1 to 100')
+        return _('[STEP] Seeks current track backward. the default step is {seek_step} seconds').format(seek_step=self.player.seek_step)
 
     def __call__(self, arg, user):
         if arg:
@@ -118,7 +118,7 @@ class SeekBackCommand(Command):
 class SeekForwardCommand(Command):
     @property
     def help(self):
-        return _('[STEP] Seeks the current track forward. The optional step is specified as a percentage from 1 to 100')
+        return _('[STEP] Seeks current track backward. the default step is {seek_step} seconds').format(seek_step=self.player.seek_step)
 
     def __call__(self, arg, user):
         if arg:
@@ -142,7 +142,7 @@ class NextTrackCommand(Command):
         except errors.NoNextTrackError:
             return _('No next track')
         except errors.NothingIsPlayingError:
-            return _('Nothing is currently playing')
+            return _('Nothing is playing')
 
 
 class PreviousTrackCommand(Command):
@@ -167,7 +167,7 @@ class ModeCommand(Command):
 
     @property
     def help(self):
-        return _('MODE Sets the playback mode. If no mode is specified, the current mode and the list of modes are displayed')
+        return _('MODE Sets the playback mode. If no mode is specified, the current mode and a list of modes are displayed')
 
     def __call__(self, arg, user):
         mode_help = _("Current_ mode: {current_mode}\n{modes}").format(current_mode=self.mode_names[self.player.mode], modes='\n'.join(['{value} {name}'.format(name=self.mode_names[i], value=i.value) for i in Mode.__members__.values()]))
@@ -220,31 +220,27 @@ class SelectTrackCommand(Command):
             except errors.IncorrectTrackIndexError:
                 return _('Out of list')
             except errors.NothingIsPlayingError:
-                return _('Nothing is currently playing')
+                return _('Nothing is playing')
             except ValueError:
                 raise errors.InvalidArgumentError
         else:
             if self.player.state != State.Stopped:
                 return _('Playing {} {}').format(self.player.track_index + 1, self.player.track.name)
             else:
-                return _('Nothing is currently playing')
-
+                return _('Nothing is playing')
 
 
 class SpeedCommand(Command):
     @property
     def help(self):
-        return _("returns current rate, if argument is not given, sets rate in float type bitween 0.25 and 4.0, if argument is given")
+        return _("SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows current speed")
 
     def __call__(self, arg, user):
         if not arg:
             return _("Current rate: {}").format(str(self.player.get_speed()))
         else:
             try:
-                if 0.25 <= float(arg) <= 4.0:
-                    self.player.set_speed(float(arg))
-                else:
-                    raise errors.InvalidArgumentError()
+                self.player.set_speed(float(arg))
             except ValueError:
                 raise errors.InvalidArgumentError()
 
@@ -252,11 +248,11 @@ class SpeedCommand(Command):
 class FavoritesCommand(Command):
     @property
     def help(self):
-        return _('Shows a list of favorite tracks. "f +" adds current track to the list. "f -" removes track requested from favorite list. If a number is specified, plays a track available for that number from the list')
+        return _('+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - removes a track requested from favorites. If a number is specified after +/-, ads/removes a track with that number')
 
     def __call__(self, arg, user):
         if user.username == '':
-            return _('Sorry, guest users can not use this command')
+            return _('This comand is not available for guest users')
         if arg:
             if arg[0] == '+':
                 return self._add(user)
@@ -316,7 +312,7 @@ class FavoritesCommand(Command):
         except IndexError:
             return _('Out of list')
         except KeyError:
-            return _('List is empty')
+            return _('The list is is empty')
 
 
 class GetLinkCommand(Command):
@@ -332,20 +328,20 @@ class GetLinkCommand(Command):
             else:
                 return _('URL is not available')
         else:
-            return _('Nothing is currently playing')
+            return _('Nothing is playing')
 
 
 class RecentsCommand(Command):
     @property
     def help(self):
-        return _('Shows history of playing (64 last tracks)')
+        return _('NUMBER Plays a track with  the given number from a list of recent tracks. Without a number shows recent tracks')
 
     def __call__(self, arg, user):
         if arg:
             try:
                 self.player.play(list(reversed(list(self.cache.recents))), start_track_index=int(arg) - 1)
             except ValueError:
-                return _('Must be integer')
+                raise errors.InvalidArgumentError()
             except IndexError:
                 return _('Out of list')
         else:
@@ -355,12 +351,13 @@ class RecentsCommand(Command):
                     track_names.append(f'{number + 1}: {track.name}')
                 else:
                     track_names.append(f'{number + 1}: {track.url}')
-            return '\n'.join(track_names) if track_names else _('List is empty')
+            return '\n'.join(track_names) if track_names else _('The list is empty')
+
 
 class DownloadCommand(Command):
     @property
     def help(self):
-        return _("Downloads the track being played and uploads it to the channel")
+        return _("Downloads the current track and uploads it to the channel")
 
     def __call__(self, arg, user):
         if not (self.ttclient.user.user_account.rights & UserRight.UploadFiles == UserRight.UploadFiles):
@@ -373,4 +370,4 @@ class DownloadCommand(Command):
             else:
                 return _('Live streams cannot be downloaded')
         else:
-            return _('Nothing is currently playing')
+            return _('Nothing is playing')

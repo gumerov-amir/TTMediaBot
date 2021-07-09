@@ -27,7 +27,7 @@ genders = {'m': 0, 'f': 256, 'n': 4096}
 
 def _str(data):
     if isinstance(data, str):
-        if sys.platform != 'win32':
+        if os.supports_bytes_environ:
             return bytes(data, 'utf-8')
         else:
             return data

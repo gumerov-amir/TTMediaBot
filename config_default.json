@@ -20,7 +20,8 @@
         "volume_fading_interval": 0.025,
         "seek_step": 5,
         "player_options": {
-           "video": false
+           "video": false,
+           "ytdl": false
        }
     },
     "teamtalk": {

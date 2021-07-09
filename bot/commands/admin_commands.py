@@ -10,7 +10,7 @@ from bot import errors, translator, vars
 class BlockCommandCommand(AdminCommand):
     @property
     def help(self):
-            return _("Blocks or unblocks commands.\nbc +command adds command in blocklist.\nbc -command removes command from blocklist.")
+            return _("+/-COMMAND Blocks or unblocks commands. +COMMAND adds command to the blocklist. -COMMAND removes from it. Without a command shows the blocklist")
 
     def __call__(self, arg, user):
         arg = arg.lower()
@@ -37,7 +37,7 @@ class BlockCommandCommand(AdminCommand):
 class ChangeGenderCommand(AdminCommand):
     @property
     def help(self):
-        return _('Changes the gender of the bot.\ncg n changes to neutral.\ncg m changes to male.\ncg f changes to female.')
+        return _("GENDER Changes bot's gender. n neutral, m male, f female")
 
     def __call__(self, arg, user):
         try:
@@ -50,7 +50,7 @@ class ChangeGenderCommand(AdminCommand):
 class ChangeLanguageCommand(AdminCommand):
     @property
     def help(self):
-        return _('Changes the bot language')
+        return _("LANGUAGE Changes bot's language")
 
     def __call__(self, arg, user):
         if arg:
@@ -58,17 +58,17 @@ class ChangeLanguageCommand(AdminCommand):
                 translator.install_locale(arg, fallback=arg == 'en')
                 self.config['general']['language'] = arg
                 self.ttclient.change_status_text('')
-                return _('Language has been changed')
+                return _('The language has been changed')
             except:
-                return _('Incorrect locale')
+                return _('Incorrect language')
         else:
-            return _('Current locale is {current_locale}. Available locales: {available_locales}').format(current_locale=self.config['general']['language'], available_locales=', '.join(translator.get_locales()))
+            return _('Current language: {current_language}. Available languages: {available_languages}').format(current_language=self.config['general']['language'], available_languages=', '.join(translator.get_locales()))
 
 
 class ChangeNicknameCommand(AdminCommand):
     @property
     def help(self):
-        return _('NICKNAME Sets the bot\'s nickname')
+        return _('NICKNAME Changes bot\'s nickname')
 
     def __call__(self, arg, user):
         self.ttclient.change_nickname(arg)
@@ -78,7 +78,7 @@ class ChangeNicknameCommand(AdminCommand):
 class ClearCacheCommand(AdminCommand):
     @property
     def help(self):
-        return _("cc without arguments clears the entire cache.\ncc r cleares only recent tracks.\ncc f cleares only favorites.")
+        return _("r/f Clears bot's cache. r clears recents, f clears favorites, without an option clears the entire cache")
 
     def __call__(self, arg, user):
         if not arg:
@@ -99,7 +99,7 @@ class ClearCacheCommand(AdminCommand):
 class TaskSchedulerCommand(AdminCommand):
     @property
     def help(self):
-        return _("Sets task on time")
+        return _("Task scheduler")
 
     def __call__(self, arg, user):
         if arg[0] == "+":
@@ -163,7 +163,7 @@ class LockCommand(AdminCommand):
 class ChangeStatusCommand(AdminCommand):
     @property
     def help(self):
-        return _('Changes bot status')
+        return _("STATUS Changes bot's status")
 
 
     def __call__(self, arg, user):
@@ -185,7 +185,7 @@ class EventHandlingCommand(AdminCommand):
 class ChannelMessagesCommand(AdminCommand):
     @property
     def help(self):
-        return _("Enables or disables channel messages sent by the bot when requesting to play music, stop current music, and other events")
+        return _("Enables or disables sending of channel messages")
 
     def __call__(self, arg, user):
         self.command_processor.send_channel_messages = not self.command_processor.send_channel_messages
@@ -196,7 +196,7 @@ class ChannelMessagesCommand(AdminCommand):
 class SaveConfigCommand(AdminCommand):
     @property
     def help(self):
-        return _('Saves the configuration to a file')
+        return _("Saves bot's configuration")
 
     def __call__(self, arg, user):
         self.config.save()
@@ -205,7 +205,7 @@ class SaveConfigCommand(AdminCommand):
 class AdminUsersCommand(AdminCommand):
     @property
     def help(self):
-        return _('Shows a list of administrators.\nua +username adds this username in adminlist.\nua -username removes its username from adminlist.')
+        return _('+/-USERNAME Manages a list of administrators. +USERNAME adds a user. -USERNAME removes it. Without an option shows the list')
 
     def __call__(self, arg, user):
         admin_users = self.command_processor.config['teamtalk']['users']['admins']
@@ -218,7 +218,7 @@ class AdminUsersCommand(AdminCommand):
                     del admin_users[admin_users.index(arg[1::])]
                     return _('Deleted')
                 except ValueError:
-                    return _('This user is not an admin')
+                    return _('This user is not in the admin list')
         else:
             admin_users = admin_users.copy()
             if len(admin_users) > 0:
@@ -226,13 +226,13 @@ class AdminUsersCommand(AdminCommand):
                     admin_users[admin_users.index('')] = '<Anonymous>'
                 return ', '.join(self.command_processor.config['teamtalk']['users']['admins'])
             else:
-                return _('List is empty')
+                return _('The list is empty')
 
 
 class BannedUsersCommand(AdminCommand):
     @property
     def help(self):
-        return _('Shows a list of banned users.\nub +username add this user to banlist.\nub -username removes this user from banlist.')
+        return _('+/-USERNAME Manages a list of banned users. +USERNAME adds a user. -USERNAME removes it. Without an option shows the list')
 
     def __call__(self, arg, user):
         banned_users = self.command_processor.config['teamtalk']['users']['banned_users']
@@ -253,7 +253,7 @@ class BannedUsersCommand(AdminCommand):
                     banned_users[banned_users.index('')] = '<Anonymous>'
                 return ', '.join(banned_users)
             else:
-                return _('List is empty')
+                return _('The list is empty')
 
 
 
