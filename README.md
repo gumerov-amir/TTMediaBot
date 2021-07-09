@@ -29,7 +29,7 @@ Note: first run could take some time.
 
 Then you can run a Docker container with the following command:
 ```sh
-docker run -rm --name ttmb_1 -dv <path/to/data/directory>:/home/ttbot/data ttmediabot
+docker run --rm --name ttmb_1 -dv <path/to/data/directory>:/home/ttbot/data ttmediabot
 ```
 <path/to/data/directory> here means a directory where config.json file will be stored. It should not contain any other non-related data.
 All cache and logs will be stored in the specified directory.
