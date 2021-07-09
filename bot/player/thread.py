@@ -7,7 +7,7 @@ import mpv
 from bot.player.enums import Mode, State, TrackType
 from bot import errors, vars
 
-
+import logging
 class PlayerThread(Thread):
     def __init__(self, player):
         Thread.__init__(self, daemon=True)
@@ -18,7 +18,7 @@ class PlayerThread(Thread):
         self._close = False
         while not self._close:
             if self.player.state == State.Playing and self.player._player.idle_active:
-                if self.player.mode == Mode.SingleTrack:
+                if self.player.mode == Mode.SingleTrack or self.player.track.type == TrackType.Direct:
                     self.player.stop()
                 elif self.player.mode == Mode.RepeatTrack:
                     self.player.play_by_index(self.player.track_index)

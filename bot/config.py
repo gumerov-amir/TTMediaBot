@@ -28,6 +28,7 @@ default_config = {
         "seek_step": 5,
         "player_options": {
             "video": False,
+            "ytdl": False
         },
     },
     "teamtalk": {

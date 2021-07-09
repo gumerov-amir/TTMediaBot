@@ -13,23 +13,11 @@ from bot.player.thread import PlayerThread
 from bot.sound_devices import SoundDevice, SoundDeviceType
 import ctypes
 
-if sys.platform == 'win32':
-    from ctypes import windll
-    windll.ole32.CoInitializeEx(None, 0)
-
-if sys.platform == 'win32':
-    vsnprintf = ctypes.cdll.msvcrt.vsnprintf
-else:
-    libc = ctypes.cdll.LoadLibrary(ctypes.util.find_library('c'))
-    vsnprintf = libc.vsnprintf
-
-vsnprintf.restype = ctypes.c_int
-vsnprintf.argtypes = (ctypes.c_char_p, ctypes.c_size_t, ctypes.c_char_p, ctypes.c_void_p)
-
 class Player:
     def __init__(self, config, cache):
         self.config = config
-        self._player = mpv.MPV(**self.config["player_options"], log_handler=self.log_handler, loglevel=None)
+        self._player = mpv.MPV(**self.config["player_options"], log_handler=self.log_handler)
+        self._log_level = 'PLAYER_DEBUG'
         self.volume = self.config['default_volume']
         self.max_volume = self.config['max_volume']
         self.volume_fading = self.config['volume_fading']
@@ -84,16 +72,18 @@ class Player:
         self.track = Track()
         self.track_index = -1
 
-    def _play(self, arg, save_to_history=True):
-        self._player.pause = False
-        if save_to_history:
+    def _play(self, arg, save_to_recents=True):
+        if save_to_recents:
             try:
                 if self.cache.recents[-1] != self.track_list[self.track_index]:
                     self.cache.recents.append(self.track_list[self.track_index])
             except:
                 self.cache.recents.append(self.track_list[self.track_index])
             self.cache.save()
+        self._player.pause = False
         self._player.play(arg)
+        while self._player.playlist_pos == -1 or self._player.idle_active:
+            time.sleep(vars.loop_timeout)
 
     def next(self):
         track_index = self.track_index
@@ -155,27 +145,41 @@ class Player:
         return self._player.speed
 
     def set_speed(self, arg):
+        if arg < 0.25 or arg > 4:
+            raise ValueError()
         self._player.speed = arg
 
-    def seek_back(self, time_step=None):
-        time_step = time_step if time_step else self.seek_step
-        self._player.seek(-time_step)
+    def seek_back(self, step=None):
+        step = step if step else self.seek_step
+        if step <= 0:
+            raise ValueError()
+        if self.state == State.Stopped:
+            raise errors.NothingIsPlayingError()
+        self._player.seek(-step, reference='relative')
 
-    def seek_forward(self, time_step=None):
-        time_step = time_step if time_step else self.seek_step
-        self._player.seek(time_step)
+    def seek_forward(self, step=None):
+        step = step if step else self.seek_step
+        if step <= 0:
+            raise ValueError()
+        if self.state == State.Stopped:
+            raise errors.NothingIsPlayingError()
+        self._player.seek(step, reference='relative')
+
+    def get_duration(self):
+        if self.state == State.Stopped:
+            raise errors.NothingIsPlayingError()
+        return self._player.duration
 
     def get_position(self):
-        if self.state != State.Stopped:
-            return self._vlc_player.get_position() * 100
-        else:
+        if self.state == State.Stopped:
             raise errors.NothingIsPlayingError()
+        pos = self._player.time_pos
+        return self._player.time_pos
 
     def set_position(self, arg):
-        if arg >= 0 and arg <= 100:
-            self._vlc_player.set_position(arg)
-        else:
+        if arg < 0:
             raise errors.IncorrectPositionError()
+        self._player.seek(arg, reference='absolute')
 
     def get_output_devices(self):
         devices = []
@@ -187,4 +191,5 @@ class Player:
         self._player.audio_device = id
 
     def log_handler(self, level, component, message):
-        logging.log(5, "{}: {}: {}".format(level, component, message))
+        level = logging.getLevelName(self._log_level)
+        logging.log(level, "{}: {}: {}".format(level, component, message))
