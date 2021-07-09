@@ -19,6 +19,20 @@ A bot for music streaming to TeamTalk Servers.
 ### Usage
 * On Linux run ./TTMediaBot.sh;
 * On Windows run python TTMediaBot.py directly.
+### Running in Docker
+You can also run a bot in Docker container.
+First of all, You should build an image from Dockerfile:
+```sh
+docker build -t ttmediabot .
+```
+Note: first run could take some time.
+
+Then you can run a Docker container with the following command:
+```sh
+docker run -rm --name ttmb_1 -dv <path/to/data/directory>:/home/ttbot/data ttmediabot
+```
+<path/to/data/directory> here means a directory where config.json file will be stored. It should not contain any other non-related data.
+All cache and logs will be stored in the specified directory.
 
 ## Startup options
 * --devices - Shows list of all available input and output audio devices;
