@@ -11,7 +11,6 @@ from bot.player.enums import Mode, State
 from bot.player.track import Track
 from bot.player.thread import PlayerThread
 from bot.sound_devices import SoundDevice, SoundDeviceType
-import ctypes
 
 class Player:
     def __init__(self, config, cache):
