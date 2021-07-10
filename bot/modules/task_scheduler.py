@@ -5,10 +5,9 @@ from bot.TeamTalk import User
 from bot import vars
 
 
-
 class TaskScheduler(threading.Thread):
     def __init__(self):
-        super().__init__()
+        super().__init__(daemon=True)
         self.name = "SchedulerThread"
         self.tasks = {}
         #self.user = User(0, "", "", 0, 0, "", is_admin=True, is_banned=False)

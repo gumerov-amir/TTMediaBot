@@ -1,15 +1,17 @@
 import logging
+import queue
 import sys
+import time
 
-from bot import cache, commands, config, connectors, logger, modules, player, services, sound_devices, TeamTalk, translator
+from bot import cache, commands, config, connectors, logger, modules, player, services, sound_devices, TeamTalk, translator, vars
+
 
 class Bot:
     def __init__(self, config_file_name, cache_file_name, log_file_name):
         try:
             self.config = config.Config(config_file_name)
         except PermissionError:
-            print('The config file is already used by another instance of the bot.')
-            sys.exit(1)
+            sys.exit('The configuration file is already used by another instance of the bot.')
         translator.install_locale(self.config['general']['language'])
         try:
             if cache_file_name:
@@ -17,8 +19,7 @@ class Bot:
             else:
                 self.cache = cache.Cache(self.config["general"]["cache_file_name"])
         except PermissionError:
-            print(_('The cache file is already used by another instance of the bot.'))
-            sys.exit(1)
+            sys.exit(_('The cache file is already used by another instance of the bot.'))
         self.log_file_name = log_file_name
         self.player = player.Player(self.config['player'], self.cache)
         self.ttclient = TeamTalk.TeamTalk(self, self.config)
@@ -46,12 +47,19 @@ class Bot:
         logging.info('Started')
         self._close = False
         while not self._close:
-            message = self.ttclient.message_queue.get()
-            logging.info("New message {text} from {username}".format(text=message.text, username=message.user.username))
-            reply_text = self.command_processor(message)
-            logging.info('replied {text}'.format(text=reply_text))
-            if reply_text:
-                self.ttclient.send_message(reply_text, message.user)
+            try:
+                message = self.ttclient.message_queue.get_nowait()
+                logging.info("New message {text} from {username}".format(text=message.text, username=message.user.username))
+                reply_text = self.command_processor(message)
+                logging.info('replied {text}'.format(text=reply_text))
+                if reply_text:
+                    self.ttclient.send_message(reply_text, message.user)
+            except queue.Empty:
+                pass
+            except KeyboardInterrupt:
+                self.close()
+            time.sleep(vars.loop_timeout)
+
 
     def close(self):
         logging.debug('Closing bot')

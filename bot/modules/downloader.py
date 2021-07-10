@@ -18,7 +18,7 @@ class Downloader:
         self.ttclient = ttclient
 
     def __call__(self, track, user):
-        t = threading.Thread(target=self.run, args=(track, user,))
+        t = threading.Thread(target=self.run, daemon=True, args=(track, user,))
         t.start()
 
     def run(self,  track, user):
