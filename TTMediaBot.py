@@ -1,6 +1,7 @@
 import click
 
 from bot import Bot
+from bot.config import save_default_file
 
 
 @click.command()
@@ -10,12 +11,12 @@ from bot import Bot
 @click.option("--devices", help='Show available devices and exit', is_flag=True)
 @click.option("--default-config", help="Save default config to \"config_default.json\" and exit", is_flag=True)
 def main(config, cache, log, devices, default_config):
-    if devices or default_config:
+    if devices:
         bot = Bot(None, None, None)
-        if devices:
-            echo_sound_devices(bot.sound_device_manager)
-        else:
-            bot.config.save_default_file()
+        echo_sound_devices(bot.sound_device_manager)
+    elif default_config:
+        save_default_file()
+        print("Successfully dumped to config_default.json")
     else:
         bot = Bot(config, cache, log)
         bot.initialize()
