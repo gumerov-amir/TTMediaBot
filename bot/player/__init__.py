@@ -206,6 +206,7 @@ class Player:
     def log_handler(self, level, component, message):
         level = logging.getLevelName(self._log_level)
         logging.log(level, "{}: {}: {}".format(level, component, message))
+
     def _parse_metadata(self, metadata):
         stream_names = ["icy-name"]
         stream_name = None
