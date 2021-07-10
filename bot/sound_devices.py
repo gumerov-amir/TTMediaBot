@@ -29,9 +29,13 @@ class SoundDeviceManager:
         try:
             self.player.set_output_device(self.output_devices[self.output_device_index].id)
         except IndexError:
-            sys.exit("Incorrect output device index: " + str(self.output_device_index))
+            error = "Incorrect output device index: " + str(self.output_device_index)
+            logging.error(error)
+            sys.exit(error)
         try:
             self.ttclient.set_input_device(self.input_devices[self.input_device_index].id)
         except IndexError:
-            sys.exit("Incorrect input device index: " + str(self.input_device_index))
+            error = "Incorrect input device index: " + str(self.input_device_index)
+            logging.error(error)
+            sys.exit(error)
         logging.debug('Sound devices initialized')

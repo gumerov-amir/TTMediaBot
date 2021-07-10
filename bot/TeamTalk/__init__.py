@@ -116,15 +116,17 @@ class TeamTalk:
                     break
                 except errors.ConnectionError:
                     if not reconnect:
-                        logging.error("Cannot connect")
-                        sys.exit(1)
+                        error = "Cannot connect"
+                        logging.error(error)
+                        sys.exit(error)
                     else:
                         time.sleep(self.config['reconnection_timeout'])
                         connection_attempt += 1
                         self.tt.disconnect()
         if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED:
-            logging.error("ConnectionError")
-            sys.exit(1)
+            error = "Connection error"
+            logging.error(error)
+            sys.exit(error)
         if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED | ClientFlags.CLIENT_AUTHORIZED:
             login_attempt = 0
             while login_attempt != self.config['reconnection_attempts']:
@@ -134,14 +136,16 @@ class TeamTalk:
                     break
                 except errors.LoginError as e:
                     if not reconnect:
-                        logging.error("Cannot log in: {}".format(e))
-                        sys.exit(1)
+                        error = "Cannot log in: {}".format(e)
+                        logging.error(error)
+                        sys.exit(error)
                     else:
                         time.sleep(self.config['reconnection_timeout'])
                         login_attempt += 1
         if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED | ClientFlags.CLIENT_AUTHORIZED:
-            logging.error("LoginError")
-            sys.exit(1)
+            error = "Login error"
+            logging.error(error)
+            sys.exit(error)
         if self.tt.getMyChannelID() == 0:
             join_attempt = 0
             while join_attempt != self.config['reconnection_attempts']:
@@ -151,14 +155,16 @@ class TeamTalk:
                     break
                 except errors.JoinChannelError:
                     if not reconnect:
-                        logging.error("Cannot joined channel")
-                        sys.exit(1)
+                        error = "Cannot join channel"
+                        logging.error(error)
+                        sys.exit(error)
                     else:
                         time.sleep(self.config['reconnection_timeout'])
                         join_attempt += 1
         if self.tt.getMyChannelID() == 0:
-                logging.error("Cannot joined channel")
-                sys.exit(1)
+            error = "Cannot join channel"
+            logging.error(error)
+            sys.exit(error)
 
     def _connect(self):
         self.tt.connect(_str(self.config['hostname']), self.config['tcp_port'], self.config['udp_port'], self.config['encrypted'])
