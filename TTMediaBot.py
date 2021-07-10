@@ -15,7 +15,10 @@ def main(config, cache, log, devices):
     else:
         bot = Bot(config, cache, log)
         bot.initialize()
-        bot.run()
+        try:
+            bot.run()
+        except KeyboardInterrupt:
+            bot.close()
 
 
 def echo_sound_devices(sound_device_manager):

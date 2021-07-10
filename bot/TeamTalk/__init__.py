@@ -98,8 +98,9 @@ class TeamTalk:
 
     def close(self):
         logging.debug('Closing teamtalk')
-        self.tt.disconnect()
         self.teamtalk_thread.close()
+        self.tt.disconnect()
+        self.tt.closeTeamTalk()
         logging.debug('Teamtalk closed')
 
     def connect(self, reconnect=False):
