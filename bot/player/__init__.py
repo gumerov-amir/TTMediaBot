@@ -1,4 +1,5 @@
 from collections import deque
+import html
 import logging
 import time
 import random
@@ -7,9 +8,9 @@ import sys
 import mpv
 
 from bot import errors, vars
-from bot.player.enums import Mode, State
+from bot.player.enums import Mode, State, TrackType
 from bot.player.track import Track
-from bot.player.thread import PlayerThread
+#from bot.player.thread import PlayerThread
 from bot.sound_devices import SoundDevice, SoundDeviceType
 
 class Player:
@@ -28,20 +29,19 @@ class Player:
         self.state = State.Stopped
         self.mode = Mode.TrackList
         self.cache = cache
-        self.player_thread = PlayerThread(self)
 
     def initialize(self):
         logging.debug('Initializing player')
         logging.debug('Player initialized')
 
     def run(self):
-        logging.debug('Starting player thread')
-        self.player_thread.start()
-        logging.debug('Player thread started')
+        logging.debug('Registerring callbacks')
+        self.register_event_callback("end-file", self.on_end_file)
+        self.register_event_callback("metadata-update", self.on_metadata_update)
+        logging.debug('Callbacks registered')
 
     def close(self):
         logging.debug('Closing player thread')
-        self.player_thread.close()
         self._player.terminate()
         logging.debug('Player thread closed')
 
@@ -189,6 +189,51 @@ class Player:
     def set_output_device(self, id):
         self._player.audio_device = id
 
+    def register_event_callback(self, callback_name, callback_func):
+        self._player.event_callback(callback_name)(callback_func)
+
+
     def log_handler(self, level, component, message):
         level = logging.getLevelName(self._log_level)
         logging.log(level, "{}: {}: {}".format(level, component, message))
+    def _parse_metadata(self, metadata):
+        stream_names = ["icy-name"]
+        stream_name = None
+        title = None
+        artist = None
+        for i in metadata:
+            if i in stream_names:
+                stream_name = html.unescape(metadata[i])
+            if "title" in i:
+                title = html.unescape(metadata[i])
+            if "artist" in i:
+                artist = html.unescape(metadata[i])
+        chunks = []
+        chunks.append(artist) if artist else ...
+        chunks.append(title) if title else ...
+        chunks.append(stream_name) if stream_name else ...
+        return " - ".join(chunks)
+
+    def on_end_file(self, event):
+            if self.state == State.Playing and self._player.idle_active:
+                if self.mode == Mode.SingleTrack or self.track.type == TrackType.Direct:
+                    self.stop()
+                elif self.mode == Mode.RepeatTrack:
+                    self.play_by_index(self.track_index)
+                else:
+                    try:
+                        self.next()
+                    except errors.NoNextTrackError:
+                        self.stop()
+
+    def on_metadata_update(self, event):
+            if self.state == State.Playing and (self.track.type == TrackType.Direct or self.track.type == TrackType.Local):
+                metadata = self._player.metadata
+                try:
+                    new_name = self._parse_metadata(metadata)
+                    if not new_name:
+                        new_name = html.unescape(self._player.media_title)
+                except TypeError:
+                    new_name = html.unescape(self._player.media_title)
+                if self.track.name != new_name and new_name:
+                    self.track.name = new_name
