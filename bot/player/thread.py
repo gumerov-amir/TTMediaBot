@@ -7,9 +7,10 @@ import mpv
 from bot.player.enums import Mode, State, TrackType
 from bot import errors, vars
 
+
 class PlayerThread(Thread):
     def __init__(self, player):
-        Thread.__init__(self, daemon=True)
+        super().__init__(daemon=True)
         self.name = 'PlayerThread'
         self.player = player
 

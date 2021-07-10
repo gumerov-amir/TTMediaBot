@@ -81,16 +81,14 @@ class Config(dict):
                     try:
                         config_dict = json.load(f)
                     except json.decoder.JSONDecodeError as e:
-                        print("Syntax error in configuration file:", e)
-                        sys.exit(1)
+                        sys.exit("Syntax error in configuration file:" + e)
                 self.file_locker = portalocker.Lock(self.file_name, timeout=0, flags=portalocker.LOCK_EX|portalocker.LOCK_NB)
                 try:
                     self.file_locker.acquire()
                 except portalocker.exceptions.LockException:
                     raise PermissionError()
             else:
-                print("Incorrect config file path")
-                sys.exit(1)
+                sys.exit("Incorrect configuration file path")
         else:
             config_dict = {}
         super().__init__(self.fill(config_dict, default_config))
