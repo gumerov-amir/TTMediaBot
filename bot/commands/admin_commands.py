@@ -14,12 +14,12 @@ class BlockCommandCommand(AdminCommand):
 
     def __call__(self, arg, user):
         arg = arg.lower()
-        if len(arg) >= 1 and not arg[1::] in self.command_processor.commands_dict:
+        if len(arg) >= 1 and arg[1:] not in self.command_processor.commands_dict:
             return _("Unknown user command")
         if not arg:
             return ", ".join(self.command_processor.blocked_commands) if self.command_processor.blocked_commands else _("List is empty")
         if arg[0] == "+":
-            if not arg[1::] in self.command_processor.blocked_commands:
+            if arg[1::] not in self.command_processor.blocked_commands:
                 self.command_processor.blocked_commands.append(arg[1::])
                 return _("Added")
             else:
