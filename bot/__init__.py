@@ -33,10 +33,9 @@ class Bot:
         if self.config['logger']['log']:
             logger.initialize_logger(self.config['logger'], self.log_file_name)
         logging.debug('Initializing')
+        self.sound_device_manager.initialize()
         self.player.initialize()
         self.ttclient.initialize()
-        self.sound_device_manager.initialize()
-        self.service_manager.initialize()
         logging.debug('Initialized')
 
     def run(self):

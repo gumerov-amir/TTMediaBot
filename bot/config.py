@@ -81,7 +81,7 @@ class Config(dict):
                     try:
                         config_dict = json.load(f)
                     except json.decoder.JSONDecodeError as e:
-                        sys.exit("Syntax error in configuration file:" + e)
+                        sys.exit("Syntax error in configuration file: " + str(e))
                 self.file_locker = portalocker.Lock(self.file_name, timeout=0, flags=portalocker.LOCK_EX|portalocker.LOCK_NB)
                 try:
                     self.file_locker.acquire()
