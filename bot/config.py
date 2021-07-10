@@ -72,6 +72,12 @@ default_config = {
     }
 }
 
+
+def save_default_file():
+    with open(utils.get_abs_path("config_default.json"), "w") as f:
+        json.dump(default_config, f, indent=4, ensure_ascii=False)
+
+
 class Config(dict):
     def __init__(self, file_name):
         if file_name:
@@ -115,8 +121,3 @@ class Config(dict):
         with open(self.file_name, 'w', encoding='UTF-8') as f:
             json.dump(self, f, indent=4, ensure_ascii=False)
         self.file_locker.acquire()
-
-    @staticmethod
-    def save_default_file():
-        with open(utils.get_abs_path("config_default.json"), "w") as f:
-            json.dump(default_config, f, indent=4, ensure_ascii=False)
