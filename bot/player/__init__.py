@@ -10,8 +10,8 @@ import mpv
 from bot import errors, vars
 from bot.player.enums import Mode, State, TrackType
 from bot.player.track import Track
-#from bot.player.thread import PlayerThread
 from bot.sound_devices import SoundDevice, SoundDeviceType
+
 
 class Player:
     def __init__(self, config, cache):
@@ -35,15 +35,15 @@ class Player:
         logging.debug('Player initialized')
 
     def run(self):
-        logging.debug('Registerring callbacks')
+        logging.debug('Registering callbacks')
         self.register_event_callback("end-file", self.on_end_file)
         self.register_event_callback("metadata-update", self.on_metadata_update)
         logging.debug('Callbacks registered')
 
     def close(self):
-        logging.debug('Closing player thread')
+        logging.debug('Closing player')
         self._player.terminate()
-        logging.debug('Player thread closed')
+        logging.debug('Player closed')
 
     def play(self, tracks=None, start_track_index=None):
         if tracks != None:
@@ -81,8 +81,6 @@ class Player:
             self.cache.save()
         self._player.pause = False
         self._player.play(arg)
-        while self._player.playlist_pos == -1 or self._player.idle_active:
-            time.sleep(vars.loop_timeout)
 
     def next(self):
         track_index = self.track_index
@@ -172,7 +170,6 @@ class Player:
     def get_position(self):
         if self.state == State.Stopped:
             raise errors.NothingIsPlayingError()
-        pos = self._player.time_pos
         return self._player.time_pos
 
     def set_position(self, arg):
@@ -191,7 +188,6 @@ class Player:
 
     def register_event_callback(self, callback_name, callback_func):
         self._player.event_callback(callback_name)(callback_func)
-
 
     def log_handler(self, level, component, message):
         level = logging.getLevelName(self._log_level)
