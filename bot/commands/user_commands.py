@@ -174,8 +174,12 @@ class ModeCommand(Command):
         if arg:
             try:
                 mode = Mode(arg.lower())
+                if mode == Mode .Random:
+                    self.player.shuffle(True)
+                if self.player.mode == Mode.Random and mode != Mode.Random:
+                    self.player.shuffle(False)
                 self.player.mode = Mode(mode)
-                return 'Current mode: {mode}'.format(mode=self.mode_names[self.player.mode])
+                return _("Current mode: {mode}").format(mode=self.mode_names[self.player.mode])
             except ValueError:
                 return 'Incorrect mode\n' + mode_help
         else:

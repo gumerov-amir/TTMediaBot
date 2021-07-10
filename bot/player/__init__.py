@@ -49,8 +49,9 @@ class Player:
         if tracks != None:
             self.track_list = tracks
             if not start_track_index and self.mode == Mode.Random:
-                self.track = random.choice(self.track_list)
-                self.track_index = self.track_list.index(self.track)
+                self.shuffle(True)
+                self.track_index = self._index_list[0]
+                self.track = self.track_list[self.track_index]
             else:
                 self.track_index = start_track_index if start_track_index else 0
                 self.track = tracks[self.track_index]
@@ -86,7 +87,10 @@ class Player:
         track_index = self.track_index
         if len(self.track_list) > 0:
             if self.mode == Mode.Random:
-                track_index = random.randrange(0, len(self.track_list))
+                try:
+                    track_index = self._index_list[self._index_list.index(self.track_index) + 1]
+                except IndexError:
+                    track_index = 0
             else:
                 track_index += 1
         else:
@@ -103,7 +107,10 @@ class Player:
         track_index = self.track_index
         if len(self.track_list) > 0:
             if self.mode == Mode.Random:
-                track_index = random.randrange(0, len(self.track_list))
+                try:
+                    track_index = self._index_list[self._index_list.index(self.track_index) - 1]
+                except IndexError:
+                    track_index = len(self.track_list) - 1
             else:
                 track_index -= 1
         else:
@@ -185,6 +192,13 @@ class Player:
 
     def set_output_device(self, id):
         self._player.audio_device = id
+
+    def shuffle(self, enable):
+        if enable:
+            self._index_list = [i for i in range(0, len(self.track_list))]
+            random.shuffle(self._index_list)
+        else:
+            del self._index_list
 
     def register_event_callback(self, callback_name, callback_func):
         self._player.event_callback(callback_name)(callback_func)
