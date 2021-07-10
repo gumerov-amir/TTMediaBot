@@ -16,4 +16,9 @@ def clean_file_name(file_name):
     file_name = file_name.strip()
     return file_name
 
+def get_abs_path(file_name):
+    return os.path.join(vars.directory, file_name)
+
+
+
 

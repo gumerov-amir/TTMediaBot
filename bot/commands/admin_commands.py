@@ -15,7 +15,7 @@ class BlockCommandCommand(AdminCommand):
     def __call__(self, arg, user):
         arg = arg.lower()
         if len(arg) >= 1 and arg[1:] not in self.command_processor.commands_dict:
-            return _("Unknown user command")
+            raise errors.InvalidArgumentError()
         if not arg:
             return ", ".join(self.command_processor.blocked_commands) if self.command_processor.blocked_commands else _("List is empty")
         if arg[0] == "+":

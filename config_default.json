@@ -20,9 +20,9 @@
         "volume_fading_interval": 0.025,
         "seek_step": 5,
         "player_options": {
-           "video": false,
-           "ytdl": false
-       }
+            "video": false,
+            "ytdl": false
+        }
     },
     "teamtalk": {
         "hostname": "localhost",
@@ -41,7 +41,9 @@
         "reconnection_attempts": -1,
         "reconnection_timeout": 10,
         "users": {
-            "admins": ["admin"],
+            "admins": [
+                "admin"
+            ],
             "banned_users": []
         }
     },

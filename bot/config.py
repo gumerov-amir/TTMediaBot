@@ -8,9 +8,9 @@ from bot import utils
 default_config = {
     "general": {
         "language": "en",
+        "send_channel_messages": True,
         "cache_file_name": "TTMediaBotCache.dat",
         "blocked_commands": [],
-        "send_channel_messages": True,
         "delete_uploaded_files_after": 300,
         "time_format": r"%H:%M",
         "load_event_handlers": False,
@@ -46,7 +46,7 @@ default_config = {
         "license_name": "",
         "license_key": "",
         "reconnection_attempts": -1,
-        "reconnection_timeout": 0,
+        "reconnection_timeout": 10,
         "users": {
             "admins": ["admin"],
             "banned_users": []
@@ -115,3 +115,8 @@ class Config(dict):
         with open(self.file_name, 'w', encoding='UTF-8') as f:
             json.dump(self, f, indent=4, ensure_ascii=False)
         self.file_locker.acquire()
+
+    @staticmethod
+    def save_default_file():
+        with open(utils.get_abs_path("config_default.json"), "w") as f:
+            json.dump(default_config, f, indent=4, ensure_ascii=False)
