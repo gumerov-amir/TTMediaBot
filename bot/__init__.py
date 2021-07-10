@@ -56,8 +56,6 @@ class Bot:
                     self.ttclient.send_message(reply_text, message.user)
             except queue.Empty:
                 pass
-            except KeyboardInterrupt:
-                self.close()
             time.sleep(vars.loop_timeout)
 
 
@@ -69,4 +67,4 @@ class Bot:
         self.config.close()
         self.cache.close()
         self._close = True
-        logging.debug('Bot closed')
+        logging.info('Bot closed')
