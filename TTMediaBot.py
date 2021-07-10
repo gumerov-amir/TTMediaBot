@@ -8,10 +8,14 @@ from bot import Bot
 @click.option("--cache", help='Path to the cache file', default=None)
 @click.option("--log", help='Path to the log file', default=None)
 @click.option("--devices", help='Show available devices and exit', is_flag=True)
-def main(config, cache, log, devices):
-    if devices:
+@click.option("--default-config", help="Save default config to \"config_default.json\" and exit", is_flag=True)
+def main(config, cache, log, devices, default_config):
+    if devices or default_config:
         bot = Bot(None, None, None)
-        echo_sound_devices(bot.sound_device_manager)
+        if devices:
+            echo_sound_devices(bot.sound_device_manager)
+        else:
+            bot.config.save_default_file()
     else:
         bot = Bot(config, cache, log)
         bot.initialize()
