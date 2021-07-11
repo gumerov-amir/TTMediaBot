@@ -65,7 +65,7 @@ default_config = {
         "log": True,
         "level": "INFO",
         "format": "%(levelname)s [%(asctime)s]: %(message)s in %(threadName)s file: %(filename)s line %(lineno)d function %(funcName)s",
-        "mode": 2,
+        "mode": "File",
         "file_name": "TTMediaBot.log",
         "max_file_size": 0,
         "backup_count": 0
@@ -97,10 +97,23 @@ class Config(dict):
                 sys.exit("Incorrect configuration file path")
         else:
             config_dict = {}
-        super().__init__(self.fill(config_dict, default_config))
+        filled_config_dict = self.fill(config_dict, default_config)
+        types_dict = self.get_types_dict(default_config)
+        types_dict["teamtalk"]["channel"] = (int, str)
+        types_dict["logger"]["mode"] = (int, str)
+        self.check_types(filled_config_dict, types_dict)
+        super().__init__(filled_config_dict)
 
     def close(self):
         self.file_locker.release()
+
+    def check_types(self, data, template):
+        type_names_dict = {int: "integer", str: "string", float: "float", bool: "boolean", list: "list", dict: "dictionary"}
+        for key in template:
+            if type(template[key]) == dict:
+                self.check_types(data[key], template[key])
+            elif not type(data[key]) in template[key]:
+                sys.exit("Invalid type: \"{}\" param in config must be {} not {}".format(key, " or ".join([type_names_dict[i] for i in template[key]]), type_names_dict[type(data[key])]))
 
     def fill(self, data, template):
         result = {}
@@ -114,6 +127,15 @@ class Config(dict):
             else:
                 result[key] = template[key]
         result.update(data)
+        return result
+
+    def get_types_dict(self, template):
+        result = {}
+        for key in template:
+            if isinstance(template[key], dict):
+                result[key] = self.get_types_dict(template[key])
+            else:
+                result[key] = (type(template[key]),)
         return result
 
     def save(self):

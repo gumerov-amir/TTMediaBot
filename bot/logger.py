@@ -1,3 +1,4 @@
+from enum import Flag
 import logging
 from logging.handlers import RotatingFileHandler
 import os
@@ -5,18 +6,25 @@ import sys
 
 from bot import vars
 
+class Mode(Flag):
+    Stdout = 1
+    File = 2
+    StdoutFile = Stdout|File
 
 def initialize_logger(config, file_name):
     logging.addLevelName(5, "PLAYER_DEBUG")
     level = logging.getLevelName(config['level'])
     formatter = logging.Formatter(config['format'])
     handlers = []
-    if config['mode'] >= 2:
+    try:
+        mode = Mode(config["mode"]) if isinstance(config["mode"], int) else Mode.__members__[config["mode"]]
+    except KeyError:
+        sys.exit("Invalid log mode name")
+    if mode & Mode.File == Mode.File:
         if file_name:
             file_name = file_name
         else:
             file_name = config["file_name"]
-        
         if os.path.isdir(os.path.join(*os.path.split(file_name)[0:-1])):
             file = file_name
         else:
@@ -25,7 +33,7 @@ def initialize_logger(config, file_name):
         rotating_file_handler.setFormatter(formatter)
         rotating_file_handler.setLevel(level)
         handlers.append(rotating_file_handler)
-    if config['mode'] == 1 or config['mode'] == 3:
+    if mode & Mode.Stdout == Mode.Stdout:
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.setFormatter(formatter)
         stream_handler.setLevel(level)
