@@ -21,7 +21,7 @@ class Service:
         http.headers.update({
             'User-agent': 'KateMobileAndroid/47-427 (Android 6.0.1; SDK 23; armeabi-v7a; samsung SM-G900F; ru)'
         })
-        self._session = vk_api.VkApi(token=self.config['token'], session=http)
+        self._session = vk_api.VkApi(token=self.config["token"], session=http)
         self.api = self._session.get_api()
         try:
             self.api.account.getInfo()

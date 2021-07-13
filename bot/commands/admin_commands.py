@@ -12,7 +12,7 @@ class BlockCommandCommand(AdminCommand):
     def help(self):
             return _("+/-COMMAND Blocks or unblocks commands. +COMMAND adds command to the blocklist. -COMMAND removes from it. Without a command shows the blocklist")
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         arg = arg.lower()
         if len(arg) >= 1 and arg[1:] not in self.command_processor.commands_dict:
             raise errors.InvalidArgumentError()
@@ -39,10 +39,10 @@ class ChangeGenderCommand(AdminCommand):
     def help(self):
         return _("GENDER Changes bot's gender. n neutral, m male, f female")
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         try:
             self.ttclient.change_gender(arg)
-            self.config['teamtalk']['gender'] = arg
+            self.config.teamtalk.gender = arg
         except KeyError:
             raise errors.InvalidArgumentError()
 
@@ -52,17 +52,17 @@ class ChangeLanguageCommand(AdminCommand):
     def help(self):
         return _("LANGUAGE Changes bot's language")
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if arg:
             try:
                 translator.install_locale(arg, fallback=arg == 'en')
-                self.config['general']['language'] = arg
+                self.config.general.language = arg
                 self.ttclient.change_status_text('')
                 return _('The language has been changed')
             except:
                 return _('Incorrect language')
         else:
-            return _('Current language: {current_language}. Available languages: {available_languages}').format(current_language=self.config['general']['language'], available_languages=', '.join(translator.get_locales()))
+            return _('Current language: {current_language}. Available languages: {available_languages}').format(current_language=self.config.general.language, available_languages=', '.join(translator.get_locales()))
 
 
 class ChangeNicknameCommand(AdminCommand):
@@ -70,9 +70,9 @@ class ChangeNicknameCommand(AdminCommand):
     def help(self):
         return _('NICKNAME Changes bot\'s nickname')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         self.ttclient.change_nickname(arg)
-        self.config['teamtalk']['nickname'] = arg
+        self.config.teamtalk.nickname = arg
 
 
 class ClearCacheCommand(AdminCommand):
@@ -80,7 +80,7 @@ class ClearCacheCommand(AdminCommand):
     def help(self):
         return _("r/f Clears bot's cache. r clears recents, f clears favorites, without an option clears the entire cache")
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if not arg:
             self.cache.recents.clear()
             self.cache.favorites.clear()
@@ -101,7 +101,7 @@ class TaskSchedulerCommand(AdminCommand):
     def help(self):
         return _("Task scheduler")
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if arg[0] == "+":
             self._add(arg[1::])
 
@@ -136,7 +136,7 @@ class VoiceTransmissionCommand(AdminCommand):
     def help(self):
         return _('Enables or disables voice transmission')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if not self.ttclient.is_voice_transmission_enabled:
             self.ttclient.enable_voice_transmission()
             if self.player.state == State.Stopped:
@@ -166,9 +166,9 @@ class ChangeStatusCommand(AdminCommand):
         return _("STATUS Changes bot's status")
 
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         self.ttclient.change_status_text(arg)
-        self.config['teamtalk']['default_status'] = self.ttclient.status
+        self.config.teamtalk.status = arg
 
 
 class EventHandlingCommand(AdminCommand):
@@ -176,10 +176,9 @@ class EventHandlingCommand(AdminCommand):
     def help(self):
             return _("Enables or disables event handling")
 
-    def __call__(self, arg, user):
-        self.ttclient.load_event_handlers = not self.ttclient.load_event_handlers
-        self.config["general"]["load_event_handlers"] = self.ttclient.load_event_handlers
-        return _("Event handling is enabled") if self.config["general"]["load_event_handlers"] else _("Event handling is disabled")
+    def __call__(self, command_id, arg, user):
+        self.config.general.load_event_handlers = not  self.config.general.load_event_handlers
+        return _("Event handling is enabled") if self.config.general.load_event_handlers else _("Event handling is disabled")
 
 
 class ChannelMessagesCommand(AdminCommand):
@@ -187,10 +186,9 @@ class ChannelMessagesCommand(AdminCommand):
     def help(self):
         return _("Enables or disables sending of channel messages")
 
-    def __call__(self, arg, user):
-        self.command_processor.send_channel_messages = not self.command_processor.send_channel_messages
-        self.config["general"]["send_channel_messages"] = self.command_processor.send_channel_messages
-        return _("Channel messages enabled") if self.command_processor.send_channel_messages else _("Channel messages disabled")
+    def __call__(self, command_id, arg, user):
+        self.config.general.send_channel_messages = not self.config.general.send_channel_messages
+        return _("Channel messages enabled") if self.config.general.send_channel_messages else _("Channel messages disabled")
 
 
 class SaveConfigCommand(AdminCommand):
@@ -198,7 +196,7 @@ class SaveConfigCommand(AdminCommand):
     def help(self):
         return _("Saves bot's configuration")
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         self.config.save()
         return _('Configuration saved')
 
@@ -207,24 +205,23 @@ class AdminUsersCommand(AdminCommand):
     def help(self):
         return _('+/-USERNAME Manages a list of administrators. +USERNAME adds a user. -USERNAME removes it. Without an option shows the list')
 
-    def __call__(self, arg, user):
-        admin_users = self.command_processor.config['teamtalk']['users']['admins']
+    def __call__(self, command_id, arg, user):
         if arg:
             if arg[0] == '+':
-                admin_users.append(arg[1::])
+                self.config.teamtalk.users["admins"].append(arg[1::])
                 return _('Added')
             elif arg[0] == '-':
                 try:
-                    del admin_users[admin_users.index(arg[1::])]
+                    del self.config.teamtalk.users["admins"][self.config.teamtalk.users["admins"].index(arg[1::])]
                     return _('Deleted')
                 except ValueError:
                     return _('This user is not in the admin list')
         else:
-            admin_users = admin_users.copy()
-            if len(admin_users) > 0:
-                if '' in admin_users:
-                    admin_users[admin_users.index('')] = '<Anonymous>'
-                return ', '.join(self.command_processor.config['teamtalk']['users']['admins'])
+            admins = self.config.teamtalk.users["admins"].copy()
+            if len(admins) > 0:
+                if '' in admins:
+                    admins[admins.index('')] = '<Anonymous>'
+                return ', '.join(admins)
             else:
                 return _('The list is empty')
 
@@ -234,20 +231,19 @@ class BannedUsersCommand(AdminCommand):
     def help(self):
         return _('+/-USERNAME Manages a list of banned users. +USERNAME adds a user. -USERNAME removes it. Without an option shows the list')
 
-    def __call__(self, arg, user):
-        banned_users = self.command_processor.config['teamtalk']['users']['banned_users']
+    def __call__(self, command_id, arg, user):
         if arg:
             if arg[0] == '+':
-                banned_users.append(arg[1::])
+                self.config.teamtalk.users["banned_users"].append(arg[1::])
                 return _('Added')
             elif arg[0] == '-':
                 try:
-                    del banned_users[banned_users.index(arg[1::])]
+                    del self.config.teamtalk.users["banned_users"][self.config.teamtalk.users["banned_users"].index(arg[1::])]
                     return _('Deleted')
                 except ValueError:
                     return _('This user is not banned')
         else:
-            banned_users = banned_users.copy()
+            banned_users = self.config.teamtalk.users["banned_users"].copy()
             if len(banned_users) > 0:
                 if '' in banned_users:
                     banned_users[banned_users.index('')] = '<Anonymous>'
@@ -262,7 +258,7 @@ class QuitCommand(AdminCommand):
     def help(self):
         return _('Quits the bot')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         self.bot.close()
 
 class RestartCommand(AdminCommand):
@@ -270,7 +266,7 @@ class RestartCommand(AdminCommand):
     def help(self):
         return _('Restarts the bot')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         self.bot.close()
         args = sys.argv
         if sys.platform == 'win32':

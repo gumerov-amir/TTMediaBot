@@ -1,4 +1,5 @@
 from bot.commands.command import Command
+from bot.commands.task import Task
 from bot.player.enums import Mode, State, TrackType
 from bot.TeamTalk.structs import UserRight
 from bot import errors, vars
@@ -9,7 +10,7 @@ class HelpCommand(Command):
     def help(self):
         return _('Shows command help')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         return self.command_processor.help(arg, user)
 
 
@@ -18,7 +19,7 @@ class AboutCommand(Command):
     def help(self):
         return _('Shows information about the bot')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         return vars.about_text()
 
 
@@ -27,22 +28,22 @@ class PlayPauseCommand(Command):
     def help(self):
         return _('QUERY Plays tracks found for the query. If no query is given, plays or pauses current track')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if arg:
-            self.ttclient.send_message(_('Searching...'), user)
+            self.ttclient.task_queue.put(Task(command_id, self.ttclient.send_message, _('Searching...'), user))
             try:
                 track_list = self.service_manager.service.search(arg)
-                if self.command_processor.send_channel_messages:
-                    self.ttclient.send_message(_("{nickname} requested {request}").format(nickname=user.nickname, request=arg), type=2)
-                self.player.play(track_list)
+                if self.config.general.send_channel_messages:
+                    self.ttclient.task_queue.put(Task(command_id, self.ttclient.send_message, _("{nickname} requested {request}").format(nickname=user.nickname, request=arg), type=2))
+                self.player.task_queue.put(Task(command_id, self.player.play, track_list))
                 return _('Playing {}').format(self.player.track.name)
             except errors.NothingFoundError:
                 return _('Nothing is found for your query')
         else:
             if self.player.state == State.Playing:
-                self.player.pause()
+                self.player.task_queue.put(Task(command_id, self.player.pause))
             elif self.player.state == State.Paused:
-                self.player.play()
+                self.player.task_queue.put(Task(command_id, self.player.play))
 
 
 class PlayUrlCommand(Command):
@@ -50,11 +51,11 @@ class PlayUrlCommand(Command):
     def help(self):
         return _('URL Plays a stream from a given URL')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if arg:
             try:
                 tracks = self.module_manager.streamer.get(arg, user.is_admin)
-                if self.command_processor.send_channel_messages:
+                if self.config.general.send_channel_messages:
                     self.ttclient.send_message(_('{nickname} requested playing from a URL').format(nickname=user.nickname), type=2)
                 self.player.play(tracks)
             except errors.IncorrectProtocolError:
@@ -72,10 +73,10 @@ class StopCommand(Command):
     def help(self):
         return _('Stops playback')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if self.player.state != State.Stopped:
             self.player.stop()
-            if self.command_processor.send_channel_messages:
+            if self.config.general.send_channel_messages:
                 self.ttclient.send_message(_("{nickname} stopped playback").format(nickname=user.nickname), type=2)
         else:
             return _('Nothing is playing')
@@ -86,11 +87,11 @@ class VolumeCommand(Command):
     def help(self):
         return _('VOLUME Sets the volume to a value between 0 and {max_volume}. If no volume is specified, the current volume level is displayed').format(max_volume=self.player.max_volume)
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if arg:
             try:
                 volume = int(arg)
-                if 0 <= volume <= self.player.max_volume:
+                if 0 <= volume <= self.config.player.max_volume:
                     self.player.set_volume(int(arg))
                 else:
                     raise ValueError
@@ -105,7 +106,7 @@ class SeekBackCommand(Command):
     def help(self):
         return _('[STEP] Seeks current track backward. the default step is {seek_step} seconds').format(seek_step=self.player.seek_step)
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if arg:
             try:
                 self.player.seek_back(float(arg))
@@ -120,7 +121,7 @@ class SeekForwardCommand(Command):
     def help(self):
         return _('[STEP] Seeks current track backward. the default step is {seek_step} seconds').format(seek_step=self.player.seek_step)
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if arg:
             try:
                 self.player.seek_forward(float(arg))
@@ -135,7 +136,7 @@ class NextTrackCommand(Command):
     def help(self):
         return _('Plays next track')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         try:
             self.player.next()
             return _('Playing {}').format(self.player.track.name)
@@ -150,7 +151,7 @@ class PreviousTrackCommand(Command):
     def help(self):
         return _('Plays previous track')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         try:
             self.player.previous()
             return _('Playing {}').format(self.player.track.name)
@@ -169,7 +170,7 @@ class ModeCommand(Command):
     def help(self):
         return _('MODE Sets the playback mode. If no mode is specified, the current mode and a list of modes are displayed')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         mode_help = _("Current_ mode: {current_mode}\n{modes}").format(current_mode=self.mode_names[self.player.mode], modes='\n'.join(['{value} {name}'.format(name=self.mode_names[i], value=i.value) for i in Mode.__members__.values()]))
         if arg:
             try:
@@ -191,7 +192,7 @@ class ServiceCommand(Command):
     def help(self):
         return _('SERVICE Selects the service to play from. If no service is specified, the current service and a list of available services are displayed')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         service_help = _('Current service: {current_service}\nAvailable: {available_services}').format(current_service=self.service_manager.service.name, available_services=', '.join([i for i in self.service_manager.available_services]))
         if arg:
             arg = arg.lower()
@@ -209,7 +210,7 @@ class SelectTrackCommand(Command):
     def help(self):
         return _('NUMBER Selects track by number from the list of current results')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if arg:
             try:
                 number = int(arg)
@@ -239,7 +240,7 @@ class SpeedCommand(Command):
     def help(self):
         return _("SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows current speed")
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if not arg:
             return _("Current rate: {}").format(str(self.player.get_speed()))
         else:
@@ -254,7 +255,7 @@ class FavoritesCommand(Command):
     def help(self):
         return _('+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - removes a track requested from favorites. If a number is specified after +/-, ads/removes a track with that number')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if user.username == '':
             return _('This comand is not available for guest users')
         if arg:
@@ -324,7 +325,7 @@ class GetLinkCommand(Command):
     def help(self):
         return _('Gets a direct link to the current track')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if self.player.state != State.Stopped:
             url = self.player.track.url
             if url:
@@ -340,7 +341,7 @@ class RecentsCommand(Command):
     def help(self):
         return _('NUMBER Plays a track with  the given number from a list of recent tracks. Without a number shows recent tracks')
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if arg:
             try:
                 self.player.play(list(reversed(list(self.cache.recents))), start_track_index=int(arg) - 1)
@@ -363,7 +364,7 @@ class DownloadCommand(Command):
     def help(self):
         return _("Downloads the current track and uploads it to the channel")
 
-    def __call__(self, arg, user):
+    def __call__(self, command_id, arg, user):
         if not (self.ttclient.user.user_account.rights & UserRight.UploadFiles == UserRight.UploadFiles):
             raise PermissionError(_("Cannot upload file to channel"))
         if self.player.state != State.Stopped:
