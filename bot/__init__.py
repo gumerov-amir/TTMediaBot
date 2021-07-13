@@ -3,6 +3,8 @@ import queue
 import sys
 import time
 
+from pydantic.error_wrappers import ValidationError
+
 from bot import cache, commands, config, connectors, logger, modules, player, services, sound_devices, TeamTalk, translator, vars
 
 
@@ -10,28 +12,32 @@ class Bot:
     def __init__(self, config_file_name, cache_file_name, log_file_name):
         try:
             self.config = config.Config(config_file_name)
+        except ValidationError as e:
+            for error in e.errors():
+                print("Error in config:", ".".join(error["loc"]), error["msg"])
+            sys.exit(1)
         except PermissionError:
             sys.exit('The configuration file is already used by another instance of the bot')
-        translator.install_locale(self.config['general']['language'])
+        translator.install_locale(self.config.general.language)
         try:
             if cache_file_name:
                 self.cache = cache.Cache(cache_file_name)
             else:
-                self.cache = cache.Cache(self.config["general"]["cache_file_name"])
+                self.cache = cache.Cache(self.config.general.cache_file_name)
         except PermissionError:
             sys.exit('The cache file is already used by another instance of the bot')
         self.log_file_name = log_file_name
-        self.player = player.Player(self.config['player'], self.cache)
-        self.ttclient = TeamTalk.TeamTalk(self, self.config)
+        self.player = player.Player(self)
+        self.ttclient = TeamTalk.TeamTalk(self)
         self.tt_player_connector = connectors.TTPlayerConnector(self.player, self.ttclient)
-        self.sound_device_manager = sound_devices.SoundDeviceManager(self.config['sound_devices'], self. player, self.ttclient)
-        self.service_manager = services.ServiceManager(self.config['services'])
+        self.sound_device_manager = sound_devices.SoundDeviceManager(self.config.sound_devices, self. player, self.ttclient)
+        self.service_manager = services.ServiceManager(self.config.services)
         self.module_manager = modules.ModuleManager(self.config, self.player, self.ttclient, self.service_manager)
         self.command_processor = commands.CommandProcessor(self, self.config, self.player, self.ttclient, self.module_manager, self.service_manager, self.cache)
 
     def initialize(self):
-        if self.config['logger']['log']:
-            logger.initialize_logger(self.config['logger'], self.log_file_name)
+        if self.config.logger.log:
+            logger.initialize_logger(self.config.logger, self.log_file_name)
         logging.debug('Initializing')
         self.sound_device_manager.initialize()
         self.ttclient.initialize()

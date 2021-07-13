@@ -4,7 +4,7 @@ import os
 import time
 import re
 import sys
-import queue
+from queue import Queue
 
 from bot.sound_devices import SoundDevice, SoundDeviceType
 from bot import errors, vars
@@ -15,7 +15,8 @@ if sys.platform == "win32":
     else:
         os.chdir(vars.directory)
 
-from bot.TeamTalk import thread
+from bot.TeamTalk.event_thread import EventThread
+from bot.TeamTalk.task_thread import TaskThread
 from bot.TeamTalk.structs import *
 
 import TeamTalkPy
@@ -68,22 +69,19 @@ def split(text, max_length=vars.max_message_length):
 
 
 class TeamTalk:
-    def __init__(self, bot, config):
-        self.config = config["teamtalk"]
-        TeamTalkPy.setLicense(_str(self.config['license_name']), _str(self.config['license_key']))
+    def __init__(self, bot):
+        self.config = bot.config
+        TeamTalkPy.setLicense(_str(self.config.teamtalk.license_name), _str(self.config.teamtalk.license_key))
         self.tt = TeamTalkPy.TeamTalk()
         self.is_voice_transmission_enabled = False
-        self.nickname = self.config['nickname']
-        self.gender = genders[self.config['gender']]
+        self.gender = genders[self.config.teamtalk.gender]
         self.status = self.default_status
-        self.admins = self.config['users']['admins']
-        self.banned_users = self.config['users']['banned_users']
-        self.load_event_handlers = config["general"]["load_event_handlers"]
-        self.event_handlers_file_name = config["general"]["event_handlers_file_name"]
-        self.teamtalk_thread = thread.TeamTalkThread(bot, self)
-        self.errors_queue = queue.Queue()
-        self.message_queue = queue.Queue()
-        self.uploaded_files_queue = queue.Queue()
+        self.errors_queue = Queue()
+        self.message_queue = Queue()
+        self.task_queue = Queue()
+        self.uploaded_files_queue = Queue()
+        self.event_thread = EventThread(bot, self)
+        self.task_thread = TaskThread(bot, self)
 
     def initialize(self):
         logging.debug('Initializing TeamTalk')
@@ -92,13 +90,16 @@ class TeamTalk:
         logging.debug('TeamTalk initialized')
 
     def run(self):
-        logging.debug('Starting TeamTalk')
-        self.teamtalk_thread.start()
-        logging.debug('TeamTalk started')
+        logging.debug('Starting TeamTalk event thread')
+        self.event_thread.start()
+        logging.debug('TeamTalk event thread started')
+        logging.debug("Starting teamtalk task thread")
+        self.task_thread.start()
+        logging.debug("Teamtalk task thread started")
 
     def close(self):
         logging.debug('Closing teamtalk')
-        self.teamtalk_thread.close()
+        self.event_thread.close()
         self.tt.disconnect()
         self.tt.closeTeamTalk()
         logging.debug('Teamtalk closed')
@@ -110,7 +111,7 @@ class TeamTalk:
                 self.tt.disconnect()
         if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTING:
             connection_attempt = 0
-            while connection_attempt != self.config['reconnection_attempts']:
+            while connection_attempt != self.config.teamtalk.reconnection_attempts:
                 try:
                     self._connect()
                     logging.debug("connected")
@@ -121,7 +122,7 @@ class TeamTalk:
                         logging.error(error)
                         sys.exit(error)
                     else:
-                        time.sleep(self.config['reconnection_timeout'])
+                        time.sleep(self.config.teamtalk.reconnection_timeout)
                         connection_attempt += 1
                         self.tt.disconnect()
         if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED:
@@ -130,7 +131,7 @@ class TeamTalk:
             sys.exit(error)
         if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED | ClientFlags.CLIENT_AUTHORIZED:
             login_attempt = 0
-            while login_attempt != self.config['reconnection_attempts']:
+            while login_attempt != self.config.teamtalk.reconnection_attempts:
                 try:
                     self._login()
                     logging.debug("Logged in")
@@ -141,7 +142,7 @@ class TeamTalk:
                         logging.error(error)
                         sys.exit(error)
                     else:
-                        time.sleep(self.config['reconnection_timeout'])
+                        time.sleep(self.config.teamtalk.reconnection_timeout)
                         login_attempt += 1
         if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED | ClientFlags.CLIENT_AUTHORIZED:
             error = "Login error"
@@ -149,7 +150,7 @@ class TeamTalk:
             sys.exit(error)
         if self.tt.getMyChannelID() == 0:
             join_attempt = 0
-            while join_attempt != self.config['reconnection_attempts']:
+            while join_attempt != self.config.teamtalk.reconnection_attempts:
                 try:
                     self._join()
                     logging.debug("Joined channel")
@@ -160,7 +161,7 @@ class TeamTalk:
                         logging.error(error)
                         sys.exit(error)
                     else:
-                        time.sleep(self.config['reconnection_timeout'])
+                        time.sleep(self.config.teamtalk.reconnection_timeout)
                         join_attempt += 1
         if self.tt.getMyChannelID() == 0:
             error = "Cannot join channel"
@@ -168,14 +169,14 @@ class TeamTalk:
             sys.exit(error)
 
     def _connect(self):
-        self.tt.connect(_str(self.config['hostname']), self.config['tcp_port'], self.config['udp_port'], self.config['encrypted'])
+        self.tt.connect(_str(self.config.teamtalk.hostname), self.config.teamtalk.tcp_port, self.config.teamtalk.udp_port, self.config.teamtalk.encrypted)
         try:
             self.wait_for_event(ClientEvent.CLIENTEVENT_CON_SUCCESS, error_events=[ClientEvent.CLIENTEVENT_CON_FAILED])
         except errors.TTEventError as e:
             raise errors.ConnectionError(e)
 
     def _login(self):
-        cmdid = self.tt.doLogin(_str(self.config['nickname']), _str(self.config['username']), _str(self.config['password']), _str(vars.client_name))
+        cmdid = self.tt.doLogin(_str(self.config.teamtalk.nickname), _str(self.config.teamtalk.username), _str(self.config.teamtalk.password), _str(vars.client_name))
         try:
             msg = self.wait_for_event(ClientEvent.CLIENTEVENT_CMD_MYSELF_LOGGEDIN, error_events=[ClientEvent.CLIENTEVENT_CMD_ERROR])
             self._user_account = self.get_user_account_by_tt_obj(msg.useraccount)
@@ -188,13 +189,13 @@ class TeamTalk:
         self.wait_for_cmd_success(cmdid)
 
     def _join(self):
-        if isinstance(self.config['channel'], int):
-            channel_id = int(self.config['channel'])
+        if isinstance(self.config.teamtalk.channel, int):
+            channel_id = int(self.config.teamtalk.channel)
         else:
-            channel_id = self.tt.getChannelIDFromPath(_str(self.config['channel']))
+            channel_id = self.tt.getChannelIDFromPath(_str(self.config.teamtalk.channel))
             if channel_id == 0:
                 channel_id = 1
-        cmdid = self.tt.doJoinChannelByID(channel_id, _str(self.config['channel_password']))
+        cmdid = self.tt.doJoinChannelByID(channel_id, _str(self.config.teamtalk.channel_password))
         try:
             msg = self.wait_for_cmd_success(cmdid)
         except errors.TTEventError:
@@ -224,8 +225,8 @@ class TeamTalk:
 
     @property
     def default_status(self):
-        if self.config['status']:
-            return self.config['status']
+        if self.config.teamtalk.status:
+            return self.config.teamtalk.status
         else:
             return _('Send "h" for help')
 
@@ -272,8 +273,8 @@ class TeamTalk:
         cmdid = self.tt.doJoinChannelByID(channel_id, _str(password))
 
     def change_nickname(self, nickname):
-        self.nickname = nickname
-        self.tt.doChangeNickname(_str(self.nickname))
+        self.config.teamtalk.nickname = nickname
+        self.tt.doChangeNickname(_str(self.config.teamtalk.nickname))
 
     def change_status_text(self, text):
         if text:
@@ -317,7 +318,7 @@ class TeamTalk:
             _str(user.szStatusMsg), gender, UserState(user.uUserState),
             self.get_channel(user.nChannelID), _str(user.szClientName), user.uVersion,
             self.get_user_account(_str(user.szUsername)), UserType(user.uUserType),
-            _str(user.szUsername) in self.admins, _str(user.szUsername) in self.banned_users
+            _str(user.szUsername) in self.config.teamtalk.users["admins"], _str(user.szUsername) in self.config.teamtalk.users["banned_users"]
         )
 
     def get_user_account(self, username):

@@ -1,9 +1,11 @@
 import logging
 import re
+from threading import Thread
 import traceback
 
 from bot import errors
 from bot.commands.admin_commands import *
+from bot.commands.task import Task
 from bot.commands.user_commands import *
 from bot.TeamTalk.structs import UserType
 from bot import vars
@@ -20,9 +22,8 @@ class CommandProcessor:
         self.player = player
         self.service_manager = service_manager
         self.ttclient = ttclient
-        self.send_channel_messages = self.config["general"]["send_channel_messages"]
         self.locked = False
-        self.blocked_commands = self.config["general"]["blocked_commands"]
+        self.current_command_id = 0
         self.commands_dict = {
             'h': HelpCommand(self),
             'a': AboutCommand(self),
@@ -64,11 +65,17 @@ class CommandProcessor:
         }
 
     def __call__(self, message):
+        command_thread = Thread(target=self.run, args=(message,))
+        command_thread.start()
+
+    def run(self, message):
         try:
             command_name, arg = self.parse_command(message.text)
             if self.check_access(message.user, command_name):
                 command = self.get_command(command_name, message.user)
-                return command(arg, message.user)
+                self.current_command_id += 1
+                result = command(self.current_command_id, arg, message.user)
+                self.ttclient.task_queue.put(Task(self.current_command_id, self.ttclient.send_message, result, message.user))
         except errors.InvalidArgumentError:
             return self.help(command_name, message.user)
         except errors.AccessDeniedError as e:
@@ -89,7 +96,7 @@ class CommandProcessor:
                 raise errors.AccessDeniedError(_("You are not in bot\'s channel"))
             elif self.locked:
                 raise errors.AccessDeniedError(_("Bot is locked"))
-            elif command in self.blocked_commands:
+            elif command in self.config.general.blocked_commands:
                 raise errors.AccessDeniedError(_("This command is blocked"))
             else:
                 return True

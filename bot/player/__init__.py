@@ -1,6 +1,7 @@
 from collections import deque
 import html
 import logging
+from queue import Queue
 import time
 import random
 import sys
@@ -9,26 +10,25 @@ import mpv
 
 from bot import errors, vars
 from bot.player.enums import Mode, State, TrackType
+from bot.player.task_thread import TaskThread
 from bot.player.track import Track
 from bot.sound_devices import SoundDevice, SoundDeviceType
 
 
 class Player:
-    def __init__(self, config, cache):
-        self.config = config
-        self._player = mpv.MPV(**self.config["player_options"], log_handler=self.log_handler)
+    def __init__(self, bot):
+        self.config = bot.config.player
+        self._player = mpv.MPV(**self.config.player_options, log_handler=self.log_handler)
         self._log_level = 'PLAYER_DEBUG'
-        self.volume = self.config['default_volume']
-        self.max_volume = self.config['max_volume']
-        self.volume_fading = self.config['volume_fading']
-        self.volume_fading_interval = self.config['volume_fading_interval']
-        self.seek_step = config['seek_step']
         self.track_list = []
         self.track = Track()
         self.track_index = -1
         self.state = State.Stopped
         self.mode = Mode.TrackList
-        self.cache = cache
+        self.cache = bot.cache
+        self.volume = self.config.default_volume
+        self.task_queue = Queue()
+        self.task_thread = TaskThread(bot, self)
 
     def initialize(self):
         logging.debug('Initializing player')
@@ -39,6 +39,9 @@ class Player:
         self.register_event_callback("end-file", self.on_end_file)
         self.register_event_callback("metadata-update", self.on_metadata_update)
         logging.debug('Callbacks registered')
+        logging.debug("Starting player task thread")
+        self.task_thread.start()
+        logging.debug("Player task thread started")
 
     def close(self):
         logging.debug('Closing player')
@@ -135,13 +138,13 @@ class Player:
             raise errors.IncorrectTrackIndexError()
 
     def set_volume(self, volume):
-        volume = volume if volume <= self.max_volume else self.max_volume
+        volume = volume if volume <= self.config.max_volume else self.config.max_volume
         self.volume = volume
-        if self.volume_fading:
+        if self.config.volume_fading:
             n = 1 if self._player.volume < volume else -1
             for i in range(int(self._player.volume), volume, n):
                 self._player.volume = i
-                time.sleep(self.volume_fading_interval)
+                time.sleep(self.config.volume_fading_interval)
         else:
             self._player.volume = volume
 
@@ -154,7 +157,7 @@ class Player:
         self._player.speed = arg
 
     def seek_back(self, step=None):
-        step = step if step else self.seek_step
+        step = step if step else self.config.seek_step
         if step <= 0:
             raise ValueError()
         if self.state == State.Stopped:
@@ -162,7 +165,7 @@ class Player:
         self._player.seek(-step, reference='relative')
 
     def seek_forward(self, step=None):
-        step = step if step else self.seek_step
+        step = step if step else self.config.seek_step
         if step <= 0:
             raise ValueError()
         if self.state == State.Stopped:
