@@ -44,7 +44,7 @@ def clean():
 
 def install():
     print('Installing mpv components')
-    print('Downloading latest library version')
+    print('Downloading latest libmpv version')
     download()
     print('Downloaded. extracting')
     extract()
