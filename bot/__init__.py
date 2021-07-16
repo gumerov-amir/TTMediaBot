@@ -52,6 +52,7 @@ class Bot:
         self.tt_player_connector.start()
         logging.info('Started')
         self._close = False
+        breakpoint()
         while not self._close:
             try:
                 message = self.ttclient.message_queue.get_nowait()
