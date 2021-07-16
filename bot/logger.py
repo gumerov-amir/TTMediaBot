@@ -7,9 +7,9 @@ import sys
 from bot import vars
 
 class Mode(Flag):
-    Stdout = 1
-    File = 2
-    StdoutFile = Stdout|File
+    STDOUT = 1
+    FILE = 2
+    STDOUT_AND_FILE = STDOUT|FILE
 
 def initialize_logger(config, file_name):
     logging.addLevelName(5, "PLAYER_DEBUG")
@@ -20,7 +20,7 @@ def initialize_logger(config, file_name):
         mode = Mode(config.mode) if isinstance(config.mode, int) else Mode.__members__[config.mode]
     except KeyError:
         sys.exit("Invalid log mode name")
-    if mode & Mode.File == Mode.File:
+    if mode & Mode.FILE == Mode.FILE:
         if file_name:
             file_name = file_name
         else:
@@ -33,7 +33,7 @@ def initialize_logger(config, file_name):
         rotating_file_handler.setFormatter(formatter)
         rotating_file_handler.setLevel(level)
         handlers.append(rotating_file_handler)
-    if mode & Mode.Stdout == Mode.Stdout:
+    if mode & Mode.STDOUT == Mode.STDOUT:
         stream_handler = logging.StreamHandler(sys.stdout)
         stream_handler.setFormatter(formatter)
         stream_handler.setLevel(level)
