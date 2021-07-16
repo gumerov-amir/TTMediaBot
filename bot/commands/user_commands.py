@@ -103,7 +103,7 @@ class VolumeCommand(Command):
 class SeekBackCommand(Command):
     @property
     def help(self):
-        return _('[STEP] Seeks current track backward. the default step is {seek_step} seconds').format(seek_step=self.player.seek_step)
+        return _('STEP Seeks current track backward. the default step is {seek_step} seconds').format(seek_step=self.player.seek_step)
 
     def __call__(self, arg, user):
         if arg:
@@ -118,7 +118,7 @@ class SeekBackCommand(Command):
 class SeekForwardCommand(Command):
     @property
     def help(self):
-        return _('[STEP] Seeks current track backward. the default step is {seek_step} seconds').format(seek_step=self.player.seek_step)
+        return _('STEP Seeks current track forward. the default step is {seek_step} seconds').format(seek_step=self.player.seek_step)
 
     def __call__(self, arg, user):
         if arg:
