@@ -129,10 +129,11 @@ dmypy.json
 .pyre/
 
 *.dll
+*.so
 TeamTalkPy/
 config.json
+*.dat
 *.log
 .*env/
 TTSDK_license.txt
-TTMediaBotCache.dat
 event_handlers.py
