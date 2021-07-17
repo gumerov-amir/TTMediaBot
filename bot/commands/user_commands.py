@@ -252,11 +252,11 @@ class SpeedCommand(Command):
 class FavoritesCommand(Command):
     @property
     def help(self):
-        return _('+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - removes a track requested from favorites. If a number is specified after +/-, ads/removes a track with that number')
+        return _('+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - removes a track requested from favorites. If a number is specified after +/-, adds/removes a track with that number')
 
     def __call__(self, arg, user):
         if user.username == '':
-            return _('This comand is not available for guest users')
+            return _('This command is not available for guest users')
         if arg:
             if arg[0] == '+':
                 return self._add(user)
