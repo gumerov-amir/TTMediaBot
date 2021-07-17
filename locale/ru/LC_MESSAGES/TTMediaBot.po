@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TTMediaBot\n"
-"POT-Creation-Date: 2021-07-16 19:50+0400\n"
-"PO-Revision-Date: 2021-07-16 20:36+0400\n"
+"POT-Creation-Date: 2021-07-17 13:34+0400\n"
+"PO-Revision-Date: 2021-07-17 13:45+0400\n"
 "Last-Translator: Гумеров Амир Эдуардович <ar8200@bk.ru>\n"
 "Language-Team: TTMediaBot's developers\n"
 "Language: ru\n"
@@ -17,8 +17,6 @@ msgstr ""
 "X-Generator: Poedit 3.0\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
-"X-Poedit-Basepath: ../../../bot\n"
-"X-Poedit-SearchPath-0: .\n"
 
 #: TeamTalk/__init__.py:230
 msgid "Send \"h\" for help"
@@ -447,20 +445,20 @@ msgstr ""
 
 #: commands/user_commands.py:244
 msgid "Current rate: {}"
-msgstr "Текущая скорость"
+msgstr "Текущая скорость: {}"
 
 #: commands/user_commands.py:255
 msgid ""
 "+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - "
 "removes a track requested from favorites. If a number is specified after "
-"+/-, ads/removes a track with that number"
+"+/-, adds/removes a track with that number"
 msgstr ""
 "+/-НОМЕР Управляет списком избранных треков. + добавляет текущий трек в "
 "избранное. - удаляет запрошенный трек из избранного. Если номер указан после "
 "+/-, добавляет/удаляет трек с этим номером"
 
 #: commands/user_commands.py:259
-msgid "This comand is not available for guest users"
+msgid "This command is not available for guest users"
 msgstr "Эта команда недоступна для гостевых пользователей"
 
 #: commands/user_commands.py:295
