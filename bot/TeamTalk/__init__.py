@@ -16,7 +16,6 @@ if sys.platform == "win32":
         os.chdir(vars.directory)
 
 from bot.TeamTalk.event_thread import EventThread
-from bot.TeamTalk.task_thread import TaskThread
 from bot.TeamTalk.structs import *
 
 import TeamTalkPy
@@ -78,10 +77,8 @@ class TeamTalk:
         self.status = self.default_status
         self.errors_queue = Queue()
         self.message_queue = Queue()
-        self.task_queue = Queue()
         self.uploaded_files_queue = Queue()
         self.event_thread = EventThread(bot, self)
-        self.task_thread = TaskThread(bot, self)
 
     def initialize(self):
         logging.debug('Initializing TeamTalk')
@@ -93,9 +90,6 @@ class TeamTalk:
         logging.debug('Starting TeamTalk event thread')
         self.event_thread.start()
         logging.debug('TeamTalk event thread started')
-        logging.debug("Starting teamtalk task thread")
-        self.task_thread.start()
-        logging.debug("Teamtalk task thread started")
 
     def close(self):
         logging.debug('Closing teamtalk')
@@ -318,7 +312,7 @@ class TeamTalk:
             _str(user.szStatusMsg), gender, UserState(user.uUserState),
             self.get_channel(user.nChannelID), _str(user.szClientName), user.uVersion,
             self.get_user_account(_str(user.szUsername)), UserType(user.uUserType),
-            _str(user.szUsername) in self.config.teamtalk.users["admins"], _str(user.szUsername) in self.config.teamtalk.users["banned_users"]
+            True if _str(user.szUsername) in self.config.teamtalk.users["admins"] or user.uUserType == 2 else False, _str(user.szUsername) in self.config.teamtalk.users["banned_users"]
         )
 
     def get_user_account(self, username):

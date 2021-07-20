@@ -42,7 +42,7 @@ class EventThread(Thread):
                 self.ttclient.errors_queue.put(self.ttclient.get_error(msg.clienterrormsg.nErrorNo, msg.nSource))
             elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG and msg.textmessage.nMsgType == 1:
                 self.ttclient.message_queue.put(self.ttclient.get_message(msg.textmessage))
-            elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_NEW and _str(msg.remotefile.szUsername) == self.ttclient.config["username"] and msg.remotefile.nChannelID == self.ttclient.channel.id:
+            elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_NEW and _str(msg.remotefile.szUsername) == self.ttclient.config.username and msg.remotefile.nChannelID == self.ttclient.channel.id:
                 self.ttclient.uploaded_files_queue.put(self.ttclient.get_file(msg.remotefile))
             elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_MYSELF_KICKED:
                 logging.warning('Kicked')

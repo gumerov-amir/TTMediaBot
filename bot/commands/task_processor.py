@@ -16,9 +16,8 @@ class TaskProcessor(Thread):
 
 
 class Task:
-    def __init__(self, command_id, cancelable, function, *args, **kwargs):
+    def __init__(self, command_id, function, args, kwargs):
         self.command_id = command_id
-        self.cancelable = cancelable
         self.function = function
         self.args = args
         self.kwargs = kwargs

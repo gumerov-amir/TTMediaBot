@@ -2,17 +2,17 @@ import os
 import subprocess
 import sys
 
-from bot.commands.command import AdminCommand
+from bot.commands.command import Command
 from bot.player.enums import State
 from bot import errors, translator, vars
 
 
-class BlockCommandCommand(AdminCommand):
+class BlockCommandCommand(Command):
     @property
     def help(self):
             return _("+/-COMMAND Blocks or unblocks commands. +COMMAND adds command to the blocklist. -COMMAND removes from it. Without a command shows the blocklist")
 
-    def __call__(self, command_id, arg, user):
+    def __call__(self, arg, user):
         arg = arg.lower()
         if len(arg) >= 1 and arg[1:] not in self.command_processor.commands_dict:
             raise errors.InvalidArgumentError()
@@ -34,12 +34,12 @@ class BlockCommandCommand(AdminCommand):
             raise errors.InvalidArgumentError()
 
 
-class ChangeGenderCommand(AdminCommand):
+class ChangeGenderCommand(Command):
     @property
     def help(self):
         return _("GENDER Changes bot's gender. n neutral, m male, f female")
 
-    def __call__(self, command_id, arg, user):
+    def __call__(self, arg, user):
         try:
             self.ttclient.change_gender(arg)
             self.config.teamtalk.gender = arg
@@ -47,12 +47,12 @@ class ChangeGenderCommand(AdminCommand):
             raise errors.InvalidArgumentError()
 
 
-class ChangeLanguageCommand(AdminCommand):
+class ChangeLanguageCommand(Command):
     @property
     def help(self):
         return _("LANGUAGE Changes bot's language")
 
-    def __call__(self, command_id, arg, user):
+    def __call__(self, arg, user):
         if arg:
             try:
                 translator.install_locale(arg, fallback=arg == 'en')
@@ -65,22 +65,22 @@ class ChangeLanguageCommand(AdminCommand):
             return _('Current language: {current_language}. Available languages: {available_languages}').format(current_language=self.config.general.language, available_languages=', '.join(translator.get_locales()))
 
 
-class ChangeNicknameCommand(AdminCommand):
+class ChangeNicknameCommand(Command):
     @property
     def help(self):
         return _('NICKNAME Changes bot\'s nickname')
 
-    def __call__(self, command_id, arg, user):
+    def __call__(self, arg, user):
         self.ttclient.change_nickname(arg)
         self.config.teamtalk.nickname = arg
 
 
-class ClearCacheCommand(AdminCommand):
+class ClearCacheCommand(Command):
     @property
     def help(self):
         return _("r/f Clears bot's cache. r clears recents, f clears favorites, without an option clears the entire cache")
 
-    def __call__(self, command_id, arg, user):
+    def __call__(self, arg, user):
         if not arg:
             self.cache.recents.clear()
             self.cache.favorites.clear()
@@ -96,12 +96,12 @@ class ClearCacheCommand(AdminCommand):
             return _("Favorites cleared")
 
 
-class TaskSchedulerCommand(AdminCommand):
+class TaskSchedulerCommand(Command):
     @property
     def help(self):
         return _("Task scheduler")
 
-    def __call__(self, command_id, arg, user):
+    def __call__(self, arg, user):
         if arg[0] == "+":
             self._add(arg[1::])
 
@@ -131,12 +131,12 @@ class TaskSchedulerCommand(AdminCommand):
         return int(datetime.combine(datetime.today(), datetime.strptime(t, self.config["general"]["time_format"]).time()).timestamp())
 
 
-class VoiceTransmissionCommand(AdminCommand):
+class VoiceTransmissionCommand(Command):
     @property
     def help(self):
         return _('Enables or disables voice transmission')
 
-    def __call__(self, command_id, arg, user):
+    def __call__(self, arg, user):
         if not self.ttclient.is_voice_transmission_enabled:
             self.ttclient.enable_voice_transmission()
             if self.player.state == State.Stopped:
@@ -149,7 +149,7 @@ class VoiceTransmissionCommand(AdminCommand):
             return _('Voice transmission disabled')
 
 
-class LockCommand(AdminCommand):
+class LockCommand(Command):
     @property
     def help(self):
         return _('Locks or unlocks the bot')
@@ -160,52 +160,52 @@ class LockCommand(AdminCommand):
         return _('Locked') if self.command_processor.locked else _('Unlocked')
 
 
-class ChangeStatusCommand(AdminCommand):
+class ChangeStatusCommand(Command):
     @property
     def help(self):
         return _("STATUS Changes bot's status")
 
 
-    def __call__(self, command_id, arg, user):
+    def __call__(self, arg, user):
         self.ttclient.change_status_text(arg)
         self.config.teamtalk.status = arg
 
 
-class EventHandlingCommand(AdminCommand):
+class EventHandlingCommand(Command):
     @property
     def help(self):
             return _("Enables or disables event handling")
 
-    def __call__(self, command_id, arg, user):
+    def __call__(self, arg, user):
         self.config.general.load_event_handlers = not  self.config.general.load_event_handlers
         return _("Event handling is enabled") if self.config.general.load_event_handlers else _("Event handling is disabled")
 
 
-class ChannelMessagesCommand(AdminCommand):
+class ChannelMessagesCommand(Command):
     @property
     def help(self):
         return _("Enables or disables sending of channel messages")
 
-    def __call__(self, command_id, arg, user):
+    def __call__(self, arg, user):
         self.config.general.send_channel_messages = not self.config.general.send_channel_messages
         return _("Channel messages enabled") if self.config.general.send_channel_messages else _("Channel messages disabled")
 
 
-class SaveConfigCommand(AdminCommand):
+class SaveConfigCommand(Command):
     @property
     def help(self):
         return _("Saves bot's configuration")
 
-    def __call__(self, command_id, arg, user):
+    def __call__(self, arg, user):
         self.config.save()
         return _('Configuration saved')
 
-class AdminUsersCommand(AdminCommand):
+class AdminUsersCommand(Command):
     @property
     def help(self):
         return _('+/-USERNAME Manages a list of administrators. +USERNAME adds a user. -USERNAME removes it. Without an option shows the list')
 
-    def __call__(self, command_id, arg, user):
+    def __call__(self, arg, user):
         if arg:
             if arg[0] == '+':
                 self.config.teamtalk.users["admins"].append(arg[1::])
@@ -226,12 +226,12 @@ class AdminUsersCommand(AdminCommand):
                 return _('The list is empty')
 
 
-class BannedUsersCommand(AdminCommand):
+class BannedUsersCommand(Command):
     @property
     def help(self):
         return _('+/-USERNAME Manages a list of banned users. +USERNAME adds a user. -USERNAME removes it. Without an option shows the list')
 
-    def __call__(self, command_id, arg, user):
+    def __call__(self, arg, user):
         if arg:
             if arg[0] == '+':
                 self.config.teamtalk.users["banned_users"].append(arg[1::])
@@ -253,21 +253,21 @@ class BannedUsersCommand(AdminCommand):
 
 
 
-class QuitCommand(AdminCommand):
+class QuitCommand(Command):
     @property
     def help(self):
         return _('Quits the bot')
 
-    def __call__(self, command_id, arg, user):
-        self.bot.close()
+    def __call__(self, arg, user):
+        self._bot.close()
 
-class RestartCommand(AdminCommand):
+class RestartCommand(Command):
     @property
     def help(self):
         return _('Restarts the bot')
 
-    def __call__(self, command_id, arg, user):
-        self.bot.close()
+    def __call__(self, arg, user):
+        self._bot.close()
         args = sys.argv
         if sys.platform == 'win32':
             subprocess.run([sys.executable] + args)
