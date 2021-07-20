@@ -1,7 +1,6 @@
 from collections import deque
 import html
 import logging
-from queue import Queue
 import time
 import random
 import sys
@@ -10,7 +9,6 @@ import mpv
 
 from bot import errors, vars
 from bot.player.enums import Mode, State, TrackType
-from bot.player.task_thread import TaskThread
 from bot.player.track import Track
 from bot.sound_devices import SoundDevice, SoundDeviceType
 
@@ -27,8 +25,6 @@ class Player:
         self.mode = Mode.TrackList
         self.cache = bot.cache
         self.volume = self.config.default_volume
-        self.task_queue = Queue()
-        self.task_thread = TaskThread(bot, self)
 
     def initialize(self):
         logging.debug('Initializing player')
@@ -39,9 +35,6 @@ class Player:
         self.register_event_callback("end-file", self.on_end_file)
         self.register_event_callback("metadata-update", self.on_metadata_update)
         logging.debug('Callbacks registered')
-        logging.debug("Starting player task thread")
-        self.task_thread.start()
-        logging.debug("Player task thread started")
 
     def close(self):
         logging.debug('Closing player')

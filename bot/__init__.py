@@ -50,17 +50,14 @@ class Bot:
         self.ttclient.run()
         self.player.run()
         self.tt_player_connector.start()
+        self.command_processor.run()
         logging.info('Started')
         self._close = False
-        breakpoint()
         while not self._close:
             try:
                 message = self.ttclient.message_queue.get_nowait()
                 logging.info("New message {text} from {username}".format(text=message.text, username=message.user.username))
-                reply_text = self.command_processor(message)
-                logging.info('replied {text}'.format(text=reply_text))
-                if reply_text:
-                    self.ttclient.send_message(reply_text, message.user)
+                self.command_processor(message)
             except queue.Empty:
                 pass
             time.sleep(vars.loop_timeout)
