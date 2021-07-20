@@ -1,4 +1,4 @@
-from bot.commands.command import Command, CancelableCommand
+from bot.commands.command import Command
 from bot.player.enums import Mode, State, TrackType
 from bot.TeamTalk.structs import UserRight
 from bot import errors, vars
@@ -22,27 +22,27 @@ class AboutCommand(Command):
         return vars.about_text()
 
 
-class PlayPauseCommand(CancelableCommand):
+class PlayPauseCommand(Command):
     @property
     def help(self):
         return _('QUERY Plays tracks found for the query. If no query is given, plays or pauses current track')
 
     def __call__(self, arg, user):
         if arg:
-            self.ttclient.send_message(_('Searching...'), user)
+            self.run_async(self.ttclient.send_message, _('Searching...'), user)
             try:
                 track_list = self.service_manager.service.search(arg)
                 if self.config.general.send_channel_messages:
-                    self.ttclient.send_message(_("{nickname} requested {request}").format(nickname=user.nickname, request=arg), type=2)
-                self.player.play(track_list)
+                    self.run_async(self.ttclient.send_message, _("{nickname} requested {request}").format(nickname=user.nickname, request=arg), type=2)
+                self.run_async(self.player.play, track_list)
                 return _('Playing {}').format(tracks[0].name)
             except errors.NothingFoundError:
                 return _('Nothing is found for your query')
         else:
             if self.player.state == State.Playing:
-                self.player.pause()
+                self.run_async(self.player.pause)
             elif self.player.state == State.Paused:
-                self.player.play()
+                self.run_async(self.player.play)
 
 
 class PlayUrlCommand(Command):
@@ -55,8 +55,8 @@ class PlayUrlCommand(Command):
             try:
                 tracks = self.module_manager.streamer.get(arg, user.is_admin)
                 if self.config.general.send_channel_messages:
-                    self.ttclient.send_message(_('{nickname} requested playing from a URL').format(nickname=user.nickname), type=2)
-                self.player.play(tracks)
+                    self.run_async(self.ttclient.send_message, _('{nickname} requested playing from a URL').format(nickname=user.nickname), type=2)
+                self.run_async(self.player.play, tracks)
             except errors.IncorrectProtocolError:
                 return _('Incorrect protocol')
             except errors.ServiceError:
