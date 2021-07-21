@@ -35,7 +35,7 @@ class PlayPauseCommand(Command):
                 if self.config.general.send_channel_messages:
                     self.run_async(self.ttclient.send_message, _("{nickname} requested {request}").format(nickname=user.nickname, request=arg), type=2)
                 self.run_async(self.player.play, track_list)
-                return _('Playing {}').format(tracks[0].name)
+                return _('Playing {}').format(track_list[0].name)
             except errors.NothingFoundError:
                 return _('Nothing is found for your query')
         else:
@@ -138,7 +138,7 @@ class NextTrackCommand(Command):
     def __call__(self, arg, user):
         try:
             self.player.next()
-            return _('Playing {}').format(self.player.track.name.get())
+            return _('Playing {}').format(self.player.track.name)
         except errors.NoNextTrackError:
             return _('No next track')
         except errors.NothingIsPlayingError:
@@ -153,7 +153,7 @@ class PreviousTrackCommand(Command):
     def __call__(self, arg, user):
         try:
             self.player.previous()
-            return _('Playing {}').format(self.player.track.name.get())
+            return _('Playing {}').format(self.player.track.name)
         except errors.NoPreviousTrackError:
             return _('No previous track')
         except errors.NothingIsPlayingError:
@@ -220,7 +220,7 @@ class SelectTrackCommand(Command):
                 else:
                     return _('Incorrect number')
                 self.player.play_by_index(index)
-                return _('Playing {} {}').format(arg, self.player.track.name.get())
+                return _('Playing {} {}').format(arg, self.player.track.name)
             except errors.IncorrectTrackIndexError:
                 return _('Out of list')
             except errors.NothingIsPlayingError:
@@ -229,7 +229,7 @@ class SelectTrackCommand(Command):
                 raise errors.InvalidArgumentError
         else:
             if self.player.state != State.Stopped:
-                return _('Playing {} {}').format(self.player.track_index.get() + 1, self.player.track.name.get())
+                return _('Playing {} {}').format(self.player.track_index + 1, self.player.track.name)
             else:
                 return _('Nothing is playing')
 
@@ -270,9 +270,9 @@ class FavoritesCommand(Command):
     def _add(self, user):
         if self.player.state != State.Stopped:
             if user.username in self.cache.favorites:
-                self.cache.favorites[user.username].append(self.player.track.get())
+                self.cache.favorites[user.username].append(self.player.track)
             else:
-                self.cache.favorites[user.username] = [self.player.track.get()]
+                self.cache.favorites[user.username] = [self.player.track]
             self.cache.save()
             return _('Added')
         else:
@@ -282,7 +282,7 @@ class FavoritesCommand(Command):
         if (self.player.state != State.Stopped and len(arg) == 1) or len(arg) > 1:
             try:
                 if len(arg) == 1:
-                    self.cache.favorites[user.username].remove(self.player.track.get())
+                    self.cache.favorites[user.username].remove(self.player.track)
                 else:
                     del self.cache.favorites[user.username][int(arg[1::]) - 1]
                 self.cache.save()
@@ -326,7 +326,7 @@ class GetLinkCommand(Command):
 
     def __call__(self, arg, user):
         if self.player.state != State.Stopped:
-            url = self.player.track.url.get()
+            url = self.player.track.url
             if url:
                 return url
             else:
@@ -367,9 +367,9 @@ class DownloadCommand(Command):
         if not (self.ttclient.user.user_account.rights & UserRight.UploadFiles == UserRight.UploadFiles):
             raise PermissionError(_("Cannot upload file to channel"))
         if self.player.state != State.Stopped:
-            track = self.player.track.get()
+            track = self.player.track
             if track.url and (track.type == TrackType.Default or track.type == TrackType.Local):
-                self.module_manager.downloader(self.player.track.get(), user)
+                self.module_manager.downloader(self.player.track, user)
                 return _("Downloading...")
             else:
                 return _('Live streams cannot be downloaded')
