@@ -84,7 +84,7 @@ class StopCommand(Command):
 class VolumeCommand(Command):
     @property
     def help(self):
-        return _('VOLUME Sets the volume to a value between 0 and {max_volume}. If no volume is specified, the current volume level is displayed').format(max_volume=self.player.max_volume)
+        return _('VOLUME Sets the volume to a value between 0 and {max_volume}. If no volume is specified, the current volume level is displayed').format(max_volume=self.config.player.max_volume)
 
     def __call__(self, arg, user):
         if arg:
@@ -118,7 +118,7 @@ class SeekBackCommand(Command):
 class SeekForwardCommand(Command):
     @property
     def help(self):
-        return _('STEP Seeks current track forward. the default step is {seek_step} seconds').format(seek_step=self.player.seek_step)
+        return _('STEP Seeks current track forward. the default step is {seek_step} seconds').format(seek_step=self.config.player.seek_step)
 
     def __call__(self, arg, user):
         if arg:
