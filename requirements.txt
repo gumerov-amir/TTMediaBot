@@ -1,5 +1,6 @@
 beautifulsoup4
 click
+pydantic
 patool
 portalocker
 requests
