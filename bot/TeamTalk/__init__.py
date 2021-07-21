@@ -317,7 +317,7 @@ class TeamTalk:
             _str(user.szStatusMsg), gender, UserState(user.uUserState),
             self.get_channel(user.nChannelID), _str(user.szClientName), user.uVersion,
             self.get_user_account(_str(user.szUsername)), UserType(user.uUserType),
-            _str(user.szUsername) in self.admins, _str(user.szUsername) in self.banned_users
+            True if _str(user.szUsername) in self.config['users']['admins'] or user.uUserType == 2 else False, _str(user.szUsername) in self.config['users']['banned_users']
         )
 
     def get_user_account(self, username):
