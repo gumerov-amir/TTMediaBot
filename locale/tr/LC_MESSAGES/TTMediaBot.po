@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: TTMediaBot\n"
-"POT-Creation-Date: 2021-07-16 13:16+0400\n"
-"PO-Revision-Date: 2021-07-16 13:47+0400\n"
+"POT-Creation-Date: 2021-07-17 13:36+0400\n"
+"PO-Revision-Date: 2021-07-17 13:41+0400\n"
 "Last-Translator: \n"
 "Language-Team: TTMediaBot's developers\n"
 "Language: tr\n"
@@ -319,14 +319,14 @@ msgstr ""
 #: commands/user_commands.py:106
 #, python-brace-format
 msgid ""
-"[STEP] Seeks current track backward. the default step is {seek_step} seconds"
+"STEP Seeks current track backward. the default step is {seek_step} seconds"
 msgstr ""
 "[ADIM] Geçerli parçayı geriye doğru arar. varsayılan adım {seek_step} saniye"
 
 #: commands/user_commands.py:121
 #, python-brace-format
 msgid ""
-"[STEP] Seeks current track forward. the default step is {seek_step} seconds"
+"STEP Seeks current track forward. the default step is {seek_step} seconds"
 msgstr ""
 "[ADIM] Mevcut parçayı ileriye doğru arar. varsayılan adım {seek_step} saniye"
 
@@ -450,14 +450,14 @@ msgstr "Geçerli hız: {}"
 msgid ""
 "+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - "
 "removes a track requested from favorites. If a number is specified after "
-"+/-, ads/removes a track with that number"
+"+/-, adds/removes a track with that number"
 msgstr ""
 "+/-NUMARA Favori parçaları yönetir. + mevcut parçayı favorilere ekler. - "
 "favorilerden istenen parçayı kaldırır. +/- sonra bir numara belirtilirse, o "
 "numaraya sahip bir parçayı ekler/kaldırır"
 
 #: commands/user_commands.py:259
-msgid "This comand is not available for guest users"
+msgid "This command is not available for guest users"
 msgstr "Bu komut konuk kullanıcılar için mevcut değildir"
 
 #: commands/user_commands.py:295
