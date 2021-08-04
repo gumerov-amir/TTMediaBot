@@ -22,7 +22,6 @@ import TeamTalkPy
 from TeamTalkPy import TTMessage, ClientEvent, ClientFlags
 
 re_line_endings = re.compile('[\\r\\n]')
-genders = {'m': 0, 'f': 256, 'n': 4096}
 
 
 def _str(data):
@@ -74,7 +73,7 @@ class TeamTalk:
         self.tt = TeamTalkPy.TeamTalk()
         self.is_voice_transmission_enabled = False
         self.nickname = self.config['nickname']
-        self.gender = genders[self.config['gender']]
+        self.gender = UserStatusMode.__members__[self.config['gender']]
         self.status = self.default_status
         self.admins = self.config['users']['admins']
         self.banned_users = self.config['users']['banned_users']
@@ -280,11 +279,11 @@ class TeamTalk:
             self.status = split(text)[0]
         else:
             self.status = self.default_status
-        self.tt.doChangeStatus(self.gender, _str(self.status))
+        self.tt.doChangeStatus(self.gender.value, _str(self.status))
 
     def change_gender(self, gender):
-        self.gender = genders[gender]
-        self.tt.doChangeStatus(self.gender, _str(self.status))
+        self.gender = UserStatusMode.__members__[gender]
+        self.tt.doChangeStatus(self.gender.value, _str(self.status))
 
     def get_channel(self, channel_id):
         channel = self.tt.getChannel(channel_id)
@@ -311,7 +310,7 @@ class TeamTalk:
 
     def get_user(self, id):
         user = self.tt.getUser(id)
-        gender = list(genders.keys())[list(genders.values()).index(user.nStatusMode)]
+        gender = UserStatusMode(user.nStatusMode)
         return User(
             user.nUserID, _str(user.szNickname), _str(user.szUsername),
             _str(user.szStatusMsg), gender, UserState(user.uUserState),

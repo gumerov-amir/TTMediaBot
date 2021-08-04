@@ -102,6 +102,13 @@ class UserAccount:
         self.init_channel = init_channel
 
 
+class UserStatusMode(Flag):
+    m = 0
+    f = 256
+    n = 4096
+    aavay = 1
+    question = 2
+
 class UserRight(Flag):
     USERRIGHT_NONE = 0x00000000
     MultiLogin = TeamTalkPy.UserRight.USERRIGHT_MULTI_LOGIN
