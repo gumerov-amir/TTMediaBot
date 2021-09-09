@@ -12,13 +12,13 @@ class PhoneValidationError(Exception):
 class TokenValidationError(Exception):
     pass
 
-client_id = '2685278'
-client_secret = 'lxhD8OD7dMsqtXIm5IUY'
+client_id = '2274003'
+client_secret = 'hHbZxrka2uZ6jB1inYsH'
 api_ver='5.82'
 scope = 'all'
-user_agent = 'KateMobileAndroid/60.1-467 (Android 6.0.1; SDK 23; armeabi-v7a; samsung SM-G900F; ru)'
+user_agent = 'VKAndroidApp/4.13.1-1206 (Android 7.1.1; SDK 25; armeabi-v7a; ; ru)'
 api_url = 'https://api.vk.com/method/'
-receipt = 'd4gdb0joSi:APA91bFAM-gVwLCkCABy5DJPPRH5TNDHW9xcGu_OLhmdUSA8zuUsBiU_DexHrTLLZWtzWHZTT5QUaVkBk_GJVQyCE_yQj9UId3pU3vxvizffCPQISmh2k93Fs7XH1qPbDvezEiMyeuLDXb5ebOVGehtbdk_9u5pwUw'
+receipt = 'fkdoOMX_yqQ:APA91bHbLn41RMJmAbuFjqLg5K-QW7si9KajBGCDJxcpzbuvEcPIk9rwx5HWa1yo1pTzpaKL50mXiWvtqApBzymO2sRKlyRiWqqzjMTXUyA5HnRJZyXWWGPX8GkFxQQ4bLrDCcnb93pn'
 
 def request_auth(login, password, scope='', code=''):
     if not (login or password):
