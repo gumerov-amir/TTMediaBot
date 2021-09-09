@@ -21,7 +21,7 @@ class Service:
         http.headers.update({
             'User-agent': 'VKAndroidApp/4.13.1-1206 (Android 7.1.1; SDK 25; armeabi-v7a; ; ru)'
         })
-        self._session = vk_api.VkApi(token=self.config['token'], session=http)
+        self._session = vk_api.VkApi(token=self.config['token'], session=http, api_version='5.68')
         self.api = self._session.get_api()
         try:
             self.api.account.getInfo()
