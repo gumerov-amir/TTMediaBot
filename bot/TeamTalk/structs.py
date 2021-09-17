@@ -108,6 +108,7 @@ class UserStatusMode(Flag):
     Question = 2
     VideoTx = 512
     Desktop = 1024
+    StreamMediaFile = 2048
     M = Available
     F = 256
     N = 4096
