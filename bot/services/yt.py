@@ -41,7 +41,10 @@ class Service:
                 return tracks
             if not process:
                 return [Track(service=self, extra_info=info)]
-            stream = ydl.process_ie_result(info)
+            try:
+                stream = ydl.process_ie_result(info)
+            except Exception:
+                raise errors.ServiceError()
             if 'url' in stream:
                 url = stream['url']
             else:
