@@ -73,7 +73,7 @@ class TeamTalk:
         self.tt = TeamTalkPy.TeamTalk()
         self.is_voice_transmission_enabled = False
         self.nickname = self.config['nickname']
-        self.gender = UserStatusMode.__members__[self.config['gender']]
+        self.gender = UserStatusMode.__members__[self.config['gender'].upper()]
         self.status = self.default_status
         self.admins = self.config['users']['admins']
         self.banned_users = self.config['users']['banned_users']
@@ -282,7 +282,7 @@ class TeamTalk:
         self.tt.doChangeStatus(self.gender.value, _str(self.status))
 
     def change_gender(self, gender):
-        self.gender = UserStatusMode.__members__[gender]
+        self.gender = UserStatusMode.__members__[gender.upper()]
         self.tt.doChangeStatus(self.gender.value, _str(self.status))
 
     def get_channel(self, channel_id):
