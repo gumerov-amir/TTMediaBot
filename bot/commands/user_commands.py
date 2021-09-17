@@ -38,6 +38,8 @@ class PlayPauseCommand(Command):
                 return _('Playing {}').format(self.player.track.name)
             except errors.NothingFoundError:
                 return _('Nothing is found for your query')
+            except errors.ServiceError:
+                return _('The selected service is currently unavailable')
         else:
             if self.player.state == State.Playing:
                 self.player.pause()
@@ -60,7 +62,7 @@ class PlayUrlCommand(Command):
             except errors.IncorrectProtocolError:
                 return _('Incorrect protocol')
             except errors.ServiceError:
-                return _('Cannot get stream URL')
+                return _('Cannot process stream URL')
             except errors.PathNotFoundError:
                 return _('The path cannot be found')
         else:
