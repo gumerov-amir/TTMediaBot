@@ -222,6 +222,9 @@ class MpvRenderParam(Structure):
         elif cons is bool:
             self.value = c_int(int(bool(value)))
             self.data = cast(pointer(self.value), c_void_p)
+        elif cons is c_void_p:
+            self.value = value
+            self.data = cast(self.value, c_void_p)
         else:
             self.value = cons(**value)
             self.data = cast(pointer(self.value), c_void_p)
@@ -472,6 +475,8 @@ OpenGlCbUpdateFn = CFUNCTYPE(None, c_void_p)
 OpenGlCbGetProcAddrFn = CFUNCTYPE(c_void_p, c_void_p, c_char_p)
 
 def _handle_func(name, args, restype, errcheck, ctx=MpvHandle, deprecated=False):
+    if name.startswith("mpv_render_context_"):
+        return
     func = getattr(backend, name)
     func.argtypes = [ctx] + args if ctx else args
     if restype is not None:
