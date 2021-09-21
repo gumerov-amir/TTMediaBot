@@ -4,5 +4,5 @@ patool
 portalocker
 requests
 vk-api
-yt-dlp
 youtube-search-python
+yt-dlp
