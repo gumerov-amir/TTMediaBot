@@ -41,7 +41,7 @@ class TTPlayerConnector(Thread):
                     last_track_meta = self.player.track.get_meta()
                     self.ttclient.change_status_text('{state}: {name}'.format(state=self.ttclient.status.split(':')[0], name=self.player.track.name))
             except Exception as e:
-                logging.error(exc_info=True)
+                logging.error("", exc_info=True)
             time.sleep(vars.loop_timeout)
 
     def close(self):
