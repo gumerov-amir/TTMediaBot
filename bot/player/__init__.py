@@ -112,7 +112,10 @@ class Player:
                 except IndexError:
                     track_index = len(self.track_list) - 1
             else:
-                track_index -= 1
+                if track_index == 0 and self.mode != Mode.RepeatTrackList:
+                    raise errors.NoPreviousTrackError
+                else:
+                    track_index -= 1
         else:
             track_index = 0
         try:
