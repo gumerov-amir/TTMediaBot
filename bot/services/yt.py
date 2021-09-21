@@ -1,6 +1,6 @@
 import logging
 
-from youtube_dl import YoutubeDL
+from yt_dlp import YoutubeDL
 from youtubesearchpython import VideosSearch
 
 from bot.player.enums import TrackType
@@ -26,6 +26,7 @@ class Service:
         with YoutubeDL(self._ydl_config) as ydl:
             if not extra_info:
                 info = ydl.extract_info(url, process=False)
+                print(info)
             else:
                 info = extra_info
             info_type = None
