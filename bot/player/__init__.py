@@ -42,6 +42,8 @@ class Player:
 
     def close(self):
         logging.debug('Closing player')
+        if self.state != State.Stopped:
+            self.stop()
         self._player.terminate()
         logging.debug('Player closed')
 
