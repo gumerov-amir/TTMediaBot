@@ -26,10 +26,7 @@ default_config = {
         "volume_fading": True,
         "volume_fading_interval": 0.025,
         "seek_step": 5,
-        "player_options": {
-            "video": False,
-            "ytdl": False
-        },
+        "player_options": {},
     },
     "teamtalk": {
         "hostname": "localhost",
@@ -65,7 +62,7 @@ default_config = {
         "log": True,
         "level": "INFO",
         "format": "%(levelname)s [%(asctime)s]: %(message)s in %(threadName)s file: %(filename)s line %(lineno)d function %(funcName)s",
-        "mode": "FILE",
+        "mode": "STDOUT_AND_FILE",
         "file_name": "TTMediaBot.log",
         "max_file_size": 0,
         "backup_count": 0

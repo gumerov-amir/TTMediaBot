@@ -16,7 +16,14 @@ from bot.sound_devices import SoundDevice, SoundDeviceType
 class Player:
     def __init__(self, config, cache):
         self.config = config
-        self._player = mpv.MPV(**self.config["player_options"], log_handler=self.log_handler)
+        mpv_options = {
+            'demuxer_max_back_bytes': 1048576,
+            'demuxer_max_bytes': 2097152,
+            'video': False,
+            'ytdl': False,
+        }
+        mpv_options.update(config['player_options'])
+        self._player = mpv.MPV(**mpv_options, log_handler=self.log_handler)
         self._log_level = 'PLAYER_DEBUG'
         self.volume = self.config['default_volume']
         self.max_volume = self.config['max_volume']
