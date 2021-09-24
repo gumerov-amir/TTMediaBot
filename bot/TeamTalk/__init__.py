@@ -278,7 +278,7 @@ class TeamTalk:
         if text:
             self.status = split(text)[0]
         else:
-            self.status = self.default_status
+            self.status = split(self.default_status)[0]
         self.tt.doChangeStatus(self.gender.value, _str(self.status))
 
     def change_gender(self, gender):

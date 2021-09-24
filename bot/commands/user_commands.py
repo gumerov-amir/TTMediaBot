@@ -19,7 +19,7 @@ class AboutCommand(Command):
         return _('Shows information about the bot')
 
     def __call__(self, arg, user):
-        return vars.about_text()
+        return vars.client_name + '\n' + vars.about_text()
 
 
 class PlayPauseCommand(Command):
