@@ -11,6 +11,7 @@ class Service:
     def __init__(self, config):
         self.name = 'yt'
         self.hostnames = []
+        self.hidden = False
 
     def initialize(self):
         self._ydl_config = {
