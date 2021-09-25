@@ -194,10 +194,10 @@ class ServiceCommand(Command):
         return _('SERVICE Selects the service to play from. If no service is specified, the current service and a list of available services are displayed')
 
     def __call__(self, arg, user):
-        service_help = _('Current service: {current_service}\nAvailable: {available_services}').format(current_service=self.service_manager.service.name, available_services=', '.join([i for i in self.service_manager.available_services]))
+        service_help = _('Current service: {current_service}\nAvailable: {available_services}').format(current_service=self.service_manager.service.name, available_services=', '.join([i for i in self.service_manager.available_services if not self.service_manager.available_services[i].hidden]))
         if arg:
             arg = arg.lower()
-            if arg in self.service_manager.available_services:
+            if arg in self.service_manager.available_services and not self.service_manager.available_services[arg].hidden:
                 self.service_manager.service = self.service_manager.available_services[arg]
                 return _('Current service: {}').format(self.service_manager.service.name)
             else:

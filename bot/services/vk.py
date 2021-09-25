@@ -15,6 +15,7 @@ class Service:
         self.hostnames = ['vk.com', 'www.vk.com', 'vkontakte.ru', 'www.vkontakte.ru', 'm.vk.com', 'm.vkontakte.ru']
         self.config = config
         self.format = "mp3"
+        self.hidden = False
 
     def initialize(self):
         http = requests.Session()
