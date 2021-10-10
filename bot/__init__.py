@@ -11,7 +11,7 @@ class Bot:
         try:
             self.config = config.Config(config_file_name)
         except PermissionError:
-            sys.exit('The configuration file is already used by another instance of the bot')
+            sys.exit('The configuration file cannot be accessed due to a permission error or is already used by another instance of the bot')
         translator.install_locale(self.config['general']['language'])
         try:
             if cache_file_name:
@@ -19,7 +19,7 @@ class Bot:
             else:
                 self.cache = cache.Cache(self.config["general"]["cache_file_name"])
         except PermissionError:
-            sys.exit('The cache file is already used by another instance of the bot')
+            sys.exit('The cache file cannot be accessed due to a permission error or is already used by another instance of the bot')
         self.log_file_name = log_file_name
         self.player = player.Player(self.config['player'], self.cache)
         self.ttclient = TeamTalk.TeamTalk(self, self.config)
