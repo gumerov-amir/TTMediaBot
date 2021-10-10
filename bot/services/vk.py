@@ -33,7 +33,7 @@ class Service:
     def get(self, url):
         parsed_url = urlparse(url)
         path = parsed_url.path[1::]
-        if 'video' in path:
+        if path.startswith('video_'):
             raise errors.ServiceError()
         try:
             if 'music/' in path:
@@ -43,7 +43,11 @@ class Service:
                 p_id = ids[1]
                 audios = self.api.audio.get(owner_id=int(o_id), album_id=int(p_id))
             else:
-                id = self.api.utils.resolveScreenName(screen_name=path)['object_id']
+                object_info = self.api.utils.resolveScreenName(screen_name=path)
+                if object_info['type'] == 'group':
+                    id = -object_info['object_id']
+                else:
+                    id = object_info['object_id']
                 audios = self.api.audio.get(owner_id=id, count=6000)
             if 'count' in audios and audios['count'] > 0:
                 tracks = []
