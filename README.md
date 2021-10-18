@@ -63,5 +63,5 @@ output should be null audio output, input should be pulse.
 * The correct number will be the last one as input, that is, if we selected the output as line 1 with the number 3, the input device would be line 1 with number 7 of the two options, number 5 and number 7.
 * The same method applies to all numbers and all Input / Outputs.
 # contacts
-E-mail - TTMediaBot@gmail.com
-telegram channel: https://t.me/TTMediaBot_official
+* telegram channel: https://t.me/TTMediaBot_chat
+* E-mail: TTMediaBot@gmail.com
