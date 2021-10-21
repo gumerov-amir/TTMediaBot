@@ -26,7 +26,7 @@ class Service:
         self.api = self._session.get_api()
         try:
             self.api.account.getInfo()
-        except (vk_api.exceptions.ApiHttpError, vk_api.exceptions.ApiError) as e:
+        except (vk_api.exceptions.ApiHttpError, vk_api.exceptions.ApiError, requests.exceptions.ConnectionError) as e:
             logging.error(e)
             raise errors.ServiceError(e)
 
