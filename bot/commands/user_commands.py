@@ -108,6 +108,8 @@ class SeekBackCommand(Command):
         return _('STEP Seeks current track backward. the default step is {seek_step} seconds').format(seek_step=self.player.seek_step)
 
     def __call__(self, arg, user):
+        if self.player.state == State.Stopped:
+            return _('Nothing is playing')
         if arg:
             try:
                 self.player.seek_back(float(arg))
@@ -123,6 +125,8 @@ class SeekForwardCommand(Command):
         return _('STEP Seeks current track forward. the default step is {seek_step} seconds').format(seek_step=self.player.seek_step)
 
     def __call__(self, arg, user):
+        if self.player.state == State.Stopped:
+            return _('Nothing is playing')
         if arg:
             try:
                 self.player.seek_forward(float(arg))
