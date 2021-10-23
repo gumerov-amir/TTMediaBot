@@ -23,6 +23,7 @@ class Track:
         track = service.get(self._url, extra_info=self.extra_info, process=True)[0]
         self.url = track.url
         self.name = track.name
+        self._original_track.name = track.name
         self.format = track.format
         self.type = track.type
         self._is_fetched = True
@@ -38,8 +39,9 @@ class Track:
 
     @property
     def name(self):
+        if not self._name:
             self._fetch_stream_data()
-            return self._name
+        return self._name
 
     @name.setter
     def name(self, value):
