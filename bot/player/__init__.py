@@ -140,8 +140,6 @@ class Player:
                 raise errors.NoPreviousTrackError
 
     def play_by_index(self, index):
-        if self.state == State.Stopped:
-            raise errors.NothingIsPlayingError()
         if index < len(self.track_list) and index >= (0 - len(self.track_list)):
             self.track = self.track_list[index]
             self.track_index = self.track_list.index(self.track)
@@ -173,26 +171,24 @@ class Player:
         step = step if step else self.seek_step
         if step <= 0:
             raise ValueError()
-        if self.state == State.Stopped:
-            raise errors.NothingIsPlayingError()
-        self._player.seek(-step, reference='relative')
+        try:
+            self._player.seek(-step, reference='relative')
+        except SystemError:
+            self.stop()
 
     def seek_forward(self, step=None):
         step = step if step else self.seek_step
         if step <= 0:
             raise ValueError()
-        if self.state == State.Stopped:
-            raise errors.NothingIsPlayingError()
-        self._player.seek(step, reference='relative')
+        try:
+            self._player.seek(step, reference='relative')
+        except SystemError:
+            self.stop()
 
     def get_duration(self):
-        if self.state == State.Stopped:
-            raise errors.NothingIsPlayingError()
         return self._player.duration
 
     def get_position(self):
-        if self.state == State.Stopped:
-            raise errors.NothingIsPlayingError()
         return self._player.time_pos
 
     def set_position(self, arg):
