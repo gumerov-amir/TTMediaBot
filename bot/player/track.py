@@ -1,4 +1,7 @@
+import copy
+
 from bot.player.enums import TrackType
+
 
 class Track:
     def __init__(self, service=None, url=None, name=None, format=None, extra_info=None, type=TrackType.Default):
@@ -15,7 +18,9 @@ class Track:
     def _fetch_stream_data(self):
         if (not self.service) or self._is_fetched:
             return
-        track = self.service.get(self._url, extra_info=self.extra_info)[0]
+        self._original_track = copy.deepcopy(self)
+        service = get_service_by_name(self.service)
+        track = service.get(self._url, extra_info=self.extra_info, process=True)[0]
         self.url = track.url
         self.name = track.name
         self.format = track.format
@@ -46,8 +51,14 @@ class Track:
         except:
             return {'name': None, 'url': ''}
 
+    def get_raw(self):
+        if hasattr(self, '_original_track'):
+            return self._original_track
+        else:
+            return self
+
     def __bool__(self):
-        if self.url or (self.service and self.extra_info):
+        if self.service or self.url:
             return True
         else:
             return False

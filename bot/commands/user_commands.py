@@ -276,9 +276,9 @@ class FavoritesCommand(Command):
     def _add(self, user):
         if self.player.state != State.Stopped:
             if user.username in self.cache.favorites:
-                self.cache.favorites[user.username].append(self.player.track)
+                self.cache.favorites[user.username].append(self.player.track.get_raw())
             else:
-                self.cache.favorites[user.username] = [self.player.track]
+                self.cache.favorites[user.username] = [self.player.track.get_raw()]
             self.cache.save()
             return _('Added')
         else:

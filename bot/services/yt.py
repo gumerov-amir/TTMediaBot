@@ -21,7 +21,7 @@ class Service:
             'logger': logging.getLogger('root')
         }
 
-    def get(self, url, extra_info=None, process=True):
+    def get(self, url, extra_info=None, process=False):
         if not (url or extra_info):
             raise errors.InvalidArgumentError()
         with YoutubeDL(self._ydl_config) as ydl:
@@ -41,7 +41,7 @@ class Service:
                     tracks += data
                 return tracks
             if not process:
-                return [Track(service=self, extra_info=info)]
+                return [Track(service=self.name, extra_info=info)]
             try:
                 stream = ydl.process_ie_result(info)
             except Exception:
@@ -65,7 +65,7 @@ class Service:
         if search['result']:
             tracks = []
             for video in search['result']:
-                track = Track(url=video['link'], service=self)
+                track = Track(url=video['link'], service=self.name)
                 tracks.append(track)
             return tracks
         else:
