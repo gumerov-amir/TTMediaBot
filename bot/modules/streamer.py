@@ -24,7 +24,7 @@ class Streamer:
                         break
                 except errors.ServiceError:
                     continue
-                except:
+                except Exception:
                     if service.name == self.service_manager.fallback_service:
                         return [track, ]
             if len(fetched_data) == 1 and fetched_data[0].url.startswith(track.url):
