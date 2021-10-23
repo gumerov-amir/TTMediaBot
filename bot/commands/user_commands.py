@@ -176,7 +176,7 @@ class ModeCommand(Command):
         return _('MODE Sets the playback mode. If no mode is specified, the current mode and a list of modes are displayed')
 
     def __call__(self, arg, user):
-        mode_help = _("Current_ mode: {current_mode}\n{modes}").format(current_mode=self.mode_names[self.player.mode], modes='\n'.join(['{value} {name}'.format(name=self.mode_names[i], value=i.value) for i in Mode.__members__.values()]))
+        mode_help = _("Current mode: {current_mode}\n{modes}").format(current_mode=self.mode_names[self.player.mode], modes='\n'.join(['{value} {name}'.format(name=self.mode_names[i], value=i.value) for i in Mode.__members__.values()]))
         if arg:
             try:
                 mode = Mode(arg.lower())
@@ -312,7 +312,7 @@ class FavoritesCommand(Command):
         if len(track_names) > 0:
             return '\n'.join(track_names)
         else:
-            return _('List is empty')
+            return _('The list is empty')
 
     def _play(self, arg, user):
         try:
