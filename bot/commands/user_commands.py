@@ -322,7 +322,7 @@ class FavoritesCommand(Command):
         except IndexError:
             return _('Out of list')
         except KeyError:
-            return _('The list is is empty')
+            return _('The list is empty')
 
 
 class GetLinkCommand(Command):
