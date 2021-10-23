@@ -1,7 +1,7 @@
 import os
 
 app_name = "TTMediaBot"
-app_version = '2.1.0'
+app_version = '2.1.1'
 client_name = app_name + "-V" + app_version
 about_text = lambda: _("""\
 A media streaming bot for TeamTalk.

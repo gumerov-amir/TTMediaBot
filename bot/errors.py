@@ -14,6 +14,10 @@ class InvalidArgumentError(Exception):
     pass
 
 
+class ServiceNotFoundError(Exception):
+    pass
+
+
 class ServiceError(Exception):
     pass
 

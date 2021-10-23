@@ -23,7 +23,11 @@ class Player:
             'ytdl': False,
         }
         mpv_options.update(config['player_options'])
-        self._player = mpv.MPV(**mpv_options, log_handler=self.log_handler)
+        try:
+            self._player = mpv.MPV(**mpv_options, log_handler=self.log_handler)
+        except AttributeError:
+            del mpv_options['demuxer_max_back_bytes']
+            self._player = mpv.MPV(**mpv_options, log_handler=self.log_handler)
         self._log_level = 'PLAYER_DEBUG'
         self.volume = self.config['default_volume']
         self.max_volume = self.config['max_volume']
@@ -85,9 +89,9 @@ class Player:
         if save_to_recents:
             try:
                 if self.cache.recents[-1] != self.track_list[self.track_index]:
-                    self.cache.recents.append(self.track_list[self.track_index])
+                    self.cache.recents.append(self.track_list[self.track_index].get_raw())
             except:
-                self.cache.recents.append(self.track_list[self.track_index])
+                self.cache.recents.append(self.track_list[self.track_index].get_raw())
             self.cache.save()
         self._player.pause = False
         self._player.play(arg)
