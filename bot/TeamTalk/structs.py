@@ -7,7 +7,7 @@ class Channel:
     def __init__(self, id, name, topic, max_users, type):
         self.id = id
         self.name = name
-        topic = topic
+        self.topic = topic
         self.max_users = max_users
         self.type = type
 
