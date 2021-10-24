@@ -1,3 +1,4 @@
+from importlib.machinery import SourceFileLoader
 import logging
 import os
 from threading import Thread
@@ -63,9 +64,9 @@ class TeamTalkThread(Thread):
     def import_event_handlers(self):
         try:
             if os.path.isfile(self.ttclient.event_handlers_file_name) and os.path.splitext(self.ttclient.event_handlers_file_name)[1] == ".py":
-                module = __import__(os.path.splitext(self.ttclient.event_handlers_file_name)[0])
+                module = SourceFileLoader(os.path.splitext(self.ttclient.event_handlers_file_name)[0], self.ttclient.event_handlers_file_name).load_module()
             elif os.path.isdir(self.ttclient.event_handlers_file_name) and "__init__.py" in os.listdir(self.ttclient.event_handlers_file_name):
-                module = __import__(self.ttclient.event_handlers_file_name)
+                module = SourceFileLoader(self.ttclient.event_handlers_file_name, self.ttclient.event_handlers_file_name+"/__init__.py").load_module()
             else:
                 logging.error("Incorrect path to event handlers. An empty module will be used")
                 module = types.ModuleType("event_handlers")
