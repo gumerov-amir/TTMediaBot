@@ -11,7 +11,7 @@ class Mode(Flag):
     FILE = 2
     STDOUT_AND_FILE = STDOUT|FILE
 
-def initialize_logger(config, file_name):
+def initialize_logger(config, file):
     logging.addLevelName(5, "PLAYER_DEBUG")
     level = logging.getLevelName(config['level'])
     formatter = logging.Formatter(config['format'])
@@ -21,14 +21,8 @@ def initialize_logger(config, file_name):
     except KeyError:
         sys.exit("Invalid log mode name")
     if mode & Mode.FILE == Mode.FILE:
-        if file_name:
-            file_name = file_name
-        else:
-            file_name = config["file_name"]
-        if os.path.isdir(os.path.join(*os.path.split(file_name)[0:-1])):
-            file = file_name
-        else:
-            file = os.path.join(vars.directory, file_name)
+        if not file:
+            file = config["file_name"]
         rotating_file_handler = RotatingFileHandler(filename=file, mode='a', maxBytes=config['max_file_size'] * 1024, backupCount=config['backup_count'], encoding='UTF-8')
         rotating_file_handler.setFormatter(formatter)
         rotating_file_handler.setLevel(level)
