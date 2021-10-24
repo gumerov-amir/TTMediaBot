@@ -66,6 +66,11 @@ default_config = {
         "file_name": "TTMediaBot.log",
         "max_file_size": 0,
         "backup_count": 0
+    },
+    "shortening": {
+        "shorten_links": False,
+        "service": "Bitly",
+        "service_token": ""
     }
 }
 
