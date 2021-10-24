@@ -1,3 +1,5 @@
+from pyshorteners import Shortener
+
 from bot.commands.command import Command
 from bot.player.enums import Mode, State, TrackType
 from bot.TeamTalk.structs import UserRight
@@ -334,6 +336,9 @@ class GetLinkCommand(Command):
         if self.player.state != State.Stopped:
             url = self.player.track.url
             if url:
+                if self.config["shortening"]["shorten_links"]:
+                    shortener = Shortener()
+                    url = shortener.clckru.short(url)
                 return url
             else:
                 return _('URL is not available')
