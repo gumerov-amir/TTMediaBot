@@ -2,6 +2,7 @@ beautifulsoup4
 click
 patool
 portalocker
+pyshorteners
 requests
 vk-api
 youtube-search-python
