@@ -17,7 +17,7 @@ class BlockCommandCommand(AdminCommand):
         if len(arg) >= 1 and arg[1:] not in self.command_processor.commands_dict:
             raise errors.InvalidArgumentError()
         if not arg:
-            return ", ".join(self.command_processor.blocked_commands) if self.command_processor.blocked_commands else _("List is empty")
+            return ", ".join(self.command_processor.blocked_commands) if self.command_processor.blocked_commands else _("The list is empty")
         if arg[0] == "+":
             if arg[1::] not in self.command_processor.blocked_commands:
                 self.command_processor.blocked_commands.append(arg[1::])
