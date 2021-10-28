@@ -1,3 +1,5 @@
+from pyshorteners import Shortener
+
 from bot.commands.command import Command
 from bot.player.enums import Mode, State, TrackType
 from bot.TeamTalk.structs import UserRight
@@ -19,7 +21,7 @@ class AboutCommand(Command):
         return _('Shows information about the bot')
 
     def __call__(self, arg, user):
-        return vars.about_text()
+        return vars.client_name + '\n' + vars.about_text()
 
 
 class PlayPauseCommand(Command):
@@ -38,6 +40,8 @@ class PlayPauseCommand(Command):
                 return _('Playing {}').format(track_list[0].name)
             except errors.NothingFoundError:
                 return _('Nothing is found for your query')
+            except errors.ServiceError:
+                return _('The selected service is currently unavailable')
         else:
             if self.player.state == State.Playing:
                 self.run_async(self.player.pause)
@@ -60,7 +64,7 @@ class PlayUrlCommand(Command):
             except errors.IncorrectProtocolError:
                 return _('Incorrect protocol')
             except errors.ServiceError:
-                return _('Cannot get stream URL')
+                return _('Cannot process stream URL')
             except errors.PathNotFoundError:
                 return _('The path cannot be found')
         else:
@@ -106,6 +110,8 @@ class SeekBackCommand(Command):
         return _('STEP Seeks current track backward. the default step is {seek_step} seconds').format(seek_step=self.config.player.seek_step)
 
     def __call__(self, arg, user):
+        if self.player.state == State.Stopped:
+            return _('Nothing is playing')
         if arg:
             try:
                 self.player.seek_back(float(arg))
@@ -121,6 +127,8 @@ class SeekForwardCommand(Command):
         return _('STEP Seeks current track forward. the default step is {seek_step} seconds').format(seek_step=self.config.player.seek_step)
 
     def __call__(self, arg, user):
+        if self.player.state == State.Stopped:
+            return _('Nothing is playing')
         if arg:
             try:
                 self.player.seek_forward(float(arg))
@@ -170,7 +178,7 @@ class ModeCommand(Command):
         return _('MODE Sets the playback mode. If no mode is specified, the current mode and a list of modes are displayed')
 
     def __call__(self, arg, user):
-        mode_help = _("Current_ mode: {current_mode}\n{modes}").format(current_mode=self.mode_names[self.player.mode], modes='\n'.join(['{value} {name}'.format(name=self.mode_names[i], value=i.value) for i in Mode.__members__.values()]))
+        mode_help = _("Current mode: {current_mode}\n{modes}").format(current_mode=self.mode_names[self.player.mode], modes='\n'.join(['{value} {name}'.format(name=self.mode_names[i], value=i.value) for i in Mode.__members__.values()]))
         if arg:
             try:
                 mode = Mode(arg.lower())
@@ -192,10 +200,10 @@ class ServiceCommand(Command):
         return _('SERVICE Selects the service to play from. If no service is specified, the current service and a list of available services are displayed')
 
     def __call__(self, arg, user):
-        service_help = _('Current service: {current_service}\nAvailable: {available_services}').format(current_service=self.service_manager.service.name, available_services=', '.join([i for i in self.service_manager.available_services]))
+        service_help = _('Current service: {current_service}\nAvailable: {available_services}').format(current_service=self.service_manager.service.name, available_services=', '.join([i for i in self.service_manager.available_services if not self.service_manager.available_services[i].hidden]))
         if arg:
             arg = arg.lower()
-            if arg in self.service_manager.available_services:
+            if arg in self.service_manager.available_services and not self.service_manager.available_services[arg].hidden:
                 self.service_manager.service = self.service_manager.available_services[arg]
                 return _('Current service: {}').format(self.service_manager.service.name)
             else:
@@ -252,11 +260,11 @@ class SpeedCommand(Command):
 class FavoritesCommand(Command):
     @property
     def help(self):
-        return _('+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - removes a track requested from favorites. If a number is specified after +/-, ads/removes a track with that number')
+        return _('+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - removes a track requested from favorites. If a number is specified after +/-, adds/removes a track with that number')
 
     def __call__(self, arg, user):
         if user.username == '':
-            return _('This comand is not available for guest users')
+            return _('This command is not available for guest users')
         if arg:
             if arg[0] == '+':
                 return self._add(user)
@@ -270,9 +278,9 @@ class FavoritesCommand(Command):
     def _add(self, user):
         if self.player.state != State.Stopped:
             if user.username in self.cache.favorites:
-                self.cache.favorites[user.username].append(self.player.track)
+                self.cache.favorites[user.username].append(self.player.track.get_raw())
             else:
-                self.cache.favorites[user.username] = [self.player.track]
+                self.cache.favorites[user.username] = [self.player.track.get_raw()]
             self.cache.save()
             return _('Added')
         else:
@@ -306,7 +314,7 @@ class FavoritesCommand(Command):
         if len(track_names) > 0:
             return '\n'.join(track_names)
         else:
-            return _('List is empty')
+            return _('The list is empty')
 
     def _play(self, arg, user):
         try:
@@ -316,7 +324,7 @@ class FavoritesCommand(Command):
         except IndexError:
             return _('Out of list')
         except KeyError:
-            return _('The list is is empty')
+            return _('The list is empty')
 
 
 class GetLinkCommand(Command):
@@ -328,6 +336,9 @@ class GetLinkCommand(Command):
         if self.player.state != State.Stopped:
             url = self.player.track.url
             if url:
+                if self.config["shortening"]["shorten_links"]:
+                    shortener = Shortener()
+                    url = shortener.clckru.short(url)
                 return url
             else:
                 return _('URL is not available')

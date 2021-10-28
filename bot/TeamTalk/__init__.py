@@ -15,14 +15,13 @@ if sys.platform == "win32":
     else:
         os.chdir(vars.directory)
 
-from bot.TeamTalk.event_thread import EventThread
+from bot.TeamTalk.thread import TeamTalkThread
 from bot.TeamTalk.structs import *
 
 import TeamTalkPy
 from TeamTalkPy import TTMessage, ClientEvent, ClientFlags
 
 re_line_endings = re.compile('[\\r\\n]')
-genders = {'m': 0, 'f': 256, 'n': 4096}
 
 
 def _str(data):
@@ -71,14 +70,17 @@ class TeamTalk:
     def __init__(self, bot):
         self.config = bot.config
         TeamTalkPy.setLicense(_str(self.config.teamtalk.license_name), _str(self.config.teamtalk.license_key))
+        self.load_event_handlers = self.config.general.load_event_handlers
+        self.event_handlers_file_name = self.config.general.event_handlers_file_name
         self.tt = TeamTalkPy.TeamTalk()
         self.is_voice_transmission_enabled = False
-        self.gender = genders[self.config.teamtalk.gender]
+        self.nickname = self.config.teamtalk.nickname
+        self.gender = UserStatusMode.__members__[self.config.teamtalk.gender.upper()]
         self.status = self.default_status
         self.errors_queue = Queue()
         self.message_queue = Queue()
         self.uploaded_files_queue = Queue()
-        self.event_thread = EventThread(bot, self)
+        self.thread = TeamTalkThread(bot, self)
 
     def initialize(self):
         logging.debug('Initializing TeamTalk')
@@ -88,7 +90,7 @@ class TeamTalk:
 
     def run(self):
         logging.debug('Starting TeamTalk event thread')
-        self.event_thread.start()
+        self.thread.start()
         logging.debug('TeamTalk event thread started')
 
     def close(self):
@@ -274,12 +276,12 @@ class TeamTalk:
         if text:
             self.status = split(text)[0]
         else:
-            self.status = self.default_status
-        self.tt.doChangeStatus(self.gender, _str(self.status))
+            self.status = split(self.default_status)[0]
+        self.tt.doChangeStatus(self.gender.value, _str(self.status))
 
     def change_gender(self, gender):
-        self.gender = genders[gender]
-        self.tt.doChangeStatus(self.gender, _str(self.status))
+        self.gender = UserStatusMode.__members__[gender.upper()]
+        self.tt.doChangeStatus(self.gender.value, _str(self.status))
 
     def get_channel(self, channel_id):
         channel = self.tt.getChannel(channel_id)
@@ -306,7 +308,7 @@ class TeamTalk:
 
     def get_user(self, id):
         user = self.tt.getUser(id)
-        gender = list(genders.keys())[list(genders.values()).index(user.nStatusMode)]
+        gender = UserStatusMode(user.nStatusMode)
         return User(
             user.nUserID, _str(user.szNickname), _str(user.szUsername),
             _str(user.szStatusMsg), gender, UserState(user.uUserState),
