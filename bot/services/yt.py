@@ -1,6 +1,6 @@
 import logging
 
-from youtube_dl import YoutubeDL
+from yt_dlp import YoutubeDL
 from youtubesearchpython import VideosSearch
 
 from bot.player.enums import TrackType
@@ -11,6 +11,7 @@ class Service:
     def __init__(self, config):
         self.name = 'yt'
         self.hostnames = []
+        self.hidden = False
 
     def initialize(self):
         self._ydl_config = {
@@ -20,7 +21,7 @@ class Service:
             'logger': logging.getLogger('root')
         }
 
-    def get(self, url, extra_info=None, process=True):
+    def get(self, url, extra_info=None, process=False):
         if not (url or extra_info):
             raise errors.InvalidArgumentError()
         with YoutubeDL(self._ydl_config) as ydl:
@@ -40,8 +41,11 @@ class Service:
                     tracks += data
                 return tracks
             if not process:
-                return [Track(service=self, extra_info=info)]
-            stream = ydl.process_ie_result(info)
+                return [Track(service=self.name, extra_info=info)]
+            try:
+                stream = ydl.process_ie_result(info)
+            except Exception:
+                raise errors.ServiceError()
             if 'url' in stream:
                 url = stream['url']
             else:
@@ -61,7 +65,7 @@ class Service:
         if search['result']:
             tracks = []
             for video in search['result']:
-                track = Track(url=video['link'], service=self)
+                track = Track(url=video['link'], service=self.name)
                 tracks.append(track)
             return tracks
         else:

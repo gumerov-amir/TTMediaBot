@@ -15,24 +15,25 @@ class Service:
         self.hostnames = ['vk.com', 'www.vk.com', 'vkontakte.ru', 'www.vkontakte.ru', 'm.vk.com', 'm.vkontakte.ru']
         self.config = config
         self.format = "mp3"
+        self.hidden = False
 
     def initialize(self):
         http = requests.Session()
         http.headers.update({
-            'User-agent': 'KateMobileAndroid/47-427 (Android 6.0.1; SDK 23; armeabi-v7a; samsung SM-G900F; ru)'
+            'User-agent': 'VKAndroidApp/4.13.1-1206 (Android 7.1.1; SDK 25; armeabi-v7a; ; ru)'
         })
-        self._session = vk_api.VkApi(token=self.config["token"], session=http)
+        self._session = vk_api.VkApi(token=self.config['token'], session=http, api_version='5.68')
         self.api = self._session.get_api()
         try:
             self.api.account.getInfo()
-        except (vk_api.exceptions.ApiHttpError, vk_api.exceptions.ApiError) as e:
+        except (vk_api.exceptions.ApiHttpError, vk_api.exceptions.ApiError, requests.exceptions.ConnectionError) as e:
             logging.error(e)
             raise errors.ServiceError(e)
 
     def get(self, url):
         parsed_url = urlparse(url)
         path = parsed_url.path[1::]
-        if 'video' in path:
+        if path.startswith('video_'):
             raise errors.ServiceError()
         try:
             if 'music/' in path:
@@ -42,7 +43,11 @@ class Service:
                 p_id = ids[1]
                 audios = self.api.audio.get(owner_id=int(o_id), album_id=int(p_id))
             else:
-                id = self.api.utils.resolveScreenName(screen_name=path)['object_id']
+                object_info = self.api.utils.resolveScreenName(screen_name=path)
+                if object_info['type'] == 'group':
+                    id = -object_info['object_id']
+                else:
+                    id = object_info['object_id']
                 audios = self.api.audio.get(owner_id=id, count=6000)
             if 'count' in audios and audios['count'] > 0:
                 tracks = []

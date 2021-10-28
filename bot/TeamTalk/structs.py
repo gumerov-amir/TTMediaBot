@@ -7,7 +7,7 @@ class Channel:
     def __init__(self, id, name, topic, max_users, type):
         self.id = id
         self.name = name
-        topic = topic
+        self.topic = topic
         self.max_users = max_users
         self.type = type
 
@@ -102,8 +102,19 @@ class UserAccount:
         self.init_channel = init_channel
 
 
+class UserStatusMode(Flag):
+    Available = 0
+    Away = 1
+    Question = 2
+    VideoTx = 512
+    Desktop = 1024
+    StreamMediaFile = 2048
+    M = Available
+    F = 256
+    N = 4096
+
 class UserRight(Flag):
-    USERRIGHT_NONE = 0x00000000
+    Null = TeamTalkPy.UserRight.USERRIGHT_NONE
     MultiLogin = TeamTalkPy.UserRight.USERRIGHT_MULTI_LOGIN
     ViewAllUsers = TeamTalkPy.UserRight.USERRIGHT_VIEW_ALL_USERS
     CreateTemporaryChannel = TeamTalkPy.UserRight.USERRIGHT_CREATE_TEMPORARY_CHANNEL
@@ -122,7 +133,7 @@ class UserRight(Flag):
     TransmitDesktopInput = TeamTalkPy.UserRight.USERRIGHT_TRANSMIT_DESKTOPINPUT
     TransmitMediaFileAudio = TeamTalkPy.UserRight.USERRIGHT_TRANSMIT_MEDIAFILE_AUDIO
     TransmitMediaFileVideo = TeamTalkPy.UserRight.USERRIGHT_TRANSMIT_MEDIAFILE_VIDEO
-    TransmitMediaFile = TeamTalkPy.UserRight.USERRIGHT_TRANSMIT_MEDIAFILE 
+    TransmitMediaFile = TeamTalkPy.UserRight.USERRIGHT_TRANSMIT_MEDIAFILE
     LockedNickname = TeamTalkPy.UserRight.USERRIGHT_LOCKED_NICKNAME
     LockedStatus = TeamTalkPy.UserRight.USERRIGHT_LOCKED_STATUS
     RecordVoice = TeamTalkPy.UserRight.USERRIGHT_RECORD_VOICE

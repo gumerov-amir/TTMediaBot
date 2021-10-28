@@ -11,7 +11,7 @@ flake8-quotes
 pydantic
 patool
 portalocker
+pyshorteners
 requests
 vk-api
-youtube-dl
-youtube-search-python
+yt-dlp

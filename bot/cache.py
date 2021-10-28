@@ -14,7 +14,7 @@ class Cache:
                 self.data = pickle.load(f)
                 if 'recents' not in self.data or 'favorites' not in self.data:
                     raise KeyError()
-        except (FileNotFoundError, KeyError):
+        except:
             self.data = {'recents': deque(maxlen=vars.recents_max_lenth), 'favorites':  {}}
             with open(self.file_name, 'wb') as f:
                 pickle.dump(self.data, f)

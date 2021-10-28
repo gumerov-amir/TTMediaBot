@@ -1,3 +1,4 @@
+from importlib.machinery import SourceFileLoader
 import logging
 import os
 from threading import Thread
@@ -6,12 +7,11 @@ import sys
 
 import TeamTalkPy
 
-class EventThread(Thread):
+class TeamTalkThread(Thread):
     def __init__(self, bot, ttclient):
         Thread.__init__(self, daemon=True)
         self.name = 'TeamTalkThread'
         self.bot = bot
-        self.config = bot.config
         self.ttclient = ttclient
         self.event_names = {
             TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_LOGGEDIN: "user_logged_in",
@@ -29,7 +29,7 @@ class EventThread(Thread):
 
     def run(self):
         from . import _str
-        if self.config.general.load_event_handlers:
+        if self.ttclient.load_event_handlers:
             self.event_handlers = self.import_event_handlers()
         self._close = False
         while True:
@@ -55,7 +55,7 @@ class EventThread(Thread):
                 except Exception as e:
                     logging.fatal(e)
                 print("bh")
-            elif msg.nClientEvent in self.event_names and self.config.general.load_event_handlers:
+            elif msg.nClientEvent in self.event_names and self.ttclient.load_event_handlers:
                 self.run_event_handler(msg)
 
     def close(self):
@@ -63,10 +63,10 @@ class EventThread(Thread):
 
     def import_event_handlers(self):
         try:
-            if os.path.isfile(self.config.general.event_handlers_file_name) and os.path.splitext(self.config.general.event_handlers_file_name)[1] == ".py":
-                module = __import__(os.path.splitext(self.config.general.event_handlers_file_name)[0])
-            elif os.path.isdir(self.config.general.event_handlers_file_name) and "__init__.py" in os.listdir(self.config.general.event_handlers_file_name):
-                module = __import__(self.config.general.event_handlers_file_name)
+            if os.path.isfile(self.ttclient.event_handlers_file_name) and os.path.splitext(self.ttclient.event_handlers_file_name)[1] == ".py":
+                module = SourceFileLoader(os.path.splitext(self.ttclient.event_handlers_file_name)[0], self.ttclient.event_handlers_file_name).load_module()
+            elif os.path.isdir(self.ttclient.event_handlers_file_name) and "__init__.py" in os.listdir(self.ttclient.event_handlers_file_name):
+                module = SourceFileLoader(self.ttclient.event_handlers_file_name, self.ttclient.event_handlers_file_name+"/__init__.py").load_module()
             else:
                 logging.error("Incorrect path to event handlers. An empty module will be used")
                 module = types.ModuleType("event_handlers")

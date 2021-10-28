@@ -14,16 +14,27 @@ from bot.sound_devices import SoundDevice, SoundDeviceType
 
 
 class Player:
-    def __init__(self, bot):
-        self.config = bot.config.player
-        self._player = mpv.MPV(**self.config.player_options, log_handler=self.log_handler)
+    def __init__(self, config, cache):
+        self.config = config
+        mpv_options = {
+            'demuxer_max_back_bytes': 1048576,
+            'demuxer_max_bytes': 2097152,
+            'video': False,
+            'ytdl': False,
+        }
+        # mpv_options.update(config['player_options'])
+        try:
+            self._player = mpv.MPV(**mpv_options, log_handler=self.log_handler)
+        except AttributeError:
+            del mpv_options['demuxer_max_back_bytes']
+            self._player = mpv.MPV(**mpv_options, log_handler=self.log_handler)
         self._log_level = 'PLAYER_DEBUG'
         self.track_list = []
         self.track = Track()
         self.track_index = -1
         self.state = State.Stopped
         self.mode = Mode.TrackList
-        self.cache = bot.cache
+        self.cache = cache
         self.volume = self.config.default_volume
 
     def initialize(self):
@@ -38,6 +49,8 @@ class Player:
 
     def close(self):
         logging.debug('Closing player')
+        if self.state != State.Stopped:
+            self.stop()
         self._player.terminate()
         logging.debug('Player closed')
 
@@ -72,9 +85,9 @@ class Player:
         if save_to_recents:
             try:
                 if self.cache.recents[-1] != self.track_list[self.track_index]:
-                    self.cache.recents.append(self.track_list[self.track_index])
+                    self.cache.recents.append(self.track_list[self.track_index].get_raw())
             except:
-                self.cache.recents.append(self.track_list[self.track_index])
+                self.cache.recents.append(self.track_list[self.track_index].get_raw())
             self.cache.save()
         self._player.pause = False
         self._player.play(arg)
@@ -108,7 +121,10 @@ class Player:
                 except IndexError:
                     track_index = len(self.track_list) - 1
             else:
-                track_index -= 1
+                if track_index == 0 and self.mode != Mode.RepeatTrackList:
+                    raise errors.NoPreviousTrackError
+                else:
+                    track_index -= 1
         else:
             track_index = 0
         try:
@@ -120,8 +136,6 @@ class Player:
                 raise errors.NoPreviousTrackError
 
     def play_by_index(self, index):
-        if self.state == State.Stopped:
-            raise errors.NothingIsPlayingError()
         if index < len(self.track_list) and index >= (0 - len(self.track_list)):
             self.track = self.track_list[index]
             self.track_index = self.track_list.index(self.track)
@@ -153,26 +167,24 @@ class Player:
         step = step if step else self.config.seek_step
         if step <= 0:
             raise ValueError()
-        if self.state == State.Stopped:
-            raise errors.NothingIsPlayingError()
-        self._player.seek(-step, reference='relative')
+        try:
+            self._player.seek(-step, reference='relative')
+        except SystemError:
+            self.stop()
 
     def seek_forward(self, step=None):
         step = step if step else self.config.seek_step
         if step <= 0:
             raise ValueError()
-        if self.state == State.Stopped:
-            raise errors.NothingIsPlayingError()
-        self._player.seek(step, reference='relative')
+        try:
+            self._player.seek(step, reference='relative')
+        except SystemError:
+            self.stop()
 
     def get_duration(self):
-        if self.state == State.Stopped:
-            raise errors.NothingIsPlayingError()
         return self._player.duration
 
     def get_position(self):
-        if self.state == State.Stopped:
-            raise errors.NothingIsPlayingError()
         return self._player.time_pos
 
     def set_position(self, arg):
