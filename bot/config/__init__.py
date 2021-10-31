@@ -1,5 +1,6 @@
 import json
 import sys
+from typing import Optional
 
 import portalocker
 
@@ -7,13 +8,13 @@ from bot import utils, logger
 from bot.config.models import ConfigModel
 
 
-def save_default_file():
+def save_default_file() -> None:
     with open(utils.get_abs_path("config_default.json"), "w") as f:
         json.dump(ConfigModel().dict(), f, indent=4, ensure_ascii=False)
 
 
 class ConfigManager:
-    def __init__(self, file_name):
+    def __init__(self, file_name: Optional[str]) -> None:
         if file_name:
             if utils.check_file_path(file_name):
                 self.file_name = file_name

@@ -8,16 +8,15 @@ import sys
 from typing import TYPE_CHECKING
 from queue import Queue
 
-from bot import errors
-from bot import vars
+from bot import errors, app_vars
 from bot.sound_devices import SoundDevice, SoundDeviceType
 
 
 if sys.platform == "win32":
     if (sys.version_info.major == 3 and sys.version_info.minor >= 8):
-        os.add_dll_directory(vars.directory)
+        os.add_dll_directory(app_vars.directory)
     else:
-        os.chdir(vars.directory)
+        os.chdir(app_vars.directory)
 
 from bot.TeamTalk.thread import TeamTalkThread
 from bot.TeamTalk.structs import *
@@ -41,7 +40,7 @@ def _str(data):
         return str(data, 'utf-8')
 
 
-def split(text, max_length=vars.max_message_length):
+def split(text, max_length=app_vars.max_message_length):
     if len(text) <= max_length:
         lines = [text]
     else:
@@ -76,6 +75,7 @@ def split(text, max_length=vars.max_message_length):
 class TeamTalk:
     def __init__(self, bot: Bot):
         self.config = bot.config.teamtalk
+        self.translator = bot.translator
         TeamTalkPy.setLicense(_str(self.config.license_name), _str(self.config.license_key))
         self.tt = TeamTalkPy.TeamTalk()
         self.is_voice_transmission_enabled = False
@@ -100,7 +100,7 @@ class TeamTalk:
 
     def close(self):
         logging.debug('Closing teamtalk')
-        self.event_thread.close()
+        self.thread.close()
         self.tt.disconnect()
         self.tt.closeTeamTalk()
         logging.debug('Teamtalk closed')
@@ -177,7 +177,7 @@ class TeamTalk:
             raise errors.ConnectionError(e)
 
     def _login(self):
-        cmdid = self.tt.doLogin(_str(self.config.nickname), _str(self.config.username), _str(self.config.password), _str(vars.client_name))
+        cmdid = self.tt.doLogin(_str(self.config.nickname), _str(self.config.username), _str(self.config.password), _str(app_vars.client_name))
         try:
             msg = self.wait_for_event(ClientEvent.CLIENTEVENT_CMD_MYSELF_LOGGEDIN, error_events=[ClientEvent.CLIENTEVENT_CMD_ERROR])
             self._user_account = self.get_user_account_by_tt_obj(msg.useraccount)
@@ -208,14 +208,14 @@ class TeamTalk:
 
     def wait_for_event(self, event, error_events=[]):
         get_time = lambda: int(round(time.time()))
-        end = get_time() + vars.tt_event_timeout
-        msg = self.tt.getMessage(vars.tt_event_timeout * 1000)
+        end = get_time() + app_vars.tt_event_timeout
+        msg = self.tt.getMessage(app_vars.tt_event_timeout * 1000)
         while msg.nClientEvent != event:
             if get_time() >= end:
                 raise errors.TTEventError()
             if msg.nClientEvent in error_events:
                 raise errors.TTEventError(_str(msg.clienterrormsg.szErrorMsg))
-            msg = self.tt.getMessage(vars.tt_event_timeout * 1000)
+            msg = self.tt.getMessage(app_vars.tt_event_timeout * 1000)
         return msg
 
     def wait_for_cmd_success(self, cmdid):
@@ -229,7 +229,7 @@ class TeamTalk:
         if self.config.status:
             return self.config.status
         else:
-            return _('Send "h" for help')
+            return self.translator.translate('Send "h" for help')
 
     def send_message(self, text, user=None, type=1):
         for string in split(text):

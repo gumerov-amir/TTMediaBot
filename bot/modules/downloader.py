@@ -11,7 +11,7 @@ from urllib import request
 
 from bot.player.enums import TrackType
 from bot.TeamTalk.structs import ErrorType
-from bot import utils, vars
+from bot import utils, app_vars
 
 if TYPE_CHECKING:
     from bot import Bot
@@ -19,8 +19,9 @@ if TYPE_CHECKING:
 
 class Downloader:
     def __init__(self, bot: Bot):
-            self.ttclient = bot.ttclient
-            self.config = bot.config
+        self.config = bot.config
+        self.ttclient = bot.ttclient
+        self.translator = bot.translator
 
     def __call__(self, track, user):
         t = threading.Thread(target=self.run, daemon=True, args=(track, user,))
@@ -53,14 +54,14 @@ class Downloader:
             try:
                 error = self.ttclient.errors_queue.get_nowait()
                 if error.command_id == command_id and error.type == ErrorType.MaxDiskusageExceeded:
-                    self.ttclient.send_message(_("Error: {}").format("Max diskusage exceeded"), user)
+                    self.ttclient.send_message(self.translator.translate("Error: {}").format("Max diskusage exceeded"), user)
                     error_exit = True
                 else:
                     self.ttclient.errors_queue.put(error)
             except Empty:
                 pass
-            time.sleep(vars.loop_timeout)
-        time.sleep(vars.loop_timeout)
+            time.sleep(app_vars.loop_timeout)
+        time.sleep(app_vars.loop_timeout)
         if track.type == TrackType.Default:
             temp_dir.cleanup()
         if error_exit:

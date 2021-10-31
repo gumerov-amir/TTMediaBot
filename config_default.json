@@ -5,9 +5,7 @@
         "cache_file_name": "TTMediaBotCache.dat",
         "blocked_commands": [],
         "delete_uploaded_files_after": 300,
-        "time_format": "%H:%M",
-        "load_event_handlers": false,
-        "event_handlers_file_name": "event_handlers.py"
+        "time_format": "%H:%M"
     },
     "sound_devices": {
         "output_device": 0,
@@ -42,6 +40,10 @@
                 "admin"
             ],
             "banned_users": []
+        },
+        "event_handling": {
+            "load_event_handlers": false,
+            "event_handlers_file_name": "event_handlers.py"
         }
     },
     "services": {
@@ -57,7 +59,7 @@
         "log": true,
         "level": "INFO",
         "format": "%(levelname)s [%(asctime)s]: %(message)s in %(threadName)s file: %(filename)s line %(lineno)d function %(funcName)s",
-        "mode": "STDOUT_AND_FILE",
+        "mode": "File",
         "file_name": "TTMediaself.log",
         "max_file_size": 0,
         "backup_count": 0

@@ -9,7 +9,7 @@ import sys
 
 import mpv
 
-from bot import errors, vars
+from bot import errors, app_vars
 from bot.player.enums import Mode, State, TrackType
 from bot.player.track import Track
 from bot.sound_devices import SoundDevice, SoundDeviceType
