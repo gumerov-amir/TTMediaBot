@@ -1,75 +1,88 @@
 from typing import Dict, List, Union
 
-from pydantic import (
-    BaseModel,
-    StrictBool,
-    StrictFloat,
-    StrictInt,
-    StrictStr
-)
+from pydantic import BaseModel
 
 
-class General(BaseModel):
-    language: StrictStr = "en"
-    send_channel_messages: StrictBool = True
-    cache_file_name: StrictStr = "TTMediaBotCache.dat"
-    blocked_commands: List[StrictStr] = []
-    delete_uploaded_files_after: StrictInt = 300
-    time_format: StrictStr = r"%H:%M"
-    load_event_handlers: StrictBool = False
-    event_handlers_file_name: StrictStr = "event_handlers.py"
+class GeneralModel(BaseModel):
+    language: str = "en"
+    send_channel_messages: bool = True
+    cache_file_name: str = "TTMediaBotCache.dat"
+    blocked_commands: List[str] = []
+    delete_uploaded_files_after: int = 300
+    time_format: str = r"%H:%M"
 
 
-class SoundDevices(BaseModel):
-    output_device: StrictInt = 0
-    input_device: StrictInt = 0
-
-class Player(BaseModel):
-    default_volume: StrictInt = 50
-    max_volume: StrictInt = 100
-    volume_fading: StrictBool = True
-    volume_fading_interval: StrictFloat = 0.025
-    seek_step: StrictInt = 5
-    player_options: dict = {"video": False, "ytdl": False}
+class SoundDevicesModel(BaseModel):
+    output_device: int = 0
+    input_device: int = 0
 
 
-class TeamTalk(BaseModel):
-    hostname: StrictStr = "localhost"
-    tcp_port: StrictInt = 10333
-    udp_port: StrictInt = 10333
-    encrypted: StrictBool = False
-    nickname: StrictStr = "TTMediaBot"
-    status: StrictStr = ""
-    gender: StrictStr = "n"
-    username: StrictStr = ""
-    password: StrictStr = ""
+class PlayerModel(BaseModel):
+    default_volume: int = 50
+    max_volume: int = 100
+    volume_fading: bool = True
+    volume_fading_interval: float = 0.025
+    seek_step: int = 5
+    player_options: dict = {}
+
+
+class TeamTalkUserModel(BaseModel):
+    admins: List[str] = ["admin"]
+    banned_users: List[str] =  []
+
+
+class EventHandlingModel(BaseModel):
+    load_event_handlers: bool = False
+    event_handlers_file_name: str = "event_handlers.py"
+
+
+class TeamTalkModel(BaseModel):
+    hostname: str = "localhost"
+    tcp_port: int = 10333
+    udp_port: int = 10333
+    encrypted: bool = False
+    nickname: str = "TTMediaBot"
+    status: str = ""
+    gender: str = "n"
+    username: str = ""
+    password: str = ""
     channel: Union[int, str] = "/"
-    channel_password: StrictStr = ""
-    license_name: StrictStr = ""
-    license_key: StrictStr = ""
-    reconnection_attempts: StrictInt = -1
-    reconnection_timeout: StrictInt = 10
-    users: Dict[str, List[str]] = {"admins": ["admin"], "banned_users": []}
+    channel_password: str = ""
+    license_name: str = ""
+    license_key: str = ""
+    reconnection_attempts: int = -1
+    reconnection_timeout: int = 10
+    users: TeamTalkUserModel = TeamTalkUserModel()
+    event_handling: EventHandlingModel = EventHandlingModel()
 
-class Services(BaseModel):
+
+class ServicesModel(BaseModel):
     available_services: Dict[str, dict] = {"vk": {"token": ""}, "yt": {}}
-    default_service: StrictStr = "vk"
+    default_service: str = "vk"
 
 
-class Logger(BaseModel):
-    log: StrictBool = True
-    level: StrictStr = "INFO"
-    format: StrictStr = "%(levelname)s [%(asctime)s]: %(message)s in %(threadName)s file: %(filename)s line %(lineno)d function %(funcName)s"
+class LoggerModel(BaseModel):
+    log: bool = True
+    level: str = "INFO"
+    format: str = "%(levelname)s [%(asctime)s]: %(message)s in %(threadName)s file: %(filename)s line %(lineno)d function %(funcName)s"
     mode: Union[int, str] = "File"
-    file_name: StrictStr = "TTMediaBot.log"
-    max_file_size: StrictInt = 0
-    backup_count: StrictInt = 0
+    file_name: str = "TTMediaself.log"
+    max_file_size: int = 0
+    backup_count: int = 0
 
 
-class Config(BaseModel):
-    general: General = General()
-    sound_devices: SoundDevices = SoundDevices()
-    player: Player = Player()
-    teamtalk: TeamTalk = TeamTalk()
-    services: Services = Services()
-    logger: Logger = Logger()
+class ShorteningModel(BaseModel):
+    shorten_links: bool = False
+    service: str = "Bitly"
+    service_token: str = ""
+
+
+
+class ConfigModel(BaseModel):
+    general: GeneralModel = GeneralModel()
+    sound_devices: SoundDevicesModel = SoundDevicesModel()
+    player: PlayerModel = PlayerModel()
+    teamtalk: TeamTalkModel = TeamTalkModel()
+    services: ServicesModel = ServicesModel()
+    logger: LoggerModel = LoggerModel()
+    shortening: ShorteningModel = ShorteningModel()

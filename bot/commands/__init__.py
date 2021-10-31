@@ -1,76 +1,79 @@
+from __future__ import annotations
 import logging
 import re
 from threading import Thread
 import traceback
+from typing import TYPE_CHECKING
 
 from bot import errors
-from bot.commands.admin_commands import *
+from bot.commands import admin_commands
+from bot.commands.command import Command
 from bot.commands.task_processor import TaskProcessor
-from bot.commands.user_commands import *
+from bot.commands import user_commands
 from bot.TeamTalk.structs import UserType
 from bot import vars
 
 
 re_command = re.compile('[a-z]+')
 
+if TYPE_CHECKING:
+    from bot import Bot
+
+
 class CommandProcessor:
-    def __init__(self, bot, config, player, ttclient, module_manager, service_manager, cache):
-        self.bot = bot
-        self.cache = cache
-        self.config = config
-        self.module_manager = module_manager
-        self.player = player
-        self.service_manager = service_manager
-        self.ttclient = ttclient
+    def __init__(self, bot: Bot):
         self.task_processor = TaskProcessor(self)
+        self.bot = bot
+        self.config = bot.config
+        self.cache = bot.cache
+        self.module_manager = bot.module_manager
+        self.player = bot.player
+        self.service_manager = bot.service_manager
+        self.ttclient = bot.ttclient
         self.locked = False
         self.current_command_id = 0
         self.commands_dict = {
-            'h': HelpCommand,
-            'a': AboutCommand,
-            'p': PlayPauseCommand,
-            'u': PlayUrlCommand,
-            'sv': ServiceCommand,
-            's': StopCommand,
-            'b': PreviousTrackCommand,
-            'n': NextTrackCommand,
-            'c': SelectTrackCommand,
-            'sb': SeekBackCommand,
-            'sf': SeekForwardCommand,
-            'v': VolumeCommand,
-            "sp": SpeedCommand,
-            'f': FavoritesCommand,
-            'm': ModeCommand,
-            'gl': GetLinkCommand,
-            "dl": DownloadCommand,
-            "r": RecentsCommand,
+            'h': user_commands.HelpCommand,
+            'a': user_commands.AboutCommand,
+            'p': user_commands.PlayPauseCommand,
+            'u': user_commands.PlayUrlCommand,
+            'sv': user_commands.ServiceCommand,
+            's': user_commands.StopCommand,
+            'b': user_commands.PreviousTrackCommand,
+            'n': user_commands.NextTrackCommand,
+            'c': user_commands.SelectTrackCommand,
+            'sb': user_commands.SeekBackCommand,
+            'sf': user_commands.SeekForwardCommand,
+            'v': user_commands.VolumeCommand,
+            "sp": user_commands.SpeedCommand,
+            'f': user_commands.FavoritesCommand,
+            'm': user_commands.ModeCommand,
+            'gl': user_commands.GetLinkCommand,
+            "dl": user_commands.DownloadCommand,
+            "r": user_commands.RecentsCommand,
         }
         self.admin_commands_dict = {
             "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 10))) for i in "╱✑⻄⦐"]): type("IllegalCommand", (Command,), {"__call__":lambda self, arg, user: "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 20))) for i in "\ueb49𘤀𡢁𢄄𛋹🚉𧚐\U0001dd24𘤀"]), "help": "Illegal operation"}),
-            'cg': ChangeGenderCommand, 
-            'cl': ChangeLanguageCommand,
-            'cn': ChangeNicknameCommand,
-            'cs': ChangeStatusCommand,
-            "cc": ClearCacheCommand,
-            "cm": ChannelMessagesCommand,
-            "bc": BlockCommandCommand,
+            'cg': admin_commands.ChangeGenderCommand,
+            'cl': admin_commands.ChangeLanguageCommand,
+            'cn': admin_commands.ChangeNicknameCommand,
+            'cs': admin_commands.ChangeStatusCommand,
+            "cc": admin_commands.ClearCacheCommand,
+            "cm": admin_commands.ChannelMessagesCommand,
+            "bc": admin_commands.BlockCommandCommand,
             #"ts": TaskSchedulerCommand,
-            'l': LockCommand,
-            'ua': AdminUsersCommand,
-            'ub': BannedUsersCommand,
-            "eh": EventHandlingCommand,
-            'sc': SaveConfigCommand,
-            'va': VoiceTransmissionCommand,
-            'rs': RestartCommand,
-            'q': QuitCommand,
+            'l': admin_commands.LockCommand,
+            'ua': admin_commands.AdminUsersCommand,
+            'ub': admin_commands.BannedUsersCommand,
+            "eh": admin_commands.EventHandlingCommand,
+            'sc': admin_commands.SaveConfigCommand,
+            'va': admin_commands.VoiceTransmissionCommand,
+            'rs': admin_commands.RestartCommand,
+            'q': admin_commands.QuitCommand,
         }
 
     def run(self):
         self.task_processor.start()
-
-
-
-
 
     def __call__(self, message):
         command_thread = Thread(target=self._run, args=(message,))
@@ -85,7 +88,7 @@ class CommandProcessor:
                 self.current_command_id = id(command)
                 result = command(arg, message.user)
                 if result:
-                    command.ttclient.send_message(result, message.user)
+                    self.ttclient.send_message(result, message.user) # here was command.ttclient later
         except errors.InvalidArgumentError:
             self.ttclient.send_message(self.help(command_name, message.user), message.user)
         except errors.AccessDeniedError as e:
@@ -99,7 +102,7 @@ class CommandProcessor:
     def check_access(self, user, command):
         if (not user.is_admin and user.type != UserType.Admin) or vars.app_name in user.client_name:
             if vars.app_name in user.client_name:
-                raise AccessDeniedError("")
+                raise errors.AccessDeniedError("")
             elif user.is_banned:
                 raise errors.AccessDeniedError(_("You are banned"))
             elif user.channel.id != self.ttclient.channel.id:

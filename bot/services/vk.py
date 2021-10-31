@@ -1,16 +1,15 @@
 import logging
+from urllib.parse import urlparse
 
 import requests
 import vk_api
-
-from urllib.parse import urlparse
 
 from bot.player.track import Track
 from bot import errors
 
 
 class Service:
-    def __init__(self, config):
+    def __init__(self, config: dict):
         self.name = 'vk'
         self.hostnames = ['vk.com', 'www.vk.com', 'vkontakte.ru', 'www.vkontakte.ru', 'm.vk.com', 'm.vkontakte.ru']
         self.config = config

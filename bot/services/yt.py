@@ -8,7 +8,7 @@ from bot.player.track import Track
 from bot import errors
 
 class Service:
-    def __init__(self, config):
+    def __init__(self, config: dict):
         self.name = 'yt'
         self.hostnames = []
         self.hidden = False

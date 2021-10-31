@@ -4,8 +4,7 @@ import sys
 import portalocker
 
 from bot import utils, logger
-from bot.config.models import Config as ConfigModel
-
+from bot.config.models import ConfigModel
 
 
 def save_default_file():
@@ -13,7 +12,7 @@ def save_default_file():
         json.dump(ConfigModel().dict(), f, indent=4, ensure_ascii=False)
 
 
-class Config:
+class ConfigManager:
     def __init__(self, file_name):
         if file_name:
             if utils.check_file_path(file_name):
@@ -32,10 +31,7 @@ class Config:
                 sys.exit("Incorrect configuration file path")
         else:
             config_dict = {}
-        self._config = ConfigModel(**config_dict)
-
-    def __getattr__(self, attr):
-        return getattr(self._config, attr)
+        self.config: ConfigModel = ConfigModel(**config_dict)
 
     def close(self):
         self.file_locker.release()
@@ -43,5 +39,5 @@ class Config:
     def save(self):
         self.file_locker.release()
         with open(self.file_name, 'w', encoding='UTF-8') as f:
-            json.dump(self.dict(), f, indent=4, ensure_ascii=False)
+            json.dump(self.config.dict(), f, indent=4, ensure_ascii=False)
         self.file_locker.acquire()

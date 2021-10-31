@@ -197,7 +197,7 @@ class SaveConfigCommand(Command):
         return _("Saves bot's configuration")
 
     def __call__(self, arg, user):
-        self.config.save()
+        self.config_manager.save()
         return _('Configuration saved')
 
 class AdminUsersCommand(Command):
@@ -259,7 +259,7 @@ class QuitCommand(Command):
         return _('Quits the bot')
 
     def __call__(self, arg, user):
-        self._bot.close()
+        self._self.close()
 
 class RestartCommand(Command):
     @property
@@ -267,7 +267,7 @@ class RestartCommand(Command):
         return _('Restarts the bot')
 
     def __call__(self, arg, user):
-        self._bot.close()
+        self._self.close()
         args = sys.argv
         if sys.platform == 'win32':
             subprocess.run([sys.executable] + args)

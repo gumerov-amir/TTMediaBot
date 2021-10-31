@@ -1,8 +1,10 @@
+from __future__ import annotations
 import logging
 import threading
 import time
 import os
 import tempfile
+from typing import TYPE_CHECKING
 from queue import Empty
 from urllib import request
 
@@ -11,11 +13,14 @@ from bot.player.enums import TrackType
 from bot.TeamTalk.structs import ErrorType
 from bot import utils, vars
 
+if TYPE_CHECKING:
+    from bot import Bot
+
 
 class Downloader:
-    def __init__(self, config, ttclient):
-        self.config = config
-        self.ttclient = ttclient
+    def __init__(self, bot: Bot):
+            self.ttclient = bot.ttclient
+            self.config = bot.config
 
     def __call__(self, track, user):
         t = threading.Thread(target=self.run, daemon=True, args=(track, user,))
@@ -60,10 +65,8 @@ class Downloader:
             temp_dir.cleanup()
         if error_exit:
             return
-        if "delete_uploaded_files_after" in self.config["general"] and self.config["general"]["delete_uploaded_files_after"] > 0:
-            timeout = self.config["general"]["delete_uploaded_files_after"]
-        elif not "delete_uploaded_files_after" in self.config["general"]:
-            timeout = vars.delete_uploaded_files_after
+        if self.config.general.delete_uploaded_files_after > 0:
+            timeout = self.config.general.delete_uploaded_files_after
         else:
             return
         time.sleep(timeout)
