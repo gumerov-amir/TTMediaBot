@@ -6,4 +6,4 @@ WORKDIR /home/ttbot
 COPY --chown=ttbot . .
 RUN pip3 install -r requirements.txt
 RUN python3 tools/ttsdk_downloader.py && python3 tools/compile_locales.py
-CMD pulseaudio -D && ./TTMediaBot.sh -c data/config.json --cache data/TTMediaBotCache.dat --log data/TTMediaBot.log
+CMD pulseaudio -D && ./TTMediaself.sh -c data/config.json --cache data/TTMediaBotCache.dat --log data/TTMediaself.log

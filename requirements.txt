@@ -1,6 +1,6 @@
 beautifulsoup4
 click
-pydantic
+dacite
 patool
 portalocker
 pyshorteners

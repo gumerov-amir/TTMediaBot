@@ -9,9 +9,10 @@ from bot import cache, commands, config, connectors, logger, modules, player, se
 
 
 class Bot:
-    def __init__(self, config_file_name, cache_file_name, log_file_name):
+    def __init__(self, config_file_name: str, cache_file_name: str = None, log_file_name: str = None) -> None:
         try:
-            self.config = config.Config(config_file_name)
+            self.config_manager = config.ConfigManager(config_file_name)
+            self.config = self.config_manager.config
         except ValidationError as e:
             for error in e.errors():
                 print("Error in config:", ".".join(error["loc"]), error["msg"])
@@ -27,17 +28,17 @@ class Bot:
         except PermissionError:
             sys.exit('The cache file cannot be accessed due to a permission error or is already used by another instance of the bot')
         self.log_file_name = log_file_name
-        self.player = player.Player(self.config.player, self.cache)
+        self.player = player.Player(self)
         self.ttclient = TeamTalk.TeamTalk(self)
-        self.tt_player_connector = connectors.TTPlayerConnector(self.player, self.ttclient)
-        self.sound_device_manager = sound_devices.SoundDeviceManager(self.config.sound_devices, self. player, self.ttclient)
-        self.service_manager = services.ServiceManager(self.config.services)
-        self.module_manager = modules.ModuleManager(self.config, self.player, self.ttclient, self.service_manager)
-        self.command_processor = commands.CommandProcessor(self, self.config, self.player, self.ttclient, self.module_manager, self.service_manager, self.cache)
+        self.tt_player_connector = connectors.TTPlayerConnector(self)
+        self.sound_device_manager = sound_devices.SoundDeviceManager(self)
+        self.service_manager = services.ServiceManager(self)
+        self.module_manager = modules.ModuleManager(self)
+        self.command_processor = commands.CommandProcessor(self)
 
     def initialize(self):
         if self.config.logger.log:
-            logger.initialize_logger(self.config.logger, self.log_file_name)
+            logger.initialize_logger(self)
         logging.debug('Initializing')
         self.sound_device_manager.initialize()
         self.ttclient.initialize()
@@ -68,7 +69,7 @@ class Bot:
         self.player.close()
         self.ttclient.close()
         self.tt_player_connector.close()
-        self.config.close()
+        self.config_manager.close()
         self.cache.close()
         self._close = True
         logging.info('Bot closed')

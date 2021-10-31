@@ -530,7 +530,7 @@ msgstr ""
 "Programcılar: Gumerov_amir, A11CF0, Beqa Gozalishvili.\n"
 "Ana sayfa: https://github.com/gumerov-amir/TTMediaBot"
 
-#~ msgid "The cache file is already used by another instance of the bot."
+#~ msgid "The cache file is already used by another instance of the self."
 #~ msgstr ""
 #~ "Önbellek dosyası, botun başka bir örneği tarafından zaten kullanılıyor."
 
@@ -538,7 +538,7 @@ msgstr ""
 #~ msgstr "Bilinmeyen kullanıcı komutu"
 
 #~ msgid ""
-#~ "Changes the gender of the bot.\n"
+#~ "Changes the gender of the self.\n"
 #~ "cg n changes to neutral.\n"
 #~ "cg m changes to male.\n"
 #~ "cg f changes to female."

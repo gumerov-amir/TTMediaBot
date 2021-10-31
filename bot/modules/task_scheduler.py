@@ -1,12 +1,17 @@
+from __future__ import annotations
 import threading
 import time
+from typing import TYPE_CHECKING
 
-from bot.TeamTalk import User
+from bot.TeamTalk import TeamTalk, User
 from bot import vars
+
+if TYPE_CHECKING:
+    from bot import Bot
 
 
 class TaskScheduler(threading.Thread):
-    def __init__(self):
+    def __init__(self, bot: Bot):
         super().__init__(daemon=True)
         self.name = "SchedulerThread"
         self.tasks = {}

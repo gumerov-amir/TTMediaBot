@@ -1,17 +1,27 @@
+from __future__ import annotations
+
 from importlib.machinery import SourceFileLoader
 import logging
 import os
 from threading import Thread
+from typing import TYPE_CHECKING
+
 import types
 import sys
 
 import TeamTalkPy
 
+if TYPE_CHECKING:
+    from bot import Bot
+    from bot.TeamTalk import TeamTalk
+
+
 class TeamTalkThread(Thread):
-    def __init__(self, bot, ttclient):
+    def __init__(self, bot: Bot, ttclient: TeamTalk):
         Thread.__init__(self, daemon=True)
         self.name = 'TeamTalkThread'
         self.bot = bot
+        self.config = ttclient.config
         self.ttclient = ttclient
         self.event_names = {
             TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_LOGGEDIN: "user_logged_in",
@@ -29,7 +39,7 @@ class TeamTalkThread(Thread):
 
     def run(self):
         from . import _str
-        if self.ttclient.load_event_handlers:
+        if self.config.event_handling.load_event_handlers:
             self.event_handlers = self.import_event_handlers()
         self._close = False
         while True:
@@ -42,7 +52,7 @@ class TeamTalkThread(Thread):
                 self.ttclient.errors_queue.put(self.ttclient.get_error(msg.clienterrormsg.nErrorNo, msg.nSource))
             elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG and msg.textmessage.nMsgType == 1:
                 self.ttclient.message_queue.put(self.ttclient.get_message(msg.textmessage))
-            elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_NEW and _str(msg.remotefile.szUsername) == self.ttclient.config.username and msg.remotefile.nChannelID == self.ttclient.channel.id:
+            elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_NEW and _str(msg.remotefile.szUsername) == self.config.username and msg.remotefile.nChannelID == self.ttclient.channel.id:
                 self.ttclient.uploaded_files_queue.put(self.ttclient.get_file(msg.remotefile))
             elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_MYSELF_KICKED:
                 logging.warning('Kicked')
@@ -55,7 +65,7 @@ class TeamTalkThread(Thread):
                 except Exception as e:
                     logging.fatal(e)
                 print("bh")
-            elif msg.nClientEvent in self.event_names and self.ttclient.load_event_handlers:
+            elif msg.nClientEvent in self.event_names and self.config.event_handling.load_event_handlers:
                 self.run_event_handler(msg)
 
     def close(self):
@@ -63,7 +73,7 @@ class TeamTalkThread(Thread):
 
     def import_event_handlers(self):
         try:
-            if os.path.isfile(self.ttclient.event_handlers_file_name) and os.path.splitext(self.ttclient.event_handlers_file_name)[1] == ".py":
+            if os.path.isfile(self.config.event_handling.event_handlers_file_name) and os.path.splitext(self.config.event_handling.event_handlers_file_name)[1] == ".py":
                 module = SourceFileLoader(os.path.splitext(self.ttclient.event_handlers_file_name)[0], self.ttclient.event_handlers_file_name).load_module()
             elif os.path.isdir(self.ttclient.event_handlers_file_name) and "__init__.py" in os.listdir(self.ttclient.event_handlers_file_name):
                 module = SourceFileLoader(self.ttclient.event_handlers_file_name, self.ttclient.event_handlers_file_name+"/__init__.py").load_module()

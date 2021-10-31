@@ -531,7 +531,7 @@ msgstr ""
 "Авторы: Gumerov_amir, A11CF0, Beqa Gozalishvili.\n"
 "Домашняя страница: https://github.com/gumerov-amir/TTMediaBot"
 
-#~ msgid "The cache file is already used by another instance of the bot."
+#~ msgid "The cache file is already used by another instance of the self."
 #~ msgstr "Кеш-файл уже используется другим экземпляром бота"
 
 #~ msgid "Blocks or unblocks commands."

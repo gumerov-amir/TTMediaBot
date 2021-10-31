@@ -1,17 +1,22 @@
+from __future__ import annotations
 import logging
 from threading import Thread
 import time
+from typing import TYPE_CHECKING
 
 from bot.player import State
 from bot import vars
 
+if TYPE_CHECKING:
+    from bot import Bot
+
 
 class TTPlayerConnector(Thread):
-    def __init__(self, player, ttclient):
+    def __init__(self, bot: Bot):
         super().__init__(daemon=True)
         self.name = 'TTPlayerConnector'
-        self.player = player
-        self.ttclient = ttclient
+        self.player = bot.player
+        self.ttclient = bot.ttclient
 
     def run(self):
         last_player_state = State.Stopped

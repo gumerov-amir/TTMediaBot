@@ -1,16 +1,22 @@
+from __future__ import annotations
 import os
 import sys
+from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
 from bot import errors
 from bot.player.enums import TrackType
 from bot.player.track import Track
 
+if TYPE_CHECKING:
+    from bot import Bot
+
 
 class Streamer:
-    def __init__(self, service_manager):
+    def __init__(self, bot: Bot):
         self.allowed_schemes = ['http', 'https', 'rtmp', 'rtsp']
-        self.service_manager = service_manager
+        self.config = bot.config
+        self.service_manager = bot.service_manager
 
     def get(self, url, is_admin):
         parsed_url = urlparse(url)

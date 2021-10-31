@@ -16,11 +16,12 @@ class SoundDeviceType(Enum):
 
 
 class SoundDeviceManager:
-    def __init__(self, config, player, ttclient):
-        self.output_device_index = config.output_device
-        self.input_device_index = config.input_device
-        self.player = player
-        self.ttclient = ttclient
+    def __init__(self, bot):
+        self.config = bot.config
+        self.output_device_index = self.config.sound_devices.output_device
+        self.input_device_index = self.config.sound_devices.input_device
+        self.player = bot.player
+        self.ttclient = bot.ttclient
         self.output_devices = self.player.get_output_devices()
         self.input_devices = self.ttclient.get_input_devices()
 

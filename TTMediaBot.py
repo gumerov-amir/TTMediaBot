@@ -13,7 +13,7 @@ from bot.config import save_default_file
 def main(config, cache, log, devices, default_config):
     if devices:
         bot = Bot(None, None, None)
-        echo_sound_devices(bot.sound_device_manager)
+        echo_sound_devices(self.sound_device_manager)
     elif default_config:
         save_default_file()
         print("Successfully dumped to config_default.json")
