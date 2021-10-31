@@ -1,13 +1,12 @@
 from collections import deque
 import portalocker
-import os
 import pickle
 
-from bot import vars
+from bot import app_vars
 
 
 class Cache:
-    def __init__(self, file_name):
+    def __init__(self, file_name: str) -> None:
         self.file_name = file_name
         try:
             with open(self.file_name, 'rb') as f:
@@ -15,7 +14,7 @@ class Cache:
                 if 'recents' not in self.data or 'favorites' not in self.data:
                     raise KeyError()
         except:
-            self.data = {'recents': deque(maxlen=vars.recents_max_lenth), 'favorites':  {}}
+            self.data = {'recents': deque(maxlen=app_vars.recents_max_lenth), 'favorites':  {}}
             with open(self.file_name, 'wb') as f:
                 pickle.dump(self.data, f)
         self.file_locker = portalocker.Lock(self.file_name, timeout=0, flags=portalocker.LOCK_EX|portalocker.LOCK_NB)

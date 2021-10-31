@@ -2,24 +2,26 @@ import logging
 import queue
 import sys
 import time
+from typing import Optional
 
 from pydantic.error_wrappers import ValidationError
 
-from bot import cache, commands, config, connectors, logger, modules, player, services, sound_devices, TeamTalk, translator, vars
+from bot import (TeamTalk, cache, commands, config, connectors, logger,
+                 modules, player, services, sound_devices, translator, app_vars)
 
 
 class Bot:
-    def __init__(self, config_file_name: str, cache_file_name: str = None, log_file_name: str = None) -> None:
+    def __init__(self, config_file_name: Optional[str], cache_file_name: Optional[str] = None, log_file_name: Optional[str] = None) -> None:
         try:
             self.config_manager = config.ConfigManager(config_file_name)
             self.config = self.config_manager.config
         except ValidationError as e:
             for error in e.errors():
-                print("Error in config:", ".".join(error["loc"]), error["msg"])
+                print("Error in config:", ".".join([str(i) for i in error["loc"]]), error["msg"])
             sys.exit(1)
         except PermissionError:
             sys.exit('The configuration file cannot be accessed due to a permission error or is already used by another instance of the bot')
-        translator.install_locale(self.config.general.language)
+        self.translator = translator.Translator(self.config.general.language)
         try:
             if cache_file_name:
                 self.cache = cache.Cache(cache_file_name)
@@ -61,10 +63,10 @@ class Bot:
                 self.command_processor(message)
             except queue.Empty:
                 pass
-            time.sleep(vars.loop_timeout)
+            time.sleep(app_vars.loop_timeout)
 
 
-    def close(self):
+    def close(self) -> None:
         logging.debug('Closing bot')
         self.player.close()
         self.ttclient.close()

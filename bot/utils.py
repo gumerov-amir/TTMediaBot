@@ -1,11 +1,11 @@
 import os
 
-from bot import vars
+from bot import app_vars
 
 def check_file_path(file_name):
         if os.path.isfile(file_name):
             return True
-        elif os.path.isfile(os.path.join(vars.directory, file_name)):
+        elif os.path.isfile(os.path.join(app_vars.directory, file_name)):
             return True
         else:
             return False
@@ -17,7 +17,7 @@ def clean_file_name(file_name):
     return file_name
 
 def get_abs_path(file_name):
-    return os.path.join(vars.directory, file_name)
+    return os.path.join(app_vars.directory, file_name)
 
 
 

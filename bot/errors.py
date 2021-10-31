@@ -66,5 +66,9 @@ class LoginError(Exception):
     pass
 
 
+class LocaleNotFoundError(Exception):
+    pass
+
+
 class JoinChannelError(Exception):
     pass

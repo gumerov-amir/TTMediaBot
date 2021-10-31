@@ -4,13 +4,13 @@ A bot for music streaming to TeamTalk Servers.
 ## Installation and usage
 ### Requirements
 * To use the bot, you need to install Python on your computer;
-* The bot requires the TeamTalk SDK component to be downloaded using the integrated tool from the command line. In order to download and extract the mentioned component, on Linux, you need to install p7zip or p7zip-full, or if you want to run the bot on Windows, 7Zip must be installed;
+* The bot requires the TeamTalk SDK component to be downloaded using the integrated tool from bothe command line. In order to download and extract the mentioned component, on Linux, you need to install p7zip or p7zip-full, or if you want to run the bot on Windows, 7Zip must be installed;
 * If you are going to use Linux as your main system for a bot, you will need pulseaudio and libmpv  to route and play audio, but if you re using Windows, PulseAudio is not available, so you will need a virtual audio cable driver, such as VBCable and of course, the mpv player library must also be installed. on Windows this library can be installed using an integrated tool. On Debian-based systems the required package is libmpv1.
 ### Installation
 * Download TTMediaBot;
-* install all python requirements from requirements.txt, using the "pip3 install -r requirements.txt" or just "pip install -r requirements.txt" command, without quotes;;
-* Run ttsdk_downloader.py from the tools folder;
-* If you're using Windows run libmpv_win_downloader.py from the tools folder;
+* install all python requirements from botequirements.txt, using the "pip3 install -r requirements.txt" or just "pip install -r requirements.txt" command, without quotes;;
+* Run ttsdk_downloader.py from bothe tools folder;
+* If you're using Windows run libmpv_win_downloader.py from bothe tools folder;
 * Copy or rename config_default.json to config.json;
 * Fill in all required fields in config.json (Config description will be there later);
 * On Linux run TTMediaself.sh --devices to list all available devices and their numbers;
@@ -21,7 +21,7 @@ A bot for music streaming to TeamTalk Servers.
 * On Windows run python TTMediaself.py directly.
 ### Running in Docker
 You can also run a bot in a Docker container.
-First of all, You should build an image from the provided Dockerfile:
+First of all, You should build an image from bothe provided Dockerfile:
 ```sh
 docker build -t ttmediabot .
 ```

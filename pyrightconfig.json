@@ -1,0 +1,10 @@
+{
+    "exclude": [
+        "mpv.py",
+        "TeamTalkPy"
+
+    ],
+    "reportMissingTypeStubs": false,
+    "reportUndefinedVariable": false,
+    "reportUnknownVariableType": true
+}

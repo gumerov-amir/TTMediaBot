@@ -38,7 +38,7 @@ class TeamTalkThread(Thread):
         }
 
     def run(self):
-        from . import _str
+        from bot.TeamTalk import _str
         if self.config.event_handling.load_event_handlers:
             self.event_handlers = self.import_event_handlers()
         self._close = False
