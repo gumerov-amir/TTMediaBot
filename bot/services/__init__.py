@@ -1,31 +1,42 @@
 from __future__ import annotations
+from abc import ABC, abstractmethod
 import logging
-from sys import exec_prefix
-from typing import TYPE_CHECKING
+from typing import Any, Any, Dict, List, TYPE_CHECKING
 
 from bot import errors
+from bot,player.track import Track
 from bot.services import vk, yt
+
+services = {"vk": vk, "yt": yt}
 
 if TYPE_CHECKING:
     from bot import Bot
 
 
+class Service(ABC):
+    @abstractmethod
+    def get(self, *args, **kwargs) -> List[Track]: ...
+
+    @abstractmethod
+    def search(self, query) -> List[Track]): ...
+
+
 class ServiceManager:
-    def __init__(self, bot: Bot):
+    def __init__(self, bot: Bot) -> None:
         self.config = bot.config.services
-        self.available_services = {}
+        self.available_services: Dict[str, Service] = {}
         self.fallback_service = 'yt'
         for service_name in self.config.available_services:
-            service_class = globals()[service_name].Service
-            self.available_services[service_name] = service_class(self.config.available_services[service_name])
+            service_class = services[service_name].Service
+            self.available_services[service_name] = service_class(getattr(self.config, service_name))
         self.service = self.available_services[self.config.default_service]
         import builtins
         builtins.__dict__["get_service_by_name"] = self.get_service_by_name
 
 
-    def initialize(self):
+    def initialize(self) -> None:
         logging.debug('Initializing services')
-        unavailable_services = []
+        unavailable_services: List[Service] = []
         for service in self.available_services.values():
             try:
                 service.initialize()
@@ -37,9 +48,7 @@ class ServiceManager:
             del self.available_services[service.name]
         logging.debug('Services initialized')
 
-    def get_service_by_name(self, name):
-        if not isinstance(name, str):
-            raise errors.InvalidArgumentError()
+    def get_service_by_name(self, name: str) -> Service:
         try:
             service = self.available_services[name]
             return service

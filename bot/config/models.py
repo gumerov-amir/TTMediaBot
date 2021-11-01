@@ -1,4 +1,4 @@
-from typing import Dict, List, Union
+from typing import Any, Dict, List, Union
 
 from pydantic import BaseModel
 
@@ -23,7 +23,7 @@ class PlayerModel(BaseModel):
     volume_fading: bool = True
     volume_fading_interval: float = 0.025
     seek_step: int = 5
-    player_options: dict = {}
+    player_options: Dict[str, Any] = {}
 
 
 class TeamTalkUserModel(BaseModel):
@@ -57,7 +57,9 @@ class TeamTalkModel(BaseModel):
 
 
 class ServicesModel(BaseModel):
-    available_services: Dict[str, dict] = {"vk": {"token": ""}, "yt": {}}
+    available_services: List[str] = ["vk", "yt"]
+    vk: Dict[str, Any] = {"token": ""}
+    yt: Dict[str, Any] = {}
     default_service: str = "vk"
 
 

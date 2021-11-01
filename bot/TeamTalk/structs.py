@@ -3,14 +3,6 @@ from enum import Enum, Flag
 import TeamTalkPy
 
 
-class Channel:
-    def __init__(self, id, name, topic, max_users, type):
-        self.id = id
-        self.name = name
-        self.topic = topic
-        self.max_users = max_users
-        self.type = type
-
 class ChannelType(Flag):
     ClassRoom = TeamTalkPy.ChannelType.CHANNEL_CLASSROOM
     Default = TeamTalkPy.ChannelType.CHANNEL_DEFAULT
@@ -22,12 +14,13 @@ class ChannelType(Flag):
     SoloTransmit = TeamTalkPy.ChannelType.CHANNEL_SOLO_TRANSMIT
 
 
-class Error:
-    def __init__(self, message, type, command_id):
-        self.message = message
+class Channel:
+    def __init__(self, id: int, name: str, topic: str, max_users: int, type: ChannelType) -> None:
+        self.id = id
+        self.name = name
+        self.topic = topic
+        self.max_users = max_users
         self.type = type
-        self.command_id = command_id
-
 
 class ErrorType(Enum):
     Success = TeamTalkPy.ClientError.CMDERR_SUCCESS
@@ -75,31 +68,28 @@ class ErrorType(Enum):
     SndEffectFailure = TeamTalkPy.ClientError.INTERR_SNDEFFECT_FAILURE
 
 
-class User:
-    def __init__(self, id, nickname, username, status, gender, state, channel, client_name, version, account, type, is_admin, is_banned):
-        self.id = id
-        self.nickname = nickname
-        self.username = username
-        self.channel = channel
-        self.status = status
-        self.gender = gender
-        self.state= state
-        self.client_name = client_name
-        self.version = version
-        self.account = account
+class Error:
+    def __init__(self, message: str, type: ErrorType, command_id: int) -> None:
+        self.message = message
         self.type = type
-        self.is_admin = is_admin
-        self.is_banned = is_banned
+        self.command_id = command_id
+
+class UserType(Enum):
+    Null = 0
+    Default = 1
+    Admin = 2
 
 
-class UserAccount:
-    def __init__(self, username, password, note, type, rights, init_channel):
-        self.username = username
-        self.password = password
-        self.note = note
-        self.type = type
-        self.rights = rights
-        self.init_channel = init_channel
+class UserState(Flag):
+    Null = TeamTalkPy.UserState.USERSTATE_NONE
+    Voice = TeamTalkPy.UserState.USERSTATE_VOICE
+    MuteVoice = TeamTalkPy.UserState.USERSTATE_MUTE_VOICE
+    MuteMediaFile = TeamTalkPy.UserState.USERSTATE_MUTE_MEDIAFILE
+    Desktop = TeamTalkPy.UserState.USERSTATE_DESKTOP
+    VideoCapture = TeamTalkPy.UserState.USERSTATE_VIDEOCAPTURE
+    AudioFile = TeamTalkPy.UserState.USERSTATE_MEDIAFILE_AUDIO
+    VideoFile = TeamTalkPy.UserState.USERSTATE_MEDIAFILE_VIDEO
+    MediaFile = TeamTalkPy.UserState.USERSTATE_MEDIAFILE
 
 
 class UserStatusMode(Flag):
@@ -112,6 +102,7 @@ class UserStatusMode(Flag):
     M = Available
     F = 256
     N = 4096
+
 
 class UserRight(Flag):
     Null = TeamTalkPy.UserRight.USERRIGHT_NONE
@@ -140,29 +131,31 @@ class UserRight(Flag):
     ViewHiddenChannels = TeamTalkPy.UserRight.USERRIGHT_VIEW_HIDDEN_CHANNELS
 
 
-class UserType(Enum):
-    Null = 0
-    Default = 1
-    Admin = 2
-
-
-class UserState(Flag):
-    Null = TeamTalkPy.UserState.USERSTATE_NONE
-    Voice = TeamTalkPy.UserState.USERSTATE_VOICE
-    MuteVoice = TeamTalkPy.UserState.USERSTATE_MUTE_VOICE
-    MuteMediaFile = TeamTalkPy.UserState.USERSTATE_MUTE_MEDIAFILE
-    Desktop = TeamTalkPy.UserState.USERSTATE_DESKTOP
-    VideoCapture = TeamTalkPy.UserState.USERSTATE_VIDEOCAPTURE
-    AudioFile = TeamTalkPy.UserState.USERSTATE_MEDIAFILE_AUDIO
-    VideoFile = TeamTalkPy.UserState.USERSTATE_MEDIAFILE_VIDEO
-    MediaFile = TeamTalkPy.UserState.USERSTATE_MEDIAFILE
-
-class Message:
-    def __init__(self, text, user, channel, type):
-        self.text = text
-        self.channel = channel
-        self.user = user
+class UserAccount:
+    def __init__(self, username: str, password: str, note: str, type: UserType, rights: UserRight, init_channel: int) -> None:
+        self.username = username
+        self.password = password
+        self.note = note
         self.type = type
+        self.rights = rights
+        self.init_channel = init_channel
+
+
+class User:
+    def __init__(self, id: int, nickname: str, username: str, status: str, gender: str, state: UserState, channel: Channel, client_name: str, version: str, account: str, type: UserType, is_admin: bool, is_banned: bool) -> None:
+        self.id = id
+        self.nickname = nickname
+        self.username = username
+        self.channel = channel
+        self.status = status
+        self.gender = gender
+        self.state= state
+        self.client_name = client_name
+        self.version = version
+        self.account = account
+        self.type = type
+        self.is_admin = is_admin
+        self.is_banned = is_banned
 
 
 class MessageType(Enum):
@@ -172,8 +165,16 @@ class MessageType(Enum):
     Custom = TeamTalkPy.TextMsgType.MSGTYPE_CUSTOM
 
 
+class Message:
+    def __init__(self, text: str, user: User, channel: Channel, type: MessageType) -> None:
+        self.text = text
+        self.channel = channel
+        self.user = user
+        self.type = type
+
+
 class File:
-    def __init__(self, id, name, channel, size, username):
+    def __init__(self, id: int, name: str, channel: Channel, size: int, username: str) -> None:
         self.id = id
         self.name = name
         self.channel = channel

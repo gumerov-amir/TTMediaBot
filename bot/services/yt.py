@@ -5,9 +5,10 @@ from youtubesearchpython import VideosSearch
 
 from bot.player.enums import TrackType
 from bot.player.track import Track
+from bot.services import Service as _Service
 from bot import errors
 
-class Service:
+class Service(_Service):
     def __init__(self, config: dict):
         self.name = 'yt'
         self.hostnames = []

@@ -1,11 +1,10 @@
 from __future__ import annotations
 import logging
-import _thread
 import os
 import time
 import re
 import sys
-from typing import TYPE_CHECKING
+from typing import List, TYPE_CHECKING, Optional, Union
 from queue import Queue
 
 from bot import errors, app_vars
@@ -22,7 +21,7 @@ from bot.TeamTalk.thread import TeamTalkThread
 from bot.TeamTalk.structs import *
 
 import TeamTalkPy
-from TeamTalkPy import TTMessage, ClientEvent, ClientFlags
+from TeamTalkPy import ClientEvent, ClientFlags, TTMessage
 
 re_line_endings = re.compile('[\\r\\n]')
 
@@ -30,7 +29,7 @@ if TYPE_CHECKING:
     from bot import Bot
 
 
-def _str(data):
+def _str(data: Union[str, bytes]) -> Union[str, bytes]:
     if isinstance(data, str):
         if os.supports_bytes_environ:
             return bytes(data, 'utf-8')
@@ -40,7 +39,7 @@ def _str(data):
         return str(data, 'utf-8')
 
 
-def split(text, max_length=app_vars.max_message_length):
+def split(text: str, max_length: int = app_vars.max_message_length) -> List[str]:
     if len(text) <= max_length:
         lines = [text]
     else:
@@ -73,7 +72,7 @@ def split(text, max_length=app_vars.max_message_length):
 
 
 class TeamTalk:
-    def __init__(self, bot: Bot):
+    def __init__(self, bot: Bot) -> None:
         self.config = bot.config.teamtalk
         self.translator = bot.translator
         TeamTalkPy.setLicense(_str(self.config.license_name), _str(self.config.license_key))
@@ -83,29 +82,29 @@ class TeamTalk:
         self.gender = UserStatusMode.__members__[self.config.gender.upper()]
         self.status = self.default_status
         self.errors_queue = Queue()
-        self.message_queue = Queue()
+        self.message_queue: Queue[Message] = Queue()
         self.uploaded_files_queue = Queue()
         self.thread = TeamTalkThread(bot, self)
 
-    def initialize(self):
+    def initialize(self) -> None:
         logging.debug('Initializing TeamTalk')
         self.connect()
         self.change_status_text(self.status)
         logging.debug('TeamTalk initialized')
 
-    def run(self):
+    def run(self) -> None:
         logging.debug('Starting TeamTalk event thread')
         self.thread.start()
         logging.debug('TeamTalk event thread started')
 
-    def close(self):
+    def close(self) -> None:
         logging.debug('Closing teamtalk')
         self.thread.close()
         self.tt.disconnect()
         self.tt.closeTeamTalk()
         logging.debug('Teamtalk closed')
 
-    def connect(self, reconnect=False):
+    def connect(self, reconnect: bool = False) -> None:
         if reconnect:
             logging.info('Reconnecting')
             if self.tt.getFlags() < ClientFlags.CLIENT_CONNECTED | ClientFlags.CLIENT_AUTHORIZED:
@@ -169,14 +168,14 @@ class TeamTalk:
             logging.error(error)
             sys.exit(error)
 
-    def _connect(self):
+    def _connect(self) -> None:
         self.tt.connect(_str(self.config.hostname), self.config.tcp_port, self.config.udp_port, self.config.encrypted)
         try:
             self.wait_for_event(ClientEvent.CLIENTEVENT_CON_SUCCESS, error_events=[ClientEvent.CLIENTEVENT_CON_FAILED])
         except errors.TTEventError as e:
             raise errors.ConnectionError(e)
 
-    def _login(self):
+    def _login(self) -> None:
         cmdid = self.tt.doLogin(_str(self.config.nickname), _str(self.config.username), _str(self.config.password), _str(app_vars.client_name))
         try:
             msg = self.wait_for_event(ClientEvent.CLIENTEVENT_CMD_MYSELF_LOGGEDIN, error_events=[ClientEvent.CLIENTEVENT_CMD_ERROR])
@@ -189,7 +188,7 @@ class TeamTalk:
             raise errors.LoginError(e)
         self.wait_for_cmd_success(cmdid)
 
-    def _join(self):
+    def _join(self) -> None:
         if isinstance(self.config.channel, int):
             channel_id = int(self.config.channel)
         else:
@@ -231,7 +230,7 @@ class TeamTalk:
         else:
             return self.translator.translate('Send "h" for help')
 
-    def send_message(self, text, user=None, type=1):
+    def send_message(self, text: str, user: Optional[User] = None, type: int = 1) -> None:
         for string in split(text):
             message = TeamTalkPy.TextMessage()
             message.nFromUserID = self.tt.getMyUserID()
@@ -264,7 +263,7 @@ class TeamTalk:
                 raise ValueError()
         self.tt.doDeleteFile(channel_id, file_id)
 
-    def join_channel(self, channel, password):
+    def join_channel(self, channel: Union[str, int], password: str) -> None:
         if isinstance(channel, int):
             channel_id = channel
         else:
@@ -273,28 +272,28 @@ class TeamTalk:
                 raise ValueError()
         cmdid = self.tt.doJoinChannelByID(channel_id, _str(password))
 
-    def change_nickname(self, nickname):
+    def change_nickname(self, nickname: str) -> None:
         self.tt.doChangeNickname(_str(nickname))
 
-    def change_status_text(self, text):
+    def change_status_text(self, text: str) -> None:
         if text:
             self.status = split(text)[0]
         else:
             self.status = split(self.default_status)[0]
         self.tt.doChangeStatus(self.gender.value, _str(self.status))
 
-    def change_gender(self, gender):
+    def change_gender(self, gender: str) -> None:
         self.gender = UserStatusMode.__members__[gender.upper()]
         self.tt.doChangeStatus(self.gender.value, _str(self.status))
 
-    def get_channel(self, channel_id):
+    def get_channel(self, channel_id: int) -> Channel:
         channel = self.tt.getChannel(channel_id)
         return Channel(channel.nChannelID, channel.szName, channel.szTopic, channel.nMaxUsers, ChannelType(channel.uChannelType))
 
     def get_error(self, error_no, cmdid):
         return Error(_str(self.tt.getErrorMessage(error_no)), ErrorType(error_no), cmdid)
 
-    def get_message(self, msg):
+    def get_message(self, msg: TTMessage) -> None:
         return Message(re.sub(re_line_endings, '', _str(msg.szMessage)), self.get_user(msg.nFromUserID), self.get_channel(msg.nChannelID), MessageType(msg.nMsgType))
 
     def get_file(self, file):
@@ -327,7 +326,7 @@ class TeamTalk:
     def get_user_account_by_tt_obj(self, obj):
         return UserAccount(_str(obj.szUsername), _str(obj.szPassword), _str(obj.szNote), UserType(obj.uUserType), UserRight(obj.uUserRights), _str(obj.szInitChannel))
 
-    def get_input_devices(self):
+    def get_input_devices(self) -> List[SoundDevice]:
         devices = []
         device_list = [i for i in self.tt.getSoundDevices()]
         for device in device_list:
@@ -338,13 +337,13 @@ class TeamTalk:
                 devices.append(SoundDevice(_str(device.szDeviceName), device.nDeviceID, SoundDeviceType.Input))
         return devices
 
-    def set_input_device(self, id):
+    def set_input_device(self, id: str) -> None:
         self.tt.initSoundInputDevice(id)
 
-    def enable_voice_transmission(self):
+    def enable_voice_transmission(self) -> None:
         self.tt.enableVoiceTransmission(True)
         self.is_voice_transmission_enabled = True
 
-    def disable_voice_transmission(self):
+    def disable_voice_transmission(self) -> None:
         self.tt.enableVoiceTransmission(False)
         self.is_voice_transmission_enabled = False

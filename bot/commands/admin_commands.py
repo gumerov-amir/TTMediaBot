@@ -6,7 +6,7 @@ from typing import Optional, TYPE_CHECKING
 
 from bot.commands.command import Command
 from bot.player.enums import State
-from bot import errors, translator, app_vars
+from bot import errors, translator
 
 if TYPE_CHECKING:
     from bot.TeamTalk.structs import User
@@ -22,16 +22,16 @@ class BlockCommandCommand(Command):
         if len(arg) >= 1 and arg[1:] not in self.command_processor.commands_dict:
             raise errors.InvalidArgumentError()
         if not arg:
-            return ", ".join(self.command_processor.blocked_commands) if self.command_processor.blocked_commands else self.translator.translate("The list is empty")
+            return ", ".join(self.config.general.blocked_commands) if self.config.general.blocked_commands else self.translator.translate("The list is empty")
         if arg[0] == "+":
-            if arg[1::] not in self.command_processor.blocked_commands:
-                self.command_processor.blocked_commands.append(arg[1::])
+            if arg[1::] not in self.config.general.blocked_commands:
+                self.config.general.blocked_commands.append(arg[1::])
                 return self.translator.translate("Added")
             else:
                 return self.translator.translate("This command is already added")
         elif arg[0] == "-":
-            if arg[1::] in self.command_processor.blocked_commands:
-                del self.command_processor.blocked_commands[self.command_processor.blocked_commands.index(arg[1::])]
+            if arg[1::] in self.config.general.blocked_commands:
+                del self.config.general.blocked_commands[self.config.general.blocked_commands.index(arg[1::])]
                 return self.translator.translate("Deleted")
             else:
                 return self.translator.translate("This command is not blocked")
@@ -67,7 +67,7 @@ class ChangeLanguageCommand(Command):
             except:
                 return self.translator.translate('Incorrect language')
         else:
-            return self.translator.translate('Current language: {current_language}. Available languages: {available_languages}').format(current_language=self.config.general.language, available_languages=', '.join(translator.get_locales()))
+            return self.translator.translate('Current language: {current_language}. Available languages: {available_languages}').format(current_language=self.config.general.language, available_languages=', '.join(self.translator.get_locales()))
 
 
 class ChangeNicknameCommand(Command):

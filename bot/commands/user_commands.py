@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 class HelpCommand(Command):
     @property
     def help(self) -> str:
-        return gettext('Shows command help')
+        return self.translator.translate('Shows command help')
 
     def __call__(self, arg: str, user: User) -> Optional[str]:
         return self.command_processor.help(arg, user)
@@ -27,7 +27,7 @@ class AboutCommand(Command):
         return self.translator.translate('Shows information about the bot')
 
     def __call__(self, arg: str, user: User) -> Optional[str]:
-        return app_vars.client_name + '\n' + app_vars.about_text()
+        return app_vars.client_name + '\n' + app_vars.about_text(self.translator)
 
 
 class PlayPauseCommand(Command):

@@ -1,10 +1,10 @@
 from __future__ import annotations
-
 from importlib.machinery import SourceFileLoader
 import logging
 import os
 from threading import Thread
-from typing import TYPE_CHECKING
+from typing import Any, Tuple, TYPE_CHECKING
+from types import ModuleType
 
 import types
 import sys
@@ -37,7 +37,7 @@ class TeamTalkThread(Thread):
             TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_REMOVE: "file_removed",
         }
 
-    def run(self):
+    def run(self) -> None:
         from bot.TeamTalk import _str
         if self.config.event_handling.load_event_handlers:
             self.event_handlers = self.import_event_handlers()
@@ -68,10 +68,10 @@ class TeamTalkThread(Thread):
             elif msg.nClientEvent in self.event_names and self.config.event_handling.load_event_handlers:
                 self.run_event_handler(msg)
 
-    def close(self):
+    def close(self) -> None:
         self._close = True
 
-    def import_event_handlers(self):
+    def import_event_handlers(self) -> ModuleType:
         try:
             if os.path.isfile(self.config.event_handling.event_handlers_file_name) and os.path.splitext(self.config.event_handling.event_handlers_file_name)[1] == ".py":
                 module = SourceFileLoader(os.path.splitext(self.ttclient.event_handlers_file_name)[0], self.ttclient.event_handlers_file_name).load_module()
@@ -85,7 +85,7 @@ class TeamTalkThread(Thread):
             module = types.ModuleType("event_handlers")
         return module
 
-    def parse_event(self, msg):
+    def parse_event(self, msg: TeamTalkPy.TTMessage) -> Tuple[Any]:
         if msg.nClientEvent in (TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_UPDATE, TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_JOINED, TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_LOGGEDIN, TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_LOGGEDOUT):
             return (self.ttclient.get_user(msg.user.nUserID),)
         elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_LEFT:
@@ -97,7 +97,7 @@ class TeamTalkThread(Thread):
         elif msg.nClientEvent in (TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_NEW, TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_REMOVE):
             return (self.ttclient.get_file(msg.remotefile),)
 
-    def run_event_handler(self, msg):
+    def run_event_handler(self, msg: TeamTalkPy.TTMessage) -> None:
         try:
             event_handler = getattr(self.event_handlers, self.event_names[msg.nClientEvent], False)
             if not event_handler:

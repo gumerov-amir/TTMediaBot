@@ -4,7 +4,7 @@ from typing import Optional
 
 import portalocker
 
-from bot import utils, logger
+from bot import utils
 from bot.config.models import ConfigModel
 
 
