@@ -1,5 +1,6 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
+from typing import Any, TYPE_CHECKING
+from types import FunctionType
 
 from bot.commands.task_processor import Task
 
@@ -25,5 +26,5 @@ class Command:
     def help(self) -> str:
         return self.translator.translate("help text not found")
 
-    def run_async(self, func, *args, **kwargs):
+    def run_async(self, func: FunctionType, *args: Any, **kwargs: Any) -> None:
         self._task_processor.task_queue.put(Task(id(self), func, args, kwargs))

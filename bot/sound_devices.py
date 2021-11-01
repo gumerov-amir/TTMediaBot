@@ -1,10 +1,15 @@
+from __future__ import annotations
 from enum import Enum
 import logging
 import sys
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from bot import Bot
 
 
 class SoundDevice:
-    def __init__(self, name, id, type):
+    def __init__(self, name: str, id: str, type: SoundDeviceType) -> None:
         self.name = name
         self.id = id
         self.type = type
@@ -16,7 +21,7 @@ class SoundDeviceType(Enum):
 
 
 class SoundDeviceManager:
-    def __init__(self, bot):
+    def __init__(self, bot: Bot) -> None:
         self.config = bot.config
         self.output_device_index = self.config.sound_devices.output_device
         self.input_device_index = self.config.sound_devices.input_device
@@ -25,7 +30,7 @@ class SoundDeviceManager:
         self.output_devices = self.player.get_output_devices()
         self.input_devices = self.ttclient.get_input_devices()
 
-    def initialize(self):
+    def initialize(self) -> None:
         logging.debug('Initializing sound devices')
         try:
             self.player.set_output_device(self.output_devices[self.output_device_index].id)

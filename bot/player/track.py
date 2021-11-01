@@ -1,10 +1,11 @@
 import copy
+from typing import Any, Dict, Optional
 
 from bot.player.enums import TrackType
 
 
 class Track:
-    def __init__(self, service=None, url=None, name=None, format=None, extra_info=None, type=TrackType.Default):
+    def __init__(self, service: Optional[str] = None, url: Optional[str] = None, name: Optional[str] = None, format: Optional[str] = None, extra_info: Optional[Dict[str, Any]] = None, type: TrackType = TrackType.Default) -> None:
         self.service = service
         self.url = url
         self.name = name

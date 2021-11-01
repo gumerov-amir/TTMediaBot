@@ -4,7 +4,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 import sys
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, List
 
 from bot import app_vars
 
@@ -22,7 +22,7 @@ def initialize_logger(bot: Bot) -> None:
     logging.addLevelName(5, "PLAYER_DEBUG")
     level = logging.getLevelName(config.level)
     formatter = logging.Formatter(config.format)
-    handlers = []
+    handlers: List[Any] = []
     try:
         mode = Mode(config.mode) if isinstance(config.mode, int) else Mode.__members__[config.mode]
     except KeyError:

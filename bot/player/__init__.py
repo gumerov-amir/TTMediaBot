@@ -1,15 +1,13 @@
 from __future__ import annotations
-from collections import deque
 import html
 import logging
 import time
 from typing import List, Optional, TYPE_CHECKING
 import random
-import sys
 
 import mpv
 
-from bot import errors, app_vars
+from bot import errors
 from bot.player.enums import Mode, State, TrackType
 from bot.player.track import Track
 from bot.sound_devices import SoundDevice, SoundDeviceType
@@ -60,7 +58,7 @@ class Player:
         self._player.terminate()
         logging.debug('Player closed')
 
-    def play(self, tracks: List[Track] = None, start_track_index: int = None) -> None:
+    def play(self, tracks: Optional[List[Track]] = None, start_track_index: Optional[int] = None) -> None:
         if tracks != None:
             self.track_list = tracks
             if not start_track_index and self.mode == Mode.Random:

@@ -5,6 +5,5 @@
 
     ],
     "reportMissingTypeStubs": false,
-    "reportUndefinedVariable": false,
-    "reportUnknownVariableType": true
+    "reportImportCycles": false
 }

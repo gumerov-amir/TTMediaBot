@@ -3,14 +3,14 @@ import logging
 import re
 from threading import Thread
 import traceback
-from typing import TYPE_CHECKING
+from typing import Any, List, Tuple, TYPE_CHECKING
 
 from bot import errors
 from bot.commands import admin_commands
 from bot.commands.command import Command
 from bot.commands.task_processor import TaskProcessor
 from bot.commands import user_commands
-from bot.TeamTalk.structs import UserType
+from bot.TeamTalk.structs import Message, User, UserType
 from bot import app_vars
 
 
@@ -55,7 +55,7 @@ class CommandProcessor:
             "r": user_commands.RecentsCommand,
         }
         self.admin_commands_dict = {
-            "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 10))) for i in "╱✑⻄⦐"]): type("IllegalCommand", (Command,), {"__call__":lambda self, arg, user: "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 20))) for i in "\ueb49𘤀𡢁𢄄𛋹🚉𧚐\U0001dd24𘤀"]), "help": "Illegal operation"}),
+            "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 10))) for i in "╱✑⻄⦐"]): type("IllegalCommand", (Command,), {"__call__":lambda self, arg, user: "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 20))) for i in "\ueb49𘤀𡢁𢄄𛋹🚉𧚐\U0001dd24𘤀"]), "help": "Illegal operation"}), # type: ignore
             'cg': admin_commands.ChangeGenderCommand,
             'cl': admin_commands.ChangeLanguageCommand,
             'cn': admin_commands.ChangeNicknameCommand,
@@ -101,7 +101,7 @@ class CommandProcessor:
             logging.error("", exc_info=True)
             self.ttclient.send_message(self.translator.translate("Error: {}").format(str(e)), message.user)
 
-    def check_access(self, user, command):
+    def check_access(self, user: User, command: str) -> bool:
         if (not user.is_admin and user.type != UserType.Admin) or app_vars.app_name in user.client_name:
             if app_vars.app_name in user.client_name:
                 raise errors.AccessDeniedError("")
@@ -118,7 +118,7 @@ class CommandProcessor:
         else:
             return True
 
-    def get_command(self, command, user):
+    def get_command(self, command: str, user: User) -> Any:
         if command in self.commands_dict:
             return self.commands_dict[command]
         elif (user.is_admin or user.type == UserType.Admin) and command in self.admin_commands_dict:
@@ -126,7 +126,7 @@ class CommandProcessor:
         else:
             raise errors.UnknownCommandError()
 
-    def help(self, arg, user):
+    def help(self, arg: str, user: User) -> str:
         if arg:
             if arg in self.commands_dict:
                 return "{} {}".format(arg, self.commands_dict[arg](self).help)
@@ -135,7 +135,7 @@ class CommandProcessor:
             else:
                 return self.translator.translate("Unknown command")
         else:
-            help_strings = []
+            help_strings: List[str] = []
             for i in list(self.commands_dict):
                 help_strings.append(self.help(i, user))
             if user.is_admin:
@@ -143,7 +143,7 @@ class CommandProcessor:
                     help_strings.append(self.help(i, user))
             return '\n'.join(help_strings)
 
-    def parse_command(self, text):
+    def parse_command(self, text: str) -> Tuple[str, str]:
         text = text.strip()
         try:
             command = re.findall(re_command, text.split(' ')[0].lower())[0]

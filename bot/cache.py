@@ -1,6 +1,7 @@
 from collections import deque
 import portalocker
 import pickle
+from typing import Any, Dict
 
 from bot import app_vars
 
@@ -10,7 +11,7 @@ class Cache:
         self.file_name = file_name
         try:
             with open(self.file_name, 'rb') as f:
-                self.data = pickle.load(f)
+                self.data: Dict[str, Any] = pickle.load(f)
                 if 'recents' not in self.data or 'favorites' not in self.data:
                     raise KeyError()
         except:
