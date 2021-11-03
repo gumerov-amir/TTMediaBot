@@ -3,15 +3,20 @@ import logging
 from yt_dlp import YoutubeDL
 from youtubesearchpython import VideosSearch
 
+from bot.config.models import YtModel
+
 from bot.player.enums import TrackType
 from bot.player.track import Track
 from bot.services import Service as _Service
 from bot import errors
 
-class Service(_Service):
-    def __init__(self, config: dict):
+class YtService(_Service):
+    def __init__(self, config: YtModel):
         self.name = 'yt'
         self.hostnames = []
+        self.config = config
+        self.is_enabled = self.config.enabled
+        self.error_message = ""
         self.hidden = False
 
     def initialize(self):

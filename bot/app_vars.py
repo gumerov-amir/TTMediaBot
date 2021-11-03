@@ -14,6 +14,7 @@ Authors: Gumerov_amir, A11CF0, Beqa Gozalishvili.
 Home page: https://github.com/gumerov-amir/TTMediaBot\
 License: Mit License\
 """)
+fallback_service = "yt"
 loop_timeout = 0.01
 max_message_length = 256
 recents_max_lenth = 32

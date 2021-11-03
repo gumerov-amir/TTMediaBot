@@ -18,6 +18,10 @@ class ServiceNotFoundError(Exception):
     pass
 
 
+class ServiceIsDisabledError(Exception):
+    pass
+
+
 class ServiceError(Exception):
     pass
 

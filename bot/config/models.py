@@ -56,11 +56,19 @@ class TeamTalkModel(BaseModel):
     event_handling: EventHandlingModel = EventHandlingModel()
 
 
+class VkModel(BaseModel):
+    enabled: bool = True
+    token: str= ""
+
+
+class YtModel(BaseModel):
+    enabled: bool = True
+
+
 class ServicesModel(BaseModel):
-    available_services: List[str] = ["vk", "yt"]
-    vk: Dict[str, Any] = {"token": ""}
-    yt: Dict[str, Any] = {}
     default_service: str = "vk"
+    vk: VkModel = VkModel()
+    yt: YtModel = YtModel()
 
 
 class LoggerModel(BaseModel):

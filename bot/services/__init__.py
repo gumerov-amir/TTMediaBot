@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 import logging
 from typing import Any, Any, Dict, List, TYPE_CHECKING
 
-from bot import errors
+from bot import app_vars, errors
 from bot.player.track import Track
 
 if TYPE_CHECKING:
@@ -18,41 +18,40 @@ class Service(ABC):
     def search(self, query) -> List[Track]: ...
 
 
-from bot.services import vk, yt
-
-services = {"vk": vk, "yt": yt}
+from bot.services.vk import VkService
+from bot.services.yt import YtService
 
 
 class ServiceManager:
     def __init__(self, bot: Bot) -> None:
         self.config = bot.config.services
-        self.available_services: Dict[str, Service] = {}
-        self.fallback_service = 'yt'
-        for service_name in self.config.available_services:
-            service_class = services[service_name].Service
-            self.available_services[service_name] = service_class(getattr(self.config, service_name))
-        self.service = self.available_services[self.config.default_service]
+        self.services: Dict[str, Service] = {
+            "vk": VkService(self.config.vk),
+            "yt": YtService(self.config.yt)
+        }
+        self.service = self.services[self.config.default_service]
+        self.fallback_service = app_vars.fallback_service
         import builtins
         builtins.__dict__["get_service_by_name"] = self.get_service_by_name
 
 
     def initialize(self) -> None:
         logging.debug('Initializing services')
-        unavailable_services: List[Service] = []
-        for service in self.available_services.values():
+        for service in self.services.values():
             try:
                 service.initialize()
-            except errors.ServiceError:
-                unavailable_services.append(service)
+            except errors.ServiceError as e:
+                service.is_enabled = False
+                service.error_message = str(e)
                 if self.service == service:
-                    self.service = self.available_services[self.fallback_service]
-        for service in unavailable_services:
-            del self.available_services[service.name]
+                    self.service = self.services[self.fallback_service]
         logging.debug('Services initialized')
 
     def get_service_by_name(self, name: str) -> Service:
         try:
-            service = self.available_services[name]
+            service = self.services[name]
+            if not service.is_enabled:
+                raise errors.ServiceIsDisabledError(service.error_message)
             return service
         except KeyError as e:
             raise errors.ServiceNotFoundError(str(e))
