@@ -6,7 +6,7 @@ from typing import Optional, TYPE_CHECKING
 
 from bot.commands.command import Command
 from bot.player.enums import State
-from bot import errors, translator
+from bot import errors
 
 if TYPE_CHECKING:
     from bot.TeamTalk.structs import User
@@ -60,14 +60,14 @@ class ChangeLanguageCommand(Command):
     def __call__(self, arg: str, user: User) -> Optional[str]:
         if arg:
             try:
-                translator.install_locale(arg, fallback=arg == 'en')
+                self.translator.set_locale(arg)
                 self.config.general.language = arg
                 self.ttclient.change_status_text('')
                 return self.translator.translate('The language has been changed')
-            except:
+            except errors.LocaleNotFoundError:
                 return self.translator.translate('Incorrect language')
         else:
-            return self.translator.translate('Current language: {current_language}. Available languages: {available_languages}').format(current_language=self.config.general.language, available_languages=', '.join(self.translator.get_locales()))
+            return self.translator.translate('Current language: {current_language}. Available languages: {available_languages}').format(current_language=self.translator.get_locale(), available_languages=', '.join(self.translator.get_locales()))
 
 
 class ChangeNicknameCommand(Command):
@@ -101,7 +101,7 @@ class ClearCacheCommand(Command):
             return self.translator.translate("Favorites cleared")
 
 
-class TaskSchedulerCommand(Command):
+""" class TaskSchedulerCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate("Task scheduler")
@@ -110,7 +110,7 @@ class TaskSchedulerCommand(Command):
         if arg[0] == "+":
             self._add(arg[1::])
 
-    def _add(self, arg):
+    def _add(self, arg: str) -> None:
         args = arg.split("|")
         timestamp = self._get_timestamp(args[0])
         task = []
@@ -134,7 +134,7 @@ class TaskSchedulerCommand(Command):
 
     def _get_timestamp(self, t):
         return int(datetime.combine(datetime.today(), datetime.strptime(t, self.config["general"]["time_format"]).time()).timestamp())
-
+ """
 
 class VoiceTransmissionCommand(Command):
     @property
@@ -160,7 +160,7 @@ class LockCommand(Command):
         return self.translator.translate('Locks or unlocks the bot')
 
 
-    def __call__(self,  arg, user):
+    def __call__(self, arg: str, user: User) -> Optional[str]:
         self.command_processor.locked = not self.command_processor.locked
         return self.translator.translate('Locked') if self.command_processor.locked else self.translator.translate('Unlocked')
 
@@ -182,8 +182,8 @@ class EventHandlingCommand(Command):
             return self.translator.translate("Enables or disables event handling")
 
     def __call__(self, arg: str, user: User) -> Optional[str]:
-        self.config.general.load_event_handlers = not  self.config.general.load_event_handlers
-        return self.translator.translate("Event handling is enabled") if self.config.general.load_event_handlers else self.translator.translate("Event handling is disabled")
+        self.config.teamtalk.event_handling.load_event_handlers = not self.config.teamtalk.event_handling.load_event_handlers
+        return self.translator.translate("Event handling is enabled") if self.config.teamtalk.event_handling.load_event_handlers else self.translator.translate("Event handling is disabled")
 
 
 class ChannelMessagesCommand(Command):
@@ -213,16 +213,16 @@ class AdminUsersCommand(Command):
     def __call__(self, arg: str, user: User) -> Optional[str]:
         if arg:
             if arg[0] == '+':
-                self.config.teamtalk.users["admins"].append(arg[1::])
+                self.config.teamtalk.users.admins.append(arg[1::])
                 return self.translator.translate('Added')
             elif arg[0] == '-':
                 try:
-                    del self.config.teamtalk.users["admins"][self.config.teamtalk.users["admins"].index(arg[1::])]
+                    del self.config.teamtalk.users.admins[self.config.teamtalk.users.admins.index(arg[1::])]
                     return self.translator.translate('Deleted')
                 except ValueError:
                     return self.translator.translate('This user is not in the admin list')
         else:
-            admins = self.config.teamtalk.users["admins"].copy()
+            admins = self.config.teamtalk.users.admins.copy()
             if len(admins) > 0:
                 if '' in admins:
                     admins[admins.index('')] = '<Anonymous>'
@@ -239,16 +239,16 @@ class BannedUsersCommand(Command):
     def __call__(self, arg: str, user: User) -> Optional[str]:
         if arg:
             if arg[0] == '+':
-                self.config.teamtalk.users["banned_users"].append(arg[1::])
+                self.config.teamtalk.users.banned_users.append(arg[1::])
                 return self.translator.translate('Added')
             elif arg[0] == '-':
                 try:
-                    del self.config.teamtalk.users["banned_users"][self.config.teamtalk.users["banned_users"].index(arg[1::])]
+                    del self.config.teamtalk.users.banned_users[self.config.teamtalk.users.banned_users.index(arg[1::])]
                     return self.translator.translate('Deleted')
                 except ValueError:
                     return self.translator.translate('This user is not banned')
         else:
-            banned_users = self.config.teamtalk.users["banned_users"].copy()
+            banned_users = self.config.teamtalk.users.banned_users.copy()
             if len(banned_users) > 0:
                 if '' in banned_users:
                     banned_users[banned_users.index('')] = '<Anonymous>'

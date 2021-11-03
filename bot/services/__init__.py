@@ -4,10 +4,7 @@ import logging
 from typing import Any, Any, Dict, List, TYPE_CHECKING
 
 from bot import errors
-from bot,player.track import Track
-from bot.services import vk, yt
-
-services = {"vk": vk, "yt": yt}
+from bot.player.track import Track
 
 if TYPE_CHECKING:
     from bot import Bot
@@ -18,7 +15,12 @@ class Service(ABC):
     def get(self, *args, **kwargs) -> List[Track]: ...
 
     @abstractmethod
-    def search(self, query) -> List[Track]): ...
+    def search(self, query) -> List[Track]: ...
+
+
+from bot.services import vk, yt
+
+services = {"vk": vk, "yt": yt}
 
 
 class ServiceManager:
