@@ -47,13 +47,14 @@
         }
     },
     "services": {
-        "available_services": {
-            "vk": {
-                "token": ""
-            },
-            "yt": {}
+        "default_service": "vk",
+        "vk": {
+            "enabled": true,
+            "token": ""
         },
-        "default_service": "vk"
+        "yt": {
+            "enabled": true
+        }
     },
     "logger": {
         "log": true,
