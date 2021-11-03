@@ -206,12 +206,17 @@ class ServiceCommand(Command):
         return self.translator.translate('SERVICE Selects the service to play from. If no service is specified, the current service and a list of available services are displayed')
 
     def __call__(self, arg: str, user: User) -> Optional[str]:
-        service_help = self.translator.translate('Current service: {current_service}\nAvailable: {available_services}').format(current_service=self.service_manager.service.name, available_services=', '.join([i for i in self.service_manager.available_services if not self.service_manager.available_services[i].hidden]))
+        service_help = self.translator.translate('Current service: {current_service}\nAvailable: {available_services}').format(current_service=self.service_manager.service.name, available_services=', '.join([i for i in self.service_manager.services if not self.service_manager.services[i].hidden and self.service_manager.services[i].is_enabled]))
         if arg:
             arg = arg.lower()
-            if arg in self.service_manager.available_services and not self.service_manager.available_services[arg].hidden:
-                self.service_manager.service = self.service_manager.available_services[arg]
+            if arg in self.service_manager.services and not self.service_manager.services[arg].hidden and self.service_manager.services[arg].is_enabled:
+                self.service_manager.service = self.service_manager.services[arg]
                 return self.translator.translate('Current service: {}').format(self.service_manager.service.name)
+            elif not self.service_manager.services[arg].is_enabled:
+                if self.service_manager.services[arg].error_message:
+                    return self.translator.translate("{error}. {service} is disabled.".format(error=self.service_manager.services[arg].error_message, service=arg))
+                else:
+                    return self.translator.translate("{service} is disabled".format(service=arg))
             else:
                 return self.translator.translate('Unknown service.\n{}').format(service_help)
         else:

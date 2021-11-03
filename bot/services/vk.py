@@ -5,16 +5,19 @@ from urllib.parse import urlparse
 import requests
 import vk_api
 
+from bot.config.models import VkModel
 from bot.player.track import Track
 from bot.services import Service as _Service
 from bot import errors
 
 
-class Service(_Service):
-    def __init__(self, config: Dict[str, Any]) -> None:
+class VkService(_Service):
+    def __init__(self, config: VkModel) -> None:
         self.name = 'vk'
         self.hostnames = ['vk.com', 'www.vk.com', 'vkontakte.ru', 'www.vkontakte.ru', 'm.vk.com', 'm.vkontakte.ru']
         self.config = config
+        self.is_enabled = config.enabled
+        self.error_message = ""
         self.format = "mp3"
         self.hidden = False
 
@@ -23,7 +26,7 @@ class Service(_Service):
         http.headers.update({
             'User-agent': 'VKAndroidApp/4.13.1-1206 (Android 7.1.1; SDK 25; armeabi-v7a; ; ru)'
         })
-        self._session = vk_api.VkApi(token=self.config['token'], session=http, api_version='5.68')
+        self._session = vk_api.VkApi(token=self.config.token, session=http, api_version='5.68')
         self.api = self._session.get_api()
         try:
             self.api.account.getInfo()
