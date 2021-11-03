@@ -18,12 +18,16 @@ class ConfigManager:
         if file_name:
             if utils.check_file_path(file_name):
                 self.file_name = file_name
-                with open(self.file_name, 'r', encoding='UTF-8') as f:
+                with open(self.file_name, "r", encoding="UTF-8") as f:
                     try:
                         config_dict = json.load(f)
                     except json.decoder.JSONDecodeError as e:
                         sys.exit("Syntax error in configuration file: " + str(e))
-                self.file_locker = portalocker.Lock(self.file_name, timeout=0, flags=portalocker.LOCK_EX|portalocker.LOCK_NB)
+                self.file_locker = portalocker.Lock(
+                    self.file_name,
+                    timeout=0,
+                    flags=portalocker.LOCK_EX | portalocker.LOCK_NB,
+                )
                 try:
                     self.file_locker.acquire()
                 except portalocker.exceptions.LockException:
@@ -39,6 +43,6 @@ class ConfigManager:
 
     def save(self):
         self.file_locker.release()
-        with open(self.file_name, 'w', encoding='UTF-8') as f:
+        with open(self.file_name, "w", encoding="UTF-8") as f:
             json.dump(self.config.dict(), f, indent=4, ensure_ascii=False)
         self.file_locker.acquire()

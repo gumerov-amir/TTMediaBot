@@ -6,14 +6,16 @@ if TYPE_CHECKING:
     from bot.translator import Translator
 
 app_name = "TTMediaBot"
-app_version = '2.1.1'
+app_version = "2.1.1"
 client_name = app_name + "-V" + app_version
-about_text: Callable[[Translator], str] = lambda translator: translator.translate("""\
+about_text: Callable[[Translator], str] = lambda translator: translator.translate(
+    """\
 A media streaming bot for TeamTalk.
 Authors: Gumerov_amir, A11CF0, Beqa Gozalishvili.
 Home page: https://github.com/gumerov-amir/TTMediaBot\
 License: Mit License\
-""")
+"""
+)
 fallback_service = "yt"
 loop_timeout = 0.01
 max_message_length = 256

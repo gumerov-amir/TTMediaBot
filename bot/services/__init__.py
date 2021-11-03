@@ -12,10 +12,12 @@ if TYPE_CHECKING:
 
 class Service(ABC):
     @abstractmethod
-    def get(self, *args, **kwargs) -> List[Track]: ...
+    def get(self, *args, **kwargs) -> List[Track]:
+        ...
 
     @abstractmethod
-    def search(self, query) -> List[Track]: ...
+    def search(self, query) -> List[Track]:
+        ...
 
 
 from bot.services.vk import VkService
@@ -27,16 +29,16 @@ class ServiceManager:
         self.config = bot.config.services
         self.services: Dict[str, Service] = {
             "vk": VkService(self.config.vk),
-            "yt": YtService(self.config.yt)
+            "yt": YtService(self.config.yt),
         }
         self.service: Service = self.services[self.config.default_service]
         self.fallback_service = app_vars.fallback_service
         import builtins
+
         builtins.__dict__["get_service_by_name"] = self.get_service_by_name
 
-
     def initialize(self) -> None:
-        logging.debug('Initializing services')
+        logging.debug("Initializing services")
         for service in self.services.values():
             try:
                 service.initialize()
@@ -45,7 +47,7 @@ class ServiceManager:
                 service.error_message = str(e)
                 if self.service == service:
                     self.service = self.services[self.fallback_service]
-        logging.debug('Services initialized')
+        logging.debug("Services initialized")
 
     def get_service_by_name(self, name: str) -> Service:
         try:

@@ -3,5 +3,10 @@
     "python.linting.flake8Enabled": true,
     "python.analysis.useLibraryCodeForTypes": true,
     "python.analysis.typeCheckingMode": "strict",
-    "python.analysis.stubPath": "typestubs"
+    "python.analysis.stubPath": "typestubs",
+    "python.formatting.provider": "black",
+    "editor.formatOnPaste": true,
+    "editor.formatOnSave": true,
+    "editor.formatOnSaveMode": "file",
+    "editor.formatOnType": true
 }
