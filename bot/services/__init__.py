@@ -29,7 +29,7 @@ class ServiceManager:
             "vk": VkService(self.config.vk),
             "yt": YtService(self.config.yt)
         }
-        self.service = self.services[self.config.default_service]
+        self.service: Service = self.services[self.config.default_service]
         self.fallback_service = app_vars.fallback_service
         import builtins
         builtins.__dict__["get_service_by_name"] = self.get_service_by_name
