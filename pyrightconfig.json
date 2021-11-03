@@ -1,9 +1,7 @@
 {
-    "exclude": [
-        "mpv.py",
-        "TeamTalkPy"
-
+    "ignore": [
+        "mpv.py"
     ],
-    "reportMissingTypeStubs": false,
-    "reportImportCycles": false
+    "stubPath": "typestubs",
+    "reportImportCycles": false,
 }

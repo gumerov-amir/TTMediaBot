@@ -35,7 +35,7 @@ def _str(data: Union[str, bytes]) -> Union[str, bytes]:
             return bytes(data, 'utf-8')
         else:
             return data
-    elif isinstance(data, bytes):
+    else:
         return str(data, 'utf-8')
 
 
@@ -64,7 +64,7 @@ def split(text: str, max_length: int = app_vars.max_message_length) -> List[str]
                             words.append(word)
                     else:
                         chunk = word
-                        for i in range(0, int(len(chunk) / max_length) + 1):
+                        for _ in range(0, int(len(chunk) / max_length) + 1):
                             words.append(chunk[0:max_length])
                             chunk = chunk[max_length::]
                 lines += words
@@ -81,9 +81,9 @@ class TeamTalk:
         self.nickname = self.config.nickname
         self.gender = UserStatusMode.__members__[self.config.gender.upper()]
         self.status = self.default_status
-        self.errors_queue = Queue()
+        self.errors_queue: Queue[Error] = Queue()
         self.message_queue: Queue[Message] = Queue()
-        self.uploaded_files_queue = Queue()
+        self.uploaded_files_queue: Queue[File] = Queue()
         self.thread = TeamTalkThread(bot, self)
 
     def initialize(self) -> None:
@@ -245,7 +245,7 @@ class TeamTalk:
                 message.nChannelID = self.tt.getMyChannelID()
             self.tt.doTextMessage(message)
 
-    def send_file(self, channel, file_path):
+    def send_file(self, channel: Union[int, str], file_path: str) :
         if isinstance(channel, int):
             channel_id = channel
         else:
