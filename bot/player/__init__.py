@@ -22,18 +22,18 @@ class Player:
         self.config = bot.config.player
         self.cache = bot.cache
         mpv_options = {
-            'demuxer_max_back_bytes': 1048576,
-            'demuxer_max_bytes': 2097152,
-            'video': False,
-            'ytdl': False,
+            "demuxer_max_back_bytes": 1048576,
+            "demuxer_max_bytes": 2097152,
+            "video": False,
+            "ytdl": False,
         }
         mpv_options.update(self.config.player_options)
         try:
             self._player = mpv.MPV(**mpv_options, log_handler=self.log_handler)
         except AttributeError:
-            del mpv_options['demuxer_max_back_bytes']
+            del mpv_options["demuxer_max_back_bytes"]
             self._player = mpv.MPV(**mpv_options, log_handler=self.log_handler)
-        self._log_level = 'PLAYER_DEBUG'
+        self._log_level = "PLAYER_DEBUG"
         self.track_list = []
         self.track = Track()
         self.track_index = -1
@@ -42,23 +42,27 @@ class Player:
         self.volume = self.config.default_volume
 
     def initialize(self) -> None:
-        logging.debug('Initializing player')
-        logging.debug('Player initialized')
+        logging.debug("Initializing player")
+        logging.debug("Player initialized")
 
     def run(self) -> None:
-        logging.debug('Registering callbacks')
+        logging.debug("Registering callbacks")
         self.register_event_callback("end-file", self.on_end_file)
         self.register_event_callback("metadata-update", self.on_metadata_update)
-        logging.debug('Callbacks registered')
+        logging.debug("Callbacks registered")
 
     def close(self) -> None:
-        logging.debug('Closing player')
+        logging.debug("Closing player")
         if self.state != State.Stopped:
             self.stop()
         self._player.terminate()
-        logging.debug('Player closed')
+        logging.debug("Player closed")
 
-    def play(self, tracks: Optional[List[Track]] = None, start_track_index: Optional[int] = None) -> None:
+    def play(
+        self,
+        tracks: Optional[List[Track]] = None,
+        start_track_index: Optional[int] = None,
+    ) -> None:
         if tracks != None:
             self.track_list = tracks
             if not start_track_index and self.mode == Mode.Random:
@@ -89,7 +93,9 @@ class Player:
         if save_to_recents:
             try:
                 if self.cache.recents[-1] != self.track_list[self.track_index]:
-                    self.cache.recents.append(self.track_list[self.track_index].get_raw())
+                    self.cache.recents.append(
+                        self.track_list[self.track_index].get_raw()
+                    )
             except:
                 self.cache.recents.append(self.track_list[self.track_index].get_raw())
             self.cache.save()
@@ -101,7 +107,9 @@ class Player:
         if len(self.track_list) > 0:
             if self.mode == Mode.Random:
                 try:
-                    track_index = self._index_list[self._index_list.index(self.track_index) + 1]
+                    track_index = self._index_list[
+                        self._index_list.index(self.track_index) + 1
+                    ]
                 except IndexError:
                     track_index = 0
             else:
@@ -121,7 +129,9 @@ class Player:
         if len(self.track_list) > 0:
             if self.mode == Mode.Random:
                 try:
-                    track_index = self._index_list[self._index_list.index(self.track_index) - 1]
+                    track_index = self._index_list[
+                        self._index_list.index(self.track_index) - 1
+                    ]
                 except IndexError:
                     track_index = len(self.track_list) - 1
             else:
@@ -172,7 +182,7 @@ class Player:
         if step <= 0:
             raise ValueError()
         try:
-            self._player.seek(-step, reference='relative')
+            self._player.seek(-step, reference="relative")
         except SystemError:
             self.stop()
 
@@ -181,7 +191,7 @@ class Player:
         if step <= 0:
             raise ValueError()
         try:
-            self._player.seek(step, reference='relative')
+            self._player.seek(step, reference="relative")
         except SystemError:
             self.stop()
 
@@ -194,12 +204,16 @@ class Player:
     def set_position(self, arg: float) -> None:
         if arg < 0:
             raise errors.IncorrectPositionError()
-        self._player.seek(arg, reference='absolute')
+        self._player.seek(arg, reference="absolute")
 
     def get_output_devices(self) -> List[SoundDevice]:
         devices = []
         for device in self._player.audio_device_list:
-                devices.append(SoundDevice(device["description"], device["name"], SoundDeviceType.Output))
+            devices.append(
+                SoundDevice(
+                    device["description"], device["name"], SoundDeviceType.Output
+                )
+            )
         return devices
 
     def set_output_device(self, id) -> None:
@@ -238,25 +252,27 @@ class Player:
         return " - ".join(chunks)
 
     def on_end_file(self, event):
-            if self.state == State.Playing and self._player.idle_active:
-                if self.mode == Mode.SingleTrack or self.track.type == TrackType.Direct:
+        if self.state == State.Playing and self._player.idle_active:
+            if self.mode == Mode.SingleTrack or self.track.type == TrackType.Direct:
+                self.stop()
+            elif self.mode == Mode.RepeatTrack:
+                self.play_by_index(self.track_index)
+            else:
+                try:
+                    self.next()
+                except errors.NoNextTrackError:
                     self.stop()
-                elif self.mode == Mode.RepeatTrack:
-                    self.play_by_index(self.track_index)
-                else:
-                    try:
-                        self.next()
-                    except errors.NoNextTrackError:
-                        self.stop()
 
     def on_metadata_update(self, event):
-            if self.state == State.Playing and (self.track.type == TrackType.Direct or self.track.type == TrackType.Local):
-                metadata = self._player.metadata
-                try:
-                    new_name = self._parse_metadata(metadata)
-                    if not new_name:
-                        new_name = html.unescape(self._player.media_title)
-                except TypeError:
+        if self.state == State.Playing and (
+            self.track.type == TrackType.Direct or self.track.type == TrackType.Local
+        ):
+            metadata = self._player.metadata
+            try:
+                new_name = self._parse_metadata(metadata)
+                if not new_name:
                     new_name = html.unescape(self._player.media_title)
-                if self.track.name != new_name and new_name:
-                    self.track.name = new_name
+            except TypeError:
+                new_name = html.unescape(self._player.media_title)
+            if self.track.name != new_name and new_name:
+                self.track.name = new_name

@@ -28,7 +28,7 @@ class PlayerModel(BaseModel):
 
 class TeamTalkUserModel(BaseModel):
     admins: List[str] = ["admin"]
-    banned_users: List[str] =  []
+    banned_users: List[str] = []
 
 
 class EventHandlingModel(BaseModel):
@@ -58,7 +58,7 @@ class TeamTalkModel(BaseModel):
 
 class VkModel(BaseModel):
     enabled: bool = True
-    token: str= ""
+    token: str = ""
 
 
 class YtModel(BaseModel):
@@ -85,7 +85,6 @@ class ShorteningModel(BaseModel):
     shorten_links: bool = False
     service: str = "Bitly"
     service_token: str = ""
-
 
 
 class ConfigModel(BaseModel):

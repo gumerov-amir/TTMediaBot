@@ -9,7 +9,9 @@ if TYPE_CHECKING:
 
 
 class Task:
-    def __init__(self, command_id: int, function: FunctionType, args: Any, kwargs: Any) -> None:
+    def __init__(
+        self, command_id: int, function: FunctionType, args: Any, kwargs: Any
+    ) -> None:
         self.command_id = command_id
         self.function = function
         self.args = args

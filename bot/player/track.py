@@ -5,7 +5,15 @@ from bot.player.enums import TrackType
 
 
 class Track:
-    def __init__(self, service: Optional[str] = None, url: Optional[str] = None, name: Optional[str] = None, format: Optional[str] = None, extra_info: Optional[Dict[str, Any]] = None, type: TrackType = TrackType.Default) -> None:
+    def __init__(
+        self,
+        service: Optional[str] = None,
+        url: Optional[str] = None,
+        name: Optional[str] = None,
+        format: Optional[str] = None,
+        extra_info: Optional[Dict[str, Any]] = None,
+        type: TrackType = TrackType.Default,
+    ) -> None:
         self.service = service
         self.url = url
         self.name = name
@@ -31,8 +39,8 @@ class Track:
 
     @property
     def url(self):
-            self._fetch_stream_data()
-            return self._url
+        self._fetch_stream_data()
+        return self._url
 
     @url.setter
     def url(self, value):
@@ -50,12 +58,12 @@ class Track:
 
     def get_meta(self):
         try:
-            return {'name': self.name, 'url': self.url}
+            return {"name": self.name, "url": self.url}
         except:
-            return {'name': None, 'url': ''}
+            return {"name": None, "url": ""}
 
     def get_raw(self):
-        if hasattr(self, '_original_track'):
+        if hasattr(self, "_original_track"):
             return self._original_track
         else:
             return self

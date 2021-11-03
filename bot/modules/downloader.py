@@ -24,10 +24,17 @@ class Downloader:
         self.translator = bot.translator
 
     def __call__(self, track, user):
-        t = threading.Thread(target=self.run, daemon=True, args=(track, user,))
+        t = threading.Thread(
+            target=self.run,
+            daemon=True,
+            args=(
+                track,
+                user,
+            ),
+        )
         t.start()
 
-    def run(self,  track, user):
+    def run(self, track, user):
         error_exit = False
         if track.type == TrackType.Default:
             temp_dir = tempfile.TemporaryDirectory()
@@ -35,7 +42,7 @@ class Downloader:
             request.urlretrieve(track.url, temp_file_name)
             extension = track.format
             file_name = track.name + "." + extension
-            file_name= utils.clean_file_name(file_name)
+            file_name = utils.clean_file_name(file_name)
             file_path = os.path.join(os.path.dirname(temp_file_name), file_name)
             os.rename(temp_file_name, file_path)
         else:
@@ -53,8 +60,16 @@ class Downloader:
                 pass
             try:
                 error = self.ttclient.errors_queue.get_nowait()
-                if error.command_id == command_id and error.type == ErrorType.MaxDiskusageExceeded:
-                    self.ttclient.send_message(self.translator.translate("Error: {}").format("Max diskusage exceeded"), user)
+                if (
+                    error.command_id == command_id
+                    and error.type == ErrorType.MaxDiskusageExceeded
+                ):
+                    self.ttclient.send_message(
+                        self.translator.translate("Error: {}").format(
+                            "Max diskusage exceeded"
+                        ),
+                        user,
+                    )
                     error_exit = True
                 else:
                     self.ttclient.errors_queue.put(error)

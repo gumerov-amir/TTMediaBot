@@ -15,7 +15,7 @@ class TaskScheduler(threading.Thread):
         super().__init__(daemon=True)
         self.name = "SchedulerThread"
         self.tasks = {}
-        #self.user = User(0, "", "", 0, 0, "", is_admin=True, is_banned=False)
+        # self.user = User(0, "", "", 0, 0, "", is_admin=True, is_banned=False)
 
     def run(self):
         while True:

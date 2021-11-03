@@ -15,7 +15,8 @@ if TYPE_CHECKING:
 class Mode(Flag):
     STDOUT = 1
     FILE = 2
-    STDOUT_AND_FILE = STDOUT|FILE
+    STDOUT_AND_FILE = STDOUT | FILE
+
 
 def initialize_logger(bot: Bot) -> None:
     config = bot.config.logger
@@ -24,7 +25,11 @@ def initialize_logger(bot: Bot) -> None:
     formatter = logging.Formatter(config.format)
     handlers: List[Any] = []
     try:
-        mode = Mode(config.mode) if isinstance(config.mode, int) else Mode.__members__[config.mode]
+        mode = (
+            Mode(config.mode)
+            if isinstance(config.mode, int)
+            else Mode.__members__[config.mode]
+        )
     except KeyError:
         sys.exit("Invalid log mode name")
     if mode & Mode.FILE == Mode.FILE:
@@ -36,7 +41,13 @@ def initialize_logger(bot: Bot) -> None:
             file = file_name
         else:
             file = os.path.join(app_vars.directory, file_name)
-        rotating_file_handler = RotatingFileHandler(filename=file, mode='a', maxBytes=config.max_file_size * 1024, backupCount=config.backup_count, encoding='UTF-8')
+        rotating_file_handler = RotatingFileHandler(
+            filename=file,
+            mode="a",
+            maxBytes=config.max_file_size * 1024,
+            backupCount=config.backup_count,
+            encoding="UTF-8",
+        )
         rotating_file_handler.setFormatter(formatter)
         rotating_file_handler.setLevel(level)
         handlers.append(rotating_file_handler)

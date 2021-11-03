@@ -15,12 +15,15 @@ class ChannelType(Flag):
 
 
 class Channel:
-    def __init__(self, id: int, name: str, topic: str, max_users: int, type: ChannelType) -> None:
+    def __init__(
+        self, id: int, name: str, topic: str, max_users: int, type: ChannelType
+    ) -> None:
         self.id = id
         self.name = name
         self.topic = topic
         self.max_users = max_users
         self.type = type
+
 
 class ErrorType(Enum):
     Success = TeamTalkPy.ClientError.CMDERR_SUCCESS
@@ -38,8 +41,12 @@ class ErrorType(Enum):
     NotAuthorised = TeamTalkPy.ClientError.CMDERR_NOT_AUTHORIZED
     MaxDiskusageExceeded = TeamTalkPy.ClientError.CMDERR_MAX_DISKUSAGE_EXCEEDED
     IncorrectOperatorPassword = TeamTalkPy.ClientError.CMDERR_INCORRECT_OP_PASSWORD
-    AudioCodecBitrateLimitExceeded = TeamTalkPy.ClientError.CMDERR_AUDIOCODEC_BITRATE_LIMIT_EXCEEDED
-    MaxLoginsPerIpAddressExceeded = TeamTalkPy.ClientError.CMDERR_MAX_LOGINS_PER_IPADDRESS_EXCEEDED
+    AudioCodecBitrateLimitExceeded = (
+        TeamTalkPy.ClientError.CMDERR_AUDIOCODEC_BITRATE_LIMIT_EXCEEDED
+    )
+    MaxLoginsPerIpAddressExceeded = (
+        TeamTalkPy.ClientError.CMDERR_MAX_LOGINS_PER_IPADDRESS_EXCEEDED
+    )
     MaxChannelsExceeded = TeamTalkPy.ClientError.CMDERR_MAX_CHANNELS_EXCEEDED
     CommandFlood = TeamTalkPy.ClientError.CMDERR_COMMAND_FLOOD
     ChannelBanned = TeamTalkPy.ClientError.CMDERR_CHANNEL_BANNED
@@ -73,6 +80,7 @@ class Error:
         self.message = message
         self.type = type
         self.command_id = command_id
+
 
 class UserType(Enum):
     Null = 0
@@ -132,7 +140,15 @@ class UserRight(Flag):
 
 
 class UserAccount:
-    def __init__(self, username: str, password: str, note: str, type: UserType, rights: UserRight, init_channel: int) -> None:
+    def __init__(
+        self,
+        username: str,
+        password: str,
+        note: str,
+        type: UserType,
+        rights: UserRight,
+        init_channel: int,
+    ) -> None:
         self.username = username
         self.password = password
         self.note = note
@@ -142,14 +158,29 @@ class UserAccount:
 
 
 class User:
-    def __init__(self, id: int, nickname: str, username: str, status: str, gender: str, state: UserState, channel: Channel, client_name: str, version: str, account: str, type: UserType, is_admin: bool, is_banned: bool) -> None:
+    def __init__(
+        self,
+        id: int,
+        nickname: str,
+        username: str,
+        status: str,
+        gender: str,
+        state: UserState,
+        channel: Channel,
+        client_name: str,
+        version: str,
+        account: str,
+        type: UserType,
+        is_admin: bool,
+        is_banned: bool,
+    ) -> None:
         self.id = id
         self.nickname = nickname
         self.username = username
         self.channel = channel
         self.status = status
         self.gender = gender
-        self.state= state
+        self.state = state
         self.client_name = client_name
         self.version = version
         self.account = account
@@ -166,7 +197,9 @@ class MessageType(Enum):
 
 
 class Message:
-    def __init__(self, text: str, user: User, channel: Channel, type: MessageType) -> None:
+    def __init__(
+        self, text: str, user: User, channel: Channel, type: MessageType
+    ) -> None:
         self.text = text
         self.channel = channel
         self.user = user
@@ -174,7 +207,9 @@ class Message:
 
 
 class File:
-    def __init__(self, id: int, name: str, channel: Channel, size: int, username: str) -> None:
+    def __init__(
+        self, id: int, name: str, channel: Channel, size: int, username: str
+    ) -> None:
         self.id = id
         self.name = name
         self.channel = channel

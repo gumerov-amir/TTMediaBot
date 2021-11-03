@@ -6,21 +6,44 @@ from typing import Optional
 
 from pydantic.error_wrappers import ValidationError
 
-from bot import (TeamTalk, cache, commands, config, connectors, logger,
-                 modules, player, services, sound_devices, translator, app_vars)
+from bot import (
+    TeamTalk,
+    cache,
+    commands,
+    config,
+    connectors,
+    logger,
+    modules,
+    player,
+    services,
+    sound_devices,
+    translator,
+    app_vars,
+)
 
 
 class Bot:
-    def __init__(self, config_file_name: Optional[str], cache_file_name: Optional[str] = None, log_file_name: Optional[str] = None) -> None:
+    def __init__(
+        self,
+        config_file_name: Optional[str],
+        cache_file_name: Optional[str] = None,
+        log_file_name: Optional[str] = None,
+    ) -> None:
         try:
             self.config_manager = config.ConfigManager(config_file_name)
             self.config = self.config_manager.config
         except ValidationError as e:
             for error in e.errors():
-                print("Error in config:", ".".join([str(i) for i in error["loc"]]), error["msg"])
+                print(
+                    "Error in config:",
+                    ".".join([str(i) for i in error["loc"]]),
+                    error["msg"],
+                )
             sys.exit(1)
         except PermissionError:
-            sys.exit('The configuration file cannot be accessed due to a permission error or is already used by another instance of the bot')
+            sys.exit(
+                "The configuration file cannot be accessed due to a permission error or is already used by another instance of the bot"
+            )
         self.translator = translator.Translator(self.config.general.language)
         try:
             if cache_file_name:
@@ -28,7 +51,9 @@ class Bot:
             else:
                 self.cache = cache.Cache(self.config.general.cache_file_name)
         except PermissionError:
-            sys.exit('The cache file cannot be accessed due to a permission error or is already used by another instance of the bot')
+            sys.exit(
+                "The cache file cannot be accessed due to a permission error or is already used by another instance of the bot"
+            )
         self.log_file_name = log_file_name
         self.player = player.Player(self)
         self.ttclient = TeamTalk.TeamTalk(self)
@@ -41,37 +66,40 @@ class Bot:
     def initialize(self):
         if self.config.logger.log:
             logger.initialize_logger(self)
-        logging.debug('Initializing')
+        logging.debug("Initializing")
         self.sound_device_manager.initialize()
         self.ttclient.initialize()
         self.player.initialize()
         self.service_manager.initialize()
-        logging.debug('Initialized')
+        logging.debug("Initialized")
 
     def run(self):
-        logging.debug('Starting')
+        logging.debug("Starting")
         self.ttclient.run()
         self.player.run()
         self.tt_player_connector.start()
         self.command_processor.run()
-        logging.info('Started')
+        logging.info("Started")
         self._close = False
         while not self._close:
             try:
                 message = self.ttclient.message_queue.get_nowait()
-                logging.info("New message {text} from {username}".format(text=message.text, username=message.user.username))
+                logging.info(
+                    "New message {text} from {username}".format(
+                        text=message.text, username=message.user.username
+                    )
+                )
                 self.command_processor(message)
             except queue.Empty:
                 pass
             time.sleep(app_vars.loop_timeout)
 
-
     def close(self) -> None:
-        logging.debug('Closing bot')
+        logging.debug("Closing bot")
         self.player.close()
         self.ttclient.close()
         self.tt_player_connector.close()
         self.config_manager.close()
         self.cache.close()
         self._close = True
-        logging.info('Bot closed')
+        logging.info("Bot closed")
