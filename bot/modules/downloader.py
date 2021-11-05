@@ -1,5 +1,4 @@
 from __future__ import annotations
-import logging
 import threading
 import time
 import os
@@ -9,8 +8,9 @@ from queue import Empty
 from urllib import request
 
 
+from bot.player.track import Track
 from bot.player.enums import TrackType
-from bot.TeamTalk.structs import ErrorType
+from bot.TeamTalk.structs import ErrorType, User
 from bot import utils, app_vars
 
 if TYPE_CHECKING:
@@ -23,7 +23,7 @@ class Downloader:
         self.ttclient = bot.ttclient
         self.translator = bot.translator
 
-    def __call__(self, track, user):
+    def __call__(self, track: Track, user: User) -> None:
         t = threading.Thread(
             target=self.run,
             daemon=True,
@@ -34,14 +34,14 @@ class Downloader:
         )
         t.start()
 
-    def run(self, track, user):
+    def run(self, track: Track, user: User) -> None:
         error_exit = False
         if track.type == TrackType.Default:
             temp_dir = tempfile.TemporaryDirectory()
             temp_file_name = os.path.join(temp_dir.name, "file.dat")
             request.urlretrieve(track.url, temp_file_name)
             extension = track.format
-            file_name = track.name + "." + extension
+            file_name: str = track.name + "." + extension
             file_name = utils.clean_file_name(file_name)
             file_path = os.path.join(os.path.dirname(temp_file_name), file_name)
             os.rename(temp_file_name, file_path)

@@ -34,9 +34,9 @@ class Player:
             del mpv_options["demuxer_max_back_bytes"]
             self._player = mpv.MPV(**mpv_options, log_handler=self.log_handler)
         self._log_level = "PLAYER_DEBUG"
-        self.track_list = []
-        self.track = Track()
-        self.track_index = -1
+        self.track_list: List[Track] = []
+        self.track: Track = Track()
+        self.track_index: int = -1
         self.state = State.Stopped
         self.mode = Mode.TrackList
         self.volume = self.config.default_volume
@@ -216,7 +216,7 @@ class Player:
             )
         return devices
 
-    def set_output_device(self, id) -> None:
+    def set_output_device(self, id: str) -> None:
         self._player.audio_device = id
 
     def shuffle(self, enable: bool) -> None:

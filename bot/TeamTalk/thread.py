@@ -3,13 +3,15 @@ from importlib.machinery import SourceFileLoader
 import logging
 import os
 from threading import Thread
-from typing import Any, Tuple, TYPE_CHECKING
+import time
+from typing import Any, Callable, Optional, Tuple, TYPE_CHECKING
 from types import ModuleType
+
 
 import types
 import sys
 
-import TeamTalkPy
+from bot.TeamTalk.structs import *
 
 if TYPE_CHECKING:
     from bot import Bot
@@ -23,72 +25,108 @@ class TeamTalkThread(Thread):
         self.bot = bot
         self.config = ttclient.config
         self.ttclient = ttclient
-        self.event_names = {
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_LOGGEDIN: "user_logged_in",
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_LOGGEDOUT: "user_logged_out",
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_JOINED: "user_joined_channel",
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_LEFT: "user_left_channel",
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG: "message_sent",
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_CHANNEL_NEW: "channel_created",
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_CHANNEL_UPDATE: "channel_updated",
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_CHANNEL_REMOVE: "channel_removed",
-            TeamTalkPy.ClientEvent.CLIENTEVENT_USER_STATECHANGE: "user_state_changed",
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_NEW: "file_uploaded",
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_REMOVE: "file_removed",
-        }
 
     def run(self) -> None:
-        from bot.TeamTalk import _str
-
         if self.config.event_handling.load_event_handlers:
             self.event_handlers = self.import_event_handlers()
         self._close = False
-        while True:
-            if self._close:
-                break
-            msg = self.ttclient.tt.getMessage()
-            if msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_NONE:
+        while not self._close:
+            event = self.ttclient.get_event(self.ttclient.tt.getMessage())
+            if event.event_type == EventType.NONE:
                 continue
-            elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_ERROR:
-                self.ttclient.errors_queue.put(
-                    self.ttclient.get_error(msg.clienterrormsg.nErrorNo, msg.nSource)
-                )
             elif (
-                msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG
-                and msg.textmessage.nMsgType == 1
+                event.event_type == EventType.ERROR
+                and self.ttclient.state == State.CONNECTED
             ):
-                self.ttclient.message_queue.put(
-                    self.ttclient.get_message(msg.textmessage)
-                )
+                self.ttclient.errors_queue.put(event.error)
             elif (
-                msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_NEW
-                and _str(msg.remotefile.szUsername) == self.config.username
-                and msg.remotefile.nChannelID == self.ttclient.channel.id
+                event.event_type == EventType.SUCCESS
+                and self.ttclient.state == State.CONNECTED
             ):
-                self.ttclient.uploaded_files_queue.put(
-                    self.ttclient.get_file(msg.remotefile)
-                )
+                self.ttclient.event_success_queue.put(event)
             elif (
-                msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_MYSELF_KICKED
+                event.event_type == EventType.USER_TEXT_MESSAGE
+                and event.message.type == MessageType.User
             ):
-                logging.warning("Kicked")
-                self.ttclient.connect(reconnect=True)
-            elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CON_LOST:
-                logging.warning("Server lost")
-                print("ah")
-                try:
-                    self.ttclient.connect(reconnect=True)
-                except Exception as e:
-                    logging.fatal(e)
-                print("bh")
+                self.ttclient.message_queue.put(event.message)
             elif (
-                msg.nClientEvent in self.event_names
-                and self.config.event_handling.load_event_handlers
+                event.event_type == EventType.FILE_NEW
+                and event.file.username == self.config.username
+                and event.file.channel.id == self.ttclient.channel.id
             ):
-                self.run_event_handler(msg)
+                self.ttclient.uploaded_files_queue.put(event.file)
+            elif (
+                event.event_type == EventType.CON_FAILED
+                or event.event_type == EventType.CON_LOST
+                or event.event_type == EventType.MYSELF_KICKED
+            ):
+                if event.event_type == EventType.CON_FAILED:
+                    logging.warning("Connection failed")
+                elif event.event_type == EventType.CON_LOST:
+                    logging.warning("Server lost")
+                else:
+                    logging.warning("Kicked")
+                self.ttclient.tt.disconnect()
+                if (
+                    self.ttclient.reconnect
+                    and self.ttclient.reconnect_attempt
+                    < self.config.reconnection_attempts
+                ):
+                    self.ttclient.tt.disconnect()
+                    time.sleep(self.config.reconnection_timeout)
+                    self.ttclient.connect()
+                    self.ttclient.reconnect_attempt += 1
+                else:
+                    logging.error("Connection error")
+                    sys.exit(1)
+            elif event.event_type == EventType.CON_SUCCESS:
+                self.ttclient.reconnect_attempt = 0
+                self.ttclient.login()
+            elif event.event_type == EventType.ERROR:
+                if self.ttclient.flags & Flags.AUTHORIZED == Flags(0):
+                    logging.warning("Login failed")
+                    if (
+                        self.ttclient.reconnect
+                        and self.ttclient.reconnect_attempt
+                        < self.config.reconnection_attempts
+                    ):
+                        time.sleep(self.config.reconnection_timeout)
+                        self.ttclient.login()
+                    else:
+                        logging.error("Login error")
+                        sys.exit(1)
+                else:
+                    logging.warning("Join channel failed")
+                    if (
+                        self.ttclient.reconnect
+                        and self.ttclient.reconnect_attempt
+                        < self.config.reconnection_attempts
+                    ):
+                        time.sleep(self.config.reconnection_timeout)
+                        self.ttclient.join()
+                    else:
+                        logging.error("Join channel error")
+                        sys.exit(1)
+            elif event.event_type == EventType.MYSELF_LOGGEDIN:
+                self.ttclient.user_account = event.user_account
+                self.ttclient.reconnect_attempt = 0
+                self.ttclient.join()
+            elif (
+                event.event_type == EventType.SUCCESS
+                and self.ttclient.state == State.CONNECTING
+            ):
+                self.ttclient.reconnect_attempt = 0
+                self.ttclient.reconnect = True
+                self.ttclient.state = State.CONNECTED
+                self.ttclient.change_status_text(self.ttclient.status)
+            if self.config.event_handling.load_event_handlers:
+                self.run_event_handler(event)
 
     def close(self) -> None:
         self._close = True
+
+    def get_function_name_by_event_type(self, event_type: EventType) -> str:
+        return f"on_{event_type.name.lower()}"
 
     def import_event_handlers(self) -> ModuleType:
         try:
@@ -100,15 +138,20 @@ class TeamTalkThread(Thread):
                 == ".py"
             ):
                 module = SourceFileLoader(
-                    os.path.splitext(self.ttclient.event_handlers_file_name)[0],
-                    self.ttclient.event_handlers_file_name,
+                    os.path.splitext(
+                        self.config.event_handling.event_handlers_file_name
+                    )[0],
+                    self.config.event_handling.event_handlers_file_name,
                 ).load_module()
             elif os.path.isdir(
-                self.ttclient.event_handlers_file_name
-            ) and "__init__.py" in os.listdir(self.ttclient.event_handlers_file_name):
+                self.config.event_handling.event_handlers_file_name
+            ) and "__init__.py" in os.listdir(
+                self.config.event_handling.event_handlers_file_name
+            ):
                 module = SourceFileLoader(
-                    self.ttclient.event_handlers_file_name,
-                    self.ttclient.event_handlers_file_name + "/__init__.py",
+                    self.config.event_handling.event_handlers_file_name,
+                    self.config.event_handling.event_handlers_file_name
+                    + "/__init__.py",
                 ).load_module()
             else:
                 logging.error(
@@ -124,41 +167,45 @@ class TeamTalkThread(Thread):
             module = types.ModuleType("event_handlers")
         return module
 
-    def parse_event(self, msg: TeamTalkPy.TTMessage) -> Tuple[Any]:
-        if msg.nClientEvent in (
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_UPDATE,
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_JOINED,
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_LOGGEDIN,
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_LOGGEDOUT,
+    def parse_event(self, event: Event) -> Tuple[Any, ...]:
+        if event.event_type in (
+            EventType.USER_UPDATE,
+            EventType.USER_JOINED,
+            EventType.USER_LOGGEDIN,
+            EventType.USER_LOGGEDOUT,
         ):
-            return (self.ttclient.get_user(msg.user.nUserID),)
-        elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_LEFT:
-            return (msg.nSource, self.ttclient.get_user(msg.user.nUserID))
-        elif msg.nClientEvent == TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG:
-            return (self.ttclient.get_message(msg.textmessage),)
-        elif msg.nClientEvent in (
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_CHANNEL_NEW,
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_CHANNEL_UPDATE,
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_CHANNEL_REMOVE,
+            return (event.user,)
+        elif event.event_type == EventType.USER_LEFT:
+            return (event.source, event.user)
+        elif event.event_type == EventType.USER_TEXT_MESSAGE:
+            return (event.message,)
+        elif event.event_type in (
+            EventType.CHANNEL_NEW,
+            EventType.CHANNEL_UPDATE,
+            EventType.CHANNEL_REMOVE,
         ):
-            return (self.ttclient.get_channel(msg.nChannelID),)
-        elif msg.nClientEvent in (
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_NEW,
-            TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_REMOVE,
+            return (event.channel,)
+        elif event.event_type in (
+            EventType.FILE_NEW,
+            EventType.FILE_REMOVE,
         ):
-            return (self.ttclient.get_file(msg.remotefile),)
+            return (event.file,)
+        else:
+            return (1, 2)
 
-    def run_event_handler(self, msg: TeamTalkPy.TTMessage) -> None:
+    def run_event_handler(self, event: Event) -> None:
         try:
-            event_handler = getattr(
-                self.event_handlers, self.event_names[msg.nClientEvent], False
+            event_handler: Optional[Callable[..., None]] = getattr(
+                self.event_handlers,
+                self.get_function_name_by_event_type(event.event_type),
+                None,
             )
             if not event_handler:
                 return
             try:
-                event_handler(*self.parse_event(msg), self.bot)
+                event_handler(*self.parse_event(event), self.bot)
             except Exception as e:
                 print("Error in event handling {}".format(e))
         except AttributeError:
             self.event_handlers = self.import_event_handlers()
-            self.run_event_handler(msg)
+            self.run_event_handler(event)

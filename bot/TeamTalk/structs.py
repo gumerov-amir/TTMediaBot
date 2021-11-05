@@ -3,6 +3,39 @@ from enum import Enum, Flag
 import TeamTalkPy
 
 
+class State(Enum):
+    NOT_CONNECTED = 0
+    CONNECTING = 1
+    RECONNECTING = 2
+    CONNECTED = 3
+
+
+class Flags(Flag):
+    CLOSED = TeamTalkPy.ClientFlags.CLIENT_CLOSED
+    SND_INPUT_READY = TeamTalkPy.ClientFlags.CLIENT_SNDINPUT_READY
+    SND_OUTPUT_READY = TeamTalkPy.ClientFlags.CLIENT_SNDOUTPUT_READY
+    SND_INOUTPUT_DUPLEX = TeamTalkPy.ClientFlags.CLIENT_SNDINOUTPUT_DUPLEX
+    SND_INPUT_VOICE_ACTIVATED = TeamTalkPy.ClientFlags.CLIENT_SNDINPUT_VOICEACTIVATED
+    SND_INPUT_VOICE_ACTIVE = TeamTalkPy.ClientFlags.CLIENT_SNDINPUT_VOICEACTIVE
+    SND_OUTPUT_MUTE = TeamTalkPy.ClientFlags.CLIENT_SNDOUTPUT_MUTE
+    SND_OUTPUT_AUTO_3D_POSITION = TeamTalkPy.ClientFlags.CLIENT_SNDOUTPUT_AUTO3DPOSITION
+    VIDEO_CAPTURE_READY = TeamTalkPy.ClientFlags.CLIENT_VIDEOCAPTURE_READY
+    TX_VOICE = TeamTalkPy.ClientFlags.CLIENT_TX_VOICE
+    TX_VIDEO_CAPTURE = TeamTalkPy.ClientFlags.CLIENT_TX_VIDEOCAPTURE
+    TX_DESKTOP = TeamTalkPy.ClientFlags.CLIENT_TX_DESKTOP
+    DESKTOP_ACTIVE = TeamTalkPy.ClientFlags.CLIENT_DESKTOP_ACTIVE
+    MUX_AUDIO_FILE = TeamTalkPy.ClientFlags.CLIENT_MUX_AUDIOFILE
+    CONNECTING = TeamTalkPy.ClientFlags.CLIENT_CONNECTING
+    CONNECTED = TeamTalkPy.ClientFlags.CLIENT_CONNECTED
+    CONNECTION = TeamTalkPy.ClientFlags.CLIENT_CONNECTION = (
+        TeamTalkPy.ClientFlags.CLIENT_CONNECTING
+        or TeamTalkPy.ClientFlags.CLIENT_CONNECTED
+    )
+    AUTHORIZED = TeamTalkPy.ClientFlags.CLIENT_AUTHORIZED
+    STREAM_AUDIO = TeamTalkPy.ClientFlags.CLIENT_STREAM_AUDIO
+    STREAM_VIDEO = TeamTalkPy.ClientFlags.CLIENT_STREAM_VIDEO
+
+
 class ChannelType(Flag):
     ClassRoom = TeamTalkPy.ChannelType.CHANNEL_CLASSROOM
     Default = TeamTalkPy.ChannelType.CHANNEL_DEFAULT
@@ -147,7 +180,7 @@ class UserAccount:
         note: str,
         type: UserType,
         rights: UserRight,
-        init_channel: int,
+        init_channel: str,
     ) -> None:
         self.username = username
         self.password = password
@@ -164,12 +197,12 @@ class User:
         nickname: str,
         username: str,
         status: str,
-        gender: str,
+        gender: UserStatusMode,
         state: UserState,
         channel: Channel,
         client_name: str,
-        version: str,
-        account: str,
+        version: int,
+        user_account: UserAccount,
         type: UserType,
         is_admin: bool,
         is_banned: bool,
@@ -183,13 +216,14 @@ class User:
         self.state = state
         self.client_name = client_name
         self.version = version
-        self.account = account
+        self.user_account = user_account
         self.type = type
         self.is_admin = is_admin
         self.is_banned = is_banned
 
 
 class MessageType(Enum):
+    NONE = 0
     User = TeamTalkPy.TextMsgType.MSGTYPE_USER
     Channel = TeamTalkPy.TextMsgType.MSGTYPE_CHANNEL
     Broadcast = TeamTalkPy.TextMsgType.MSGTYPE_BROADCAST
@@ -215,3 +249,88 @@ class File:
         self.channel = channel
         self.size = size
         self.username = username
+
+
+class EventType(Enum):
+    NONE = TeamTalkPy.ClientEvent.CLIENTEVENT_NONE
+    CON_SUCCESS = TeamTalkPy.ClientEvent.CLIENTEVENT_CON_SUCCESS
+    CON_FAILED = TeamTalkPy.ClientEvent.CLIENTEVENT_CON_FAILED
+    CON_LOST = TeamTalkPy.ClientEvent.CLIENTEVENT_CON_LOST
+    CON_MAX_PAYLOAD_UPDATED = TeamTalkPy.ClientEvent.CLIENTEVENT_CON_MAX_PAYLOAD_UPDATED
+    PROCESSING = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_PROCESSING
+    ERROR = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_ERROR
+    SUCCESS = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_SUCCESS
+    MYSELF_LOGGEDIN = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_MYSELF_LOGGEDIN
+    MYSELF_LOGGEDOUT = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_MYSELF_LOGGEDOUT
+    MYSELF_KICKED = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_MYSELF_KICKED
+    USER_LOGGEDIN = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_LOGGEDIN
+    USER_LOGGEDOUT = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_LOGGEDOUT
+    USER_UPDATE = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_UPDATE
+    USER_JOINED = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_JOINED
+    USER_LEFT = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_LEFT
+    USER_TEXT_MESSAGE = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USER_TEXTMSG
+    CHANNEL_NEW = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_CHANNEL_NEW
+    CHANNEL_UPDATE = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_CHANNEL_UPDATE
+    CHANNEL_REMOVE = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_CHANNEL_REMOVE
+    SERVER_UPDATE = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_SERVER_UPDATE
+    SERVER_STATISTICS = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_SERVERSTATISTICS
+    FILE_NEW = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_NEW
+    FILE_REMOVE = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_FILE_REMOVE
+    USER_ACCOUNT = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_USERACCOUNT
+    BANNED_USER = TeamTalkPy.ClientEvent.CLIENTEVENT_CMD_BANNEDUSER
+    STATE_CHANGE = TeamTalkPy.ClientEvent.CLIENTEVENT_USER_STATECHANGE
+    USER_VIDEO_CAPTURE = TeamTalkPy.ClientEvent.CLIENTEVENT_USER_VIDEOCAPTURE
+    USER_MEDIAFILE_VIDEO = TeamTalkPy.ClientEvent.CLIENTEVENT_USER_MEDIAFILE_VIDEO
+    USER_DESKTOP_WINDOW = TeamTalkPy.ClientEvent.CLIENTEVENT_USER_DESKTOPWINDOW
+    USER_DESKTOP_CURSOR = TeamTalkPy.ClientEvent.CLIENTEVENT_USER_DESKTOPCURSOR
+    USER_DESKTOP_INPUT = TeamTalkPy.ClientEvent.CLIENTEVENT_USER_DESKTOPINPUT
+    USER_RECORD_MEDIAFILE = TeamTalkPy.ClientEvent.CLIENTEVENT_USER_RECORD_MEDIAFILE
+    USER_AUDIO_BLOCK = TeamTalkPy.ClientEvent.CLIENTEVENT_USER_AUDIOBLOCK
+    INTERNAL_ERROR = TeamTalkPy.ClientEvent.CLIENTEVENT_INTERNAL_ERROR
+    VOICE_ACTIVATION = TeamTalkPy.ClientEvent.CLIENTEVENT_VOICE_ACTIVATION
+    HOTKEY = TeamTalkPy.ClientEvent.CLIENTEVENT_HOTKEY
+    HOTKEY_TEST = TeamTalkPy.ClientEvent.CLIENTEVENT_HOTKEY_TEST
+    FILE_TRANSFER = TeamTalkPy.ClientEvent.CLIENTEVENT_FILETRANSFER
+    DESKTOP_WINDOW_TRANSFER = TeamTalkPy.ClientEvent.CLIENTEVENT_DESKTOPWINDOW_TRANSFER
+    STREAM_MEDIAFILE = TeamTalkPy.ClientEvent.CLIENTEVENT_STREAM_MEDIAFILE
+    LOCAL_MEDIAFILE = TeamTalkPy.ClientEvent.CLIENTEVENT_LOCAL_MEDIAFILE
+    AUDIO_INPUT = TeamTalkPy.ClientEvent.CLIENTEVENT_AUDIOINPUT
+    USER_FIRST_STREAM_VOICE_PACKET = (
+        TeamTalkPy.ClientEvent.CLIENTEVENT_USER_FIRSTVOICESTREAMPACKET
+    )
+
+
+class Event:
+    def __init__(
+        self,
+        event_type: EventType,
+        source: int,
+        channel: Channel,
+        error: Error,
+        file: File,
+        message: Message,
+        user: User,
+        user_account: UserAccount,
+    ):
+        self.event_type = event_type
+        self.source = source
+        # ("ttType", INT32),
+        # ("uReserved", UINT32),
+        self.channel = channel
+        self.error = error
+        # desktop_input
+        # ("filetransfer", FileTransfer),
+        # ("mediafileinfo", MediaFileInfo),
+        self.file = file
+        # ("serverproperties", ServerProperties),
+        # ("serverstatistics", ServerStatistics),
+        self.message: Message = message
+        self.user = user
+        self.user_account = user_account
+        # ("banneduser", BannedUser),
+        # ("bActive", BOOL),
+        # ("nBytesRemain", INT32),
+        # ("nStreamID", INT32),
+        # ("nPayloadSize", INT32),
+        # ("nStreamType", INT32),
+        # ("audioinputprogress", AudioInputProgress),

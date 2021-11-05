@@ -1,22 +1,37 @@
 from __future__ import annotations
 from abc import ABC, abstractmethod
 import logging
-from typing import Any, Any, Dict, List, TYPE_CHECKING
+from typing import Any, Dict, List, Optional, TYPE_CHECKING
 
 from bot import app_vars, errors
-from bot.player.track import Track
 
 if TYPE_CHECKING:
     from bot import Bot
+    from bot.player.track import Track
 
 
 class Service(ABC):
+    is_enabled: bool
+    hidden: bool
+    hostnames: List[str]
+    error_message: str
+    name: str
+
     @abstractmethod
-    def get(self, *args, **kwargs) -> List[Track]:
+    def get(
+        self,
+        url: str,
+        extra_info: Optional[Dict[str, Any]] = None,
+        process: bool = False,
+    ) -> List[Track]:
         ...
 
     @abstractmethod
-    def search(self, query) -> List[Track]:
+    def initialize(self) -> None:
+        ...
+
+    @abstractmethod
+    def search(self, query: str) -> List[Track]:
         ...
 
 

@@ -4,6 +4,7 @@ import click
 
 from bot import Bot
 from bot.config import save_default_file
+from bot.sound_devices import SoundDeviceManager
 
 
 @click.command()
@@ -40,7 +41,7 @@ def main(
             bot.close()
 
 
-def echo_sound_devices(sound_device_manager):
+def echo_sound_devices(sound_device_manager: SoundDeviceManager):
     print("Output devices:")
     for i, device in enumerate(sound_device_manager.output_devices):
         print("\t{index}: {name}".format(index=i, name=device.name))

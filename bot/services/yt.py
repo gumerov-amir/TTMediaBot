@@ -1,4 +1,5 @@
 import logging
+from typing import Any, Dict, List, Optional
 
 from yt_dlp import YoutubeDL
 from youtubesearchpython import VideosSearch
@@ -28,7 +29,12 @@ class YtService(_Service):
             "logger": logging.getLogger("root"),
         }
 
-    def get(self, url, extra_info=None, process=False):
+    def get(
+        self,
+        url: str,
+        extra_info: Optional[Dict[str, Any]] = None,
+        process: bool = False,
+    ) -> List[Track]:
         if not (url or extra_info):
             raise errors.InvalidArgumentError()
         with YoutubeDL(self._ydl_config) as ydl:
@@ -67,8 +73,8 @@ class YtService(_Service):
                 type = TrackType.Default
             return [Track(url=url, name=title, format=format, type=type)]
 
-    def search(self, text):
-        search = VideosSearch(text, limit=300).result()
+    def search(self, query: str) -> List[Track]:
+        search = VideosSearch(query, limit=300).result()
         if search["result"]:
             tracks = []
             for video in search["result"]:

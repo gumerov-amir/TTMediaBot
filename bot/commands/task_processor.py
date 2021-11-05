@@ -1,8 +1,7 @@
 from __future__ import annotations
 from threading import Thread
 from queue import Queue
-from types import FunctionType
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, Callable
 
 if TYPE_CHECKING:
     from bot.commands import CommandProcessor
@@ -10,7 +9,7 @@ if TYPE_CHECKING:
 
 class Task:
     def __init__(
-        self, command_id: int, function: FunctionType, args: Any, kwargs: Any
+        self, command_id: int, function: Callable[..., None], args: Any, kwargs: Any
     ) -> None:
         self.command_id = command_id
         self.function = function

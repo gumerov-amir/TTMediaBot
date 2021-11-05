@@ -1,11 +1,9 @@
 from __future__ import annotations
-from typing import Optional, TYPE_CHECKING
-
-from pyshorteners import Shortener
+from typing import List, Optional, TYPE_CHECKING
 
 from bot.commands.command import Command
 from bot.player.enums import Mode, State, TrackType
-from bot.TeamTalk.structs import UserRight
+from bot.TeamTalk.structs import User, UserRight
 from bot import errors, app_vars
 
 if TYPE_CHECKING:
@@ -212,16 +210,6 @@ class PreviousTrackCommand(Command):
 
 
 class ModeCommand(Command):
-    def __init__(self, command_processor):
-        super().__init__(command_processor)
-        self.mode_names = {
-            Mode.SingleTrack: self.translator.translate("Single Track"),
-            Mode.RepeatTrack: self.translator.translate("Repeat Track"),
-            Mode.TrackList: self.translator.translate("Track list"),
-            Mode.RepeatTrackList: self.translator.translate("Repeat track list"),
-            Mode.Random: self.translator.translate("Random"),
-        }
-
     @property
     def help(self) -> str:
         return self.translator.translate(
@@ -229,6 +217,13 @@ class ModeCommand(Command):
         )
 
     def __call__(self, arg: str, user: User) -> Optional[str]:
+        self.mode_names = {
+            Mode.SingleTrack: self.translator.translate("Single Track"),
+            Mode.RepeatTrack: self.translator.translate("Repeat Track"),
+            Mode.TrackList: self.translator.translate("Track list"),
+            Mode.RepeatTrackList: self.translator.translate("Repeat track list"),
+            Mode.Random: self.translator.translate("Random"),
+        }
         mode_help = self.translator.translate(
             "Current mode: {current_mode}\n{modes}"
         ).format(
@@ -386,7 +381,7 @@ class FavoritesCommand(Command):
         else:
             return self._list(user)
 
-    def _add(self, user):
+    def _add(self, user: User) -> str:
         if self.player.state != State.Stopped:
             if user.username in self.cache.favorites:
                 self.cache.favorites[user.username].append(self.player.track.get_raw())
@@ -397,7 +392,7 @@ class FavoritesCommand(Command):
         else:
             return self.translator.translate("Nothing is playing")
 
-    def _del(self, arg, user):
+    def _del(self, arg: str, user: User) -> str:
         if (self.player.state != State.Stopped and len(arg) == 1) or len(arg) > 1:
             try:
                 if len(arg) == 1:
@@ -415,8 +410,8 @@ class FavoritesCommand(Command):
         else:
             return self.translator.translate("Nothing is playing")
 
-    def _list(self, user):
-        track_names = []
+    def _list(self, user: User) -> str:
+        track_names: List[str] = []
         try:
             for number, track in enumerate(self.cache.favorites[user.username]):
                 track_names.append(
@@ -432,13 +427,13 @@ class FavoritesCommand(Command):
         else:
             return self.translator.translate("The list is empty")
 
-    def _play(self, arg, user):
+    def _play(self, arg: str, user: User) -> Optional[str]:
         try:
             self.player.play(
                 self.cache.favorites[user.username], start_track_index=int(arg) - 1
             )
         except ValueError:
-            return self.help
+            raise errors.InvalidArgumentError()
         except IndexError:
             return self.translator.translate("Out of list")
         except KeyError:
@@ -454,10 +449,7 @@ class GetLinkCommand(Command):
         if self.player.state != State.Stopped:
             url = self.player.track.url
             if url:
-                if self.config.shortening.shorten_links:
-                    shortener = Shortener()
-                    url = shortener.clckru.short(url)
-                return url
+                return self.module_manager.shortener.get(url)
             else:
                 return self.translator.translate("URL is not available")
         else:
@@ -483,7 +475,7 @@ class RecentsCommand(Command):
             except IndexError:
                 return self.translator.translate("Out of list")
         else:
-            track_names = []
+            track_names: List[str] = []
             for number, track in enumerate(reversed(self.cache.recents)):
                 if track.name:
                     track_names.append(f"{number + 1}: {track.name}")
@@ -500,7 +492,7 @@ class DownloadCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "Downloads the current track and uploads it to the channel.
+            "Downloads the current track and uploads it to the channel."
         )
 
     def __call__(self, arg: str, user: User) -> Optional[str]:
