@@ -2,11 +2,13 @@ from __future__ import annotations
 import os
 import subprocess
 import sys
+import time
 from typing import Optional, TYPE_CHECKING
+from queue import Empty
 
 from bot.commands.command import Command
 from bot.player.enums import State
-from bot import errors
+from bot import app_vars, errors
 
 if TYPE_CHECKING:
     from bot.TeamTalk.structs import User
@@ -116,6 +118,51 @@ class ClearCacheCommand(Command):
             self.cache.favorites.clear()
             self.cache.save()
             return self.translator.translate("Favorites cleared")
+
+
+class JoinChannelCommand(Command):
+    @property
+    def help(self) -> str:
+        return self.translator.translate(
+            'Join channel. first argument is channel name or id, second argument is password, split argument " | ", if password is undefined, don\'t type second argument'
+        )
+
+    def __call__(self, arg: str, user: User) -> Optional[str]:
+        if not arg:
+            channel = self.config.teamtalk.channel
+            password = self.config.teamtalk.channel_password
+        elif " | " in arg:
+            channel = arg.split(" | ")[0]
+            password = arg.split(" | ")[1]
+        else:
+            channel = arg
+            password = ""
+        if isinstance(channel, str) and channel.isdigit():
+            channel = int(channel)
+        try:
+            cmd = self.ttclient.join_channel(channel, password)
+        except ValueError:
+            return self.translator.translate("This channel does not exist")
+        while True:
+            try:
+                event = self.ttclient.event_success_queue.get_nowait()
+                if event.source == cmd:
+                    break
+                else:
+                    self.ttclient.event_success_queue.put(event)
+            except Empty:
+                pass
+            try:
+                error = self.ttclient.errors_queue.get_nowait()
+                if error.command_id == cmd:
+                    return self.translator.translate(
+                        "Error joining channel: {error}".format(error=error.message)
+                    )
+                else:
+                    self.ttclient.errors_queue.put(error)
+            except Empty:
+                pass
+            time.sleep(app_vars.loop_timeout)
 
 
 """ class TaskSchedulerCommand(Command):

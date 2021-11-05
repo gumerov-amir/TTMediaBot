@@ -2,7 +2,6 @@ from __future__ import annotations
 import logging
 import re
 from threading import Thread
-import traceback
 from typing import Any, List, Tuple, TYPE_CHECKING
 
 from bot import errors
@@ -62,6 +61,7 @@ class CommandProcessor:
             "cs": admin_commands.ChangeStatusCommand,
             "cc": admin_commands.ClearCacheCommand,
             "cm": admin_commands.ChannelMessagesCommand,
+            "jc": admin_commands.JoinChannelCommand,
             "bc": admin_commands.BlockCommandCommand,
             # "ts": TaskSchedulerCommand,
             "l": admin_commands.LockCommand,

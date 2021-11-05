@@ -1,7 +1,6 @@
 from __future__ import annotations
 import os
-import sys
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List
 from urllib.parse import urlparse
 
 from bot import errors
@@ -14,16 +13,16 @@ if TYPE_CHECKING:
 
 class Streamer:
     def __init__(self, bot: Bot):
-        self.allowed_schemes = ["http", "https", "rtmp", "rtsp"]
+        self.allowed_schemes: List[str] = ["http", "https", "rtmp", "rtsp"]
         self.config = bot.config
         self.service_manager = bot.service_manager
 
-    def get(self, url, is_admin):
+    def get(self, url: str, is_admin: bool) -> List[Track]:
         parsed_url = urlparse(url)
         if parsed_url.scheme in self.allowed_schemes:
             track = Track(url=url, type=TrackType.Direct)
             fetched_data = [track]
-            for service in self.service_manager.available_services.values():
+            for service in self.service_manager.services.values():
                 try:
                     if (
                         parsed_url.hostname in service.hostnames
@@ -38,7 +37,9 @@ class Streamer:
                         return [
                             track,
                         ]
-            if len(fetched_data) == 1 and fetched_data[0].url.startswith(track.url):
+            if len(fetched_data) == 1 and fetched_data[0].url.startswith(
+                str(track.url)
+            ):
                 return [
                     track,
                 ]
@@ -56,7 +57,7 @@ class Streamer:
                     track,
                 ]
             elif os.path.isdir(url):
-                tracks = []
+                tracks: List[Track] = []
                 for path, dirs, files in os.walk(url):
                     for file in sorted(files):
                         url = os.path.join(path, file)

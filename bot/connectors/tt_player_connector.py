@@ -70,7 +70,7 @@ class TTPlayerConnector(Thread):
                             name=self.player.track.name,
                         )
                     )
-            except Exception as e:
+            except Exception:
                 logging.error("", exc_info=True)
             time.sleep(app_vars.loop_timeout)
 

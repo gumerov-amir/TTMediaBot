@@ -75,7 +75,6 @@ class Bot:
 
     def run(self):
         logging.debug("Starting")
-        self.ttclient.run()
         self.player.run()
         self.tt_player_connector.start()
         self.command_processor.run()

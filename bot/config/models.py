@@ -83,8 +83,8 @@ class LoggerModel(BaseModel):
 
 class ShorteningModel(BaseModel):
     shorten_links: bool = False
-    service: str = "Bitly"
-    service_token: str = ""
+    service: str = "clckru"
+    service_params: Dict[str, Any] = {}
 
 
 class ConfigModel(BaseModel):

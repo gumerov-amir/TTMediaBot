@@ -49,7 +49,12 @@ class VkService(_Service):
             logging.error(e)
             raise errors.ServiceError(e)
 
-    def get(self, url: str) -> Optional[List[Track]]:
+    def get(
+        self,
+        url: str,
+        extra_info: Optional[Dict[str, Any]] = None,
+        process: bool = False,
+    ) -> List[Track]:
         parsed_url = urlparse(url)
         path = parsed_url.path[1::]
         if path.startswith("video_"):
@@ -60,18 +65,14 @@ class VkService(_Service):
                 ids = id.split("_")
                 o_id = ids[0]
                 p_id = ids[1]
-                audios: Dict[str, Any] = self.api.audio.get(
-                    owner_id=int(o_id), album_id=int(p_id)
-                )
+                audios = self.api.audio.get(owner_id=int(o_id), album_id=int(p_id))
             else:
-                object_info: Dict[str, Any] = self.api.utils.resolveScreenName(
-                    screen_name=path
-                )
+                object_info = self.api.utils.resolveScreenName(screen_name=path)
                 if object_info["type"] == "group":
                     id = -object_info["object_id"]
                 else:
                     id = object_info["object_id"]
-                audios: Dict[str, Any] = self.api.audio.get(owner_id=id, count=6000)
+                audios = self.api.audio.get(owner_id=id, count=6000)
             if "count" in audios and audios["count"] > 0:
                 tracks: List[Track] = []
                 for audio in audios["items"]:
@@ -92,9 +93,10 @@ class VkService(_Service):
         except NotImplementedError as e:
             print("vk get error")
             print(e)
+            raise NotImplementedError()
 
-    def search(self, text: str) -> List[Track]:
-        results: Dict[str, Any] = self.api.audio.search(q=text, count=300, sort=0)
+    def search(self, query: str) -> List[Track]:
+        results = self.api.audio.search(q=query, count=300, sort=0)
         if "count" in results and results["count"] > 0:
             tracks: List[Track] = []
             for track in results["items"]:
