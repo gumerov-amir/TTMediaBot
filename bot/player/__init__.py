@@ -22,6 +22,7 @@ class Player:
         self.config = bot.config.player
         self.cache = bot.cache
         mpv_options = {
+            "demuxer_lavf_o": "http_persistent=false",
             "demuxer_max_back_bytes": 1048576,
             "demuxer_max_bytes": 2097152,
             "video": False,
