@@ -1,8 +1,8 @@
 beautifulsoup4
 click
-dacite
 patool
 portalocker
+pydantic
 pyshorteners
 requests
 vk-api

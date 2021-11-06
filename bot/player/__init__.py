@@ -2,7 +2,7 @@ from __future__ import annotations
 import html
 import logging
 import time
-from typing import List, Optional, TYPE_CHECKING
+from typing import Any, Dict, Callable, List, Optional, TYPE_CHECKING
 import random
 
 import mpv
@@ -33,7 +33,7 @@ class Player:
         except AttributeError:
             del mpv_options["demuxer_max_back_bytes"]
             self._player = mpv.MPV(**mpv_options, log_handler=self.log_handler)
-        self._log_level = "PLAYER_DEBUG"
+        self._log_level = 5
         self.track_list: List[Track] = []
         self.track: Track = Track()
         self.track_index: int = -1
@@ -177,7 +177,7 @@ class Player:
             raise ValueError()
         self._player.speed = arg
 
-    def seek_back(self, step: float = None) -> None:
+    def seek_back(self, step: Optional[float] = None) -> None:
         step = step if step else self.config.seek_step
         if step <= 0:
             raise ValueError()
@@ -186,7 +186,7 @@ class Player:
         except SystemError:
             self.stop()
 
-    def seek_forward(self, step: float = None) -> None:
+    def seek_forward(self, step: Optional[float] = None) -> None:
         step = step if step else self.config.seek_step
         if step <= 0:
             raise ValueError()
@@ -198,16 +198,16 @@ class Player:
     def get_duration(self) -> float:
         return self._player.duration
 
-    def get_position(self) -> float:
+    """def get_position(self) -> float:
         return self._player.time_pos
 
     def set_position(self, arg: float) -> None:
         if arg < 0:
             raise errors.IncorrectPositionError()
-        self._player.seek(arg, reference="absolute")
+        self._player.seek(arg, reference="absolute")"""
 
     def get_output_devices(self) -> List[SoundDevice]:
-        devices = []
+        devices: List[SoundDevice] = []
         for device in self._player.audio_device_list:
             devices.append(
                 SoundDevice(
@@ -226,14 +226,15 @@ class Player:
         else:
             del self._index_list
 
-    def register_event_callback(self, callback_name, callback_func):
+    def register_event_callback(
+        self, callback_name: str, callback_func: Callable[[mpv.MpvEvent], None]
+    ) -> None:
         self._player.event_callback(callback_name)(callback_func)
 
-    def log_handler(self, level, component, message):
-        level = logging.getLevelName(self._log_level)
-        logging.log(level, "{}: {}: {}".format(level, component, message))
+    def log_handler(self, level: str, component: str, message: str) -> None:
+        logging.log(self._log_level, "{}: {}: {}".format(level, component, message))
 
-    def _parse_metadata(self, metadata: dict) -> str:
+    def _parse_metadata(self, metadata: Dict[str, Any]) -> str:
         stream_names = ["icy-name"]
         stream_name = None
         title = None
@@ -245,13 +246,13 @@ class Player:
                 title = html.unescape(metadata[i])
             if "artist" in i:
                 artist = html.unescape(metadata[i])
-        chunks = []
+        chunks: List[str] = []
         chunks.append(artist) if artist else ...
         chunks.append(title) if title else ...
         chunks.append(stream_name) if stream_name else ...
         return " - ".join(chunks)
 
-    def on_end_file(self, event):
+    def on_end_file(self, event: mpv.MpvEvent) -> None:
         if self.state == State.Playing and self._player.idle_active:
             if self.mode == Mode.SingleTrack or self.track.type == TrackType.Direct:
                 self.stop()
@@ -263,7 +264,7 @@ class Player:
                 except errors.NoNextTrackError:
                     self.stop()
 
-    def on_metadata_update(self, event):
+    def on_metadata_update(self, event: mpv.MpvEvent) -> None:
         if self.state == State.Playing and (
             self.track.type == TrackType.Direct or self.track.type == TrackType.Local
         ):

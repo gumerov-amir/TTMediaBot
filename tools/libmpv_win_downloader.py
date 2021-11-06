@@ -3,7 +3,6 @@
 import os
 import platform
 import shutil
-import sys
 from urllib import request
 
 import bs4
@@ -32,19 +31,22 @@ def extract():
         shutil.rmtree(os.path.join(cd, "libmpv"))
         os.mkdir(os.path.join(cd, "libmpv"))
     patoolib.extract_archive(
-        os.path.join(cd, "libmpv.7z"), outdir=os.path.join(cd, "libmpv")
+        os.path.join(cd, "libmpv.7z"),
+        outdir=os.path.join(cd, "libmpv"),
     )
 
 
 def move():
     try:
         os.rename(
-            os.path.join(cd, "libmpv", "mpv-1.dll"), os.path.join(cd, "mpv-1.dll")
+            os.path.join(cd, "libmpv", "mpv-1.dll"),
+            os.path.join(cd, "mpv-1.dll"),
         )
     except FileExistsError:
         os.remove(os.path.join(cd, "mpv-1.dll"))
         os.rename(
-            os.path.join(cd, "libmpv", "mpv-1.dll"), os.path.join(cd, "mpv-1.dll")
+            os.path.join(cd, "libmpv", "mpv-1.dll"),
+            os.path.join(cd, "mpv-1.dll"),
         )
 
 

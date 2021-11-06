@@ -48,9 +48,9 @@ class YtService(_Service):
             if info_type == "url" and not info["ie_key"]:
                 return self.get(info["url"], process=False)
             elif info_type == "playlist":
-                tracks = []
+                tracks: List[Track] = []
                 for entry in info["entries"]:
-                    data = self.get(None, extra_info=entry, process=False)
+                    data = self.get("", extra_info=entry, process=False)
                     tracks += data
                 return tracks
             if not process:
@@ -76,7 +76,7 @@ class YtService(_Service):
     def search(self, query: str) -> List[Track]:
         search = VideosSearch(query, limit=300).result()
         if search["result"]:
-            tracks = []
+            tracks: List[Track] = []
             for video in search["result"]:
                 track = Track(url=video["link"], service=self.name)
                 tracks.append(track)

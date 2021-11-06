@@ -1,9 +1,9 @@
+"""
 from __future__ import annotations
 import threading
 import time
 from typing import TYPE_CHECKING
 
-from bot.TeamTalk import TeamTalk, User
 from bot import app_vars
 
 if TYPE_CHECKING:
@@ -27,3 +27,6 @@ class TaskScheduler(threading.Thread):
 
     def get_time(self):
         return int(round(time.time()))
+
+
+"""

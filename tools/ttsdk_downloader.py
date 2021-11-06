@@ -9,12 +9,13 @@ from urllib import request
 import bs4
 import patoolib
 
+
 url = "http://bearware.dk/teamtalksdk"
 
 cd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-def get_url_suffix_from_platform():
+def get_url_suffix_from_platform() -> str:
     machine = platform.machine()
     if sys.platform == "win32":
         architecture = platform.architecture()
@@ -36,7 +37,7 @@ def get_url_suffix_from_platform():
             sys.exit("Your architecture is not supported")
 
 
-def download():
+def download() -> None:
     r = request.urlopen(url)
     html = r.read().decode("UTF-8")
     page = bs4.BeautifulSoup(html, features="html.parser")
@@ -53,7 +54,7 @@ def download():
     request.urlretrieve(download_url, os.path.join(cd, "ttsdk.7z"))
 
 
-def extract():
+def extract() -> None:
     try:
         os.mkdir(os.path.join(cd, "ttsdk"))
     except FileExistsError:
@@ -64,7 +65,7 @@ def extract():
     )
 
 
-def move():
+def move() -> None:
     path = os.path.join(cd, "ttsdk", os.listdir(os.path.join(cd, "ttsdk"))[0])
     try:
         if sys.platform == "win32":
@@ -110,12 +111,12 @@ def move():
         )
 
 
-def clean():
+def clean() -> None:
     os.remove(os.path.join(cd, "ttsdk.7z"))
     shutil.rmtree(os.path.join(cd, "ttsdk"))
 
 
-def install():
+def install() -> None:
     print("Installing TeamTalk sdk components")
     print("Downloading latest sdk version")
     download()
