@@ -3,6 +3,8 @@
 import requests
 from getpass import getpass
 
+from bot.config import ConfigManager
+
 
 class AuthenticationError(Exception):
     pass
@@ -25,7 +27,7 @@ api_url = "https://api.vk.com/method/"
 receipt = "fkdoOMX_yqQ:APA91bHbLn41RMJmAbuFjqLg5K-QW7si9KajBGCDJxcpzbuvEcPIk9rwx5HWa1yo1pTzpaKL50mXiWvtqApBzymO2sRKlyRiWqqzjMTXUyA5HnRJZyXWWGPX8GkFxQQ4bLrDCcnb93pn"
 
 
-def request_auth(login, password, scope="", code=""):
+def request_auth(login: str, password: str, scope: str = "", code: str = "") -> str:
     if not (login or password):
         raise ValueError
     url = (
@@ -61,7 +63,7 @@ def request_auth(login, password, scope="", code=""):
         raise AuthenticationError(r.text)
 
 
-def handle_2fa(sid):
+def handle_2fa(sid: str) -> str:
     if not sid:
         raise ValueError("No sid is given")
     url = api_url + "auth.validatePhone?sid=" + sid + "&v=" + api_ver
@@ -80,7 +82,7 @@ def handle_2fa(sid):
         raise PhoneValidationError(r.text)
 
 
-def validate_token(token, receipt):
+def validate_token(token: str, receipt: str) -> str:
     if not (token and receipt):
         raise ValueError("Required argument is missing")
     url = (
@@ -119,10 +121,16 @@ def main():
         token = request_auth(login, password, scope=scope)
         validated_token = validate_token(token, receipt)
         print("Your VK token:")
-        print(validated_token)
+        if input("Do you want save token to config file? y/n").lower().strip() == "y":
+            cm = ConfigManager(input("Your config file"))
+            cm.config.services.vk.token = validated_token
+            cm.save()
+            print("Your token successfully saved to config file")
+        else:
+            print(validated_token)
     except Exception as e:
         print(e)
-    input("Press any key to continue")
+    input("Press enter to continue")
 
 
 if __name__ == "__main__":
