@@ -2,6 +2,10 @@
 
 import requests
 from getpass import getpass
+import os
+import sys
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from bot.config import ConfigManager
 
@@ -119,16 +123,20 @@ def main():
         while not password:
             password = getpass("Password: ")
         token = request_auth(login, password, scope=scope)
+        print("before validation")
         validated_token = validate_token(token, receipt)
-        print("Your VK token:")
-        if input("Do you want save token to config file? y/n").lower().strip() == "y":
+        print("After vvalidation")
+        y_or_n = input("Do you want save token to config file? y/n")
+        print("C")
+        if y_or_n == "y":
             cm = ConfigManager(input("Your config file"))
             cm.config.services.vk.token = validated_token
             cm.save()
             print("Your token successfully saved to config file")
         else:
+            print("Your VK token:")
             print(validated_token)
-    except Exception as e:
+    except ValueError as e:
         print(e)
     input("Press enter to continue")
 
