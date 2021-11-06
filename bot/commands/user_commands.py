@@ -508,7 +508,7 @@ class DownloadCommand(Command):
             if track.url and (
                 track.type == TrackType.Default or track.type == TrackType.Local
             ):
-                self.module_manager.downloader(self.player.track, user)
+                self.module_manager.uploader(self.player.track, user)
                 return self.translator.translate("Downloading...")
             else:
                 return self.translator.translate("Live streams cannot be downloaded")

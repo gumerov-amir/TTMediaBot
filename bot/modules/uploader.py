@@ -17,14 +17,14 @@ if TYPE_CHECKING:
     from bot import Bot
 
 
-class Downloader:
+class Uploader:
     def __init__(self, bot: Bot):
         self.config = bot.config
         self.ttclient = bot.ttclient
         self.translator = bot.translator
 
     def __call__(self, track: Track, user: User) -> None:
-        t = threading.Thread(
+        thread = threading.Thread(
             target=self.run,
             daemon=True,
             args=(
@@ -32,19 +32,13 @@ class Downloader:
                 user,
             ),
         )
-        t.start()
+        thread.start()
 
     def run(self, track: Track, user: User) -> None:
         error_exit = False
         if track.type == TrackType.Default:
             temp_dir = tempfile.TemporaryDirectory()
-            temp_file_name = os.path.join(temp_dir.name, "file.dat")
-            request.urlretrieve(track.url, temp_file_name)
-            extension = track.format
-            file_name: str = track.name + "." + extension
-            file_name = utils.clean_file_name(file_name)
-            file_path = os.path.join(os.path.dirname(temp_file_name), file_name)
-            os.rename(temp_file_name, file_path)
+            file_path = track.download(temp_dir.name)
         else:
             file_path = track.url
         command_id = self.ttclient.send_file(self.ttclient.channel.id, file_path)

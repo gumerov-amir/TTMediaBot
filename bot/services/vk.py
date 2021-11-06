@@ -1,7 +1,9 @@
 import logging
+import time
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
 
+import mpv
 import requests
 import vk_api
 
@@ -27,6 +29,22 @@ class VkService(_Service):
         self.error_message = ""
         self.format = "mp3"
         self.hidden = False
+
+    def download(self, track: Track, file_path: str) -> None:
+        if ".m3u8" not in track.url:
+            raise errors.ServiceError()
+        _mpv = mpv.MPV(
+            **{
+                "demuxer_lavf_o": "http_persistent=false",
+                "ao": "null",
+                "ao_null_untimed": True,
+            }
+        )
+        _mpv.stream_record = file_path
+        _mpv.play(track.url)
+        while not _mpv.idle_active:
+            pass
+        _mpv.terminate()
 
     def initialize(self) -> None:
         http = requests.Session()
@@ -79,6 +97,7 @@ class VkService(_Service):
                     if "url" not in audio or not audio["url"]:
                         continue
                     track = Track(
+                        service=self.name,
                         url=audio["url"],
                         name="{} - {}".format(audio["artist"], audio["title"]),
                         format=self.format,
@@ -103,6 +122,7 @@ class VkService(_Service):
                 if "url" not in track or not track["url"]:
                     continue
                 track = Track(
+                    service=self.name,
                     url=track["url"],
                     name="{} - {}".format(track["artist"], track["title"]),
                     format=self.format,

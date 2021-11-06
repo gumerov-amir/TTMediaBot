@@ -1,8 +1,10 @@
 from __future__ import annotations
 import copy
+import os
 from typing import Any, Dict, Optional, TYPE_CHECKING
 
 from bot.player.enums import TrackType
+from bot import utils
 
 if TYPE_CHECKING:
     from bot.services import Service
@@ -27,12 +29,19 @@ class Track:
         self.format = format
         self.extra_info = extra_info
         self.type = type
-        if service:
-            self.type = TrackType.Dynamic
         self._is_fetched = False
 
+    def download(self, directory: str) -> str:
+        print(self.service)
+        service: Service = get_service_by_name(self.service)
+        file_name = self.name + "." + self.format
+        file_name = utils.clean_file_name(file_name)
+        file_path = os.path.join(directory, file_name)
+        service.download(self, file_path)
+        return file_path
+
     def _fetch_stream_data(self):
-        if (not self.service) or self._is_fetched:
+        if self.type != TrackType.Dynamic or self._is_fetched:
             return
         self._original_track = copy.deepcopy(self)
         service: Service = get_service_by_name(self.service)
