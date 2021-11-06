@@ -1,5 +1,6 @@
 import logging
 from typing import Any, Dict, List, Optional
+from urllib import request
 
 from yt_dlp import YoutubeDL
 from youtubesearchpython import VideosSearch
@@ -20,6 +21,9 @@ class YtService(_Service):
         self.is_enabled = self.config.enabled
         self.error_message = ""
         self.hidden = False
+
+    def download(self, track: Track, file_path: str) -> None:
+        request.urlretrieve(track.url, file_path)
 
     def initialize(self):
         self._ydl_config = {
@@ -54,7 +58,9 @@ class YtService(_Service):
                     tracks += data
                 return tracks
             if not process:
-                return [Track(service=self.name, extra_info=info)]
+                return [
+                    Track(service=self.name, extra_info=info, type=TrackType.Dynamic)
+                ]
             try:
                 stream = ydl.process_ie_result(info)
             except Exception:
@@ -71,14 +77,18 @@ class YtService(_Service):
                 type = TrackType.Live
             else:
                 type = TrackType.Default
-            return [Track(url=url, name=title, format=format, type=type)]
+            return [
+                Track(service=self.name, url=url, name=title, format=format, type=type)
+            ]
 
     def search(self, query: str) -> List[Track]:
         search = VideosSearch(query, limit=300).result()
         if search["result"]:
             tracks: List[Track] = []
             for video in search["result"]:
-                track = Track(url=video["link"], service=self.name)
+                track = Track(
+                    service=self.name, url=video["link"], type=TrackType.Dynamic
+                )
                 tracks.append(track)
             return tracks
         else:

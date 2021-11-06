@@ -18,6 +18,10 @@ class Service(ABC):
     name: str
 
     @abstractmethod
+    def download(self, track: Track, file_path: str) -> None:
+        ...
+
+    @abstractmethod
     def get(
         self,
         url: str,
