@@ -35,10 +35,7 @@ def _str(data: AnyStr) -> AnyStr:
         else:
             return data
     else:
-        try:
-            return str(data, "utf-8")
-        except UnicodeDecodeError:
-            return ""
+        return str(data, "utf-8")
 
 
 def split(text: str, max_length: int = app_vars.max_message_length) -> List[str]:
@@ -295,15 +292,53 @@ class TeamTalk:
         )
 
     def get_event(self, obj: TeamTalkPy.TTMessage) -> Event:
+        try:
+            channel = self.get_channel_from_obj(obj.channel)
+        except (UnicodeDecodeError, ValueError):
+            channel = Channel(1, "", "", 0, ChannelType.Default)
+        try:
+            error = self.get_error(obj.clienterrormsg.nErrorNo, obj.nSource)
+        except (UnicodeDecodeError, ValueError):
+            error = Error("", ErrorType.Success, 1)
+        try:
+            file = self.get_file(obj.remotefile)
+        except (UnicodeDecodeError, ValueError):
+            file = File(1, "", channel, 0, "")
+        try:
+            user_account = self.get_user_account_by_tt_obj(obj.useraccount)
+        except (UnicodeDecodeError, ValueError):
+            user_account = UserAccount("", "", "", UserType.Null, UserRight.Null, "")
+        try:
+            user = self.get_user(obj.user.nUserID)
+        except (UnicodeDecodeError, ValueError):
+            user = User(
+                1,
+                "",
+                "",
+                "",
+                UserStatusMode.M,
+                UserState.Null,
+                channel,
+                "",
+                1,
+                user_account,
+                UserType.Null,
+                False,
+                False,
+            )
+        try:
+            message = self.get_message(obj.textmessage)
+        except (UnicodeDecodeError, ValueError):
+            message = Message("", user, channel, MessageType.NONE)
         return Event(
             EventType(obj.nClientEvent),
             obj.nSource,
-            self.get_channel_from_obj(obj.channel),
-            self.get_error(obj.clienterrormsg.nErrorNo, obj.nSource),
-            self.get_file(obj.remotefile),
-            self.get_message(obj.textmessage),
-            self.get_user(obj.user.nUserID),
-            self.get_user_account_by_tt_obj(obj.useraccount),
+            channel,
+            error,
+            file,
+            message,
+            user,
+            user_account,
         )
 
     def get_input_devices(self) -> List[SoundDevice]:
