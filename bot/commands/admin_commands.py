@@ -128,12 +128,13 @@ class JoinChannelCommand(Command):
         )
 
     def __call__(self, arg: str, user: User) -> Optional[str]:
+        args = self.command_processor.split_arg(arg)
         if not arg:
             channel = self.config.teamtalk.channel
             password = self.config.teamtalk.channel_password
-        elif " | " in arg:
-            channel = arg.split(" | ")[0]
-            password = arg.split(" | ")[1]
+        elif len(args) == 2:
+            channel = args[0]
+            password = args[1]
         else:
             channel = arg
             password = ""
