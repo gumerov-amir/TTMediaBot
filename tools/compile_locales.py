@@ -24,8 +24,8 @@ def main():
         code = subprocess.call(
             '{msgfmt_path} -o "{mo}" "{po}"'.format(
                 msgfmt_path=msgfmt_path,
-                po=os.path.join(path, i, "LC_MESSAGES", "TTMediaself.po"),
-                mo=os.path.join(path, i, "LC_MESSAGES", "TTMediaself.mo"),
+                po=os.path.join(path, i, "LC_MESSAGES", "TTMediaBot.po"),
+                mo=os.path.join(path, i, "LC_MESSAGES", "TTMediaBot.mo"),
             ),
             shell=True,
         )

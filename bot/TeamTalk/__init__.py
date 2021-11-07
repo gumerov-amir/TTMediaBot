@@ -35,7 +35,10 @@ def _str(data: AnyStr) -> AnyStr:
         else:
             return data
     else:
-        return str(data, "utf-8")
+        try:
+            return str(data, "utf-8")
+        except UnicodeDecodeError:
+            return ""
 
 
 def split(text: str, max_length: int = app_vars.max_message_length) -> List[str]:

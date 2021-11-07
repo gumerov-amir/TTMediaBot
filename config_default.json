@@ -61,7 +61,7 @@
         "level": "INFO",
         "format": "%(levelname)s [%(asctime)s]: %(message)s in %(threadName)s file: %(filename)s line %(lineno)d function %(funcName)s",
         "mode": "File",
-        "file_name": "TTMediaself.log",
+        "file_name": "TTMediaBot.log",
         "max_file_size": 0,
         "backup_count": 0
     },
