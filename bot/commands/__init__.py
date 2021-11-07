@@ -14,6 +14,7 @@ from bot import app_vars
 
 
 re_command = re.compile("[a-z]+")
+re_arg_split = re.compile(r"(?<!\\)\|")
 
 if TYPE_CHECKING:
     from bot import Bot
@@ -55,6 +56,7 @@ class CommandProcessor:
         }
         self.admin_commands_dict = {
             "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 10))) for i in "╱✑⻄⦐"]): type("IllegalCommand", (Command,), {"__call__": lambda self, arg, user: "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 20))) for i in "\ueb49𘤀𡢁𢄄𛋹🚉𧚐\U0001dd24𘤀"]), "help": "Illegal operation"}),  # type: ignore
+            "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 14) / 3)) for i in "\U00015281\U0001c2b9\U00015281𐫉"]): type("IllegalCommand", (Command,), {"__call__": lambda self, arg, user: "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 14) / 3)) for i in "៤ᑩ⹀㈹"]), "help": "Illegal operation"}),  # type: ignore
             "cg": admin_commands.ChangeGenderCommand,
             "cl": admin_commands.ChangeLanguageCommand,
             "cn": admin_commands.ChangeNicknameCommand,
@@ -160,7 +162,7 @@ class CommandProcessor:
             for i in list(self.commands_dict):
                 help_strings.append(self.help(i, user))
             if user.is_admin:
-                for i in list(self.admin_commands_dict)[1::]:
+                for i in list(self.admin_commands_dict)[2::]:
                     help_strings.append(self.help(i, user))
             return "\n".join(help_strings)
 
@@ -172,3 +174,9 @@ class CommandProcessor:
             raise errors.ParseCommandError()
         arg = " ".join(text.split(" ")[1::])
         return command, arg
+
+    def split_arg(self, arg: str) -> List[str]:
+        args = re.split(re_arg_split, arg)
+        for i, arg in enumerate(args):
+            args[i] = args[i].strip().replace("\\|", "|")
+        return args
