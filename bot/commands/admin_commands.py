@@ -168,8 +168,7 @@ class ChangeStatusCommand(AdminCommand):
 
     def __call__(self, arg, user):
         self.ttclient.change_status_text(arg)
-        self.config['teamtalk']['default_status'] = self.ttclient.status
-
+        self.config['teamtalk']['status'] = self.ttclient.status
 
 class EventHandlingCommand(AdminCommand):
     @property
