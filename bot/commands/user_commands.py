@@ -82,7 +82,7 @@ class PlayUrlCommand(Command):
                     self.run_async(
                         self.ttclient.send_message,
                         self.translator.translate(
-                            "{nickname} requested playing from bot URL"
+                            "{nickname} requested playing from a URL"
                         ).format(nickname=user.nickname),
                         type=2,
                     )
