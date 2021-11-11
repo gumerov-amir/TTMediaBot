@@ -50,7 +50,7 @@ class VkService(_Service):
         http = requests.Session()
         http.headers.update(
             {
-                "VKAndroidApp/6.2-5091 (Android 9; SDK 28; samsungexynos7870; samsung j6lte; 720x1450)"
+                "user-agent": "VKAndroidApp/6.2-5091 (Android 9; SDK 28; samsungexynos7870; samsung j6lte; 720x1450)"
             }
         )
         self._session = vk_api.VkApi(
