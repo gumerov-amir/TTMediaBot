@@ -75,7 +75,7 @@ class LoggerModel(BaseModel):
     log: bool = True
     level: str = "INFO"
     format: str = "%(levelname)s [%(asctime)s]: %(message)s in %(threadName)s file: %(filename)s line %(lineno)d function %(funcName)s"
-    mode: Union[int, str] = "File"
+    mode: Union[int, str] = "FILE"
     file_name: str = "TTMediaBot.log"
     max_file_size: int = 0
     backup_count: int = 0
