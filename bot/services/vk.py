@@ -50,11 +50,11 @@ class VkService(_Service):
         http = requests.Session()
         http.headers.update(
             {
-                "User-agent": "VKAndroidApp/4.13.1-1206 (Android 7.1.1; SDK 25; armeabi-v7a; ; ru)"
+                "VKAndroidApp/6.2-5091 (Android 9; SDK 28; samsungexynos7870; samsung j6lte; 720x1450)"
             }
         )
         self._session = vk_api.VkApi(
-            token=self.config.token, session=http, api_version="5.68"
+            token=self.config.token, session=http, api_version="5.131"
         )
         self.api = self._session.get_api()
         try:
