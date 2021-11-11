@@ -3,7 +3,7 @@ A bot for music streaming to TeamTalk Servers.
 
 ## Installation and usage
 ### Requirements
-* To use the bot, you need to install Python on your computer;
+* To use the bot, you need to install Python 37 or later on your computer;
 * The bot requires the TeamTalk SDK component to be downloaded using the integrated tool from bothe command line. In order to download and extract the mentioned component, on Linux, you need to install p7zip or p7zip-full, or if you want to run the bot on Windows, 7Zip must be installed;
 * If you are going to use Linux as your main system for a bot, you will need pulseaudio and libmpv  to route and play audio, but if you re using Windows, PulseAudio is not available, so you will need a virtual audio cable driver, such as VBCable and of course, the mpv player library must also be installed. on Windows this library can be installed using an integrated tool. On Debian-based systems the required package is libmpv1.
 ### Installation

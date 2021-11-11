@@ -1,5 +1,4 @@
 import logging
-import time
 from typing import Any, Dict, List, Optional
 from urllib.parse import urlparse
 
@@ -32,7 +31,8 @@ class VkService(_Service):
 
     def download(self, track: Track, file_path: str) -> None:
         if ".m3u8" not in track.url:
-            raise errors.ServiceError()
+            super().download(track, file_path)
+            return
         _mpv = mpv.MPV(
             **{
                 "demuxer_lavf_o": "http_persistent=false",
