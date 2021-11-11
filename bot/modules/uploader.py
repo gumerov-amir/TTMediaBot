@@ -5,13 +5,12 @@ import os
 import tempfile
 from typing import TYPE_CHECKING
 from queue import Empty
-from urllib import request
 
 
 from bot.player.track import Track
 from bot.player.enums import TrackType
 from bot.TeamTalk.structs import ErrorType, User
-from bot import utils, app_vars
+from bot import app_vars
 
 if TYPE_CHECKING:
     from bot import Bot

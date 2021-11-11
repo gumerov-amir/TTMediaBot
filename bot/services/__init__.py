@@ -2,6 +2,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 import logging
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from urllib import request
 
 from bot import app_vars, errors
 
@@ -17,9 +18,8 @@ class Service(ABC):
     error_message: str
     name: str
 
-    @abstractmethod
     def download(self, track: Track, file_path: str) -> None:
-        ...
+        request.urlretrieve(track.url, file_path)
 
     @abstractmethod
     def get(

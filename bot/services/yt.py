@@ -1,6 +1,5 @@
 import logging
 from typing import Any, Dict, List, Optional
-from urllib import request
 
 from yt_dlp import YoutubeDL
 from youtubesearchpython import VideosSearch
@@ -21,9 +20,6 @@ class YtService(_Service):
         self.is_enabled = self.config.enabled
         self.error_message = ""
         self.hidden = False
-
-    def download(self, track: Track, file_path: str) -> None:
-        request.urlretrieve(track.url, file_path)
 
     def initialize(self):
         self._ydl_config = {
