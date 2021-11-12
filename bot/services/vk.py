@@ -40,8 +40,8 @@ class VkService(_Service):
                 "ao_null_untimed": True,
             }
         )
-        _mpv.stream_record = file_path
         _mpv.play(track.url)
+        _mpv.record_file = file_path
         while not _mpv.idle_active:
             pass
         _mpv.terminate()
