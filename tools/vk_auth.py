@@ -100,7 +100,6 @@ def validate_token(token: str, receipt: str) -> str:
         print("s1")
         res = r.json()
         received_token = res["response"]["token"]
-        print(received_token, "Nastya", token)
         if not received_token:
             raise TokenValidationError(r.text)
         else:
