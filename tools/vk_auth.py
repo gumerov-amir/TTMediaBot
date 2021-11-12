@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 
+import json
 import requests
 from getpass import getpass
 import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from bot.config import ConfigManager
 
 
 class AuthenticationError(Exception):
@@ -101,9 +97,11 @@ def validate_token(token: str, receipt: str) -> str:
     headers = {"User-Agent": user_agent}
     r = requests.get(url, headers=headers)
     if r.status_code == 200 and "token" in r.text:
+        print("s1")
         res = r.json()
         received_token = res["response"]["token"]
-        if token == received_token or not received_token:
+        print(received_token, "Nastya", token)
+        if not received_token:
             raise TokenValidationError(r.text)
         else:
             return received_token
@@ -123,15 +121,15 @@ def main():
         while not password:
             password = getpass("Password: ")
         token = request_auth(login, password, scope=scope)
-        print("before validation")
         validated_token = validate_token(token, receipt)
-        print("After vvalidation")
         y_or_n = input("Do you want save token to config file? y/n")
-        print("C")
         if y_or_n == "y":
-            cm = ConfigManager(input("Your config file"))
-            cm.config.services.vk.token = validated_token
-            cm.save()
+            config_file = input("Your config file ")
+            with open(config_file, "r") as f:
+                data = json.load(f)
+            data["services"]["vk"]["token"] = validated_token
+            with open(config_file, "w") as f:
+                json.dump(data, f, indent=4, ensure_ascii=False)
             print("Your token successfully saved to config file")
         else:
             print("Your VK token:")
