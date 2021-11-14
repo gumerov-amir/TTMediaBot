@@ -1,0 +1,271 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: TTMediaBot\n"
+"POT-Creation-Date: 2021-07-17 13:36+0400\n"
+"PO-Revision-Date: 2021-07-17 13:41+0400\n"
+"Last-Translator: \n"
+"Language-Team: TTMediaBot's developers\n"
+"Language: pt-BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 3.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: TeamTalk/__init__.py:230
+msgid "Send \"h\" for help"
+msgstr "Envie \"h\" para obter ajuda"
+#: commands/__init__.py:77 commands/admin_commands.py:121
+msgid "Unknown command. Send \"h\" for help."
+msgstr "Comando desconhecido. Envie \"h\" para obter ajuda."
+#: commands/__init__.py:80 modules/downloader.py:51
+msgid "Error: {}"
+msgstr "erro: {}"
+
+#: commands/__init__.py:87
+msgid "You are banned"
+msgstr "Você está banido"
+
+#: commands/__init__.py:89
+msgid "You are not in bot's channel"
+msgstr "Você não está no canal do bot"
+
+#: commands/__init__.py:91
+msgid "Bot is locked"
+msgstr "O bot está bloqueado"
+
+#: commands/__init__.py:93
+msgid "This command is blocked"
+msgstr "Este comando está bloqueado"
+
+#: commands/__init__.py:114
+msgid "Unknown command"
+msgstr "Comando desconhecido"
+
+#: commands/admin_commands.py:13
+msgid ""
+"+/-COMMAND Blocks or unblocks commands. +COMMAND adds command to the "
+"blocklist. -COMMAND removes from it. Without a command shows the blocklist"
+msgstr ""
+" /-COMMAND Bloqueia ou desbloqueia comandos.  COMMAND adiciona comando ao "
+"blocklist. -O COMANDO remove-o. Sem um comando mostra a lista de bloqueios"
+
+#: commands/admin_commands.py:20 commands/user_commands.py:309
+msgid "List is empty"
+msgstr "A lista está vazia"
+
+#: commands/admin_commands.py:24 commands/admin_commands.py:215
+#: commands/admin_commands.py:242 commands/user_commands.py:277
+msgid "Added"
+msgstr "Adicionado"
+
+#: commands/admin_commands.py:26
+msgid "This command is already added"
+msgstr "Este comando já foi adicionado"
+
+#: commands/admin_commands.py:30 commands/admin_commands.py:219
+#: commands/admin_commands.py:246 commands/user_commands.py:289
+msgid "Deleted"
+msgstr "Excluído"
+
+#: commands/admin_commands.py:32
+msgid "This command is not blocked"
+msgstr "Este comando não está bloqueado"
+
+#: commands/admin_commands.py:40
+msgid "GENDER Changes bot's gender. n neutral, m male, f female"
+msgstr "GENDER  muda o sexo do bot. n neutro, m macho, f fêmea"
+
+#: commands/admin_commands.py:53
+msgid "LANGUAGE Changes bot's language"
+msgstr "LANGUAGE muda a linguagem do bot"
+
+#: commands/admin_commands.py:61
+msgid "The language has been changed"
+msgstr "A linguagem foi alterada"
+
+#: commands/admin_commands.py:63
+msgid "Incorrect language"
+msgstr "linguagem incorreta"
+
+#: commands/admin_commands.py:65
+#, python-brace-format
+msgid ""
+"Current language: {current_language}. Available languages: "
+"{available_languages}"
+msgstr "Linguagem atual: {current_language}. Idiomas disponíveis: {available_languages}"
+#: commands/admin_commands.py:71
+msgid "NICKNAME Changes bot's nickname"
+msgstr "NICKNAME Muda o apelido do bot"
+#: commands/admin_commands.py:81
+msgid ""
+"r/f Clears bot's cache. r clears recents, f clears favorites, without an "
+"option clears the entire cache"
+msgstr "r/f Limpa o cache do bot. r limpa recentes, f limpa favoritos, sem um ""opção limpa todo o cache"
+
+#: commands/admin_commands.py:88
+msgid "Cache cleared"
+msgstr "Cache limpo"
+
+#: commands/admin_commands.py:92
+msgid "Recents cleared"
+msgstr "Última lista de faixas limpa"
+
+#: commands/admin_commands.py:96
+msgid "Favorites cleared"
+msgstr "Favoritos limpos"
+
+#: commands/admin_commands.py:102
+msgid "Task scheduler"
+msgstr "Agendador de tarefas"
+
+#: commands/admin_commands.py:137
+msgid "Enables or disables voice transmission"
+msgstr "Habilita ou desativa a transmissão de áudio"
+
+#: commands/admin_commands.py:143 commands/admin_commands.py:144
+msgid "Voice transmission enabled"
+msgstr "Transmissão de voz habilitada"
+
+#: commands/admin_commands.py:149
+msgid "Voice transmission disabled"
+msgstr "Transmissão de áudio desativada"
+
+#: commands/admin_commands.py:155
+msgid "Locks or unlocks the bot"
+msgstr "Bloqueia ou desbloqueia o bot"
+
+#: commands/admin_commands.py:160
+msgid "Locked"
+msgstr "Bloqueado"
+
+#: commands/admin_commands.py:160
+msgid "Unlocked"
+msgstr "Desbloqueado"
+
+#: commands/admin_commands.py:166
+msgid "STATUS Changes bot's status"
+msgstr "STATUS altera o status do bot"
+
+#: commands/admin_commands.py:177
+msgid "Enables or disables event handling"
+msgstr "Habilita ou desativa o manuseio de eventos"
+
+#: commands/admin_commands.py:182
+msgid "Event handling is enabled"
+msgstr "O manuseio de eventos está habilitado"
+
+#: commands/admin_commands.py:182
+msgid "Event handling is disabled"
+msgstr "Manuseio de eventos desativado"
+
+#: commands/admin_commands.py:188
+msgid "Enables or disables sending of channel messages"
+msgstr "Habilita ou desativa o envio de mensagens de canal"
+
+#: commands/admin_commands.py:193
+msgid "Channel messages enabled"
+msgstr "Mensagens de canal habilitadas"
+
+#: commands/admin_commands.py:193
+msgid "Channel messages disabled"
+msgstr "Mensagens de canal desativadas"
+
+#: commands/admin_commands.py:199
+msgid "Saves bot's configuration"
+msgstr "Salva a configuração do bot"
+
+#: commands/admin_commands.py:203
+msgid "Configuration saved"
+msgstr "Configuração salva"
+
+#: commands/admin_commands.py:208
+msgid ""
+"+/-USERNAME Manages a list of administrators. +USERNAME adds a user. -"
+"USERNAME removes it. Without an option shows the list"
+msgstr """ /-USERNAME Gerencia uma lista de administradores.  O USERNAME adiciona um usuário. -""O NOME DE USUÁRIO remove-o. Sem uma opção mostra a lista"
+
+#: commands/admin_commands.py:221
+msgid "This user is not in the admin list"
+msgstr "Este usuário não está na lista de administradores"
+
+#: commands/admin_commands.py:229 commands/admin_commands.py:256
+#: commands/user_commands.py:358
+msgid "The list is empty"
+msgstr "A lista está vazia"
+
+#: commands/admin_commands.py:235
+msgid ""
+"+/-USERNAME Manages a list of banned users. +USERNAME adds a user. -USERNAME "
+"removes it. Without an option shows the list"
+msgstr "+/-USERNAME Gerencia uma lista de usuários banidos. +O USERNAME adiciona um usuário. -NOME DE USUÁRIO ""remove-o. Sem uma opção mostra a lista"
+
+#: commands/admin_commands.py:248
+msgid "This user is not banned"
+msgstr "Este usuário não está bloqueado"
+
+#: commands/admin_commands.py:263
+msgid "Quits the bot"
+msgstr "Para o bot"
+
+#: commands/admin_commands.py:271
+msgid "Restarts the bot"
+msgstr "Reinicia o bot"
+
+#: commands/command.py:14
+msgid "help text not found"
+msgstr "Texto  de ajuda não encontrado"
+
+#: commands/user_commands.py:10
+msgid "Shows command help"
+msgstr "Mostra ajuda de comando"
+
+#: commands/user_commands.py:19
+msgid "Shows information about the bot"
+msgstr "Mostra informações sobre o bot"
+
+#: commands/user_commands.py:28
+msgid ""
+"QUERY Plays tracks found for the query. If no query is given, plays or "
+"pauses current track"
+msgstr "QUERY Reproduz faixas encontradas para a consulta. Se nenhuma consulta for dada, reproduz ou  pausa a faixa atual"
+
+#: commands/user_commands.py:32
+msgid "Searching..."
+msgstr "Procurando..."
+
+#: commands/user_commands.py:36
+#, python-brace-format
+msgid "{nickname} requested {request}"
+msgstr "{nickname} solicitou {request}"
+
+#: commands/user_commands.py:38 commands/user_commands.py:141
+#: commands/user_commands.py:156
+msgid "Playing {}"
+msgstr "tocando {}"
+
+#: commands/user_commands.py:40
+msgid "Nothing is found for your query"
+msgstr "Nada encontrado para sua pesquisa"
+
+#: commands/user_commands.py:51
+msgid "URL Plays a stream from a given URL"
+msgstr "URL Reproduz a partirde uma determinada URL"
+
+#: commands/user_commands.py:58
+#, python-brace-format
+msgid "{nickname} requested playing from a URL"
+msgstr "{nickname} começou a reproduzir a partir de uma URL"
+
+#: commands/user_commands.py:61
+msgid "Incorrect protocol"
+msgstr "Protocolo inválido"
+
+#: commands/user_commands.py:63
+msgid "Cannot get stream URL"
+msgstr "Não foi possível obter URL"
