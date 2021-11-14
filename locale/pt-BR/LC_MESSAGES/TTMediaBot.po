@@ -219,55 +219,53 @@ msgstr "Reinicia o bot"
 
 #: commands/command.py:14
 msgid "help text not found"
-msgstr "yardım metni bulunamadı"
+msgstr "Texto  de ajuda não encontrado"
 
 #: commands/user_commands.py:10
 msgid "Shows command help"
-msgstr "Komut yardımını gösterir"
+msgstr "Mostra ajuda de comando"
 
 #: commands/user_commands.py:19
 msgid "Shows information about the bot"
-msgstr "Bot hakkında bilgi gösterir"
+msgstr "Mostra informações sobre o bot"
 
 #: commands/user_commands.py:28
 msgid ""
 "QUERY Plays tracks found for the query. If no query is given, plays or "
 "pauses current track"
-msgstr ""
-"İSTEK İstek için bulunan parçaları çalar. İstek verilmezse, mevcut parçayı "
-"oynatır veya duraklatır"
+msgstr "QUERY Reproduz faixas encontradas para a consulta. Se nenhuma consulta for dada, reproduz ou  pausa a faixa atual"
 
 #: commands/user_commands.py:32
 msgid "Searching..."
-msgstr "Aranıyor..."
+msgstr "Procurando..."
 
 #: commands/user_commands.py:36
 #, python-brace-format
 msgid "{nickname} requested {request}"
-msgstr "{nickname} {request} istedi"
+msgstr "{nickname} solicitou {request}"
 
 #: commands/user_commands.py:38 commands/user_commands.py:141
 #: commands/user_commands.py:156
 msgid "Playing {}"
-msgstr "Oynatılıyor {}"
+msgstr "tocando {}"
 
 #: commands/user_commands.py:40
 msgid "Nothing is found for your query"
-msgstr "Sorgunuz için hiçbir şey bulunamadı"
+msgstr "Nada encontrado para sua pesquisa"
 
 #: commands/user_commands.py:51
 msgid "URL Plays a stream from a given URL"
-msgstr "URL Belirli bir URL'den akış oynatır"
+msgstr "URL Reproduz a partirde uma determinada URL"
 
 #: commands/user_commands.py:58
 #, python-brace-format
 msgid "{nickname} requested playing from a URL"
-msgstr "{nickname} URL'den oynatmak istedi"
+msgstr "{nickname} começou a reproduzir a partir de uma URL"
 
 #: commands/user_commands.py:61
 msgid "Incorrect protocol"
-msgstr "Yanlış protokol"
+msgstr "Protocolo inválido"
 
 #: commands/user_commands.py:63
 msgid "Cannot get stream URL"
-msgstr "Akış URL'si alınamı
+msgstr "Não foi possível obter URL"
