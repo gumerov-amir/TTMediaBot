@@ -84,6 +84,11 @@ class VkService(_Service):
                 o_id = ids[0]
                 p_id = ids[1]
                 audios = self.api.audio.get(owner_id=int(o_id), album_id=int(p_id))
+            elif "audio" in path:
+                audios = {
+                    "count": 1,
+                    "items": self.api.audio.getById(audios=[path[5::]]),
+                }
             else:
                 object_info = self.api.utils.resolveScreenName(screen_name=path)
                 if object_info["type"] == "group":

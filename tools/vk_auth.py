@@ -20,7 +20,7 @@ class TokenValidationError(Exception):
 
 client_id = "2274003"
 client_secret = "hHbZxrka2uZ6jB1inYsH"
-api_ver = "5.131"
+api_ver = "5.122"
 scope = "all"
 user_agent = "VKAndroidApp/6.2-5091 (Android 9; SDK 28; samsungexynos7870; samsung j6lte; 720x1450)"
 api_url = "https://api.vk.com/method/"
