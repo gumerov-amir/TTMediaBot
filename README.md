@@ -62,6 +62,8 @@ output should be null audio output, input should be pulse.
 * When listing input and output devices in the Windows variant of TTMediaBot, please note, that the input device will be doubled, i.e., if the output device is line 1 with number 3, the input device for line 1 will be listed twice, at number 5 and, for example, at number 7.
 * The correct number will be the last one as input, that is, if we selected the output as line 1 with the number 3, the input device would be line 1 with number 7 of the two options, number 5 and number 7.
 * The same method applies to all numbers and all Input / Outputs.
+# support us
+* yoomoney: https://yoomoney.ru/to/4100117354062028
 # contacts
 * telegram channel: https://t.me/TTMediaBot_chat
 * E-mail: TTMediaBot@gmail.com
