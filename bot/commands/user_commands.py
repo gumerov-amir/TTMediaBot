@@ -449,7 +449,8 @@ class GetLinkCommand(Command):
         if self.player.state != State.Stopped:
             url = self.player.track.url
             if url:
-                return self.module_manager.shortener.get(url)
+                shortener = self.module_manager.shortener
+                return shortener.get(url) if shortener else url
             else:
                 return self.translator.translate("URL is not available")
         else:
