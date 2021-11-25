@@ -115,6 +115,8 @@ class TeamTalk:
             _str(self.config.hostname),
             self.config.tcp_port,
             self.config.udp_port,
+            0,
+            0,
             self.config.encrypted,
         )
 
