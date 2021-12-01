@@ -126,7 +126,7 @@ def main():
             data["services"]["vk"]["token"] = validated_token
             with open(config_file, "w") as f:
                 json.dump(data, f, indent=4, ensure_ascii=False)
-            print("Your token successfully saved to the configuration file")
+            print("Your token has been successfully saved to the configuration file")
         else:
             print("Your VK token:")
             print(validated_token)
