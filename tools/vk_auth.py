@@ -82,22 +82,19 @@ def handle_2fa(sid: str) -> str:
         raise PhoneValidationError(r.text)
 
 
-def validate_token(token: str, receipt: str) -> str:
-    if not (token and receipt):
+def validate_token(token: str) -> str:
+    if not (token):
         raise ValueError("Required argument is missing")
     url = (
         api_url
         + "auth.refreshToken?access_token="
         + token
-        + "&receipt="
-        + receipt
         + "&v="
         + api_ver
     )
     headers = {"User-Agent": user_agent}
     r = requests.get(url, headers=headers)
     if r.status_code == 200 and "token" in r.text:
-        print("s1")
         res = r.json()
         received_token = res["response"]["token"]
         if not received_token:
@@ -120,20 +117,20 @@ def main():
         while not password:
             password = getpass("Password: ")
         token = request_auth(login, password, scope=scope)
-        validated_token = validate_token(token, receipt)
-        y_or_n = input("Do you want save token to config file? y/n")
+        validated_token = validate_token(token)
+        y_or_n = input("Do you want to save the token to the configuration file? y/n")
         if y_or_n == "y":
-            config_file = input("Your config file ")
+            config_file = input("Configuration file path: ")
             with open(config_file, "r") as f:
                 data = json.load(f)
             data["services"]["vk"]["token"] = validated_token
             with open(config_file, "w") as f:
                 json.dump(data, f, indent=4, ensure_ascii=False)
-            print("Your token successfully saved to config file")
+            print("Your token successfully saved to the configuration file")
         else:
             print("Your VK token:")
             print(validated_token)
-    except ValueError as e:
+    except Exception as e:
         print(e)
     input("Press enter to continue")
 
