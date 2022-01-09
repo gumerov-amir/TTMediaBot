@@ -71,6 +71,7 @@ class TeamTalkThread(Thread):
                     self.ttclient.reconnect
                     and self.ttclient.reconnect_attempt
                     < self.config.reconnection_attempts
+                    or self.config.reconnection_attempts < 0
                 ):
                     self.ttclient.tt.disconnect()
                     time.sleep(self.config.reconnection_timeout)
@@ -89,6 +90,7 @@ class TeamTalkThread(Thread):
                         self.ttclient.reconnect
                         and self.ttclient.reconnect_attempt
                         < self.config.reconnection_attempts
+                        or self.config.reconnection_attempts < 0
                     ):
                         time.sleep(self.config.reconnection_timeout)
                         self.ttclient.login()
@@ -96,16 +98,17 @@ class TeamTalkThread(Thread):
                         logging.error("Login error")
                         sys.exit(1)
                 else:
-                    logging.warning("Join channel failed")
+                    logging.warning("Failed to join channel")
                     if (
                         self.ttclient.reconnect
                         and self.ttclient.reconnect_attempt
                         < self.config.reconnection_attempts
+                    or self.config.reconnection_attempts < 0
                     ):
                         time.sleep(self.config.reconnection_timeout)
                         self.ttclient.join()
                     else:
-                        logging.error("Join channel error")
+                        logging.error("Error joining channel")
                         sys.exit(1)
             elif event.event_type == EventType.MYSELF_LOGGEDIN:
                 self.ttclient.user_account = event.user_account
