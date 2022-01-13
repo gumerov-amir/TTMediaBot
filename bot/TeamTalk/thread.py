@@ -66,14 +66,14 @@ class TeamTalkThread(Thread):
                     logging.warning("Server lost")
                 else:
                     logging.warning("Kicked")
-                self.ttclient.tt.disconnect()
+                self.ttclient.disconnect()
                 if (
                     self.ttclient.reconnect
                     and self.ttclient.reconnect_attempt
                     < self.config.reconnection_attempts
                     or self.config.reconnection_attempts < 0
                 ):
-                    self.ttclient.tt.disconnect()
+                    self.ttclient.disconnect()
                     time.sleep(self.config.reconnection_timeout)
                     self.ttclient.connect()
                     self.ttclient.reconnect_attempt += 1

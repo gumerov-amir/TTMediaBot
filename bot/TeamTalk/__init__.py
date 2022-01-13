@@ -99,18 +99,19 @@ class TeamTalk:
     def initialize(self) -> None:
         logging.debug("Initializing TeamTalk")
         self.thread.start()
-        self.state = State.CONNECTING
         self.connect()
         logging.debug("TeamTalk initialized")
 
     def close(self) -> None:
         logging.debug("Closing teamtalk")
         self.thread.close()
-        self.tt.disconnect()
+        self.disconnect()
+        self.state = State.NOT_CONNECTED
         self.tt.closeTeamTalk()
         logging.debug("Teamtalk closed")
 
     def connect(self) -> None:
+        self.state = State.CONNECTING
         self.tt.connect(
             _str(self.config.hostname),
             self.config.tcp_port,
@@ -119,6 +120,10 @@ class TeamTalk:
             0,
             self.config.encrypted,
         )
+
+    def disconnect(self) -> None:
+        self.tt.disconnect()
+        self.state = State.NOT_CONNECTED
 
     def login(self) -> None:
         self.tt.doLogin(
