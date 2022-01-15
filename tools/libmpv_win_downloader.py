@@ -39,14 +39,14 @@ def extract():
 def move():
     try:
         os.rename(
-            os.path.join(cd, "libmpv", "mpv-1.dll"),
-            os.path.join(cd, "mpv-1.dll"),
+            os.path.join(cd, "libmpv", "mpv-2.dll"),
+            os.path.join(cd, "mpv.dll"),
         )
     except FileExistsError:
-        os.remove(os.path.join(cd, "mpv-1.dll"))
+        os.remove(os.path.join(cd, "mpv.dll"))
         os.rename(
-            os.path.join(cd, "libmpv", "mpv-1.dll"),
-            os.path.join(cd, "mpv-1.dll"),
+            os.path.join(cd, "libmpv", "mpv-2.dll"),
+            os.path.join(cd, "mpv.dll"),
         )
 
 
