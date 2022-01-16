@@ -17,8 +17,8 @@ def save_default_file() -> None:
 class ConfigManager:
     def __init__(self, file_name: Optional[str]) -> None:
         if file_name:
-            if os.path.exists(file_name):
-                self.file_name = file_name
+            if os.path.isfile(file_name):
+                self.file_name = os.path.abspath(file_name)
                 with open(self.file_name, "r", encoding="UTF-8") as f:
                     try:
                         config_dict = json.load(f)

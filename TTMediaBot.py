@@ -1,15 +1,16 @@
 from typing import Optional
 
+from os import path
+
 import click
 
-from bot import Bot
+from bot import Bot, app_vars
 from bot.config import save_default_file
 from bot.sound_devices import SoundDeviceManager
 
-
 @click.command()
 @click.option(
-    "-c", "--config", help="Path to the configuration file", default="config.json"
+    "-c", "--config", help="Path to the configuration file", default=path.join(app_vars.directory, "config.json")
 )
 @click.option("--cache", help="Path to the cache file", default=None)
 @click.option("--log", help="Path to the log file", default=None)
