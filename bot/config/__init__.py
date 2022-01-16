@@ -1,4 +1,5 @@
 import json
+import os
 import sys
 from typing import Optional
 
@@ -16,7 +17,7 @@ def save_default_file() -> None:
 class ConfigManager:
     def __init__(self, file_name: Optional[str]) -> None:
         if file_name:
-            if utils.check_file_path(file_name):
+            if os.path.exists(file_name):
                 self.file_name = file_name
                 with open(self.file_name, "r", encoding="UTF-8") as f:
                     try:
