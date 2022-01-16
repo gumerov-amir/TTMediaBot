@@ -1,3 +1,4 @@
+import os
 import logging
 import queue
 import sys
@@ -49,7 +50,10 @@ class Bot:
             if cache_file_name:
                 self.cache = cache.Cache(cache_file_name)
             else:
-                self.cache = cache.Cache(self.config.general.cache_file_name)
+                cache_file_name = self.config.general.cache_file_name
+                if not os.path.isdir(os.path.join(*os.path.split(cache_file_name)[0:-1])):
+                    cache_file_name = os.path.join(os.path.dirname(self.config_manager.file_name), cache_file_name)
+                self.cache = cache.Cache(cache_file_name)
         except PermissionError:
             sys.exit(
                 "The cache file cannot be accessed due to a permission error or is already used by another instance of the bot"
