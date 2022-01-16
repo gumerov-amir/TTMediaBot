@@ -59,6 +59,8 @@ class ServiceManager:
     def initialize(self) -> None:
         logging.debug("Initializing services")
         for service in self.services.values():
+            if not service.is_enabled:
+                continue
             try:
                 service.initialize()
             except errors.ServiceError as e:
