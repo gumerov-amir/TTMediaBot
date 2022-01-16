@@ -888,7 +888,7 @@ class MPV(object):
                 if eid == MpvEventID.SHUTDOWN:
                     try:
                         _mpv_detach_destroy(self._event_handle)
-                    except AttributeError:
+                    except NameError:
                         _mpv_destroy(self._event_handle)
                     return
 
