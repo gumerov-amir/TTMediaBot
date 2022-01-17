@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-import json
 import requests
+
 from getpass import getpass
+import json
 import os
 
 

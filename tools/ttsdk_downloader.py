@@ -1,13 +1,18 @@
 #!/usr/bin/env python3
 
+import bs4
+import patoolib
+import requests
+
 import os
 import platform
 import shutil
 import sys
-from urllib import request
 
-import bs4
-import patoolib
+path = os.path.dirname(os.path.realpath(__file__))
+path = os.path.dirname(path)
+sys.path.append(path)
+import downloader
 
 
 url = "http://bearware.dk/teamtalksdk"
@@ -38,9 +43,8 @@ def get_url_suffix_from_platform() -> str:
 
 
 def download() -> None:
-    r = request.urlopen(url)
-    html = r.read().decode("UTF-8")
-    page = bs4.BeautifulSoup(html, features="html.parser")
+    r = requests.get(url)
+    page = bs4.BeautifulSoup(r.text, features="html.parser")
     versions = page.find_all("li")
     last_version = versions[-1].a.get("href")[0:-1]
     download_url = (
@@ -51,7 +55,7 @@ def download() -> None:
         + "tt5sdk_{v}_{p}.7z".format(v=last_version, p=get_url_suffix_from_platform())
     )
     print("Downloading from " + download_url)
-    request.urlretrieve(download_url, os.path.join(cd, "ttsdk.7z"))
+    downloader.download_file(download_url, os.path.join(cd, "ttsdk.7z"))
 
 
 def extract() -> None:
