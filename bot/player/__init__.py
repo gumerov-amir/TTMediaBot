@@ -49,7 +49,8 @@ class Player:
     def run(self) -> None:
         logging.debug("Registering player callbacks")
         self.register_event_callback("end-file", self.on_end_file)
-        self.register_event_callback("metadata-update", self.on_metadata_update)
+        self._player.observe_property("metadata", self.on_metadata_update)
+        self._player.observe_property("media-title", self.on_metadata_update)
         logging.debug("Player callbacks registered")
 
     def close(self) -> None:
@@ -265,12 +266,11 @@ class Player:
                 except errors.NoNextTrackError:
                     self.stop()
 
-    def on_metadata_update(self, event: mpv.MpvEvent) -> None:
+    def on_metadata_update(self, name: str, value: Any) -> None:
         if self.state == State.Playing and (
             self.track.type == TrackType.Direct or self.track.type == TrackType.Local
         ):
             metadata = self._player.metadata
-            print(self._player.media_title)
             try:
                 new_name = self._parse_metadata(metadata)
                 if not new_name:
