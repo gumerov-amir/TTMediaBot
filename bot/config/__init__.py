@@ -5,7 +5,7 @@ from typing import Optional
 
 import portalocker
 
-from bot import utils
+from bot import app_vars, utils
 from bot.config.models import ConfigModel
 
 
@@ -19,6 +19,7 @@ class ConfigManager:
         if file_name:
             if os.path.isfile(file_name):
                 self.file_name = os.path.abspath(file_name)
+                self.config_dir = os.path.dirname(self.file_name)
                 with open(self.file_name, "r", encoding="UTF-8") as f:
                     try:
                         config_dict = json.load(f)
@@ -36,6 +37,7 @@ class ConfigManager:
             else:
                 sys.exit("Incorrect configuration file path")
         else:
+            self.config_dir = app_vars.directory
             config_dict = {}
         self.config: ConfigModel = ConfigModel(**config_dict)
 

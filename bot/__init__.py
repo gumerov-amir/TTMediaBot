@@ -52,7 +52,7 @@ class Bot:
             else:
                 cache_file_name = self.config.general.cache_file_name
                 if not os.path.isdir(os.path.join(*os.path.split(cache_file_name)[0:-1])):
-                    cache_file_name = os.path.join(os.path.dirname(self.config_manager.file_name), cache_file_name)
+                    cache_file_name = os.path.join(self.config_manager.config_dir, cache_file_name)
                 self.cache = cache.Cache(cache_file_name)
         except PermissionError:
             sys.exit(
