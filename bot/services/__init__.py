@@ -2,7 +2,8 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 import logging
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
-from urllib import request
+
+import downloader
 
 from bot import app_vars, errors
 
@@ -19,7 +20,7 @@ class Service(ABC):
     name: str
 
     def download(self, track: Track, file_path: str) -> None:
-        request.urlretrieve(track.url, file_path)
+        downloader.download_file(track.url, file_path)
 
     @abstractmethod
     def get(

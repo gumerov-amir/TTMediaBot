@@ -8,6 +8,7 @@ from bot import Bot, app_vars
 from bot.config import save_default_file
 from bot.sound_devices import SoundDeviceManager
 
+
 @click.command()
 @click.option(
     "-c", "--config", help="Path to the configuration file", default=path.join(app_vars.directory, "config.json")
