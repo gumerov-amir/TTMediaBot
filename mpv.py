@@ -1432,7 +1432,7 @@ class MPV(object):
         self._event_callbacks.append(callback)
 
     def unregister_event_callback(self, callback):
-        """Unregiser an event callback."""
+        """Unregister an event callback."""
         self._event_callbacks.remove(callback)
 
     def event_callback(self, *event_types):
