@@ -47,10 +47,10 @@ class Player:
         logging.debug("Player initialized")
 
     def run(self) -> None:
-        logging.debug("Registering callbacks")
+        logging.debug("Registering player callbacks")
         self.register_event_callback("end-file", self.on_end_file)
         self.register_event_callback("metadata-update", self.on_metadata_update)
-        logging.debug("Callbacks registered")
+        logging.debug("Player callbacks registered")
 
     def close(self) -> None:
         logging.debug("Closing player")
@@ -270,6 +270,7 @@ class Player:
             self.track.type == TrackType.Direct or self.track.type == TrackType.Local
         ):
             metadata = self._player.metadata
+            print(self._player.media_title)
             try:
                 new_name = self._parse_metadata(metadata)
                 if not new_name:
