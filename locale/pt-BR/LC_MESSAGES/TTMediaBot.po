@@ -282,12 +282,12 @@ msgstr "O caminho não pode ser encontrado"
 
 #: commands/user_commands.py:73
 msgid "Stops playback"
-msgstr "Останавливает воспроизведение"
+msgstr "Para a reprodução"
 
 #: commands/user_commands.py:79
 #, python-brace-format
 msgid "{nickname} stopped playback"
-msgstr "{nickname} остановил воспроизведение"
+msgstr "{nickname} parou a reprodução"
 
 #: commands/user_commands.py:81 commands/user_commands.py:145
 #: commands/user_commands.py:160 commands/user_commands.py:227
@@ -295,7 +295,7 @@ msgstr "{nickname} остановил воспроизведение"
 #: commands/user_commands.py:297 commands/user_commands.py:335
 #: commands/user_commands.py:377
 msgid "Nothing is playing"
-msgstr "Ничего не воспроизводится"
+msgstr "Nada está tocando"
 
 #: commands/user_commands.py:87
 #, python-brace-format
@@ -303,66 +303,66 @@ msgid ""
 "VOLUME Sets the volume to a value between 0 and {max_volume}. If no volume "
 "is specified, the current volume level is displayed"
 msgstr ""
-"ГРОМКОСТЬ Устанавливает для громкости значение от 0 до {max_volume}. Если "
-"громкость не указана, отображается текущий уровень громкости"
+"VOLUME Define o volume para um valor entre 0 e {max_volume}. Se não houver volume "
+"é especificado, o nível de volume atual é exibido"
 
 #: commands/user_commands.py:106
 #, python-brace-format
 msgid ""
 "STEP Seeks current track backward. the default step is {seek_step} seconds"
 msgstr ""
-"ШАГ Прокручивает текущий трек назад. шаг по умолчанию {seek_step} секунды"
+"STEP busca a faixa atual para trás. o passo padrão é {seek_step} segundos"
 
 #: commands/user_commands.py:121
 #, python-brace-format
 msgid ""
 "STEP Seeks current track forward. the default step is {seek_step} seconds"
 msgstr ""
-"ШАГ Прокручивает текущий трек вперед. шаг по умолчанию {seek_step} секунды"
+"STEP busca a faixa atual para frente. o passo padrão é {seek_step} segundos"
 
 #: commands/user_commands.py:136
 msgid "Plays next track"
-msgstr "Воспроизводит следующий трек"
+msgstr "Reproduz a próxima faixa"
 
 #: commands/user_commands.py:143
 msgid "No next track"
-msgstr "Нет следующего трека"
+msgstr "Nenhuma próxima faixa"
 
 #: commands/user_commands.py:151
 msgid "Plays previous track"
-msgstr "Воспроизводит предыдущий трек"
+msgstr "Reproduz a faixa anterior"
 
 #: commands/user_commands.py:158
 msgid "No previous track"
-msgstr "Нет предыдущего трека"
+msgstr "Nenhuma faixa anterior"
 
 #: commands/user_commands.py:166
 msgid "Single Track"
-msgstr "Один трек"
+msgstr "Faixa única"
 
 #: commands/user_commands.py:166
 msgid "Repeat Track"
-msgstr "Повтор трека"
+msgstr "Repetir Faixa"
 
 #: commands/user_commands.py:166
 msgid "Track list"
-msgstr "Список треков"
+msgstr "Lista de faixas"
 
 #: commands/user_commands.py:166
 msgid "Repeat track list"
-msgstr "Повтор списка треков"
+msgstr "Repetir lista de faixas"
 
 #: commands/user_commands.py:166
 msgid "Random"
-msgstr "Случайный трек"
+msgstr "Aleatório"
 
 #: commands/user_commands.py:170
 msgid ""
 "MODE Sets the playback mode. If no mode is specified, the current mode and a "
 "list of modes are displayed"
 msgstr ""
-"РЕЖИМ Устанавливает режим воспроизведения. Если режим не указан, "
-"отображается текущий режим и список режимов"
+"MODE Define o modo de reprodução. Se nenhum modo for especificado, o modo atual e um "
+"lista de modos são exibidos"
 
 #: commands/user_commands.py:173
 #, python-brace-format
@@ -370,21 +370,21 @@ msgid ""
 "Current_ mode: {current_mode}\n"
 "{modes}"
 msgstr ""
-"Текущий_ режим: {current_mode}\n"
+"Modo_atual: {current_mode}\n"
 "{modes}"
 
 #: commands/user_commands.py:182
 #, python-brace-format
 msgid "Current mode: {mode}"
-msgstr "Текущий режим: {mode}"
+msgstr "Modo atual: {mode}"
 
 #: commands/user_commands.py:192
 msgid ""
 "SERVICE Selects the service to play from. If no service is specified, the "
 "current service and a list of available services are displayed"
 msgstr ""
-"СЕРВИС Выбирает сервис для воспроизведения. Если сервис не указан, "
-"показывает текущий сервис и список доступных"
+"SERVICE Seleciona o serviço do qual iniciar. Se nenhum serviço for especificado, o "
+"serviço atual e uma lista de serviços disponíveis são exibidos"
 
 #: commands/user_commands.py:195
 #, python-brace-format
@@ -392,49 +392,49 @@ msgid ""
 "Current service: {current_service}\n"
 "Available: {available_services}"
 msgstr ""
-"Текущий сервис: {current_service}\n"
-"Доступные: {available_services}"
+"Serviço atual: {current_service}\n"
+"Disponível: {available_services}"
 
 #: commands/user_commands.py:200
 msgid "Current service: {}"
-msgstr "Текущий сервис: {}"
+msgstr "Serviço atual: {}"
 
 #: commands/user_commands.py:202
 msgid ""
 "Unknown service.\n"
 "{}"
 msgstr ""
-"Неизвестный сервис.\n"
+"Serviço desconhecido.\n"
 "{}"
 
 #: commands/user_commands.py:210
 msgid "NUMBER Selects track by number from the list of current results"
-msgstr "НОМЕР Выбирает трек по номеру из списка текущих результатов"
+msgstr "NUMBER Seleciona a música por número da lista de resultados atuais"
 
 #: commands/user_commands.py:221
 msgid "Incorrect number"
-msgstr "Неверный номер"
+msgstr "Número incorreto"
 
 #: commands/user_commands.py:223 commands/user_commands.py:232
 msgid "Playing {} {}"
-msgstr "Воспроизводится {} {}"
+msgstr "Tocando {} {}"
 
 #: commands/user_commands.py:225 commands/user_commands.py:291
 #: commands/user_commands.py:317 commands/user_commands.py:350
 msgid "Out of list"
-msgstr "Вне списка"
+msgstr "Fora da lista"
 
 #: commands/user_commands.py:240
 msgid ""
 "SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows "
 "current speed"
 msgstr ""
-"СКОРОСТЬ Устанавливает скорость воспроизведения от 0.25 до 4. Если скорость "
-"не указана, показывает текущую скорость"
+"SPEED Define a velocidade de reprodução de 0,25 a 4. Se nenhuma velocidade for fornecida, mostra "
+"velocidade atual"
 
 #: commands/user_commands.py:244
 msgid "Current rate: {}"
-msgstr "Текущая скорость: {}"
+msgstr "Taxa atual: {}"
 
 #: commands/user_commands.py:255
 msgid ""
@@ -442,73 +442,73 @@ msgid ""
 "removes a track requested from favorites. If a number is specified after "
 "+/-, adds/removes a track with that number"
 msgstr ""
-"+/-НОМЕР Управляет списком избранных треков. + добавляет текущий трек в "
-"избранное. - удаляет запрошенный трек из избранного. Если номер указан после "
-"+/-, добавляет/удаляет трек с этим номером"
+"+/-NUMBER Gerencia as faixas favoritas. + adiciona a faixa atual aos favoritos. - "
+"remove uma faixa solicitada dos favoritos. Se um número for especificado após "
+"+/-, adiciona/remove uma faixa com esse número"
 
 #: commands/user_commands.py:259
 msgid "This command is not available for guest users"
-msgstr "Эта команда недоступна для гостевых пользователей"
+msgstr "Este comando não está disponível para usuários convidados"
 
 #: commands/user_commands.py:295
 msgid "This track is not in favorites"
-msgstr "Этого трека нет в избранном"
+msgstr "Esta faixa não está nos favoritos"
 
 #: commands/user_commands.py:319
 msgid "The list is is empty"
-msgstr "Список пуст"
+msgstr "A lista está vazia"
 
 #: commands/user_commands.py:325
 msgid "Gets a direct link to the current track"
-msgstr "Получает прямую ссылку на текущий трек"
+msgstr "Obtém um link direto para a faixa atual"
 
 #: commands/user_commands.py:333
 msgid "URL is not available"
-msgstr "Поток не доступен"
+msgstr "URL não está disponível"
 
 #: commands/user_commands.py:341
 msgid ""
 "NUMBER Plays a track with  the given number from a list of recent tracks. "
 "Without a number shows recent tracks"
 msgstr ""
-"НОМЕР Воспроизводит трек с заданным номером из списка последних треков. Без "
-"номера показывает последние треки"
+"NUMBER Reproduz uma faixa com o número fornecido de uma lista de faixas recentes."
+"Sem um número mostra faixas recentes"
 
 #: commands/user_commands.py:364
 msgid "Downloads the current track and uploads it to the channel"
-msgstr "Скачивает проигрываемый трек и выгружает его на канал"
+msgstr "Baixa a faixa atual e envia para o canal"
 
 #: commands/user_commands.py:368
 msgid "Cannot upload file to channel"
-msgstr "Невозможно загрузить файл на канал"
+msgstr "Não é possível enviar arquivo para o canal"
 
 #: commands/user_commands.py:373
 msgid "Downloading..."
-msgstr "Скачивание..."
+msgstr "Baixando..."
 
 #: commands/user_commands.py:375
 msgid "Live streams cannot be downloaded"
-msgstr "Прямые трансляции не могут быть загружены"
+msgstr "Transmissões ao vivo não podem ser baixadas"
 
 #: connectors/tt_player_connector.py:26
 #, python-brace-format
 msgid "Playing: {track_name}"
-msgstr "Воспроизводится: {track_name}"
+msgstr "Reproduzindo: {track_name}"
 
 #: connectors/tt_player_connector.py:28
 #, python-brace-format
 msgid "Playing: {stream_url}"
-msgstr "Воспроизводится: {stream_url}"
+msgstr "Reproduzindo: {stream_url}"
 
 #: connectors/tt_player_connector.py:35
 #, python-brace-format
 msgid "Paused: {track_name}"
-msgstr "Приостановлено: {track_name}"
+msgstr "{track_name} Pausado"
 
 #: connectors/tt_player_connector.py:37
 #, python-brace-format
 msgid "Paused: {stream_url}"
-msgstr "Приостановлено: {stream_url}"
+msgstr "{stream_url} Pausado"
 
 #: vars.py:6
 msgid ""
@@ -516,101 +516,99 @@ msgid ""
 "Authors: Gumerov_amir, A11CF0, Beqa Gozalishvili.\n"
 "Home page: https://github.com/gumerov-amir/TTMediaBot"
 msgstr ""
-"TTMediaBot - бот для потоковой передачи мультимедиа для TeamTalk.\n"
-"Авторы: Gumerov_amir, A11CF0, Beqa Gozalishvili.\n"
-"Домашняя страница: https://github.com/gumerov-amir/TTMediaBot"
+"TTMediaBot - um bot de streaming de mídia para TeamTalk.\n"
+"Autores: Gumerov_amir, A11CF0, Beqa Gozalishvili.\n"
+"Web site: https://github.com/gumerov-amir/TTMediaBot"
 
 #~ msgid "The cache file is already used by another instance of the bot."
-#~ msgstr "Кеш-файл уже используется другим экземпляром бота"
+#~ msgstr "O arquivo de cache já é usado por outra instância do bot."
 
 #~ msgid "Blocks or unblocks commands."
-#~ msgstr "Блокирует или разблокирует команды"
+#~ msgstr "Bloqueia ou desbloqueia comandos."
 
 #~ msgid "Unknown user command"
-#~ msgstr "Неизвестная команда пользователя"
+#~ msgstr "Comando de usuário desconhecido"
 
 #~ msgid "Changes the gender of the bot"
-#~ msgstr "Меняет пол бота"
+#~ msgstr "Muda o sexo do bot"
 
 #~ msgid ""
 #~ "Clears the entire cache. If an argument is specified, only favorites or "
 #~ "the history of recently played tracks are deleted"
 #~ msgstr ""
-#~ "Очищает весь кеш. Если указан аргумент, удаляются только избранное или "
-#~ "история недавно воспроизведенных треков"
+#~ "Limpa todo o cache. Se um argumento for especificado, apenas favoritos ou "
+#~ "o histórico das faixas tocadas recentemente é deletado"
 
 #~ msgid "History cleared"
-#~ msgstr "История очищена"
+#~ msgstr "Histórico limpo"
 
 #~ msgid ""
 #~ "Enables or disables channel messages sent by the bot when requesting to "
 #~ "play music, stop current music, and other events"
 #~ msgstr ""
-#~ "Включает или отключает сообщения канала, отправляемые ботом при запросе "
-#~ "воспроизведения музыки, остановки текущей музыки и других событий"
+#~ "Ativa ou desativa as mensagens do canal enviadas pelo bot ao solicitar "
+#~ "tocar música, parar a música atual e outros eventos"
 
 #~ msgid ""
 #~ "Shows a list of administrators. If username is specified with a specific "
 #~ "command argument, adds or removes it from the list"
 #~ msgstr ""
-#~ "Показывает список администраторов. Если имя пользователя указано с "
-#~ "конкретным аргументом команды, добавляет или удаляет его из списка"
+#~ "Mostra uma lista de administradores. Se o nome de usuário for especificado com um "
+#~ "argumento de comando, adiciona ou remove da lista"
 
 #~ msgid ""
 #~ "Shows a list of banned users. If username is specified with a specific "
 #~ "command argument, adds or removes it from the list"
 #~ msgstr ""
-#~ "Показывает список заблокированных пользователей. Если имя пользователя "
-#~ "указано с конкретным аргументом команды, добавляет или удаляет его из "
-#~ "списка"
+#~ "Mostra uma lista de usuários banidos. Se o nome de usuário for especificado com um "
+#~ "argumento de comando, adiciona ou remove da lista"
 
 #~ msgid "Nothing is currently playing"
-#~ msgstr "В данный момент ничего не Воспроизводится"
+#~ msgstr "Nada está tocando no momento"
 
 #~ msgid "Sorry, guest users can not use this command"
-#~ msgstr ""
-#~ "К сожалению, гостевые пользователи не могут использовать эту команду"
+#~ msgstr "Desculpe, usuários convidados não podem usar este comando"
 
 #~ msgid "Shows history of playing (64 last tracks)"
-#~ msgstr "Показывает историю воспроизведения (64 последних трека)"
+#~ msgstr "Mostra o histórico de reprodução (64 últimas faixas)"
 
 #~ msgid "Must be integer"
-#~ msgstr "Должно быть целым числом"
+#~ msgstr "Deve ser inteiro"
 
 #~ msgid ""
 #~ "TTMediaBot - bot for music streaming in TeamTalk.\n"
 #~ "Authors: Gumerov_amir, A11CF0."
 #~ msgstr ""
-#~ "TTMediaBot - бот для потоковой передачи музыки в TeamTalk.\n"
-#~ "Авторы: Гумеров_амир, A11CF0."
+#~ "TTMediaBot - bot para streaming de música no TeamTalk.\n"
+#~ "Autores: Gumerov_amir, A11CF0."
 
 #~ msgid "Volume is unlocked"
-#~ msgstr "Громкость разблокирована"
+#~ msgstr "O volume está desbloqueado"
 
 #, python-brace-format
 #~ msgid "VOLUME Sets volume to a value from 0 to {max_volume}"
-#~ msgstr "ГРОМКОСТЬ Устанавливает громкость в процентах от 0 до {max_volume}"
+#~ msgstr "VOLUME Define o volume para um valor de 0 a {max_volume}"
 
 #~ msgid "Incorrect position"
-#~ msgstr "Не верная позиция"
+#~ msgstr "Posição incorreta"
 
 #~ msgid "shows list of admin users, if user_name is given adds it to list"
-#~ msgstr ""
-#~ "показывает список администраторов, если имя пользователя указано, "
-#~ "добавляет его в список"
+#~ msgstr "mostra a lista de usuários admin, se user_name for fornecido adiciona-o à lista"
 
 #~ msgid "must be integer"
-#~ msgstr "Должно быть целым числом"
+#~ msgstr "deve ser inteiro"
 
 #~ msgid "Unable to perform a search. Please try again"
-#~ msgstr "Поиск не удался. Попробуйте снова"
+#~ msgstr "Não foi possível realizar a pesquisa. Por favor, tente novamente"
 
 #~ msgid ""
 #~ "The stream cannot be played\n"
 #~ "Additional error info:\n"
 #~ msgstr ""
-#~ "Поток не может быть проигран\n"
-#~ "Дополнительная информация об ошибке\n"
+#~ msgstr ""
+#~ "A transmissão não pode ser reproduzida\n"
+#~ "Informações de erro adicionais:\n"
+#~ msgstr ""
 
 #~ msgid "not found"
-#~ msgstr "Не найдено"
+#~ msgstr "não encontrado"
