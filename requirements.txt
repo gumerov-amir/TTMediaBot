@@ -1,5 +1,4 @@
 beautifulsoup4
-click
 patool
 portalocker
 pydantic
