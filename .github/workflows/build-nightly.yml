@@ -22,4 +22,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: gumerovamir/ttmediabot:nightly,gumerovamir/ttmediabot:${{ GITHUB_SHA }}
+          tags: gumerovamir/ttmediabot:nightly
