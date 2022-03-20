@@ -1,42 +1,81 @@
+from __future__ import annotations
+from abc import ABC, abstractmethod
 import logging
-from sys import exec_prefix
+from typing import Any, Dict, List, Optional, TYPE_CHECKING
 
-from bot import errors
-from bot.services import vk, yt
+import downloader
+
+from bot import app_vars, errors
+
+if TYPE_CHECKING:
+    from bot import Bot
+    from bot.player.track import Track
+
+
+class Service(ABC):
+    is_enabled: bool
+    hidden: bool
+    hostnames: List[str]
+    error_message: str
+    name: str
+
+    def download(self, track: Track, file_path: str) -> None:
+        downloader.download_file(track.url, file_path)
+
+    @abstractmethod
+    def get(
+        self,
+        url: str,
+        extra_info: Optional[Dict[str, Any]] = None,
+        process: bool = False,
+    ) -> List[Track]:
+        ...
+
+    @abstractmethod
+    def initialize(self) -> None:
+        ...
+
+    @abstractmethod
+    def search(self, query: str) -> List[Track]:
+        ...
+
+
+from bot.services.vk import VkService
+from bot.services.yt import YtService
 
 
 class ServiceManager:
-    def __init__(self, config):
-        global _service_manager
-        _service_manager = self
-        self.available_services = {}
-        self.fallback_service = 'yt'
-        for service_name in config['available_services']:
-            service_class = globals()[service_name].Service
-            self.available_services[service_name] = service_class(config['available_services'][service_name])
-        self.service = self.available_services[config['default_service']]
+    def __init__(self, bot: Bot) -> None:
+        self.config = bot.config.services
+        self.services: Dict[str, Service] = {
+            "vk": VkService(self.config.vk),
+            "yt": YtService(self.config.yt),
+        }
+        self.service: Service = self.services[self.config.default_service]
+        self.fallback_service = app_vars.fallback_service
         import builtins
-        builtins.__dict__['get_service_by_name'] = self.get_service_by_name
 
-    def initialize(self):
-        logging.debug('Initializing services')
-        unavailable_services = []
-        for service in self.available_services.values():
+        builtins.__dict__["get_service_by_name"] = self.get_service_by_name
+
+    def initialize(self) -> None:
+        logging.debug("Initializing services")
+        for service in self.services.values():
+            if not service.is_enabled:
+                continue
             try:
                 service.initialize()
-            except errors.ServiceError:
-                unavailable_services.append(service)
+            except errors.ServiceError as e:
+                service.is_enabled = False
+                service.error_message = str(e)
                 if self.service == service:
-                    self.service = self.available_services[self.fallback_service]
-        for service in unavailable_services:
-            del self.available_services[service.name]
-        logging.debug('Services initialized')
+                    self.service = self.services[self.fallback_service]
+        logging.debug("Services initialized")
 
-    def get_service_by_name(self, name):
-        if not isinstance(name, str):
-            raise errors.InvalidArgumentError()
+    def get_service_by_name(self, name: str) -> Service:
         try:
-            service = self.available_services[name]
+            service = self.services[name]
+            if not service.is_enabled:
+                raise errors.ServiceIsDisabledError(service.error_message)
             return service
         except KeyError as e:
             raise errors.ServiceNotFoundError(str(e))

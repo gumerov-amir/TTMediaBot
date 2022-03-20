@@ -1,0 +1,614 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: TTMediaBot\n"
+"POT-Creation-Date: 2021-07-17 13:36+0400\n"
+"PO-Revision-Date: 2021-07-17 13:41+0400\n"
+"Last-Translator: \n"
+"Language-Team: TTMediaBot's developers\n"
+"Language: pt-BR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: pygettext.py 1.5\n"
+"X-Generator: Poedit 3.0\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: TeamTalk/__init__.py:230
+msgid "Send \"h\" for help"
+msgstr "Envie \"h\" para obter ajuda"
+
+#: commands/__init__.py:77 commands/admin_commands.py:121
+msgid "Unknown command. Send \"h\" for help."
+msgstr "Comando desconhecido. Envie \"h\" para obter ajuda."
+
+#: commands/__init__.py:80 modules/downloader.py:51
+msgid "Error: {}"
+msgstr "erro: {}"
+
+#: commands/__init__.py:87
+msgid "You are banned"
+msgstr "Você está banido"
+
+#: commands/__init__.py:89
+msgid "You are not in bot's channel"
+msgstr "Você não está no canal do bot"
+
+#: commands/__init__.py:91
+msgid "Bot is locked"
+msgstr "O bot está bloqueado"
+
+#: commands/__init__.py:93
+msgid "This command is blocked"
+msgstr "Este comando está bloqueado"
+
+#: commands/__init__.py:114
+msgid "Unknown command"
+msgstr "Comando desconhecido"
+
+#: commands/admin_commands.py:13
+msgid ""
+"+/-COMMAND Blocks or unblocks commands. +COMMAND adds command to the "
+"blocklist. -COMMAND removes from it. Without a command shows the blocklist"
+msgstr " /-COMMAND Bloqueia ou desbloqueia comandos.  COMMAND adiciona comando ao blocklist. -O COMANDO remove-o. Sem um comando mostra a lista de bloqueios"
+
+#: commands/admin_commands.py:20 commands/user_commands.py:309
+msgid "List is empty"
+msgstr "A lista está vazia"
+
+#: commands/admin_commands.py:24 commands/admin_commands.py:215
+#: commands/admin_commands.py:242 commands/user_commands.py:277
+msgid "Added"
+msgstr "Adicionado"
+
+#: commands/admin_commands.py:26
+msgid "This command is already added"
+msgstr "Este comando já foi adicionado"
+
+#: commands/admin_commands.py:30 commands/admin_commands.py:219
+#: commands/admin_commands.py:246 commands/user_commands.py:289
+msgid "Deleted"
+msgstr "Excluído"
+
+#: commands/admin_commands.py:32
+msgid "This command is not blocked"
+msgstr "Este comando não está bloqueado"
+
+#: commands/admin_commands.py:40
+msgid "GENDER Changes bot's gender. n neutral, m male, f female"
+msgstr "GENDER  muda o sexo do bot. n neutro, m macho, f fêmea"
+
+#: commands/admin_commands.py:53
+msgid "LANGUAGE Changes bot's language"
+msgstr "LANGUAGE muda a linguagem do bot"
+
+#: commands/admin_commands.py:61
+msgid "The language has been changed"
+msgstr "A linguagem foi alterada"
+
+#: commands/admin_commands.py:63
+msgid "Incorrect language"
+msgstr "linguagem incorreta"
+
+#: commands/admin_commands.py:65
+#, python-brace-format
+msgid ""
+"Current language: {current_language}. Available languages: "
+"{available_languages}"
+msgstr "Linguagem atual: {current_language}. Idiomas disponíveis: {available_languages}"
+
+#: commands/admin_commands.py:71
+msgid "NICKNAME Changes bot's nickname"
+msgstr "NICKNAME Muda o apelido do bot"
+
+#: commands/admin_commands.py:81
+msgid ""
+"r/f Clears bot's cache. r clears recents, f clears favorites, without an "
+"option clears the entire cache"
+msgstr "r/f Limpa o cache do bot. r limpa recentes, f limpa favoritos, sem um opção limpa todo o cache"
+
+#: commands/admin_commands.py:88
+msgid "Cache cleared"
+msgstr "Cache limpo"
+
+#: commands/admin_commands.py:92
+msgid "Recents cleared"
+msgstr "Última lista de faixas limpa"
+
+#: commands/admin_commands.py:96
+msgid "Favorites cleared"
+msgstr "Favoritos limpos"
+
+#: commands/admin_commands.py:102
+msgid "Task scheduler"
+msgstr "Agendador de tarefas"
+
+#: commands/admin_commands.py:137
+msgid "Enables or disables voice transmission"
+msgstr "Habilita ou desativa a transmissão de áudio"
+
+#: commands/admin_commands.py:143 commands/admin_commands.py:144
+msgid "Voice transmission enabled"
+msgstr "Transmissão de voz habilitada"
+
+#: commands/admin_commands.py:149
+msgid "Voice transmission disabled"
+msgstr "Transmissão de áudio desativada"
+
+#: commands/admin_commands.py:155
+msgid "Locks or unlocks the bot"
+msgstr "Bloqueia ou desbloqueia o bot"
+
+#: commands/admin_commands.py:160
+msgid "Locked"
+msgstr "Bloqueado"
+
+#: commands/admin_commands.py:160
+msgid "Unlocked"
+msgstr "Desbloqueado"
+
+#: commands/admin_commands.py:166
+msgid "STATUS Changes bot's status"
+msgstr "STATUS altera o status do bot"
+
+#: commands/admin_commands.py:177
+msgid "Enables or disables event handling"
+msgstr "Habilita ou desativa o manuseio de eventos"
+
+#: commands/admin_commands.py:182
+msgid "Event handling is enabled"
+msgstr "O manuseio de eventos está habilitado"
+
+#: commands/admin_commands.py:182
+msgid "Event handling is disabled"
+msgstr "Manuseio de eventos desativado"
+
+#: commands/admin_commands.py:188
+msgid "Enables or disables sending of channel messages"
+msgstr "Habilita ou desativa o envio de mensagens de canal"
+
+#: commands/admin_commands.py:193
+msgid "Channel messages enabled"
+msgstr "Mensagens de canal habilitadas"
+
+#: commands/admin_commands.py:193
+msgid "Channel messages disabled"
+msgstr "Mensagens de canal desativadas"
+
+#: commands/admin_commands.py:199
+msgid "Saves bot's configuration"
+msgstr "Salva a configuração do bot"
+
+#: commands/admin_commands.py:203
+msgid "Configuration saved"
+msgstr "Configuração salva"
+
+#: commands/admin_commands.py:208
+msgid ""
+"+/-USERNAME Manages a list of administrators. +USERNAME adds a user. -"
+"USERNAME removes it. Without an option shows the list"
+msgstr "/-USERNAME Gerencia uma lista de administradores.  O USERNAME adiciona um usuário. - O NOME DE USUÁRIO remove-o. Sem uma opção mostra a lista"
+
+#: commands/admin_commands.py:221
+msgid "This user is not in the admin list"
+msgstr "Este usuário não está na lista de administradores"
+
+#: commands/admin_commands.py:229 commands/admin_commands.py:256
+#: commands/user_commands.py:358
+msgid "The list is empty"
+msgstr "A lista está vazia"
+
+#: commands/admin_commands.py:235
+msgid ""
+"+/-USERNAME Manages a list of banned users. +USERNAME adds a user. -USERNAME "
+"removes it. Without an option shows the list"
+msgstr "+/-USERNAME Gerencia uma lista de usuários banidos. +O USERNAME adiciona um usuário. -NOME DE USUÁRIO remove-o. Sem uma opção mostra a lista"
+
+#: commands/admin_commands.py:248
+msgid "This user is not banned"
+msgstr "Este usuário não está bloqueado"
+
+#: commands/admin_commands.py:263
+msgid "Quits the bot"
+msgstr "Para o bot"
+
+#: commands/admin_commands.py:271
+msgid "Restarts the bot"
+msgstr "Reinicia o bot"
+
+#: commands/command.py:14
+msgid "help text not found"
+msgstr "Texto  de ajuda não encontrado"
+
+#: commands/user_commands.py:10
+msgid "Shows command help"
+msgstr "Mostra ajuda de comando"
+
+#: commands/user_commands.py:19
+msgid "Shows information about the bot"
+msgstr "Mostra informações sobre o bot"
+
+#: commands/user_commands.py:28
+msgid ""
+"QUERY Plays tracks found for the query. If no query is given, plays or "
+"pauses current track"
+msgstr "QUERY Reproduz faixas encontradas para a consulta. Se nenhuma consulta for dada, reproduz ou  pausa a faixa atual"
+
+#: commands/user_commands.py:32
+msgid "Searching..."
+msgstr "Procurando..."
+
+#: commands/user_commands.py:36
+#, python-brace-format
+msgid "{nickname} requested {request}"
+msgstr "{nickname} solicitou {request}"
+
+#: commands/user_commands.py:38 commands/user_commands.py:141
+#: commands/user_commands.py:156
+msgid "Playing {}"
+msgstr "tocando {}"
+
+#: commands/user_commands.py:40
+msgid "Nothing is found for your query"
+msgstr "Nada encontrado para sua pesquisa"
+
+#: commands/user_commands.py:51
+msgid "URL Plays a stream from a given URL"
+msgstr "URL Reproduz a partirde uma determinada URL"
+
+#: commands/user_commands.py:58
+#, python-brace-format
+msgid "{nickname} requested playing from a URL"
+msgstr "{nickname} começou a reproduzir a partir de uma URL"
+
+#: commands/user_commands.py:61
+msgid "Incorrect protocol"
+msgstr "Protocolo inválido"
+
+#: commands/user_commands.py:63
+msgid "Cannot get stream URL"
+msgstr "Não foi possível obter URL"
+
+#: commands/user_commands.py:63
+msgid "Cannot get stream URL"
+msgstr "Não é possível obter o URL do stream"
+
+#: commands/user_commands.py:65
+msgid "The path cannot be found"
+msgstr "O caminho não pode ser encontrado"
+
+#: commands/user_commands.py:73
+msgid "Stops playback"
+msgstr "Para a reprodução"
+
+#: commands/user_commands.py:79
+#, python-brace-format
+msgid "{nickname} stopped playback"
+msgstr "{nickname} parou a reprodução"
+
+#: commands/user_commands.py:81 commands/user_commands.py:145
+#: commands/user_commands.py:160 commands/user_commands.py:227
+#: commands/user_commands.py:234 commands/user_commands.py:279
+#: commands/user_commands.py:297 commands/user_commands.py:335
+#: commands/user_commands.py:377
+msgid "Nothing is playing"
+msgstr "Nada está tocando"
+
+#: commands/user_commands.py:87
+#, python-brace-format
+msgid ""
+"VOLUME Sets the volume to a value between 0 and {max_volume}. If no volume "
+"is specified, the current volume level is displayed"
+msgstr ""
+"VOLUME Define o volume para um valor entre 0 e {max_volume}. Se não houver volume "
+"é especificado, o nível de volume atual é exibido"
+
+#: commands/user_commands.py:106
+#, python-brace-format
+msgid ""
+"STEP Seeks current track backward. the default step is {seek_step} seconds"
+msgstr ""
+"STEP busca a faixa atual para trás. o passo padrão é {seek_step} segundos"
+
+#: commands/user_commands.py:121
+#, python-brace-format
+msgid ""
+"STEP Seeks current track forward. the default step is {seek_step} seconds"
+msgstr ""
+"STEP busca a faixa atual para frente. o passo padrão é {seek_step} segundos"
+
+#: commands/user_commands.py:136
+msgid "Plays next track"
+msgstr "Reproduz a próxima faixa"
+
+#: commands/user_commands.py:143
+msgid "No next track"
+msgstr "Nenhuma próxima faixa"
+
+#: commands/user_commands.py:151
+msgid "Plays previous track"
+msgstr "Reproduz a faixa anterior"
+
+#: commands/user_commands.py:158
+msgid "No previous track"
+msgstr "Nenhuma faixa anterior"
+
+#: commands/user_commands.py:166
+msgid "Single Track"
+msgstr "Faixa única"
+
+#: commands/user_commands.py:166
+msgid "Repeat Track"
+msgstr "Repetir Faixa"
+
+#: commands/user_commands.py:166
+msgid "Track list"
+msgstr "Lista de faixas"
+
+#: commands/user_commands.py:166
+msgid "Repeat track list"
+msgstr "Repetir lista de faixas"
+
+#: commands/user_commands.py:166
+msgid "Random"
+msgstr "Aleatório"
+
+#: commands/user_commands.py:170
+msgid ""
+"MODE Sets the playback mode. If no mode is specified, the current mode and a "
+"list of modes are displayed"
+msgstr ""
+"MODE Define o modo de reprodução. Se nenhum modo for especificado, o modo atual e um "
+"lista de modos são exibidos"
+
+#: commands/user_commands.py:173
+#, python-brace-format
+msgid ""
+"Current_ mode: {current_mode}\n"
+"{modes}"
+msgstr ""
+"Modo_atual: {current_mode}\n"
+"{modes}"
+
+#: commands/user_commands.py:182
+#, python-brace-format
+msgid "Current mode: {mode}"
+msgstr "Modo atual: {mode}"
+
+#: commands/user_commands.py:192
+msgid ""
+"SERVICE Selects the service to play from. If no service is specified, the "
+"current service and a list of available services are displayed"
+msgstr ""
+"SERVICE Seleciona o serviço do qual iniciar. Se nenhum serviço for especificado, o "
+"serviço atual e uma lista de serviços disponíveis são exibidos"
+
+#: commands/user_commands.py:195
+#, python-brace-format
+msgid ""
+"Current service: {current_service}\n"
+"Available: {available_services}"
+msgstr ""
+"Serviço atual: {current_service}\n"
+"Disponível: {available_services}"
+
+#: commands/user_commands.py:200
+msgid "Current service: {}"
+msgstr "Serviço atual: {}"
+
+#: commands/user_commands.py:202
+msgid ""
+"Unknown service.\n"
+"{}"
+msgstr ""
+"Serviço desconhecido.\n"
+"{}"
+
+#: commands/user_commands.py:210
+msgid "NUMBER Selects track by number from the list of current results"
+msgstr "NUMBER Seleciona a música por número da lista de resultados atuais"
+
+#: commands/user_commands.py:221
+msgid "Incorrect number"
+msgstr "Número incorreto"
+
+#: commands/user_commands.py:223 commands/user_commands.py:232
+msgid "Playing {} {}"
+msgstr "Tocando {} {}"
+
+#: commands/user_commands.py:225 commands/user_commands.py:291
+#: commands/user_commands.py:317 commands/user_commands.py:350
+msgid "Out of list"
+msgstr "Fora da lista"
+
+#: commands/user_commands.py:240
+msgid ""
+"SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows "
+"current speed"
+msgstr ""
+"SPEED Define a velocidade de reprodução de 0,25 a 4. Se nenhuma velocidade for fornecida, mostra "
+"velocidade atual"
+
+#: commands/user_commands.py:244
+msgid "Current rate: {}"
+msgstr "Taxa atual: {}"
+
+#: commands/user_commands.py:255
+msgid ""
+"+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - "
+"removes a track requested from favorites. If a number is specified after "
+"+/-, adds/removes a track with that number"
+msgstr ""
+"+/-NUMBER Gerencia as faixas favoritas. + adiciona a faixa atual aos favoritos. - "
+"remove uma faixa solicitada dos favoritos. Se um número for especificado após "
+"+/-, adiciona/remove uma faixa com esse número"
+
+#: commands/user_commands.py:259
+msgid "This command is not available for guest users"
+msgstr "Este comando não está disponível para usuários convidados"
+
+#: commands/user_commands.py:295
+msgid "This track is not in favorites"
+msgstr "Esta faixa não está nos favoritos"
+
+#: commands/user_commands.py:319
+msgid "The list is is empty"
+msgstr "A lista está vazia"
+
+#: commands/user_commands.py:325
+msgid "Gets a direct link to the current track"
+msgstr "Obtém um link direto para a faixa atual"
+
+#: commands/user_commands.py:333
+msgid "URL is not available"
+msgstr "URL não está disponível"
+
+#: commands/user_commands.py:341
+msgid ""
+"NUMBER Plays a track with  the given number from a list of recent tracks. "
+"Without a number shows recent tracks"
+msgstr ""
+"NUMBER Reproduz uma faixa com o número fornecido de uma lista de faixas recentes."
+"Sem um número mostra faixas recentes"
+
+#: commands/user_commands.py:364
+msgid "Downloads the current track and uploads it to the channel"
+msgstr "Baixa a faixa atual e envia para o canal"
+
+#: commands/user_commands.py:368
+msgid "Cannot upload file to channel"
+msgstr "Não é possível enviar arquivo para o canal"
+
+#: commands/user_commands.py:373
+msgid "Downloading..."
+msgstr "Baixando..."
+
+#: commands/user_commands.py:375
+msgid "Live streams cannot be downloaded"
+msgstr "Transmissões ao vivo não podem ser baixadas"
+
+#: connectors/tt_player_connector.py:26
+#, python-brace-format
+msgid "Playing: {track_name}"
+msgstr "Reproduzindo: {track_name}"
+
+#: connectors/tt_player_connector.py:28
+#, python-brace-format
+msgid "Playing: {stream_url}"
+msgstr "Reproduzindo: {stream_url}"
+
+#: connectors/tt_player_connector.py:35
+#, python-brace-format
+msgid "Paused: {track_name}"
+msgstr "{track_name} Pausado"
+
+#: connectors/tt_player_connector.py:37
+#, python-brace-format
+msgid "Paused: {stream_url}"
+msgstr "{stream_url} Pausado"
+
+#: vars.py:6
+msgid ""
+"TTMediaBot - a media streaming bot for TeamTalk.\n"
+"Authors: Gumerov_amir, A11CF0, Beqa Gozalishvili.\n"
+"Home page: https://github.com/gumerov-amir/TTMediaBot"
+msgstr ""
+"TTMediaBot - um bot de streaming de mídia para TeamTalk.\n"
+"Autores: Gumerov_amir, A11CF0, Beqa Gozalishvili.\n"
+"Web site: https://github.com/gumerov-amir/TTMediaBot"
+
+#~ msgid "The cache file is already used by another instance of the bot."
+#~ msgstr "O arquivo de cache já é usado por outra instância do bot."
+
+#~ msgid "Blocks or unblocks commands."
+#~ msgstr "Bloqueia ou desbloqueia comandos."
+
+#~ msgid "Unknown user command"
+#~ msgstr "Comando de usuário desconhecido"
+
+#~ msgid "Changes the gender of the bot"
+#~ msgstr "Muda o sexo do bot"
+
+#~ msgid ""
+#~ "Clears the entire cache. If an argument is specified, only favorites or "
+#~ "the history of recently played tracks are deleted"
+#~ msgstr ""
+#~ "Limpa todo o cache. Se um argumento for especificado, apenas favoritos ou "
+#~ "o histórico das faixas tocadas recentemente é deletado"
+
+#~ msgid "History cleared"
+#~ msgstr "Histórico limpo"
+
+#~ msgid ""
+#~ "Enables or disables channel messages sent by the bot when requesting to "
+#~ "play music, stop current music, and other events"
+#~ msgstr ""
+#~ "Ativa ou desativa as mensagens do canal enviadas pelo bot ao solicitar "
+#~ "tocar música, parar a música atual e outros eventos"
+
+#~ msgid ""
+#~ "Shows a list of administrators. If username is specified with a specific "
+#~ "command argument, adds or removes it from the list"
+#~ msgstr ""
+#~ "Mostra uma lista de administradores. Se o nome de usuário for especificado com um "
+#~ "argumento de comando, adiciona ou remove da lista"
+
+#~ msgid ""
+#~ "Shows a list of banned users. If username is specified with a specific "
+#~ "command argument, adds or removes it from the list"
+#~ msgstr ""
+#~ "Mostra uma lista de usuários banidos. Se o nome de usuário for especificado com um "
+#~ "argumento de comando, adiciona ou remove da lista"
+
+#~ msgid "Nothing is currently playing"
+#~ msgstr "Nada está tocando no momento"
+
+#~ msgid "Sorry, guest users can not use this command"
+#~ msgstr "Desculpe, usuários convidados não podem usar este comando"
+
+#~ msgid "Shows history of playing (64 last tracks)"
+#~ msgstr "Mostra o histórico de reprodução (64 últimas faixas)"
+
+#~ msgid "Must be integer"
+#~ msgstr "Deve ser inteiro"
+
+#~ msgid ""
+#~ "TTMediaBot - bot for music streaming in TeamTalk.\n"
+#~ "Authors: Gumerov_amir, A11CF0."
+#~ msgstr ""
+#~ "TTMediaBot - bot para streaming de música no TeamTalk.\n"
+#~ "Autores: Gumerov_amir, A11CF0."
+
+#~ msgid "Volume is unlocked"
+#~ msgstr "O volume está desbloqueado"
+
+#, python-brace-format
+#~ msgid "VOLUME Sets volume to a value from 0 to {max_volume}"
+#~ msgstr "VOLUME Define o volume para um valor de 0 a {max_volume}"
+
+#~ msgid "Incorrect position"
+#~ msgstr "Posição incorreta"
+
+#~ msgid "shows list of admin users, if user_name is given adds it to list"
+#~ msgstr "mostra a lista de usuários admin, se user_name for fornecido adiciona-o à lista"
+
+#~ msgid "must be integer"
+#~ msgstr "deve ser inteiro"
+
+#~ msgid "Unable to perform a search. Please try again"
+#~ msgstr "Não foi possível realizar a pesquisa. Por favor, tente novamente"
+
+#~ msgid ""
+#~ "The stream cannot be played\n"
+#~ "Additional error info:\n"
+#~ msgstr ""
+#~ msgstr ""
+#~ "A transmissão não pode ser reproduzida\n"
+#~ "Informações de erro adicionais:\n"
+#~ msgstr ""
+
+#~ msgid "not found"
+#~ msgstr "não encontrado"
