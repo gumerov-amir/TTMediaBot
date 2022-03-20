@@ -1,131 +1,182 @@
+from __future__ import annotations
 import logging
 import re
-import traceback
+from threading import Thread
+from typing import Any, List, Tuple, TYPE_CHECKING
 
 from bot import errors
-from bot.commands.admin_commands import *
-from bot.commands.user_commands import *
-from bot.TeamTalk.structs import UserType
-from bot import vars
+from bot.commands import admin_commands
+from bot.commands.command import Command
+from bot.commands.task_processor import TaskProcessor
+from bot.commands import user_commands
+from bot.TeamTalk.structs import Message, User, UserType
+from bot import app_vars
 
 
-re_command = re.compile('[a-z]+')
+re_command = re.compile("[a-z]+")
+re_arg_split = re.compile(r"(?<!\\)\|")
+
+if TYPE_CHECKING:
+    from bot import Bot
+
 
 class CommandProcessor:
-    def __init__(self, bot, config, player, ttclient, module_manager, service_manager, cache):
+    def __init__(self, bot: Bot):
+        self.task_processor = TaskProcessor(self)
         self.bot = bot
-        self.cache = cache
-        self.config = config
-        self.module_manager = module_manager
-        self.player = player
-        self.service_manager = service_manager
-        self.ttclient = ttclient
-        self.send_channel_messages = self.config["general"]["send_channel_messages"]
+        self.config = bot.config
+        self.config_manager = bot.config_manager
+        self.cache = bot.cache
+        self.module_manager = bot.module_manager
+        self.player = bot.player
+        self.service_manager = bot.service_manager
+        self.ttclient = bot.ttclient
+        self.translator = bot.translator
         self.locked = False
-        self.blocked_commands = self.config["general"]["blocked_commands"]
+        self.current_command_id = 0
         self.commands_dict = {
-            'h': HelpCommand(self),
-            'a': AboutCommand(self),
-            'p': PlayPauseCommand(self),
-            'u': PlayUrlCommand(self),
-            'sv': ServiceCommand(self),
-            's': StopCommand(self),
-            'b': PreviousTrackCommand(self),
-            'n': NextTrackCommand(self),
-            'c': SelectTrackCommand(self),
-            'sb': SeekBackCommand(self),
-            'sf': SeekForwardCommand(self),
-            'v': VolumeCommand(self),
-            "sp": SpeedCommand(self),
-            'f': FavoritesCommand(self),
-            'm': ModeCommand(self),
-            'gl': GetLinkCommand(self),
-            "dl": DownloadCommand(self),
-            "r": RecentsCommand(self),
+            "h": user_commands.HelpCommand,
+            "a": user_commands.AboutCommand,
+            "p": user_commands.PlayPauseCommand,
+            "u": user_commands.PlayUrlCommand,
+            "sv": user_commands.ServiceCommand,
+            "s": user_commands.StopCommand,
+            "b": user_commands.PreviousTrackCommand,
+            "n": user_commands.NextTrackCommand,
+            "c": user_commands.SelectTrackCommand,
+            "sb": user_commands.SeekBackCommand,
+            "sf": user_commands.SeekForwardCommand,
+            "v": user_commands.VolumeCommand,
+            "sp": user_commands.SpeedCommand,
+            "f": user_commands.FavoritesCommand,
+            "m": user_commands.ModeCommand,
+            "gl": user_commands.GetLinkCommand,
+            "dl": user_commands.DownloadCommand,
+            "r": user_commands.RecentsCommand,
         }
         self.admin_commands_dict = {
-            'girl': lambda arg, user: "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 20))) for i in "𐱁🼄🚉𛋹𤮱𝴤𘤀"]),
-            'cg': ChangeGenderCommand(self),
-            'cl': ChangeLanguageCommand(self),
-            'cn': ChangeNicknameCommand(self),
-            'cs': ChangeStatusCommand(self),
-            "cc": ClearCacheCommand(self),
-            "cm": ChannelMessagesCommand(self),
-            "bc": BlockCommandCommand(self),
-            #"ts": TaskSchedulerCommand(self),
-            'l': LockCommand(self),
-            'ua': AdminUsersCommand(self),
-            'ub': BannedUsersCommand(self),
-            "eh": EventHandlingCommand(self),
-            'sc': SaveConfigCommand(self),
-            'va': VoiceTransmissionCommand(self),
-            'rs': RestartCommand(self),
-            'q': QuitCommand(self),
+            "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 10))) for i in "╱✑⻄⦐"]): type("IllegalCommand", (Command,), {"__call__": lambda self, arg, user: "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 20))) for i in "\ueb49𘤀𡢁𢄄𛋹🚉𧚐\U0001dd24𘤀"]), "help": "Illegal operation"}),  # type: ignore
+            "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 14) / 3)) for i in "\U00015281\U0001c2b9\U00015281𐫉"]): type("IllegalCommand", (Command,), {"__call__": lambda self, arg, user: "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 14) / 3)) for i in "៤ᑩ⹀㈹"]), "help": "Illegal operation"}),  # type: ignore
+            "cg": admin_commands.ChangeGenderCommand,
+            "cl": admin_commands.ChangeLanguageCommand,
+            "cn": admin_commands.ChangeNicknameCommand,
+            "cs": admin_commands.ChangeStatusCommand,
+            "cc": admin_commands.ClearCacheCommand,
+            "cm": admin_commands.ChannelMessagesCommand,
+            "jc": admin_commands.JoinChannelCommand,
+            "bc": admin_commands.BlockCommandCommand,
+            # "ts": TaskSchedulerCommand,
+            "l": admin_commands.LockCommand,
+            "ua": admin_commands.AdminUsersCommand,
+            "ub": admin_commands.BannedUsersCommand,
+            "eh": admin_commands.EventHandlingCommand,
+            "sc": admin_commands.SaveConfigCommand,
+            "va": admin_commands.VoiceTransmissionCommand,
+            "rs": admin_commands.RestartCommand,
+            "q": admin_commands.QuitCommand,
         }
 
-    def __call__(self, message):
+    def run(self):
+        self.task_processor.start()
+
+    def __call__(self, message: Message) -> None:
+        command_thread = Thread(target=self._run, args=(message,))
+        command_thread.start()
+
+    def _run(self, message: Message) -> None:
         try:
             command_name, arg = self.parse_command(message.text)
             if self.check_access(message.user, command_name):
-                command = self.get_command(command_name, message.user)
-                return command(arg, message.user)
+                command_class = self.get_command(command_name, message.user)
+                command = command_class(self)
+                self.current_command_id = id(command)
+                result = command(arg, message.user)
+                if result:
+                    self.ttclient.send_message(
+                        result, message.user
+                    )  # here was command.ttclient later
         except errors.InvalidArgumentError:
-            return self.help(command_name, message.user)
+            self.ttclient.send_message(
+                self.help(command_name, message.user), message.user
+            )
         except errors.AccessDeniedError as e:
-            return str(e)
+            self.ttclient.send_message(str(e), message.user)
         except (errors.ParseCommandError, errors.UnknownCommandError):
-            return _("Unknown command. Send \"h\" for help.")
+            self.ttclient.send_message(
+                self.translator.translate('Unknown command. Send "h" for help.'),
+                message.user,
+            )
         except Exception as e:
             logging.error("", exc_info=True)
-            return _("Error: {}").format(e)
+            self.ttclient.send_message(
+                self.translator.translate("Error: {}").format(str(e)), message.user
+            )
 
-    def check_access(self, user, command):
-        if (not user.is_admin and user.type != UserType.Admin) or vars.app_name in user.client_name:
-            if vars.app_name in user.client_name:
-                raise AccessDeniedError("")
+    def check_access(self, user: User, command: str) -> bool:
+        if (
+            not user.is_admin and user.type != UserType.Admin
+        ) or app_vars.app_name in user.client_name:
+            if app_vars.app_name in user.client_name:
+                raise errors.AccessDeniedError("")
             elif user.is_banned:
-                raise errors.AccessDeniedError(_("You are banned"))
+                raise errors.AccessDeniedError(
+                    self.translator.translate("You are banned")
+                )
             elif user.channel.id != self.ttclient.channel.id:
-                raise errors.AccessDeniedError(_("You are not in bot\'s channel"))
+                raise errors.AccessDeniedError(
+                    self.translator.translate("You are not in bot's channel")
+                )
             elif self.locked:
-                raise errors.AccessDeniedError(_("Bot is locked"))
-            elif command in self.blocked_commands:
-                raise errors.AccessDeniedError(_("This command is blocked"))
+                raise errors.AccessDeniedError(
+                    self.translator.translate("Bot is locked")
+                )
+            elif command in self.config.general.blocked_commands:
+                raise errors.AccessDeniedError(
+                    self.translator.translate("This command is blocked")
+                )
             else:
                 return True
         else:
             return True
 
-    def get_command(self, command, user):
+    def get_command(self, command: str, user: User) -> Any:
         if command in self.commands_dict:
             return self.commands_dict[command]
-        elif (user.is_admin or user.type == UserType.Admin) and command in self.admin_commands_dict:
+        elif (
+            user.is_admin or user.type == UserType.Admin
+        ) and command in self.admin_commands_dict:
             return self.admin_commands_dict[command]
         else:
             raise errors.UnknownCommandError()
 
-    def help(self, arg, user):
+    def help(self, arg: str, user: User) -> str:
         if arg:
             if arg in self.commands_dict:
-                return "{} {}".format(arg, self.commands_dict[arg].help)
+                return "{} {}".format(arg, self.commands_dict[arg](self).help)
             elif user.is_admin and arg in self.admin_commands_dict:
-                return "{} {}".format(arg, self.admin_commands_dict[arg].help)
+                return "{} {}".format(arg, self.admin_commands_dict[arg](self).help)
             else:
-                return _("Unknown command")
+                return self.translator.translate("Unknown command")
         else:
-            help_strings = []
+            help_strings: List[str] = []
             for i in list(self.commands_dict):
                 help_strings.append(self.help(i, user))
             if user.is_admin:
-                for i in list(self.admin_commands_dict)[1::]:
+                for i in list(self.admin_commands_dict)[2::]:
                     help_strings.append(self.help(i, user))
-            return '\n'.join(help_strings)
+            return "\n".join(help_strings)
 
-    def parse_command(self, text):
+    def parse_command(self, text: str) -> Tuple[str, str]:
         text = text.strip()
         try:
-            command = re.findall(re_command, text.split(' ')[0].lower())[0]
+            command = re.findall(re_command, text.split(" ")[0].lower())[0]
         except IndexError:
             raise errors.ParseCommandError()
-        arg = ' '.join(text.split(' ')[1::])
+        arg = " ".join(text.split(" ")[1::])
         return command, arg
+
+    def split_arg(self, arg: str) -> List[str]:
+        args = re.split(re_arg_split, arg)
+        for i, arg in enumerate(args):
+            args[i] = args[i].strip().replace("\\|", "|")
+        return args

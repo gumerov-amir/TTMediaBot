@@ -1,5 +1,4 @@
 [flake8]
-ignore = F821
-exclude = TeamTalkPy
+exclude = TeamTalkPy,mpv.py
 inline-quotes = "
 max-line-length = 88

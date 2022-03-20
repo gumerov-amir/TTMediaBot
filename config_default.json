@@ -5,9 +5,7 @@
         "cache_file_name": "TTMediaBotCache.dat",
         "blocked_commands": [],
         "delete_uploaded_files_after": 300,
-        "time_format": "%H:%M",
-        "load_event_handlers": false,
-        "event_handlers_file_name": "event_handlers.py"
+        "time_format": "%H:%M"
     },
     "sound_devices": {
         "output_device": 0,
@@ -42,29 +40,34 @@
                 "admin"
             ],
             "banned_users": []
+        },
+        "event_handling": {
+            "load_event_handlers": false,
+            "event_handlers_file_name": "event_handlers.py"
         }
     },
     "services": {
-        "available_services": {
-            "vk": {
-                "token": ""
-            },
-            "yt": {}
+        "default_service": "vk",
+        "vk": {
+            "enabled": true,
+            "token": ""
         },
-        "default_service": "vk"
+        "yt": {
+            "enabled": true
+        }
     },
     "logger": {
         "log": true,
         "level": "INFO",
         "format": "%(levelname)s [%(asctime)s]: %(message)s in %(threadName)s file: %(filename)s line %(lineno)d function %(funcName)s",
-        "mode": "STDOUT_AND_FILE",
+        "mode": "FILE",
         "file_name": "TTMediaBot.log",
         "max_file_size": 0,
         "backup_count": 0
     },
     "shortening": {
         "shorten_links": false,
-        "service": "Bitly",
-        "service_token": ""
+        "service": "clckru",
+        "service_params": {}
     }
 }

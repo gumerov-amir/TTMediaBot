@@ -31,7 +31,7 @@ import traceback
 if os.name == 'nt':
     if (sys.version_info.major == 3 and sys.version_info.minor >= 8):
         os.add_dll_directory(os.getcwd())
-    dll = 'mpv-1.dll'
+    dll = 'mpv.dll'
     backend = cdll.LoadLibrary(dll)
     fs_enc = 'utf-8'
 else:
@@ -530,7 +530,10 @@ _mpv_create = backend.mpv_create
 _handle_func('mpv_create_client',           [c_char_p],                                 MpvHandle, notnull_errcheck)
 _handle_func('mpv_client_name',             [],                                         c_char_p, errcheck=None)
 _handle_func('mpv_initialize',              [],                                         c_int, ec_errcheck)
-_handle_func('mpv_detach_destroy',          [],                                         None, errcheck=None)
+try:
+    _handle_func('mpv_detach_destroy',          [],                                         None, errcheck=None)
+except AttributeError:
+    _handle_func('mpv_destroy',          [],                                         None, errcheck=None)
 _handle_func('mpv_terminate_destroy',       [],                                         None, errcheck=None)
 _handle_func('mpv_load_config_file',        [c_char_p],                                 c_int, ec_errcheck)
 _handle_func('mpv_get_time_us',             [],                                         c_ulonglong, errcheck=None)
@@ -883,7 +886,10 @@ class MPV(object):
                         self._message_handlers[target](*args)
 
                 if eid == MpvEventID.SHUTDOWN:
-                    _mpv_detach_destroy(self._event_handle)
+                    try:
+                        _mpv_detach_destroy(self._event_handle)
+                    except NameError:
+                        _mpv_destroy(self._event_handle)
                     return
 
             except Exception as e:
@@ -1426,7 +1432,7 @@ class MPV(object):
         self._event_callbacks.append(callback)
 
     def unregister_event_callback(self, callback):
-        """Unregiser an event callback."""
+        """Unregister an event callback."""
         self._event_callbacks.remove(callback)
 
     def event_callback(self, *event_types):
