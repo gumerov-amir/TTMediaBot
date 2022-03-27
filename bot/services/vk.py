@@ -26,6 +26,8 @@ class VkService(_Service):
         self.config = config
         self.is_enabled = config.enabled
         self.error_message = ""
+        self.warning_message = ""
+        self.help = ""
         self.format = "mp3"
         self.hidden = False
 

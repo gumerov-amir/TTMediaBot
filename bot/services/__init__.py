@@ -13,11 +13,13 @@ if TYPE_CHECKING:
 
 
 class Service(ABC):
+    name: str
     is_enabled: bool
     hidden: bool
     hostnames: List[str]
     error_message: str
-    name: str
+    warning_message: str
+    help: str
 
     def download(self, track: Track, file_path: str) -> None:
         downloader.download_file(track.url, file_path)
@@ -41,6 +43,7 @@ class Service(ABC):
 
 
 from bot.services.vk import VkService
+from bot.services.yam import YamService
 from bot.services.yt import YtService
 
 
@@ -49,6 +52,7 @@ class ServiceManager:
         self.config = bot.config.services
         self.services: Dict[str, Service] = {
             "vk": VkService(self.config.vk),
+            "yam": YamService(self.config.yam),
             "yt": YtService(self.config.yt),
         }
         self.service: Service = self.services[self.config.default_service]

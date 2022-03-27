@@ -65,9 +65,15 @@ class YtModel(BaseModel):
     enabled: bool = True
 
 
+class YamModel(BaseModel):
+    enabled: bool = True
+    token: str = ""
+
+
 class ServicesModel(BaseModel):
     default_service: str = "vk"
     vk: VkModel = VkModel()
+    yam: YamModel = YamModel()
     yt: YtModel = YtModel()
 
 

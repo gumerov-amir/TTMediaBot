@@ -2,12 +2,13 @@ from typing import Any, Dict
 
 import requests
 
-from . import exceptions
-
 
 class Audio:
     def get(
-        self, owner_id: int = 1, album_id: int = 1, count: int = 100
+        self,
+        owner_id: int = 1,
+        album_id: int = 1,
+        count: int = ...,
     ) -> Dict[str, Any]:
         ...
 
@@ -35,7 +36,7 @@ class VkApi:
     def __init__(
         self,
         token: str = "",
-        session: requests.Session = requests.Session(),
+        session: requests.Session = ...,
         api_version: str = "",
     ) -> None:
         ...
