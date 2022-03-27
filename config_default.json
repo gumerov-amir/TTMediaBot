@@ -52,6 +52,10 @@
             "enabled": true,
             "token": ""
         },
+        "yam": {
+            "enabled": true,
+            "token": ""
+        },
         "yt": {
             "enabled": true
         }

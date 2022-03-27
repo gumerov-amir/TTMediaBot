@@ -256,52 +256,75 @@ class ServiceCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "SERVICE Selects the service to play from. If no service is specified, the current service and a list of available services are displayed"
+            "SERVICE Selects the service to play from, sv SERVICE h returns additional help. If no service is specified, the current service and a list of available services are displayed"
         )
 
     def __call__(self, arg: str, user: User) -> Optional[str]:
-        service_help = self.translator.translate(
-            "Current service: {current_service}\nAvailable: {available_services}"
-        ).format(
-            current_service=self.service_manager.service.name,
-            available_services=", ".join(
-                [
-                    i
-                    for i in self.service_manager.services
-                    if not self.service_manager.services[i].hidden
-                    and self.service_manager.services[i].is_enabled
-                ]
-            ),
-        )
-        if arg:
-            arg = arg.lower()
-            if (
-                arg in self.service_manager.services
-                and not self.service_manager.services[arg].hidden
-                and self.service_manager.services[arg].is_enabled
-            ):
-                self.service_manager.service = self.service_manager.services[arg]
-                return self.translator.translate("Current service: {}").format(
-                    self.service_manager.service.name
+        args = arg.split(" ")
+        if args[0]:
+            service_name = args[0].lower()
+            if service_name not in self.service_manager.services:
+                return self.translator.translate("Unknown service.\n{}").format(
+                    self.service_help
                 )
-            elif not self.service_manager.services[arg].is_enabled:
-                if self.service_manager.services[arg].error_message:
-                    return self.translator.translate(
-                        "{error}. {service} is disabled.".format(
-                            error=self.service_manager.services[arg].error_message,
-                            service=arg,
-                        )
+            service = self.service_manager.services[service_name]
+            if len(args) == 1:
+                if not service.hidden and service.is_enabled:
+                    self.service_manager.service = service
+                    if service.warning_message:
+                        return self.translator.translate(
+                            "Current service: {}\nWarning: {}"
+                        ).format(service.name, service.warning_message)
+                    return self.translator.translate("Current service: {}").format(
+                        service.name
                     )
+                elif not service.is_enabled:
+                    if service.error_message:
+                        return self.translator.translate(
+                            "Error: {error}\n{service} is disabled".format(
+                                error=service.error_message,
+                                service=service.name,
+                            )
+                        )
+                    else:
+                        return self.translator.translate(
+                            "{service} is disabled".format(service=service.name)
+                        )
+            elif len(args) >= 1:
+                if service.help:
+                    return service.help
                 else:
                     return self.translator.translate(
-                        "{service} is disabled".format(service=arg)
+                        "This service has no additional help"
                     )
-            else:
-                return self.translator.translate("Unknown service.\n{}").format(
-                    service_help
-                )
         else:
-            return service_help
+            return self.service_help
+
+    @property
+    def service_help(self):
+        services = []
+        for i in self.service_manager.services:
+            service = self.service_manager.services[i]
+            if not service.is_enabled:
+                if service.error_message:
+                    services.append(
+                        "{} (Error: {})".format(service.name, service.error_message)
+                    )
+                else:
+                    services.append("{} (Error)".format(service.name))
+            elif service.warning_message:
+                services.append(
+                    "{} (Warning: {})".format(service.name, service.warning_message)
+                )
+            else:
+                services.append(service.name)
+        help = self.translator.translate(
+            "Current service: {current_service}\nAvailable:\n{available_services}\nsend sv SERVICE h for additional help"
+        ).format(
+            current_service=self.service_manager.service.name,
+            available_services="\n".join(services),
+        )
+        return help
 
 
 class SelectTrackCommand(Command):

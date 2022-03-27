@@ -19,6 +19,8 @@ class YtService(_Service):
         self.config = config
         self.is_enabled = self.config.enabled
         self.error_message = ""
+        self.warning_message = ""
+        self.help = ""
         self.hidden = False
 
     def initialize(self):
