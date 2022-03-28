@@ -352,8 +352,17 @@ class TeamTalk:
         devices: List[SoundDevice] = []
         device_list = [i for i in self.tt.getSoundDevices()]
         for device in device_list:
-            if sys.platform == "win32":
-                if device.nSoundSystem == TeamTalkPy.SoundSystem.SOUNDSYSTEM_WASAPI:
+            if device.nMaxOutputChannels == 0:
+                if sys.platform == "win32":
+                    if device.nSoundSystem == TeamTalkPy.SoundSystem.SOUNDSYSTEM_WASAPI:
+                        devices.append(
+                            SoundDevice(
+                                _str(device.szDeviceName),
+                                device.nDeviceID,
+                                SoundDeviceType.Input,
+                            )
+                        )
+                else:
                     devices.append(
                         SoundDevice(
                             _str(device.szDeviceName),
@@ -361,14 +370,6 @@ class TeamTalk:
                             SoundDeviceType.Input,
                         )
                     )
-            else:
-                devices.append(
-                    SoundDevice(
-                        _str(device.szDeviceName),
-                        device.nDeviceID,
-                        SoundDeviceType.Input,
-                    )
-                )
         return devices
 
     def set_input_device(self, id: int) -> None:
