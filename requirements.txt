@@ -1,3 +1,4 @@
+babel
 beautifulsoup4
 patool
 portalocker
