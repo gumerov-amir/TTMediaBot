@@ -353,7 +353,10 @@ class TeamTalk:
         device_list = [i for i in self.tt.getSoundDevices()]
         for device in device_list:
             if sys.platform == "win32":
-                if device.nSoundSystem == TeamTalkPy.SoundSystem.SOUNDSYSTEM_WASAPI:
+                if (
+                    device.nSoundSystem == TeamTalkPy.SoundSystem.SOUNDSYSTEM_WASAPI
+                    and device.nMaxOutputChannels == 0
+                ):
                     devices.append(
                         SoundDevice(
                             _str(device.szDeviceName),
