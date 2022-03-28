@@ -8,5 +8,8 @@
     "editor.formatOnPaste": true,
     "editor.formatOnSave": true,
     "editor.formatOnSaveMode": "file",
-    "editor.formatOnType": true
+    "editor.formatOnType": true,
+    "files.exclude": {
+        "**/__pycache__": true
+    }
 }
