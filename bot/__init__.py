@@ -13,6 +13,7 @@ from bot import (
     commands,
     config,
     connectors,
+    console,
     logger,
     modules,
     player,
@@ -51,8 +52,12 @@ class Bot:
                 self.cache = cache.Cache(cache_file_name)
             else:
                 cache_file_name = self.config.general.cache_file_name
-                if not os.path.isdir(os.path.join(*os.path.split(cache_file_name)[0:-1])):
-                    cache_file_name = os.path.join(self.config_manager.config_dir, cache_file_name)
+                if not os.path.isdir(
+                    os.path.join(*os.path.split(cache_file_name)[0:-1])
+                ):
+                    cache_file_name = os.path.join(
+                        self.config_manager.config_dir, cache_file_name
+                    )
                 self.cache = cache.Cache(cache_file_name)
         except PermissionError:
             sys.exit(
@@ -62,6 +67,7 @@ class Bot:
         self.player = player.Player(self)
         self.ttclient = TeamTalk.TeamTalk(self)
         self.tt_player_connector = connectors.TTPlayerConnector(self)
+        self.console = console.Console()
         self.sound_device_manager = sound_devices.SoundDeviceManager(self)
         self.service_manager = services.ServiceManager(self)
         self.module_manager = modules.ModuleManager(self)
@@ -82,9 +88,15 @@ class Bot:
         self.player.run()
         self.tt_player_connector.start()
         self.command_processor.run()
+        self.console.run()
         logging.info("Started")
         self._close = False
         while not self._close:
+            try:
+                message = self.console.message_queue.get_nowait()
+                self.command_processor(message)
+            except queue.Empty:
+                pass
             try:
                 message = self.ttclient.message_queue.get_nowait()
                 logging.info(
