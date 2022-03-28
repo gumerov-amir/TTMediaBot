@@ -10,6 +10,7 @@
     "editor.formatOnSaveMode": "file",
     "editor.formatOnType": true,
     "files.exclude": {
-        "**/__pycache__": true
+        "**/__pycache__": true,
+        ".*env": true
     }
 }
