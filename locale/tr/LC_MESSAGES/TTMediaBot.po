@@ -1,113 +1,135 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR ORGANIZATION
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Copyright (C) 2021 ORGANIZATION
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2021.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: TTMediaBot\n"
-"POT-Creation-Date: 2021-07-17 13:36+0400\n"
+"Project-Id-Version:  TTMediaBot\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2022-03-28 17:46+0300\n"
 "PO-Revision-Date: 2021-07-17 13:41+0400\n"
 "Last-Translator: \n"
-"Language-Team: TTMediaBot's developers\n"
 "Language: tr\n"
+"Language-Team: TTMediaBot's developers\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: pygettext.py 1.5\n"
-"X-Generator: Poedit 3.0\n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Generated-By: Babel 2.9.1\n"
 
-#: TeamTalk/__init__.py:230
+#: Z:/development/python/TTMediaBot/bot/app_vars.py:11
+#, fuzzy
+msgid ""
+"A media streaming bot for TeamTalk.\n"
+"Authors: Gumerov_amir, A11CF0, Beqa Gozalishvili.\n"
+"Home page: https://github.com/gumerov-amir/TTMediaBotLicense: Mit License"
+msgstr ""
+"TTMediaBot - TeamTalk için medya akış botu.\n"
+"Programcılar: Gumerov_amir, A11CF0, Beqa Gozalishvili.\n"
+"Ana sayfa: https://github.com/gumerov-amir/TTMediaBot"
+
+#: Z:/development/python/TTMediaBot/bot/TeamTalk/__init__.py:150
 msgid "Send \"h\" for help"
 msgstr "Yardım için \"h\" gönderin"
 
-#: commands/__init__.py:77 commands/admin_commands.py:121
+#: Z:/development/python/TTMediaBot/bot/commands/__init__.py:106
 msgid "Unknown command. Send \"h\" for help."
 msgstr "Bilinmeyen komut. Yardım için \"h\" gönderin."
 
-#: commands/__init__.py:80 modules/downloader.py:51
+#: Z:/development/python/TTMediaBot/bot/commands/__init__.py:112
+#: Z:/development/python/TTMediaBot/bot/modules/uploader.py:61
 msgid "Error: {}"
 msgstr "Hata: {}"
 
-#: commands/__init__.py:87
+#: Z:/development/python/TTMediaBot/bot/commands/__init__.py:123
 msgid "You are banned"
 msgstr "Siz engellendiniz"
 
-#: commands/__init__.py:89
+#: Z:/development/python/TTMediaBot/bot/commands/__init__.py:127
 msgid "You are not in bot's channel"
 msgstr "botun kanalında değilsiniz"
 
-#: commands/__init__.py:91
+#: Z:/development/python/TTMediaBot/bot/commands/__init__.py:131
 msgid "Bot is locked"
 msgstr "Bot kilitli"
 
-#: commands/__init__.py:93
+#: Z:/development/python/TTMediaBot/bot/commands/__init__.py:135
 msgid "This command is blocked"
 msgstr "Bu komut kilitli"
 
-#: commands/__init__.py:114
+#: Z:/development/python/TTMediaBot/bot/commands/__init__.py:159
 msgid "Unknown command"
 msgstr "Bilinmeyen komut"
 
-#: commands/admin_commands.py:13
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:20
 msgid ""
 "+/-COMMAND Blocks or unblocks commands. +COMMAND adds command to the "
-"blocklist. -COMMAND removes from it. Without a command shows the blocklist"
+"blocklist. -COMMAND removes from it. Without a command shows the "
+"blocklist"
 msgstr ""
 "+/-KOMUT Komutları engeller veya engellemeyi kaldırır. +KOMUT engelleme "
-"listesine komut ekler. -KOMUT komutu engelleme listesinden kaldırır. Komut "
-"olmadan engellenen komut listesini gösterir"
+"listesine komut ekler. -KOMUT komutu engelleme listesinden kaldırır. "
+"Komut olmadan engellenen komut listesini gösterir"
 
-#: commands/admin_commands.py:20 commands/user_commands.py:309
-msgid "List is empty"
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:32
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:322
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:352
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:451
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:463
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:511
+msgid "The list is empty"
 msgstr "Liste boş"
 
-#: commands/admin_commands.py:24 commands/admin_commands.py:215
-#: commands/admin_commands.py:242 commands/user_commands.py:277
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:37
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:304
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:336
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:414
 msgid "Added"
 msgstr "Eklendi"
 
-#: commands/admin_commands.py:26
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:39
 msgid "This command is already added"
 msgstr "Bu komut zaten eklendi"
 
-#: commands/admin_commands.py:30 commands/admin_commands.py:219
-#: commands/admin_commands.py:246 commands/user_commands.py:289
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:45
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:310
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:342
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:426
 msgid "Deleted"
 msgstr "Silindi"
 
-#: commands/admin_commands.py:32
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:47
 msgid "This command is not blocked"
 msgstr "Bu komut kilitli değil"
 
-#: commands/admin_commands.py:40
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:55
 msgid "GENDER Changes bot's gender. n neutral, m male, f female"
 msgstr "CİNSİYET Botun cinsiyetini değiştirir. n nötr, m erkek, f kadın"
 
-#: commands/admin_commands.py:53
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:70
 msgid "LANGUAGE Changes bot's language"
 msgstr "DIL Botun dilini değiştirir"
 
-#: commands/admin_commands.py:61
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:78
 msgid "The language has been changed"
 msgstr "Dil değiştirildi"
 
-#: commands/admin_commands.py:63
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:80
 msgid "Incorrect language"
 msgstr "yanlış dil"
 
-#: commands/admin_commands.py:65
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:82
 #, python-brace-format
 msgid ""
 "Current language: {current_language}. Available languages: "
 "{available_languages}"
 msgstr "Şu anki dil: {current_language}. Mevcut diller: {available_languages}"
 
-#: commands/admin_commands.py:71
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:93
 msgid "NICKNAME Changes bot's nickname"
 msgstr "TAKMA AD Botun takma adını değiştirir"
 
-#: commands/admin_commands.py:81
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:103
 msgid ""
 "r/f Clears bot's cache. r clears recents, f clears favorites, without an "
 "option clears the entire cache"
@@ -115,301 +137,309 @@ msgstr ""
 "r/f Botun önbelleğini temizler. r son çalınan parça listesini siler, f "
 "favorileri siler, seçenek olmadan tüm önbelleği temizler"
 
-#: commands/admin_commands.py:88
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:112
 msgid "Cache cleared"
 msgstr "Önbellek temizlendi"
 
-#: commands/admin_commands.py:92
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:116
 msgid "Recents cleared"
 msgstr "Son çalınan parça listesi temizlendi"
 
-#: commands/admin_commands.py:96
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:120
 msgid "Favorites cleared"
 msgstr "Favoriler temizlendi"
 
-#: commands/admin_commands.py:102
-msgid "Task scheduler"
-msgstr "Görev Zamanlayıcısı"
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:126
+msgid ""
+"Join channel. first argument is channel name or id, second argument is "
+"password, split argument \" | \", if password is undefined, don't type "
+"second argument"
+msgstr ""
 
-#: commands/admin_commands.py:137
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:146
+msgid "This channel does not exist"
+msgstr ""
+
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:160
+msgid "Error joining channel: {error}"
+msgstr ""
+
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:208
 msgid "Enables or disables voice transmission"
 msgstr "Ses iletimini etkinleştirir veya devre dışı bırakır"
 
-#: commands/admin_commands.py:143 commands/admin_commands.py:144
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:215
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:217
 msgid "Voice transmission enabled"
 msgstr "Ses iletimi etkin"
 
-#: commands/admin_commands.py:149
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:222
 msgid "Voice transmission disabled"
 msgstr "Ses iletimi devre dışı"
 
-#: commands/admin_commands.py:155
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:228
 msgid "Locks or unlocks the bot"
 msgstr "Botu kilitler veya kilidini açar"
 
-#: commands/admin_commands.py:160
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:233
 msgid "Locked"
 msgstr "Kilitlendi"
 
-#: commands/admin_commands.py:160
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:235
 msgid "Unlocked"
 msgstr "Kilid açıldı"
 
-#: commands/admin_commands.py:166
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:242
 msgid "STATUS Changes bot's status"
 msgstr "DURUM Botun durumunu değiştirir"
 
-#: commands/admin_commands.py:177
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:252
 msgid "Enables or disables event handling"
 msgstr "Olay işlemeyi etkinleştirir veya devre dışı bırakır"
 
-#: commands/admin_commands.py:182
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:259
 msgid "Event handling is enabled"
 msgstr "Olay işleme etkin"
 
-#: commands/admin_commands.py:182
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:261
 msgid "Event handling is disabled"
 msgstr "Olay işleme devre dışı"
 
-#: commands/admin_commands.py:188
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:268
 msgid "Enables or disables sending of channel messages"
-msgstr ""
-"Kanal mesajlarının gönderilmesini etkinleştirir veya devre dışı bırakır"
+msgstr "Kanal mesajlarının gönderilmesini etkinleştirir veya devre dışı bırakır"
 
-#: commands/admin_commands.py:193
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:277
 msgid "Channel messages enabled"
 msgstr "Kanal mesajları etkinleştirildi"
 
-#: commands/admin_commands.py:193
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:279
 msgid "Channel messages disabled"
 msgstr "Kanal mesajları devre dışı bırakıldı"
 
-#: commands/admin_commands.py:199
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:286
 msgid "Saves bot's configuration"
 msgstr "Botun konfigurasyonunu kaydeder"
 
-#: commands/admin_commands.py:203
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:290
 msgid "Configuration saved"
 msgstr "Konfigurasyon kaydedildi"
 
-#: commands/admin_commands.py:208
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:296
 msgid ""
-"+/-USERNAME Manages a list of administrators. +USERNAME adds a user. -"
-"USERNAME removes it. Without an option shows the list"
+"+/-USERNAME Manages a list of administrators. +USERNAME adds a user. "
+"-USERNAME removes it. Without an option shows the list"
 msgstr ""
 "+/-KULLANICI ADI Yöneticiler listesini yönetir. +KULLANICI ADI kullanıcı "
 "ekler. -KULLANICI ADI kullanıcıyı kaldırır. Bir seçenek olmadan listeyi "
 "gösterir"
 
-#: commands/admin_commands.py:221
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:312
 msgid "This user is not in the admin list"
 msgstr "Bu kullanıcı yönetici listesinde değil"
 
-#: commands/admin_commands.py:229 commands/admin_commands.py:256
-#: commands/user_commands.py:358
-msgid "The list is empty"
-msgstr "Liste boş"
-
-#: commands/admin_commands.py:235
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:328
 msgid ""
-"+/-USERNAME Manages a list of banned users. +USERNAME adds a user. -USERNAME "
-"removes it. Without an option shows the list"
+"+/-USERNAME Manages a list of banned users. +USERNAME adds a user. "
+"-USERNAME removes it. Without an option shows the list"
 msgstr ""
-"+/-KULLANICI ADI Engellenmiş kullanıcılar listesini yönetir. +KULLANICI ADI "
-"kullanıcı ekler. -KULLANICI ADI kullanıcıyı kaldırır. Bir seçenek olmadan "
-"listeyi gösterir"
+"+/-KULLANICI ADI Engellenmiş kullanıcılar listesini yönetir. +KULLANICI "
+"ADI kullanıcı ekler. -KULLANICI ADI kullanıcıyı kaldırır. Bir seçenek "
+"olmadan listeyi gösterir"
 
-#: commands/admin_commands.py:248
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:344
 msgid "This user is not banned"
 msgstr "Bu kullanıcı engellenmemiştir"
 
-#: commands/admin_commands.py:263
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:358
 msgid "Quits the bot"
 msgstr "Botu kapatır"
 
-#: commands/admin_commands.py:271
+#: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:367
 msgid "Restarts the bot"
 msgstr "Botu yeniden başlatır"
 
-#: commands/command.py:14
+#: Z:/development/python/TTMediaBot/bot/commands/command.py:26
 msgid "help text not found"
 msgstr "yardım metni bulunamadı"
 
-#: commands/user_commands.py:10
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:16
 msgid "Shows command help"
 msgstr "Komut yardımını gösterir"
 
-#: commands/user_commands.py:19
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:25
 msgid "Shows information about the bot"
 msgstr "Bot hakkında bilgi gösterir"
 
-#: commands/user_commands.py:28
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:34
 msgid ""
 "QUERY Plays tracks found for the query. If no query is given, plays or "
 "pauses current track"
 msgstr ""
-"İSTEK İstek için bulunan parçaları çalar. İstek verilmezse, mevcut parçayı "
-"oynatır veya duraklatır"
+"İSTEK İstek için bulunan parçaları çalar. İstek verilmezse, mevcut "
+"parçayı oynatır veya duraklatır"
 
-#: commands/user_commands.py:32
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:42
 msgid "Searching..."
 msgstr "Aranıyor..."
 
-#: commands/user_commands.py:36
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:50
 #, python-brace-format
 msgid "{nickname} requested {request}"
 msgstr "{nickname} {request} istedi"
 
-#: commands/user_commands.py:38 commands/user_commands.py:141
-#: commands/user_commands.py:156
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:56
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:186
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:203
 msgid "Playing {}"
 msgstr "Oynatılıyor {}"
 
-#: commands/user_commands.py:40
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:60
 msgid "Nothing is found for your query"
 msgstr "Sorgunuz için hiçbir şey bulunamadı"
 
-#: commands/user_commands.py:51
-msgid "URL Plays a stream from a given URL"
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:62
+msgid "The selected service is currently unavailable"
+msgstr ""
+
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:75
+#, fuzzy
+msgid "URL Plays a stream from bot given URL"
 msgstr "URL Belirli bir URL'den akış oynatır"
 
-#: commands/user_commands.py:58
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:84
 #, python-brace-format
 msgid "{nickname} requested playing from a URL"
 msgstr "{nickname} URL'den oynatmak istedi"
 
-#: commands/user_commands.py:61
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:91
 msgid "Incorrect protocol"
 msgstr "Yanlış protokol"
 
-#: commands/user_commands.py:63
-msgid "Cannot get stream URL"
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:93
+#, fuzzy
+msgid "Cannot process stream URL"
 msgstr "Akış URL'si alınamıyor"
 
-#: commands/user_commands.py:65
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:95
 msgid "The path cannot be found"
 msgstr "Yol bulunamıyor"
 
-#: commands/user_commands.py:73
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:103
 msgid "Stops playback"
 msgstr "Oynatmayı durdurur"
 
-#: commands/user_commands.py:79
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:110
 #, python-brace-format
 msgid "{nickname} stopped playback"
 msgstr "{nickname} oynatmayı durdurdu"
 
-#: commands/user_commands.py:81 commands/user_commands.py:145
-#: commands/user_commands.py:160 commands/user_commands.py:227
-#: commands/user_commands.py:234 commands/user_commands.py:279
-#: commands/user_commands.py:297 commands/user_commands.py:335
-#: commands/user_commands.py:377
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:116
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:149
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:168
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:192
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:209
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:354
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:363
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:416
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:434
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:480
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:540
 msgid "Nothing is playing"
 msgstr "Hiçbir şey çalmıyor"
 
-#: commands/user_commands.py:87
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:122
 #, python-brace-format
 msgid ""
-"VOLUME Sets the volume to a value between 0 and {max_volume}. If no volume "
-"is specified, the current volume level is displayed"
+"VOLUME Sets the volume to a value between 0 and {max_volume}. If no "
+"volume is specified, the current volume level is displayed"
 msgstr ""
 "SES Sesi 0 ile {max_volume} arasında bir değere ayarlar. Ses düzeyi "
 "belirtilmemişse, geçerli ses düzeyi görüntülenir"
 
-#: commands/user_commands.py:106
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:143
 #, python-brace-format
-msgid ""
-"STEP Seeks current track backward. the default step is {seek_step} seconds"
+msgid "STEP Seeks current track backward. the default step is {seek_step} seconds"
 msgstr ""
-"[ADIM] Geçerli parçayı geriye doğru arar. varsayılan adım {seek_step} saniye"
+"[ADIM] Geçerli parçayı geriye doğru arar. varsayılan adım {seek_step} "
+"saniye"
 
-#: commands/user_commands.py:121
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:162
 #, python-brace-format
-msgid ""
-"STEP Seeks current track forward. the default step is {seek_step} seconds"
+msgid "STEP Seeks current track forward. the default step is {seek_step} seconds"
 msgstr ""
-"[ADIM] Mevcut parçayı ileriye doğru arar. varsayılan adım {seek_step} saniye"
+"[ADIM] Mevcut parçayı ileriye doğru arar. varsayılan adım {seek_step} "
+"saniye"
 
-#: commands/user_commands.py:136
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:181
 msgid "Plays next track"
 msgstr "Sonraki parçayı çalar"
 
-#: commands/user_commands.py:143
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:190
 msgid "No next track"
 msgstr "Sonraki parça yok"
 
-#: commands/user_commands.py:151
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:198
 msgid "Plays previous track"
 msgstr "Önceki parçayı oynatır"
 
-#: commands/user_commands.py:158
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:207
 msgid "No previous track"
 msgstr "Önceki parça yok"
 
-#: commands/user_commands.py:166
-msgid "Single Track"
-msgstr "Tek Parça"
-
-#: commands/user_commands.py:166
-msgid "Repeat Track"
-msgstr "Parçayı Tekrarlama modu"
-
-#: commands/user_commands.py:166
-msgid "Track list"
-msgstr "Parça listesi"
-
-#: commands/user_commands.py:166
-msgid "Repeat track list"
-msgstr "Parça listesini tekrarlama modu"
-
-#: commands/user_commands.py:166
-msgid "Random"
-msgstr "Rastgele"
-
-#: commands/user_commands.py:170
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:215
 msgid ""
-"MODE Sets the playback mode. If no mode is specified, the current mode and a "
-"list of modes are displayed"
+"MODE Sets the playback mode. If no mode is specified, the current mode "
+"and a list of modes are displayed"
 msgstr ""
 "MOD Oynatma modunu ayarlar. Mod belirtilmemişse, geçerli mod ve modların "
 "listesi görüntülenir"
 
-#: commands/user_commands.py:173
-#, python-brace-format
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:221
+msgid "Single Track"
+msgstr "Tek Parça"
+
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:222
+msgid "Repeat Track"
+msgstr "Parçayı Tekrarlama modu"
+
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:223
+msgid "Track list"
+msgstr "Parça listesi"
+
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:224
+msgid "Repeat track list"
+msgstr "Parça listesini tekrarlama modu"
+
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:225
+msgid "Random"
+msgstr "Rastgele"
+
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:227
+#, fuzzy, python-brace-format
 msgid ""
-"Current_ mode: {current_mode}\n"
+"Current mode: {current_mode}\n"
 "{modes}"
 msgstr ""
 "Geçerli_ mod: {current_mode}\n"
 "{modes}"
 
-#: commands/user_commands.py:182
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:246
 #, python-brace-format
 msgid "Current mode: {mode}"
 msgstr "Geçerli mod: {mode}"
 
-#: commands/user_commands.py:192
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:258
+#, fuzzy
 msgid ""
-"SERVICE Selects the service to play from. If no service is specified, the "
-"current service and a list of available services are displayed"
+"SERVICE Selects the service to play from, sv SERVICE h returns additional"
+" help. If no service is specified, the current service and a list of "
+"available services are displayed"
 msgstr ""
-"HIZMET Oynatılacak hizmeti seçer. Herhangi bir hizmet belirtilmemişse, şu "
-"anki hizmet ve mevcut hizmetlerin listesi görüntülenir"
+"HIZMET Oynatılacak hizmeti seçer. Herhangi bir hizmet belirtilmemişse, şu"
+" anki hizmet ve mevcut hizmetlerin listesi görüntülenir"
 
-#: commands/user_commands.py:195
-#, python-brace-format
-msgid ""
-"Current service: {current_service}\n"
-"Available: {available_services}"
-msgstr ""
-"Şu anki hizmet: {current_service}\n"
-"Mevcut: {available_services}"
-
-#: commands/user_commands.py:200
-msgid "Current service: {}"
-msgstr "Mevcut hizmet: {}"
-
-#: commands/user_commands.py:202
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:267
 msgid ""
 "Unknown service.\n"
 "{}"
@@ -417,122 +447,150 @@ msgstr ""
 "Bilinmeyen hizmet.\n"
 "{}"
 
-#: commands/user_commands.py:210
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:275
+#, fuzzy
+msgid ""
+"Current service: {}\n"
+"Warning: {}"
+msgstr "Mevcut hizmet: {}"
+
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:278
+msgid "Current service: {}"
+msgstr "Mevcut hizmet: {}"
+
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:284
+msgid ""
+"Error: {error}\n"
+"{service} is disabled"
+msgstr ""
+
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:291
+#, fuzzy
+msgid "{service} is disabled"
+msgstr "Ses iletimi devre dışı"
+
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:297
+msgid "This service has no additional help"
+msgstr ""
+
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:321
+#, fuzzy, python-brace-format
+msgid ""
+"Current service: {current_service}\n"
+"Available:\n"
+"{available_services}\n"
+"send sv SERVICE h for additional help"
+msgstr ""
+"Şu anki hizmet: {current_service}\n"
+"Mevcut: {available_services}"
+
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:333
 msgid "NUMBER Selects track by number from the list of current results"
 msgstr "NUMARA Geçerli sonuçlar listesinden parçayı numaraya göre seçer"
 
-#: commands/user_commands.py:221
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:346
 msgid "Incorrect number"
 msgstr "Yanlış numara"
 
-#: commands/user_commands.py:223 commands/user_commands.py:232
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:348
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:359
 msgid "Playing {} {}"
 msgstr "Oynatılıyor {} {}"
 
-#: commands/user_commands.py:225 commands/user_commands.py:291
-#: commands/user_commands.py:317 commands/user_commands.py:350
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:352
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:428
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:461
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:500
 msgid "Out of list"
 msgstr "Liste dışı"
 
-#: commands/user_commands.py:240
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:369
+#, fuzzy
 msgid ""
-"SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows "
+"SPEED Sets playback speed from bot.25 to 4. If no speed is given, shows "
 "current speed"
 msgstr ""
 "HIZ Hızı 0.25 ile 4 arasında bir değere ayarlar. Herhangi bir oran "
 "verilmezse mevcut oranı gösterir."
 
-#: commands/user_commands.py:244
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:375
 msgid "Current rate: {}"
 msgstr "Geçerli hız: {}"
 
-#: commands/user_commands.py:255
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:388
 msgid ""
-"+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - "
-"removes a track requested from favorites. If a number is specified after "
-"+/-, adds/removes a track with that number"
+"+/-NUMBER Manages favorite tracks. + adds the current track to favorites."
+" - removes a track requested from favorites. If a number is specified "
+"after +/-, adds/removes a track with that number"
 msgstr ""
 "+/-NUMARA Favori parçaları yönetir. + mevcut parçayı favorilere ekler. - "
-"favorilerden istenen parçayı kaldırır. +/- sonra bir numara belirtilirse, o "
-"numaraya sahip bir parçayı ekler/kaldırır"
+"favorilerden istenen parçayı kaldırır. +/- sonra bir numara belirtilirse,"
+" o numaraya sahip bir parçayı ekler/kaldırır"
 
-#: commands/user_commands.py:259
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:394
 msgid "This command is not available for guest users"
 msgstr "Bu komut konuk kullanıcılar için mevcut değildir"
 
-#: commands/user_commands.py:295
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:432
 msgid "This track is not in favorites"
 msgstr "Bu parça favorilerde değil"
 
-#: commands/user_commands.py:319
-msgid "The list is is empty"
-msgstr "Liste boş"
-
-#: commands/user_commands.py:325
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:469
 msgid "Gets a direct link to the current track"
 msgstr "Geçerli parçaya doğrudan bir bağlantı alır"
 
-#: commands/user_commands.py:333
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:478
 msgid "URL is not available"
 msgstr "URL mevcut değil"
 
-#: commands/user_commands.py:341
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:486
+#, fuzzy
 msgid ""
-"NUMBER Plays a track with  the given number from a list of recent tracks. "
-"Without a number shows recent tracks"
+"NUMBER Plays a track with  the given number from bot list of recent "
+"tracks. Without a number shows recent tracks"
 msgstr ""
-"NUMARA Son parçalar listesinden verilen numarayla bir parça çalar. Numara "
-"olmadan son parçaları gösterir"
+"NUMARA Son parçalar listesinden verilen numarayla bir parça çalar. Numara"
+" olmadan son parçaları gösterir"
 
-#: commands/user_commands.py:364
-msgid "Downloads the current track and uploads it to the channel"
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:518
+#, fuzzy
+msgid "Downloads the current track and uploads it to the channel."
 msgstr "Oynatılmakta olan parçayı indirir ve kanala yükler"
 
-#: commands/user_commands.py:368
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:528
 msgid "Cannot upload file to channel"
 msgstr "Kanala dosya yüklenemiyor"
 
-#: commands/user_commands.py:373
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:536
 msgid "Downloading..."
 msgstr "İndiriliyor..."
 
-#: commands/user_commands.py:375
+#: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:538
 msgid "Live streams cannot be downloaded"
 msgstr "Canlı akışlar indirilemiyor"
 
-#: connectors/tt_player_connector.py:26
+#: Z:/development/python/TTMediaBot/bot/connectors/tt_player_connector.py:35
 #, python-brace-format
 msgid "Playing: {track_name}"
 msgstr "Oynatılıyor: {track_name}"
 
-#: connectors/tt_player_connector.py:28
+#: Z:/development/python/TTMediaBot/bot/connectors/tt_player_connector.py:41
 #, python-brace-format
 msgid "Playing: {stream_url}"
 msgstr "Oynatılıyor: {stream_url}"
 
-#: connectors/tt_player_connector.py:35
+#: Z:/development/python/TTMediaBot/bot/connectors/tt_player_connector.py:52
 #, python-brace-format
 msgid "Paused: {track_name}"
 msgstr "Duraklatıldı: {track_name}"
 
-#: connectors/tt_player_connector.py:37
+#: Z:/development/python/TTMediaBot/bot/connectors/tt_player_connector.py:58
 #, python-brace-format
 msgid "Paused: {stream_url}"
 msgstr "Duraklatıldı: {stream_url}"
 
-#: vars.py:6
-msgid ""
-"TTMediaBot - a media streaming bot for TeamTalk.\n"
-"Authors: Gumerov_amir, A11CF0, Beqa Gozalishvili.\n"
-"Home page: https://github.com/gumerov-amir/TTMediaBot"
-msgstr ""
-"TTMediaBot - TeamTalk için medya akış botu.\n"
-"Programcılar: Gumerov_amir, A11CF0, Beqa Gozalishvili.\n"
-"Ana sayfa: https://github.com/gumerov-amir/TTMediaBot"
-
 #~ msgid "The cache file is already used by another instance of the bot."
-#~ msgstr ""
-#~ "Önbellek dosyası, botun başka bir örneği tarafından zaten kullanılıyor."
+#~ msgstr "Önbellek dosyası, botun başka bir örneği tarafından zaten kullanılıyor."
 
 #~ msgid "Unknown user command"
 #~ msgstr "Bilinmeyen kullanıcı komutu"
@@ -561,12 +619,15 @@ msgstr ""
 #~ msgstr "Belirlenmiş bir zaman için görev ayarlar"
 
 #~ msgid ""
-#~ "Enables or disables channel messages sent by the bot when requesting to "
-#~ "play music, stop current music, and other events"
+#~ "Enables or disables channel messages "
+#~ "sent by the bot when requesting to"
+#~ " play music, stop current music, and"
+#~ " other events"
 #~ msgstr ""
-#~ "Müzik çalmak, mevcut müziği durdurmak ve diğer etkinlikleri talep ederken "
-#~ "bot tarafından gönderilen kanal mesajlarını etkinleştirir veya devre dışı "
-#~ "bırakır"
+#~ "Müzik çalmak, mevcut müziği durdurmak ve"
+#~ " diğer etkinlikleri talep ederken bot "
+#~ "tarafından gönderilen kanal mesajlarını "
+#~ "etkinleştirir veya devre dışı bırakır"
 
 #~ msgid ""
 #~ "Shows a list of administrators.\n"
@@ -583,20 +644,25 @@ msgstr ""
 #~ "ub -username removes this user from banlist."
 #~ msgstr ""
 #~ "Engellenen kullanıcıların listesini gösterir.\n"
-#~ "ub +kullanıcı adı, bu kullanıcı adını engellenmiş kullanıcılar listesine "
-#~ "ekler.\n"
-#~ "ub -kullanıcı adı, kullanıcı adını engellenmiş kullanıcılar listesinden "
-#~ "kaldırır."
+#~ "ub +kullanıcı adı, bu kullanıcı adını"
+#~ " engellenmiş kullanıcılar listesine ekler.\n"
+#~ ""
+#~ "ub -kullanıcı adı, kullanıcı adını "
+#~ "engellenmiş kullanıcılar listesinden kaldırır."
 
 #~ msgid "Nothing is currently playing"
 #~ msgstr "Şu anda hiçbir şey çalmıyor"
 
 #~ msgid ""
-#~ "returns current rate, if argument is not given, sets rate in float type "
-#~ "bitween 0.25 and 4.0, if argument is given"
+#~ "returns current rate, if argument is "
+#~ "not given, sets rate in float type"
+#~ " bitween 0.25 and 4.0, if argument"
+#~ " is given"
 #~ msgstr ""
-#~ "Bir argüman belirtilirse, 0.25 ile 4.0 arasında kayan nokta türü için "
-#~ "hızı ayarlar, argüman verilmezse, geçerli hızı gösterir"
+#~ "Bir argüman belirtilirse, 0.25 ile 4.0"
+#~ " arasında kayan nokta türü için hızı"
+#~ " ayarlar, argüman verilmezse, geçerli hızı"
+#~ " gösterir"
 
 #~ msgid "Sorry, guest users can not use this command"
 #~ msgstr "Üzgünüz, konuk kullanıcılar bu komutu kullanamaz"
@@ -614,11 +680,14 @@ msgstr ""
 #~ msgstr "Botun cinsiyetini değiştirir"
 
 #~ msgid ""
-#~ "Clears the entire cache. If an argument is specified, only favorites or "
-#~ "the history of recently played tracks are deleted"
+#~ "Clears the entire cache. If an "
+#~ "argument is specified, only favorites or"
+#~ " the history of recently played "
+#~ "tracks are deleted"
 #~ msgstr ""
-#~ "Tüm önbelleği temizler. Bir argüman belirtilirse, yalnızca favoriler veya "
-#~ "en son çalınan parçaların geçmişi silinir"
+#~ "Tüm önbelleği temizler. Bir argüman "
+#~ "belirtilirse, yalnızca favoriler veya en "
+#~ "son çalınan parçaların geçmişi silinir"
 
 #~ msgid "History cleared"
 #~ msgstr "Geçmiş temizlendi"
@@ -635,7 +704,6 @@ msgstr ""
 #~ msgid "Locks or unlocks volume"
 #~ msgstr "Ses kontrolünü kilitler veya kilidini açar"
 
-#, python-brace-format
 #~ msgid "VOLUME Sets volume to a value from 0 to {max_volume}"
 #~ msgstr "SES Sesi 0 ile {max_volume} arasında bir değere ayarlar"
 
@@ -647,8 +715,9 @@ msgstr ""
 
 #~ msgid "shows list of admin users, if user_name is given adds it to list"
 #~ msgstr ""
-#~ "Yönetici kullanıcıların listesini gösterir, eğer kullanıcı adı verilirse "
-#~ "listeye ekler"
+#~ "Yönetici kullanıcıların listesini gösterir, "
+#~ "eğer kullanıcı adı verilirse listeye "
+#~ "ekler"
 
 #~ msgid "must be integer"
 #~ msgstr "Tamsayı olmalı"
@@ -665,3 +734,13 @@ msgstr ""
 
 #~ msgid "not found"
 #~ msgstr "Bulunamadı"
+
+#~ msgid "List is empty"
+#~ msgstr "Liste boş"
+
+#~ msgid "Task scheduler"
+#~ msgstr "Görev Zamanlayıcısı"
+
+#~ msgid "The list is is empty"
+#~ msgstr "Liste boş"
+
