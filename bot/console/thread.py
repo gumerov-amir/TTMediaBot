@@ -17,7 +17,10 @@ class ConsoleThread(Thread):
     def run(self) -> None:
         self._close = False
         while not self._close:
-            message_text = input("Enter command: ")
+            try:
+                message_text = input("Enter command: ")
+            except EOFError:
+                break
             message = self.console.build_message(message_text)
             self.console.message_queue.put(message)
 
