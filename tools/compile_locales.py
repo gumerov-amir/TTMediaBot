@@ -5,35 +5,44 @@ import sys
 import subprocess
 
 
-path = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "locale"
-)
+cd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+locale_path = os.path.join(cd, "locale")
+pot_file_path = os.path.join(locale_path, "TTMediaBot.pot")
+source_paths = [os.path.join(cd, "bot"), os.path.join(cd, "TTMediaBot.py")]
+babel_prefix = "{} -m babel.messages.frontend".format(sys.executable)
+locale_domain = "TTMediaBot"
+
+
+def extract():
+    code = subprocess.call(
+        f"{babel_prefix} extract {' '.join(source_paths)} -o {pot_file_path} --keywords=translate",
+        shell=True,
+    )
+    if code:
+        sys.exit("Bable is not installed. please install all the requirements")
+
+
+def update():
+    code = subprocess.call(
+        f"{babel_prefix} update -i {pot_file_path} -d {locale_path} -D {locale_domain}",
+        shell=True,
+    )
+    if code:
+        sys.exit(code)
+
+
+def compile():
+    code = subprocess.call(
+        f"{babel_prefix} compile -d {locale_path} -D {locale_domain}", shell=True
+    )
+    if code:
+        sys.exit(code)
 
 
 def main():
-    if sys.platform == "win32":
-        msgfmt_path = '"{exec}" "{file}"'.format(
-            exec=sys.executable,
-            file=os.path.join(
-                os.path.dirname(sys.executable), "Tools", "i18n", "msgfmt.py"
-            ),
-        )
-    else:
-        msgfmt_path = "msgfmt"
-    for i in os.listdir(path):
-        code = subprocess.call(
-            '{msgfmt_path} -o "{mo}" "{po}"'.format(
-                msgfmt_path=msgfmt_path,
-                po=os.path.join(path, i, "LC_MESSAGES", "TTMediaBot.po"),
-                mo=os.path.join(path, i, "LC_MESSAGES", "TTMediaBot.mo"),
-            ),
-            shell=True,
-        )
-        if code != 0:
-            print(
-                "Gettext is not installed on your computer.\nplease, installed it for using bot"
-            )
-            break
+    extract()
+    update()
+    compile()
 
 
 if __name__ == "__main__":
