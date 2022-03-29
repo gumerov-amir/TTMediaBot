@@ -6,6 +6,7 @@ import requests
 
 import os
 import platform
+import re
 import shutil
 import sys
 
@@ -23,11 +24,13 @@ cd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 def download():
     r = requests.get(url)
     page = bs4.BeautifulSoup(r.text, features="html.parser")
-    trs = page.table.find_all("tr")
+    table = page.table
     if platform.architecture()[0][0:2] == "64":
-        download_url = trs[2].a.get("href")
+        download_url = table.find("a", href=True, title=re.compile("x86_64")).get(
+            "href"
+        )
     else:
-        download_url = trs[3].a.get("href")
+        download_url = table.find("a", href=True, title=re.compile("i686")).get("href")
     downloader.download_file(download_url, os.path.join(cd, "libmpv.7z"))
 
 
@@ -63,7 +66,9 @@ def clean():
 
 
 def install():
-    print("Installing mpv components")
+    if sys.platform != "win32":
+        sys.exit("This script should be run only on Windows")
+    print("Installing libmpv for Windows")
     print("Downloading latest libmpv version")
     download()
     print("Downloaded. extracting")

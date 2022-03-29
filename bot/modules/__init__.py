@@ -13,7 +13,11 @@ if TYPE_CHECKING:
 
 class ModuleManager:
     def __init__(self, bot: Bot):
-        self.shortener = Shortener(bot.config.shortening) if bot.config.shortening.shorten_links else None
+        self.shortener = (
+            Shortener(bot.config.shortening)
+            if bot.config.shortening.shorten_links
+            else None
+        )
         self.streamer = Streamer(bot)
         # self.task_scheduler = TaskScheduler(bot)
         self.uploader = Uploader(bot)
