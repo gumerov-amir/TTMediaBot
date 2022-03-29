@@ -103,7 +103,7 @@ class TeamTalkThread(Thread):
                         self.ttclient.reconnect
                         and self.ttclient.reconnect_attempt
                         < self.config.reconnection_attempts
-                    or self.config.reconnection_attempts < 0
+                        or self.config.reconnection_attempts < 0
                     ):
                         time.sleep(self.config.reconnection_timeout)
                         self.ttclient.join()

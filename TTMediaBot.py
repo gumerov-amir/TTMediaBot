@@ -9,12 +9,24 @@ from bot.config import save_default_file
 from bot.sound_devices import SoundDeviceManager
 
 parser = ArgumentParser()
-parser.add_argument("-c", "--config", help="Path to the configuration file", default=path.join(app_vars.directory, "config.json"))
+parser.add_argument(
+    "-c",
+    "--config",
+    help="Path to the configuration file",
+    default=path.join(app_vars.directory, "config.json"),
+)
 parser.add_argument("-C", "--cache", help="Path to the cache file", default=None)
 parser.add_argument("-l", "--log", help="Path to the log file", default=None)
-parser.add_argument("--devices", help="Show available devices and exit", action="store_true")
-parser.add_argument("--default-config", help='Save default config to "config_default.json" and exit', action="store_true")
+parser.add_argument(
+    "--devices", help="Show available devices and exit", action="store_true"
+)
+parser.add_argument(
+    "--default-config",
+    help='Save default config to "config_default.json" and exit',
+    action="store_true",
+)
 args = parser.parse_args()
+
 
 def main(
     config: str = args.config,

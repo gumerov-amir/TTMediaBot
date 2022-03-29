@@ -86,13 +86,7 @@ def handle_2fa(sid: str) -> str:
 def validate_token(token: str) -> str:
     if not (token):
         raise ValueError("Required argument is missing")
-    url = (
-        api_url
-        + "auth.refreshToken?access_token="
-        + token
-        + "&v="
-        + api_ver
-    )
+    url = api_url + "auth.refreshToken?access_token=" + token + "&v=" + api_ver
     headers = {"User-Agent": user_agent}
     r = requests.get(url, headers=headers)
     if r.status_code == 200 and "token" in r.text:
