@@ -34,7 +34,7 @@ class YamService(_Service):
         if not self.api.account_status().account.uid:
             self.warning_message = "Your token is not correct"
         elif not self.api.account_status().plus["has_plus"]:
-            self.warning_message = "You have not plus"
+            self.warning_message = "You don't have Yandex Plus"
 
     def get(
         self,
