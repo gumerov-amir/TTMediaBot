@@ -6,7 +6,7 @@ if TYPE_CHECKING:
     from bot.translator import Translator
 
 app_name = "TTMediaBot"
-app_version = "2.2.0"
+app_version = "2.3.0"
 client_name = app_name + "-V" + app_version
 about_text: Callable[[Translator], str] = lambda translator: translator.translate(
     """\

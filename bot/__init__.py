@@ -12,6 +12,7 @@ from bot import (
     cache,
     commands,
     config,
+    migrator,
     connectors,
     logger,
     modules,
@@ -62,6 +63,8 @@ class Bot:
             sys.exit(
                 "The cache file cannot be accessed due to a permission error or is already used by another instance of the bot"
             )
+        self.migrator = migrator.Migrator(self.config_manager, self.cache)
+        self.migrator.migrate()
         self.log_file_name = log_file_name
         self.player = player.Player(self)
         self.ttclient = TeamTalk.TeamTalk(self)
