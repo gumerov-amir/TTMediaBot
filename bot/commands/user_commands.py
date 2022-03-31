@@ -314,7 +314,7 @@ class ServiceCommand(Command):
                     services.append("{} (Error)".format(service.name))
             elif service.warning_message:
                 services.append(
-                    "{} (Warning: {})".format(service.name, service.warning_message)
+                    self.translator.translate("{} (Warning: {})").format(service.name, service.warning_message)
                 )
             else:
                 services.append(service.name)

@@ -41,7 +41,7 @@ class YamService(Service):
             )
         elif not self.api.account_status().plus["has_plus"]:
             self.warning_message = self.bot.translator.translate(
-                "You do not have Yandex Plus"
+                "You don't have Yandex Plus"
             )
 
     def get(
