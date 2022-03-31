@@ -15,7 +15,7 @@ locale_domain = "TTMediaBot"
 
 def extract():
     code = subprocess.call(
-        f"{babel_prefix} extract {' '.join(source_paths)} -o {pot_file_path} --keywords=translate",
+        f"{babel_prefix} extract {' '.join(source_paths)} -o {pot_file_path} --keywords=translate -c translators: --copyright-holder=TTMediaBot-team --project=TTMediaBot",
         shell=True,
     )
     if code:
@@ -24,7 +24,7 @@ def extract():
 
 def update():
     code = subprocess.call(
-        f"{babel_prefix} update -i {pot_file_path} -d {locale_path} -D {locale_domain}",
+        f"{babel_prefix} update -i {pot_file_path} -d {locale_path} -D {locale_domain} --update-header-comment",
         shell=True,
     )
     if code:
