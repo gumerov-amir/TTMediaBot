@@ -1,6 +1,10 @@
+from __future__ import annotations
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, TYPE_CHECKING
 from urllib.parse import urlparse
+
+if TYPE_CHECKING:
+    from bot import Bot
 
 import mpv
 import requests
@@ -13,7 +17,9 @@ from bot import errors
 
 
 class VkService(_Service):
-    def __init__(self, config: VkModel) -> None:
+    def __init__(self, bot: Bot, config: VkModel) -> None:
+        self.bot = bot
+        self.config = config
         self.name = "vk"
         self.hostnames = [
             "vk.com",
@@ -23,7 +29,6 @@ class VkService(_Service):
             "m.vk.com",
             "m.vkontakte.ru",
         ]
-        self.config = config
         self.is_enabled = config.enabled
         self.error_message = ""
         self.warning_message = ""

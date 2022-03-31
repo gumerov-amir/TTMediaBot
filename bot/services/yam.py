@@ -1,23 +1,27 @@
+from __future__ import annotations
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, TYPE_CHECKING
 from urllib.parse import urlparse
+
+if TYPE_CHECKING:
+    from bot import Bot
 
 from yandex_music import Client
 from yandex_music.exceptions import UnauthorizedError
 
 from bot.config.models import YamModel
-
 from bot.player.enums import TrackType
 from bot.player.track import Track
-from bot.services import Service as _Service
+from bot.services import Service
 from bot import errors
 
 
-class YamService(_Service):
-    def __init__(self, config: YamModel):
+class YamService(Service):
+    def __init__(self, bot: Bot, config: YamModel):
+        self.bot = bot
+        self.config = config
         self.name = "yam"
         self.hostnames = ["music.yandex.ru"]
-        self.config = config
         self.is_enabled = self.config.enabled
         self.error_message = ""
         self.warning_message = ""
@@ -32,9 +36,13 @@ class YamService(_Service):
         except UnauthorizedError as e:
             raise errors.ServiceError(e)
         if not self.api.account_status().account.uid:
-            self.warning_message = "Your token is not correct"
+            self.warning_message = self.bot.translator.translate(
+                "Token is not provided"
+            )
         elif not self.api.account_status().plus["has_plus"]:
-            self.warning_message = "You have not plus"
+            self.warning_message = self.bot.translator.translate(
+                "You do not have Yandex Plus"
+            )
 
     def get(
         self,
@@ -46,8 +54,8 @@ class YamService(_Service):
             parsed_data = urlparse(url)
             path = parsed_data.path
             if "/album/" in path and "/track/" in path:
-                splitted_path = path.split("/")
-                real_id = splitted_path[4] + ":" + splitted_path[2]
+                split_path = path.split("/")
+                real_id = split_path[4] + ":" + split_path[2]
                 return self.get(None, extra_info={"track_id": real_id}, process=True)
             elif "/album/" in path:
                 tracks = []
@@ -77,7 +85,6 @@ class YamService(_Service):
                             type=TrackType.Dynamic,
                         )
                     )
-                    print(type(tracks))
                 return tracks
         else:
             track = self.api.tracks(extra_info["track_id"])[0]

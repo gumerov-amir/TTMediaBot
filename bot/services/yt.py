@@ -1,5 +1,9 @@
+from __future__ import annotations
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from bot import Bot
 
 from yt_dlp import YoutubeDL
 from youtubesearchpython import VideosSearch
@@ -13,10 +17,11 @@ from bot import errors
 
 
 class YtService(_Service):
-    def __init__(self, config: YtModel):
+    def __init__(self, bot: Bot, config: YtModel):
+        self.bot = bot
+        self.config = config
         self.name = "yt"
         self.hostnames = []
-        self.config = config
         self.is_enabled = self.config.enabled
         self.error_message = ""
         self.warning_message = ""

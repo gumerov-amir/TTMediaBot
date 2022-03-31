@@ -51,9 +51,9 @@ class ServiceManager:
     def __init__(self, bot: Bot) -> None:
         self.config = bot.config.services
         self.services: Dict[str, Service] = {
-            "vk": VkService(self.config.vk),
-            "yam": YamService(self.config.yam),
-            "yt": YtService(self.config.yt),
+            "vk": VkService(bot, self.config.vk),
+            "yam": YamService(bot, self.config.yam),
+            "yt": YtService(bot, self.config.yt),
         }
         self.service: Service = self.services[self.config.default_service]
         self.fallback_service = app_vars.fallback_service
