@@ -33,7 +33,7 @@ def update():
 
 def compile():
     code = subprocess.call(
-        f"{babel_prefix} compile -d {locale_path} -D {locale_domain}", shell=True
+        f"{babel_prefix} compile -d {locale_path} -D {locale_domain} --previous", shell=True
     )
     if code:
         sys.exit(code)
