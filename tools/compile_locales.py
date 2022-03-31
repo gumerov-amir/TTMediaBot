@@ -24,7 +24,7 @@ def extract():
 
 def update():
     code = subprocess.call(
-        f"{babel_prefix} update -i {pot_file_path} -d {locale_path} -D {locale_domain} --update-header-comment",
+        f"{babel_prefix} update -i {pot_file_path} -d {locale_path} -D {locale_domain} --update-header-comment --previous",
         shell=True,
     )
     if code:
@@ -33,7 +33,7 @@ def update():
 
 def compile():
     code = subprocess.call(
-        f"{babel_prefix} compile -d {locale_path} -D {locale_domain} --previous", shell=True
+        f"{babel_prefix} compile -d {locale_path} -D {locale_domain}", shell=True
     )
     if code:
         sys.exit(code)
