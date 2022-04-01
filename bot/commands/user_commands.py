@@ -72,7 +72,7 @@ class PlayPauseCommand(Command):
 class PlayUrlCommand(Command):
     @property
     def help(self) -> str:
-        return self.translator.translate("URL Plays a stream from bot given URL")
+        return self.translator.translate("URL Plays a stream from a given URL")
 
     def __call__(self, arg: str, user: User) -> Optional[str]:
         if arg:
@@ -367,7 +367,7 @@ class SpeedCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "SPEED Sets playback speed from bot.25 to 4. If no speed is given, shows current speed"
+            "SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows current speed"
         )
 
     def __call__(self, arg: str, user: User) -> Optional[str]:
@@ -484,7 +484,7 @@ class RecentsCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "NUMBER Plays a track with  the given number from bot list of recent tracks. Without a number shows recent tracks"
+            "NUMBER Plays a track with  the given number from a list of recent tracks. Without a number shows recent tracks"
         )
 
     def __call__(self, arg: str, user: User) -> Optional[str]:
