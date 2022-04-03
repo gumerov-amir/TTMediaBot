@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from typing import Any, TYPE_CHECKING, Callable
 
 from bot.commands.task_processor import Task
@@ -11,6 +12,7 @@ class Command:
     def __init__(self, command_processor: CommandProcessor):
         self._bot = command_processor.bot
         self.cache = command_processor.cache
+        self.cache_manager = command_processor.cache_manager
         self.command_processor = command_processor
         self.config = command_processor.config
         self.config_manager = command_processor.config_manager

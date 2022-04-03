@@ -302,7 +302,7 @@ class ServiceCommand(Command):
 
     @property
     def service_help(self):
-        services = []
+        services: List[str] = []
         for i in self.service_manager.services:
             service = self.service_manager.services[i]
             if not service.is_enabled:
@@ -314,7 +314,9 @@ class ServiceCommand(Command):
                     services.append("{} (Error)".format(service.name))
             elif service.warning_message:
                 services.append(
-                    self.translator.translate("{} (Warning: {})").format(service.name, service.warning_message)
+                    self.translator.translate("{} (Warning: {})").format(
+                        service.name, service.warning_message
+                    )
                 )
             else:
                 services.append(service.name)
@@ -410,7 +412,7 @@ class FavoritesCommand(Command):
                 self.cache.favorites[user.username].append(self.player.track.get_raw())
             else:
                 self.cache.favorites[user.username] = [self.player.track.get_raw()]
-            self.cache.save()
+            self.cache_manager.save()
             return self.translator.translate("Added")
         else:
             return self.translator.translate("Nothing is playing")
@@ -422,7 +424,7 @@ class FavoritesCommand(Command):
                     self.cache.favorites[user.username].remove(self.player.track)
                 else:
                     del self.cache.favorites[user.username][int(arg[1::]) - 1]
-                self.cache.save()
+                self.cache_manager.save()
                 return self.translator.translate("Deleted")
             except IndexError:
                 return self.translator.translate("Out of list")

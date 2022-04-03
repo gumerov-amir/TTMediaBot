@@ -6,7 +6,6 @@ pydantic
 pyshorteners
 requests
 vk-api
-version
 yandex_music
 youtube-search-python
 yt-dlp

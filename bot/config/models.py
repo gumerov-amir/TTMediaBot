@@ -2,8 +2,6 @@ from typing import Any, Dict, List, Union
 
 from pydantic import BaseModel
 
-from bot import app_vars
-
 
 class GeneralModel(BaseModel):
     language: str = "en"
@@ -96,7 +94,7 @@ class ShorteningModel(BaseModel):
 
 
 class ConfigModel(BaseModel):
-    version: str = "0.0.0"
+    config_version: int = 0
     general: GeneralModel = GeneralModel()
     sound_devices: SoundDevicesModel = SoundDevicesModel()
     player: PlayerModel = PlayerModel()

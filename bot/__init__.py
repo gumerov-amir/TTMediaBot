@@ -12,7 +12,6 @@ from bot import (
     cache,
     commands,
     config,
-    migrator,
     connectors,
     logger,
     modules,
@@ -33,7 +32,6 @@ class Bot:
     ) -> None:
         try:
             self.config_manager = config.ConfigManager(config_file_name)
-            self.config = self.config_manager.config
         except ValidationError as e:
             for error in e.errors():
                 print(
@@ -46,10 +44,11 @@ class Bot:
             sys.exit(
                 "The configuration file cannot be accessed due to a permission error or is already used by another instance of the bot"
             )
+        self.config = self.config_manager.config
         self.translator = translator.Translator(self.config.general.language)
         try:
             if cache_file_name:
-                self.cache = cache.Cache(cache_file_name)
+                self.cache_manager = cache.CacheManager(cache_file_name)
             else:
                 cache_file_name = self.config.general.cache_file_name
                 if not os.path.isdir(
@@ -58,13 +57,12 @@ class Bot:
                     cache_file_name = os.path.join(
                         self.config_manager.config_dir, cache_file_name
                     )
-                self.cache = cache.Cache(cache_file_name)
+                self.cache_manager = cache.CacheManager(cache_file_name)
         except PermissionError:
             sys.exit(
                 "The cache file cannot be accessed due to a permission error or is already used by another instance of the bot"
             )
-        self.migrator = migrator.Migrator(self.config_manager, self.cache)
-        self.migrator.migrate()
+        self.cache = self.cache_manager.cache
         self.log_file_name = log_file_name
         self.player = player.Player(self)
         self.ttclient = TeamTalk.TeamTalk(self)
@@ -110,6 +108,6 @@ class Bot:
         self.ttclient.close()
         self.tt_player_connector.close()
         self.config_manager.close()
-        self.cache.close()
+        self.cache_manager.close()
         self._close = True
         logging.info("Bot closed")

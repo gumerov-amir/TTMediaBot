@@ -45,14 +45,15 @@ def get_url_suffix_from_platform() -> str:
 def download() -> None:
     r = requests.get(url)
     page = bs4.BeautifulSoup(r.text, features="html.parser")
+    # last tested version is 5.8
     versions = page.find_all("li")
-    last_version = versions[-1].a.get("href")[0:-1]
+    version = [i for i in versions if "5.8" in i.text][-1].a.get("href")[0:-1]
     download_url = (
         url
         + "/"
-        + last_version
+        + version
         + "/"
-        + "tt5sdk_{v}_{p}.7z".format(v=last_version, p=get_url_suffix_from_platform())
+        + "tt5sdk_{v}_{p}.7z".format(v=version, p=get_url_suffix_from_platform())
     )
     print("Downloading from " + download_url)
     downloader.download_file(download_url, os.path.join(cd, "ttsdk.7z"))

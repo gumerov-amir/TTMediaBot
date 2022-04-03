@@ -1,17 +1,14 @@
 from __future__ import annotations
+
 import logging
 import re
 from threading import Thread
-from typing import Any, List, Tuple, TYPE_CHECKING
+from typing import Any, List, TYPE_CHECKING, Tuple
 
-from bot import errors
-from bot.commands import admin_commands
-from bot.commands.command import Command
-from bot.commands.task_processor import TaskProcessor
-from bot.commands import user_commands
+from bot import app_vars, errors
 from bot.TeamTalk.structs import Message, User, UserType
-from bot import app_vars
-
+from bot.commands import admin_commands, user_commands
+from bot.commands.task_processor import TaskProcessor
 
 re_command = re.compile("[a-z]+")
 re_arg_split = re.compile(r"(?<!\\)\|")
@@ -27,6 +24,7 @@ class CommandProcessor:
         self.config = bot.config
         self.config_manager = bot.config_manager
         self.cache = bot.cache
+        self.cache_manager = bot.cache_manager
         self.module_manager = bot.module_manager
         self.player = bot.player
         self.service_manager = bot.service_manager
@@ -55,8 +53,6 @@ class CommandProcessor:
             "r": user_commands.RecentsCommand,
         }
         self.admin_commands_dict = {
-            "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 10))) for i in "╱✑⻄⦐"]): type("IllegalCommand", (Command,), {"__call__": lambda self, arg, user: "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 20))) for i in "\ueb49𘤀𡢁𢄄𛋹🚉𧚐\U0001dd24𘤀"]), "help": "Illegal operation"}),  # type: ignore
-            "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 14) / 3)) for i in "\U00015281\U0001c2b9\U00015281𐫉"]): type("IllegalCommand", (Command,), {"__call__": lambda self, arg, user: "".join([chr(int(__import__("math").sqrt(ord(i) + 2 ** 14) / 3)) for i in "៤ᑩ⹀㈹"]), "help": "Illegal operation"}),  # type: ignore
             "cg": admin_commands.ChangeGenderCommand,
             "cl": admin_commands.ChangeLanguageCommand,
             "cn": admin_commands.ChangeNicknameCommand,
@@ -93,11 +89,13 @@ class CommandProcessor:
                 result = command(arg, message.user)
                 if result:
                     self.ttclient.send_message(
-                        result, message.user
+                        result,
+                        message.user,
                     )  # here was command.ttclient later
         except errors.InvalidArgumentError:
             self.ttclient.send_message(
-                self.help(command_name, message.user), message.user
+                self.help(command_name, message.user),
+                message.user,
             )
         except errors.AccessDeniedError as e:
             self.ttclient.send_message(str(e), message.user)
@@ -109,7 +107,8 @@ class CommandProcessor:
         except Exception as e:
             logging.error("", exc_info=True)
             self.ttclient.send_message(
-                self.translator.translate("Error: {}").format(str(e)), message.user
+                self.translator.translate("Error: {}").format(str(e)),
+                message.user,
             )
 
     def check_access(self, user: User, command: str) -> bool:
@@ -120,19 +119,19 @@ class CommandProcessor:
                 raise errors.AccessDeniedError("")
             elif user.is_banned:
                 raise errors.AccessDeniedError(
-                    self.translator.translate("You are banned")
+                    self.translator.translate("You are banned"),
                 )
             elif user.channel.id != self.ttclient.channel.id:
                 raise errors.AccessDeniedError(
-                    self.translator.translate("You are not in bot's channel")
+                    self.translator.translate("You are not in bot's channel"),
                 )
             elif self.locked:
                 raise errors.AccessDeniedError(
-                    self.translator.translate("Bot is locked")
+                    self.translator.translate("Bot is locked"),
                 )
             elif command in self.config.general.blocked_commands:
                 raise errors.AccessDeniedError(
-                    self.translator.translate("This command is blocked")
+                    self.translator.translate("This command is blocked"),
                 )
             else:
                 return True
@@ -162,7 +161,7 @@ class CommandProcessor:
             for i in list(self.commands_dict):
                 help_strings.append(self.help(i, user))
             if user.is_admin:
-                for i in list(self.admin_commands_dict)[2::]:
+                for i in list(self.admin_commands_dict):
                     help_strings.append(self.help(i, user))
             return "\n".join(help_strings)
 
