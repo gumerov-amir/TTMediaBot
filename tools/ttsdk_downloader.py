@@ -30,7 +30,7 @@ def get_url_suffix_from_platform() -> str:
             else:
                 return "win32"
         else:
-            sys.exit("Native Windows on ARM is not suported")
+            sys.exit("Native Windows on ARM is not supported")
     elif sys.platform == "darwin":
         sys.exit("Darwin is not supported")
     else:
