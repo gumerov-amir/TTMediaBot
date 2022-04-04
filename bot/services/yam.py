@@ -1,5 +1,7 @@
 from __future__ import annotations
+
 import logging
+import time
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
 from urllib.parse import urlparse
 
@@ -78,6 +80,23 @@ class YamService(Service):
                 if len(artist_tracks) == 0:
                     raise errors.ServiceError()
                 for track in artist_tracks:
+                    tracks.append(
+                        Track(
+                            service=self.name,
+                            extra_info={"track_id": track.track_id},
+                            type=TrackType.Dynamic,
+                        )
+                    )
+                return tracks
+            elif "users" in path and "playlist" in path:
+                tracks = []
+                split_path = path.split("/")
+                user_id = split_path[2]
+                kind = split_path[4]
+                playlist = self.api.users_playlists(kind=kind, user_id=user_id)
+                if playlist.track_count == 0:
+                    raise errors.ServiceError()
+                for track in playlist.tracks:
                     tracks.append(
                         Track(
                             service=self.name,
