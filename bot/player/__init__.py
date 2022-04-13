@@ -21,6 +21,7 @@ class Player:
     def __init__(self, bot: Bot):
         self.config = bot.config.player
         self.cache = bot.cache
+        self.cache_manager = bot.cache_manager
         mpv_options = {
             "demuxer_lavf_o": "http_persistent=false",
             "demuxer_max_back_bytes": 1048576,
@@ -100,7 +101,7 @@ class Player:
                     )
             except:
                 self.cache.recents.append(self.track_list[self.track_index].get_raw())
-            self.cache.save()
+            self.cache_manager.save()
         self._player.pause = False
         self._player.play(arg)
 

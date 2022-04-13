@@ -94,6 +94,7 @@ class ShorteningModel(BaseModel):
 
 
 class ConfigModel(BaseModel):
+    config_version: int = 0
     general: GeneralModel = GeneralModel()
     sound_devices: SoundDevicesModel = SoundDevicesModel()
     player: PlayerModel = PlayerModel()

@@ -108,15 +108,15 @@ class ClearCacheCommand(Command):
         if not arg:
             self.cache.recents.clear()
             self.cache.favorites.clear()
-            self.cache.save()
+            self.cache_manager.save()
             return self.translator.translate("Cache cleared")
         elif arg == "r":
             self.cache.recents.clear()
-            self.cache.save()
+            self.cache_manager.save()
             return self.translator.translate("Recents cleared")
         elif arg == "f":
             self.cache.favorites.clear()
-            self.cache.save()
+            self.cache_manager.save()
             return self.translator.translate("Favorites cleared")
 
 
