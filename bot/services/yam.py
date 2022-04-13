@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from bot import Bot
 
 from yandex_music import Client
-from yandex_music.exceptions import UnauthorizedError
+from yandex_music.exceptions import UnauthorizedError, NetworkError
 
 from bot.config.models import YamModel
 from bot.player.enums import TrackType
@@ -35,7 +35,8 @@ class YamService(Service):
         self.api = Client(token=self.config.token)
         try:
             self.api.init()
-        except UnauthorizedError as e:
+        except (UnauthorizedError, NetworkError) as e:
+            logging.error(e)
             raise errors.ServiceError(e)
         if not self.api.account_status().account.uid:
             self.warning_message = self.bot.translator.translate(
