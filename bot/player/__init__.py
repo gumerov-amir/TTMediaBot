@@ -1,6 +1,7 @@
 from __future__ import annotations
 import html
 import logging
+import datetime
 import time
 from typing import Any, Dict, Callable, List, Optional, TYPE_CHECKING
 import random
@@ -198,8 +199,11 @@ class Player:
         except SystemError:
             self.stop()
 
-    def get_duration(self) -> float:
-        return self._player.duration
+    def get_duration(self) -> str:
+        if not self._player.duration:
+            return "unknown"
+        else:
+            return str(datetime.timedelta(seconds=round(self._player.duration)))
 
     """def get_position(self) -> float:
         return self._player.time_pos

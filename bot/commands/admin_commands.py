@@ -14,6 +14,73 @@ if TYPE_CHECKING:
     from bot.TeamTalk.structs import User
 
 
+class VolumeFadingCommand(Command):
+    @property
+    def help(self) -> str:
+        return self.translator.translate(
+            "enable or disable the volume fading"
+        )
+
+    def __call__(self, arg: str, user: User) -> Optional[str]:
+        self.config.player.volume_fading = (
+            not self.config.player.volume_fading
+        )
+        self.config_manager.save()
+        if self.config.general.send_channel_messages:
+            self.run_async(
+                self.ttclient.send_message,
+                self.translator.translate("volume fading is now enabled")
+                if self.config.player.volume_fading
+                else self.translator.translate("volume fading is now disabled"),
+                type=2,
+            )
+        else:
+            return (
+                self.translator.translate("volume fading is now enabled")
+                if self.config.player.volume_fading
+                else self.translator.translate("volume fading is now disabled")
+            )
+
+
+
+class VolumeFadingIntervalCommand(Command):
+    @property
+    def help(self) -> str:
+        return self.translator.translate("VALUE Change the volume fading interval. Without an argument show the current volume fading interval.")
+
+    def __call__(self, arg: str, user: User) -> Optional[str]:
+        if arg:
+            try:
+                self.config.player.volume_fading_interval = float(arg)
+                self.config_manager.save()
+                self.run_async(
+                    self.ttclient.send_message,
+                    self.translator.translate(
+                        "the volume fading interval successfully changed to {value}"
+                    ).format(value=float(arg)),
+                    user,
+                )
+            except ValueError:
+                raise errors.InvalidArgumentError
+        else:
+            return self.translator.translate("current volume fading interval is {value}").format(value=self.config.player.volume_fading_interval)
+
+
+class VolumeFadingStateCommand(Command):
+    @property
+    def help(self) -> str:
+        return self.translator.translate(
+            "check the state of the volume fading"
+        )
+
+    def __call__(self, arg: str, user: User) -> Optional[str]:
+        return (
+            self.translator.translate("the current state of volume fading is enabled")
+            if self.config.player.volume_fading
+            else self.translator.translate("the current state of volume fading is disabled")
+        )
+
+
 class BlockCommandCommand(Command):
     @property
     def help(self) -> str:

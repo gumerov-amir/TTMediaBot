@@ -43,7 +43,6 @@ class PlayPauseCommand(Command):
                 user,
             )
             try:
-                track_list = self.service_manager.service.search(arg)
                 if self.config.general.send_channel_messages:
                     self.run_async(
                         self.ttclient.send_message,
@@ -52,6 +51,7 @@ class PlayPauseCommand(Command):
                         ).format(nickname=user.nickname, request=arg),
                         type=2,
                     )
+                track_list = self.service_manager.service.search(arg)
                 self.run_async(self.player.play, track_list)
                 return self.translator.translate("Playing {}").format(
                     track_list[0].name

@@ -31,10 +31,11 @@ class TTPlayerConnector(Thread):
                         self.ttclient.enable_voice_transmission()
                         last_track_meta = self.player.track.get_meta()
                         if self.player.track.name:
+                            time.sleep(0.5)
                             self.ttclient.change_status_text(
                                 self.translator.translate(
-                                    "Playing: {track_name}"
-                                ).format(track_name=self.player.track.name)
+                                    "Playing: {track_name} ({duration})"
+                                ).format(track_name=self.player.track.name, duration=self.player.get_duration())
                             )
                         else:
                             self.ttclient.change_status_text(
@@ -48,10 +49,11 @@ class TTPlayerConnector(Thread):
                     elif self.player.state == State.Paused:
                         self.ttclient.disable_voice_transmission()
                         if self.player.track.name:
+                            time.sleep(0.5)
                             self.ttclient.change_status_text(
                                 self.translator.translate(
-                                    "Paused: {track_name}"
-                                ).format(track_name=self.player.track.name)
+                                    "Paused: {track_name} ({duration})"
+                                ).format(track_name=self.player.track.name, duration=self.player.get_duration())
                             )
                         else:
                             self.ttclient.change_status_text(

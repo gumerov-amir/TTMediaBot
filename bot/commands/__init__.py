@@ -53,6 +53,9 @@ class CommandProcessor:
             "r": user_commands.RecentsCommand,
         }
         self.admin_commands_dict = {
+            "vf": admin_commands.VolumeFadingCommand,
+            "vfi": admin_commands.VolumeFadingIntervalCommand,
+            "vfs": admin_commands.VolumeFadingStateCommand,
             "cg": admin_commands.ChangeGenderCommand,
             "cl": admin_commands.ChangeLanguageCommand,
             "cn": admin_commands.ChangeNicknameCommand,
