@@ -152,7 +152,7 @@ class GetPositionCommand(Command):
                     self.translator.translate(
                         "Current Position: {} ({} second)"
                     ).format(str(datetime.timedelta(seconds=round(self.player.get_position()))), round(self.player.get_position())),
-                    type=2,
+                    user,
                 )
             else:
                 self.run_async(
@@ -160,7 +160,7 @@ class GetPositionCommand(Command):
                     self.translator.translate(
                         "Current Position: {} ({} seconds)"
                     ).format(str(datetime.timedelta(seconds=round(self.player.get_position()))), round(self.player.get_position())),
-                    type=2,
+                    user,
                 )
         else:
             self.run_async(
