@@ -50,12 +50,14 @@ class TTPlayerConnector(Thread):
                     elif self.player.state == State.Paused:
                         self.ttclient.disable_voice_transmission()
                         if self.player.track.name:
+                            time.sleep(0.5)
                             self.ttclient.change_status_text(
                                 self.translator.translate(
                                     "Paused: {track_name} ({duration})"
                                 ).format(track_name=self.player.track.name, duration=self.player.get_duration())
                             )
                         else:
+                            time.sleep(0.5)
                             self.ttclient.change_status_text(
                                 self.translator.translate(
                                     "Paused: {stream_url} ({duration})"
@@ -66,6 +68,7 @@ class TTPlayerConnector(Thread):
                     and last_player_state != State.Stopped
                 ):
                     last_track_meta = self.player.track.get_meta()
+                    time.sleep(0.5)
                     self.ttclient.change_status_text(
                         "{state}: {name} ({duration})".format(
                             state=self.ttclient.status.split(":")[0],
