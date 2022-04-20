@@ -38,10 +38,11 @@ class TTPlayerConnector(Thread):
                                 ).format(track_name=self.player.track.name, duration=self.player.get_duration())
                             )
                         else:
+                            time.sleep(0.5)
                             self.ttclient.change_status_text(
                                 self.translator.translate(
-                                    "Playing: {stream_url}"
-                                ).format(stream_url=self.player.track.url)
+                                    "Playing: {stream_url} ({duration})"
+                                ).format(stream_url=self.player.track.url, duration=self.player.get_duration())
                             )
                     elif self.player.state == State.Stopped:
                         self.ttclient.disable_voice_transmission()
@@ -49,7 +50,6 @@ class TTPlayerConnector(Thread):
                     elif self.player.state == State.Paused:
                         self.ttclient.disable_voice_transmission()
                         if self.player.track.name:
-                            time.sleep(0.5)
                             self.ttclient.change_status_text(
                                 self.translator.translate(
                                     "Paused: {track_name} ({duration})"
@@ -58,8 +58,8 @@ class TTPlayerConnector(Thread):
                         else:
                             self.ttclient.change_status_text(
                                 self.translator.translate(
-                                    "Paused: {stream_url}"
-                                ).format(stream_url=self.player.track.url)
+                                    "Paused: {stream_url} ({duration})"
+                                ).format(stream_url=self.player.track.url, duration=self.player.get_duration())
                             )
                 if (
                     self.player.track.get_meta() != last_track_meta
@@ -67,9 +67,10 @@ class TTPlayerConnector(Thread):
                 ):
                     last_track_meta = self.player.track.get_meta()
                     self.ttclient.change_status_text(
-                        "{state}: {name}".format(
+                        "{state}: {name} ({duration})".format(
                             state=self.ttclient.status.split(":")[0],
                             name=self.player.track.name,
+                            duration=self.player.get_duration()
                         )
                     )
             except Exception:

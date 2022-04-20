@@ -42,6 +42,7 @@ class CommandProcessor:
             "b": user_commands.PreviousTrackCommand,
             "n": user_commands.NextTrackCommand,
             "c": user_commands.SelectTrackCommand,
+            "gp": user_commands.GetPositionCommand,
             "sb": user_commands.SeekBackCommand,
             "sf": user_commands.SeekForwardCommand,
             "v": user_commands.VolumeCommand,

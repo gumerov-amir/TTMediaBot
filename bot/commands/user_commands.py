@@ -137,6 +137,41 @@ class VolumeCommand(Command):
             return str(self.player.volume)
 
 
+class GetPositionCommand(Command):
+    @property
+    def help(self) -> str:
+        return self.translator.translate(
+            "get the current position of the track"
+        )
+
+    def __call__(self, arg: str, user: User) -> Optional[str]:
+        if self.player.state != State.Stopped:
+            if round(self.player.get_position()) == 1:
+                self.run_async(
+                    self.ttclient.send_message,
+                    self.translator.translate(
+                        "Current Position: {} ({} second)"
+                    ).format(str(datetime.timedelta(seconds=round(self.player.get_position()))), round(self.player.get_position())),
+                    type=2,
+                )
+            else:
+                self.run_async(
+                    self.ttclient.send_message,
+                    self.translator.translate(
+                        "Current Position: {} ({} seconds)"
+                    ).format(str(datetime.timedelta(seconds=round(self.player.get_position()))), round(self.player.get_position())),
+                    type=2,
+                )
+        else:
+            self.run_async(
+                self.ttclient.send_message,
+                self.translator.translate(
+                    "nothing is playing"
+                ),
+                user,
+            )
+
+
 class SeekBackCommand(Command):
     @property
     def help(self) -> str:

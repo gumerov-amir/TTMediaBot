@@ -20,6 +20,7 @@ if TYPE_CHECKING:
 
 class Player:
     def __init__(self, bot: Bot):
+        self.bot = bot
         self.config = bot.config.player
         self.cache = bot.cache
         self.cache_manager = bot.cache_manager
@@ -201,14 +202,17 @@ class Player:
 
     def get_duration(self) -> str:
         if not self._player.duration:
-            return "unknown"
+            return self.bot.translator.translate("unknown")
         else:
             return str(datetime.timedelta(seconds=round(self._player.duration)))
 
-    """def get_position(self) -> float:
-        return self._player.time_pos
+    def get_position(self) -> float:
+        if not self._player.time_pos:
+            return self.bot.translator.translate("unknown")
+        else:
+            return self._player.time_pos
 
-    def set_position(self, arg: float) -> None:
+    """def set_position(self, arg: float) -> None:
         if arg < 0:
             raise errors.IncorrectPositionError()
         self._player.seek(arg, reference="absolute")"""
