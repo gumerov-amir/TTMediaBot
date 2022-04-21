@@ -202,13 +202,13 @@ class Player:
 
     def get_duration(self) -> str:
         if not self._player.duration:
-            return self.bot.translator.translate("unknown")
+            return self.bot.translator.translate("unknown duration")
         else:
             return str(datetime.timedelta(seconds=round(self._player.duration)))
 
     def get_position(self) -> float:
         if not self._player.time_pos:
-            return self.bot.translator.translate("unknown")
+            return self.bot.translator.translate("unknown position")
         else:
             return self._player.time_pos
 
