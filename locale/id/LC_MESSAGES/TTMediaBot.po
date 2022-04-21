@@ -7,22 +7,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TTMediaBot VERSION\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-04-21 13:56+0800\n"
-"PO-Revision-Date: 2022-04-15 20:17+0700\n"
+"POT-Creation-Date: 2022-04-21 16:56+0800\n"
+"PO-Revision-Date: 2022-04-21 17:18+0800\n"
 "Last-Translator: \n"
-"Language: id_ID\n"
 "Language-Team: Infinity Art And Technology\n"
-"Plural-Forms: nplurals=1; plural=0\n"
+"Language: id_ID\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "Generated-By: Babel 2.9.1\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/app_vars.py:11
 msgid ""
 "A media streaming bot for TeamTalk.\n"
-"Authors: Amir Gumerov, Vladislav Kopylov, Beqa Gozalishvili, Kirill "
-"Belousov.\n"
+"Authors: Amir Gumerov, Vladislav Kopylov, Beqa Gozalishvili, Kirill Belousov.\n"
 "Home page: https://github.com/gumerov-amir/TTMediaBotLicense: Mit License"
 msgstr ""
 "Bot streaming media untuk TeamTalk.\n"
@@ -65,73 +65,71 @@ msgstr "Perintah tidak diketahui."
 
 # | msgid "Enables or disables event handling"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:20
-#, fuzzy
 msgid "enable or disable the volume fading"
-msgstr "Mengaktifkan atau menonaktifkan penanganan acara."
+msgstr "aktifkan atau nonaktifkan pemudaran volume"
 
 # | msgid "Event handling is enabled"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:32
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:39
-#, fuzzy
 msgid "volume fading is now enabled"
-msgstr "Penanganan acara diaktifkan."
+msgstr "volume memudar diaktifkan"
 
 # | msgid "Event handling is disabled"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:34
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:41
-#, fuzzy
 msgid "volume fading is now disabled"
-msgstr "Penanganan acara dinonaktifkan."
+msgstr "volume memudar dinonaktifkan"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:49
 msgid ""
-"VALUE Change the volume fading interval. Without an argument show the "
-"current volume fading interval."
+"VALUE Change the volume fading interval. Without an argument show the current "
+"volume fading interval."
 msgstr ""
+"VALUE Ubah interval pemudaran volume. Tanpa argumen, tunjukkan interval "
+"pemudaran volume saat ini."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:58
 msgid "the volume fading interval successfully changed to {value}"
-msgstr ""
+msgstr "interval volume memudar berhasil diubah menjadi {value}"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:66
 msgid "current volume fading interval is {value}"
-msgstr ""
+msgstr "interval pemudaran volume saat ini adalah {value}"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:72
 msgid "check the state of the volume fading"
-msgstr ""
+msgstr "periksa keadaan volume memudar"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:78
 msgid "the current state of volume fading is enabled"
-msgstr ""
+msgstr "status pemudaran volume saat ini diaktifkan"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:80
 msgid "the current state of volume fading is disabled"
-msgstr ""
+msgstr "status pemudaran volume saat ini dinonaktifkan"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:87
 msgid ""
-"+/-COMMAND Blocks or unblocks commands. +COMMAND adds command to the "
-"blocklist. -COMMAND removes from it. Without a command shows the "
-"blocklist"
+"+/-COMMAND Blocks or unblocks commands. +COMMAND adds command to the blocklist. "
+"-COMMAND removes from it. Without a command shows the blocklist"
 msgstr ""
 "+/-Perintah Memblokir atau membuka blokir perintah. +Perintah tambahkan "
-"perintah ke daftar blokir. -Perintah hapus perintah dari daftar perintah."
-" Tanpa argumen apapun, tampilkan daftar blokir."
+"perintah ke daftar blokir. -Perintah hapus perintah dari daftar perintah. Tanpa "
+"argumen apapun, tampilkan daftar blokir."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:99
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:389
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:419
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:488
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:500
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:548
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:479
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:491
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:539
 msgid "The list is empty"
 msgstr "Daftar kosong."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:104
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:371
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:403
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:451
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:442
 msgid "Added"
 msgstr "Ditambahkan."
 
@@ -142,7 +140,7 @@ msgstr "Perintah ini sudah ditambahkan."
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:112
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:377
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:409
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:463
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:454
 msgid "Deleted"
 msgstr "Dihapus."
 
@@ -153,8 +151,7 @@ msgstr "Perintah ini tidak diblokir."
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:122
 msgid "GENDER Changes bot's gender. n neutral, m male, f female"
 msgstr ""
-"JENIS KELAMIN Mengubah jenis kelamin bot. n netral, m laki-laki, f "
-"perempuan."
+"JENIS KELAMIN Mengubah jenis kelamin bot. n netral, m laki-laki, f perempuan."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:137
 msgid "LANGUAGE Changes bot's language"
@@ -170,8 +167,7 @@ msgstr "Bahasa tidak tersedia."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:149
 msgid ""
-"Current language: {current_language}. Available languages: "
-"{available_languages}"
+"Current language: {current_language}. Available languages: {available_languages}"
 msgstr ""
 "Bahasa saat ini: {current_language}. Bahasa yang tersedia: "
 "{available_languages}."
@@ -182,11 +178,11 @@ msgstr "NAMA PANGGILAN ubah nama panggilan bot."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:170
 msgid ""
-"r/f Clears bot's cache. r clears recents, f clears favorites, without an "
-"option clears the entire cache"
+"r/f Clears bot's cache. r clears recents, f clears favorites, without an option "
+"clears the entire cache"
 msgstr ""
-"r/f Membersihkan cache bot. r hapus daftar terbaru, f hapus daftar "
-"favorit, tanpa argumen apapun hapus seluruh cache."
+"r/f Membersihkan cache bot. r hapus daftar terbaru, f hapus daftar favorit, "
+"tanpa argumen apapun hapus seluruh cache."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:179
 msgid "Cache cleared"
@@ -203,13 +199,12 @@ msgstr "Daftar cache favorit dibersihkan."
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:193
 msgid ""
 "Join channel. first argument is channel name or id, second argument is "
-"password, split argument \" | \", if password is undefined, don't type "
-"second argument"
+"password, split argument \" | \", if password is undefined, don't type second "
+"argument"
 msgstr ""
-"Gabung dengan saluran. argumen pertama adalah nama atau ID saluran, "
-"argumen kedua adalah kata sandi, Setiap argumen dipisahkan oleh tanda "
-"garis fertikal (|), jika kata sandi tidak ditentukan, jangan ketik "
-"argumen kedua."
+"Gabung dengan saluran. argumen pertama adalah nama atau ID saluran, argumen "
+"kedua adalah kata sandi, Setiap argumen dipisahkan oleh tanda garis fertikal "
+"(|), jika kata sandi tidak ditentukan, jangan ketik argumen kedua."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:213
 msgid "This channel does not exist"
@@ -282,12 +277,12 @@ msgstr "Konfigurasi disimpan."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:363
 msgid ""
-"+/-USERNAME Manages a list of administrators. +USERNAME adds a user. "
-"-USERNAME removes it. Without an option shows the list"
+"+/-USERNAME Manages a list of administrators. +USERNAME adds a user. -USERNAME "
+"removes it. Without an option shows the list"
 msgstr ""
-"+/-NAMAPENGGUNA Kelola daftar administrator. +NAMAPENGGUNA tambahkan "
-"pengguna ke daftar administrator. -NAMAPENGGUNA hapus dari daftar "
-"administrator. Tampa argumen apapun tampilkan daftar administrator."
+"+/-NAMAPENGGUNA Kelola daftar administrator. +NAMAPENGGUNA tambahkan pengguna "
+"ke daftar administrator. -NAMAPENGGUNA hapus dari daftar administrator. Tampa "
+"argumen apapun tampilkan daftar administrator."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:379
 msgid "This user is not in the admin list"
@@ -295,13 +290,13 @@ msgstr "Pengguna ini tidak ada dalam daftar administrator."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:395
 msgid ""
-"+/-USERNAME Manages a list of banned users. +USERNAME adds a user. "
-"-USERNAME removes it. Without an option shows the list"
+"+/-USERNAME Manages a list of banned users. +USERNAME adds a user. -USERNAME "
+"removes it. Without an option shows the list"
 msgstr ""
-"+/-NAMAPENGGUNA KELOLA daftar pengguna yang dilarang. +NAMAPENGGUNA "
-"tambahkan pengguna ke daftar pengguna yang dilarang. -NAMAPENGGUNA hapus "
-"dari daftar pengguna yang dilarang. Tanpa argumen apapun tampilkan daftar"
-" pengguna yang dilarang."
+"+/-NAMAPENGGUNA KELOLA daftar pengguna yang dilarang. +NAMAPENGGUNA tambahkan "
+"pengguna ke daftar pengguna yang dilarang. -NAMAPENGGUNA hapus dari daftar "
+"pengguna yang dilarang. Tanpa argumen apapun tampilkan daftar pengguna yang "
+"dilarang."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:411
 msgid "This user is not banned"
@@ -329,8 +324,8 @@ msgstr "Tampilkan informasi tentang bot."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:34
 msgid ""
-"QUERY Plays tracks found for the query. If no query is given, plays or "
-"pauses current track"
+"QUERY Plays tracks found for the query. If no query is given, plays or pauses "
+"current track"
 msgstr ""
 "KUERI Memutar trek yang ditemukan untuk kueri. Jika tidak ada kueri yang "
 "diberikan, putar atau jeda trek saat ini."
@@ -344,8 +339,8 @@ msgid "{nickname} requested {request}"
 msgstr "{nickname} meminta {request}."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:56
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:221
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:238
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:212
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:229
 msgid "Playing {}"
 msgstr "Memutar {}."
 
@@ -386,98 +381,90 @@ msgid "{nickname} stopped playback"
 msgstr "{nickname} menghentikan pemutaran."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:116
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:184
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:203
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:227
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:244
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:159
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:175
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:194
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:218
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:235
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:382
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:391
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:400
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:453
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:471
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:517
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:577
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:444
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:462
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:508
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:568
 msgid "Nothing is playing"
 msgstr "Tidak ada yang diputar."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:122
 msgid ""
-"VOLUME Sets the volume to a value between 0 and {max_volume}. If no "
-"volume is specified, the current volume level is displayed"
+"VOLUME Sets the volume to a value between 0 and {max_volume}. If no volume is "
+"specified, the current volume level is displayed"
 msgstr ""
-"VOLUME Menyetel volume ke nilai antara 0 dan {max_volume}. Jika tidak ada"
-" volume yang ditentukan, level volume saat ini ditampilkan."
+"VOLUME Menyetel volume ke nilai antara 0 dan {max_volume}. Jika tidak ada "
+"volume yang ditentukan, level volume saat ini ditampilkan."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:143
 msgid "get the current position of the track"
 msgstr "dapatkan posisi trek saat ini"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:152
-msgid "Current Position: {} ({} second)"
-msgstr "Posisi saat ini: {} ({} saat)"
-
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:160
-msgid "Current Position: {} ({} seconds)"
-msgstr "Posisi saat ini: {} ({} saat)"
-
-# | msgid "Nothing is playing"
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:168
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:151
 #, fuzzy
-msgid "nothing is playing"
-msgstr "Tidak ada yang diputar."
+msgid "Current Position: {}"
+msgstr "Posisi saat ini: {}"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:178
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:169
 msgid "STEP Seeks current track backward. the default step is {seek_step} seconds"
 msgstr "Mundur {seek_step} detik."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:197
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:188
 msgid "STEP Seeks current track forward. the default step is {seek_step} seconds"
 msgstr "Maju {seek_step} detik."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:216
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:207
 msgid "Plays next track"
 msgstr "Putar trek berikutnya."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:225
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:216
 msgid "No next track"
 msgstr "Tidak ada trek berikutnya."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:233
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:224
 msgid "Plays previous track"
 msgstr "Putar trek sebelumnya."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:242
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:233
 msgid "No previous track"
 msgstr "Tidak ada trek sebelumnya."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:250
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:241
 msgid ""
-"MODE Sets the playback mode. If no mode is specified, the current mode "
-"and a list of modes are displayed"
+"MODE Sets the playback mode. If no mode is specified, the current mode and a "
+"list of modes are displayed"
 msgstr ""
-"MODE Mengatur mode pemutaran. Jika tidak ada mode yang ditentukan, mode "
-"saat ini dan daftar mode akan ditampilkan."
+"MODE Mengatur mode pemutaran. Jika tidak ada mode yang ditentukan, mode saat "
+"ini dan daftar mode akan ditampilkan."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:256
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:247
 msgid "Single Track"
 msgstr "Trek tunggal"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:257
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:248
 msgid "Repeat Track"
 msgstr "Ulangi trek"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:258
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:249
 msgid "Track list"
 msgstr "Daftar trek"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:259
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:250
 msgid "Repeat track list"
 msgstr "Ulangi daftar trek"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:260
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:251
 msgid "Random"
 msgstr "Acak"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:262
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:253
 msgid ""
 "Current mode: {current_mode}\n"
 "{modes}"
@@ -485,21 +472,21 @@ msgstr ""
 "Mode saat ini: {current_mode}\n"
 "{mode}."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:281
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:272
 msgid "Current mode: {mode}"
 msgstr "Mode saat ini: {mode}."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:293
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:284
 msgid ""
-"SERVICE Selects the service to play from, sv SERVICE h returns additional"
-" help. If no service is specified, the current service and a list of "
-"available services are displayed"
+"SERVICE Selects the service to play from, sv SERVICE h returns additional help. "
+"If no service is specified, the current service and a list of available "
+"services are displayed"
 msgstr ""
 "LAYANAN Memilih layanan untuk digunakan, sv LAYANAN h TAMPILKAN bantuan "
-"tambahan. Jika tidak ada layanan yang ditentukan, layanan saat ini dan "
-"daftar layanan yang tersedia akan ditampilkan."
+"tambahan. Jika tidak ada layanan yang ditentukan, layanan saat ini dan daftar "
+"layanan yang tersedia akan ditampilkan."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:302
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:293
 msgid ""
 "Unknown service.\n"
 "{}"
@@ -507,7 +494,7 @@ msgstr ""
 "Layanan tidak dikenal.\n"
 "{}"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:310
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:301
 msgid ""
 "Current service: {}\n"
 "Warning: {}"
@@ -515,11 +502,11 @@ msgstr ""
 "Layanan saat ini: {}\n"
 "Peringatan: {}"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:313
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:304
 msgid "Current service: {}"
 msgstr "Layanan saat ini: {}."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:319
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:310
 msgid ""
 "Error: {error}\n"
 "{service} is disabled"
@@ -527,19 +514,19 @@ msgstr ""
 "Kesalahan: {error}\n"
 "{service} dinonaktifkan."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:326
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:317
 msgid "{service} is disabled"
 msgstr "{service} dinonaktifkan."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:332
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:323
 msgid "This service has no additional help"
 msgstr "Layanan ini tidak memiliki bantuan tambahan."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:352
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:343
 msgid "{} (Warning: {})"
 msgstr "{} (Peringatan: {})."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:358
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:349
 msgid ""
 "Current service: {current_service}\n"
 "Available:\n"
@@ -551,85 +538,85 @@ msgstr ""
 "{available_services}\n"
 "kirim sv LAYANAN h untuk bantuan tambahan."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:370
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:361
 msgid "NUMBER Selects track by number from the list of current results"
 msgstr "NOMOR Memilih trek dengan nomor dari daftar hasil saat ini."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:383
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:374
 msgid "Incorrect number"
 msgstr "Nomor salah."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:385
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:396
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:376
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:387
 msgid "Playing {} {}"
 msgstr "Memutar {} {}."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:389
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:465
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:498
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:537
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:380
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:456
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:489
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:528
 msgid "Out of list"
 msgstr "Daftar terlampaui."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:406
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:397
 msgid ""
-"SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows "
-"current speed"
+"SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows current "
+"speed"
 msgstr ""
-"KECEPATAN Mengatur kecepatan pemutaran dari 0,25 hingga 4. Jika tidak ada"
-" kecepatan yang ditetapkan, tampilkan kecepatan saat ini."
+"KECEPATAN Mengatur kecepatan pemutaran dari 0,25 hingga 4. Jika tidak ada "
+"kecepatan yang ditetapkan, tampilkan kecepatan saat ini."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:412
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:403
 msgid "Current rate: {}"
 msgstr "Kecepatan saat ini: {}."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:425
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:416
 msgid ""
-"+/-NUMBER Manages favorite tracks. + adds the current track to favorites."
-" - removes a track requested from favorites. If a number is specified "
-"after +/-, adds/removes a track with that number"
+"+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - "
+"removes a track requested from favorites. If a number is specified after +/-, "
+"adds/removes a track with that number"
 msgstr ""
-"+/-NOMOR kelola trek favorit. + tambahkan trek saat ini ke daftar "
-"favorit. -NOMOR hapus trek yang diminta dari daftar favorit. Jika nomor "
-"ditentukan setelah +/-, tambahkan/hapus trek dengan nomor itu."
+"+/-NOMOR kelola trek favorit. + tambahkan trek saat ini ke daftar favorit. -"
+"NOMOR hapus trek yang diminta dari daftar favorit. Jika nomor ditentukan "
+"setelah +/-, tambahkan/hapus trek dengan nomor itu."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:431
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:422
 msgid "This command is not available for guest users"
 msgstr "Perintah ini tidak tersedia untuk pengguna guest."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:469
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:460
 msgid "This track is not in favorites"
 msgstr "Lagu ini tidak ada di daftar favorit."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:506
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:497
 msgid "Gets a direct link to the current track"
 msgstr "Dapatkan tautan langsung ke trek saat ini."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:515
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:506
 msgid "URL is not available"
 msgstr "URL tidak tersedia."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:523
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:514
 msgid ""
-"NUMBER Plays a track with  the given number from a list of recent tracks."
-" Without a number shows recent tracks"
+"NUMBER Plays a track with  the given number from a list of recent tracks. "
+"Without a number shows recent tracks"
 msgstr ""
-"NOMOR PUTAR trek dengan nomor tertentu dari daftar trek terbaru. Tanpa "
-"nomor TAMPILKAN DAFTAR trek terbaru."
+"NOMOR PUTAR trek dengan nomor tertentu dari daftar trek terbaru. Tanpa nomor "
+"TAMPILKAN DAFTAR trek terbaru."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:555
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:546
 msgid "Downloads the current track and uploads it to the channel."
 msgstr "Unduh trek saat ini dan unggah ke saluran.."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:565
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:556
 msgid "Cannot upload file to channel"
 msgstr "Tidak dapat mengunggah file ke saluran."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:573
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:564
 msgid "Downloading..."
 msgstr "Mengunduh..."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:575
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:566
 msgid "Live streams cannot be downloaded"
 msgstr "Streaming langsung tidak dapat diunduh."
 
@@ -657,15 +644,15 @@ msgstr "dijeda: {track_name} ({duration})"
 msgid "Paused: {stream_url} ({duration})"
 msgstr "dijeda: {stream_url} ({duration})"
 
+# | msgid "unknown"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/player/__init__.py:205
 #, fuzzy
-#| msgid "unknown"
 msgid "unknown duration"
 msgstr "durasi tidak diketahui"
 
+# | msgid "unknown"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/player/__init__.py:211
 #, fuzzy
-#| msgid "unknown"
 msgid "unknown position"
 msgstr "posisi tidak diketahui"
 
@@ -676,4 +663,3 @@ msgstr "Token tidak disediakan."
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/services/yam.py:46
 msgid "You don't have Yandex Plus"
 msgstr "Anda tidak memiliki Yandex Plus."
-

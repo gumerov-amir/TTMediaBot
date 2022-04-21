@@ -210,7 +210,7 @@ class Player:
         if not self._player.time_pos:
             return self.bot.translator.translate("unknown position")
         else:
-            return self._player.time_pos
+            return str(datetime.timedelta(seconds=round(self._player.time_pos)))
 
     """def set_position(self, arg: float) -> None:
         if arg < 0:

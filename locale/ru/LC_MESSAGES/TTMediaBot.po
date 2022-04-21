@@ -5,25 +5,25 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  TTMediaBot\n"
+"Project-Id-Version: TTMediaBot\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-04-21 13:56+0800\n"
-"PO-Revision-Date: 2022-04-02 01:03+0300\n"
+"POT-Creation-Date: 2022-04-21 16:56+0800\n"
+"PO-Revision-Date: 2022-04-21 17:10+0800\n"
 "Last-Translator: Гумеров Амир Эдуардович <ar8200@bk.ru>\n"
-"Language: ru\n"
 "Language-Team: TTMediaBot's developers\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 "
+"&& (n%100<12 || n%100>14) ? 1 : 2);\n"
 "Generated-By: Babel 2.9.1\n"
+"X-Generator: Poedit 3.0.1\n"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/app_vars.py:11
 msgid ""
 "A media streaming bot for TeamTalk.\n"
-"Authors: Amir Gumerov, Vladislav Kopylov, Beqa Gozalishvili, Kirill "
-"Belousov.\n"
+"Authors: Amir Gumerov, Vladislav Kopylov, Beqa Gozalishvili, Kirill Belousov.\n"
 "Home page: https://github.com/gumerov-amir/TTMediaBotLicense: Mit License"
 msgstr ""
 "TTMediaBot - бот для потоковой передачи мультимедиа для TeamTalk.\n"
@@ -65,73 +65,71 @@ msgstr "Неизвестная команда"
 
 # | msgid "Enables or disables event handling"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:20
-#, fuzzy
 msgid "enable or disable the volume fading"
-msgstr "Включает или отключает обработку событий"
+msgstr "включить или отключить затухание громкости"
 
 # | msgid "Event handling is enabled"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:32
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:39
-#, fuzzy
 msgid "volume fading is now enabled"
-msgstr "Обработка событий включена"
+msgstr "затухание громкости теперь включено"
 
 # | msgid "Event handling is disabled"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:34
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:41
-#, fuzzy
 msgid "volume fading is now disabled"
-msgstr "Обработка событий отключена"
+msgstr "затухание громкости теперь отключено"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:49
 msgid ""
-"VALUE Change the volume fading interval. Without an argument show the "
-"current volume fading interval."
+"VALUE Change the volume fading interval. Without an argument show the current "
+"volume fading interval."
 msgstr ""
+"ЗНАЧЕНИЕ Изменить интервал затухания громкости. Без аргумента показать текущий "
+"интервал затухания громкости."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:58
 msgid "the volume fading interval successfully changed to {value}"
-msgstr ""
+msgstr "интервал затухания громкости успешно изменен на {value}"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:66
 msgid "current volume fading interval is {value}"
-msgstr ""
+msgstr "текущий интервал затухания громкости {value}"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:72
 msgid "check the state of the volume fading"
-msgstr ""
+msgstr "проверить состояние затухания громкости"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:78
 msgid "the current state of volume fading is enabled"
-msgstr ""
+msgstr "текущее состояние затухания громкости включено"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:80
 msgid "the current state of volume fading is disabled"
-msgstr ""
+msgstr "текущее состояние затухания громкости отключено"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:87
 msgid ""
-"+/-COMMAND Blocks or unblocks commands. +COMMAND adds command to the "
-"blocklist. -COMMAND removes from it. Without a command shows the "
-"blocklist"
+"+/-COMMAND Blocks or unblocks commands. +COMMAND adds command to the blocklist. -"
+"COMMAND removes from it. Without a command shows the blocklist"
 msgstr ""
-"+/-КОМАНДА Блокирует или разблокирует команды. +КОМАНДА добавляет команду"
-" в список заблокированных команд. -КОМАНДА удаляет из него. Без команды "
-"показывает список заблокированных команд"
+"+/-КОМАНДА Блокирует или разблокирует команды. +КОМАНДА добавляет команду в "
+"список заблокированных команд. -КОМАНДА удаляет из него. Без команды показывает "
+"список заблокированных команд"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:99
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:389
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:419
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:488
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:500
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:548
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:479
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:491
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:539
 msgid "The list is empty"
 msgstr "Список пуст"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:104
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:371
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:403
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:451
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:442
 msgid "Added"
 msgstr "Добавлен"
 
@@ -142,7 +140,7 @@ msgstr "Эта команда уже добавлена"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:112
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:377
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:409
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:463
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:454
 msgid "Deleted"
 msgstr "Удалено"
 
@@ -169,8 +167,7 @@ msgstr "Неправильный язык"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:149
 #, python-brace-format
 msgid ""
-"Current language: {current_language}. Available languages: "
-"{available_languages}"
+"Current language: {current_language}. Available languages: {available_languages}"
 msgstr "Текущий язык: {current_language}. Доступные языки: {available_languages}"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:160
@@ -179,11 +176,11 @@ msgstr "НИК Меняет ник бота"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:170
 msgid ""
-"r/f Clears bot's cache. r clears recents, f clears favorites, without an "
-"option clears the entire cache"
+"r/f Clears bot's cache. r clears recents, f clears favorites, without an option "
+"clears the entire cache"
 msgstr ""
-"r/f Очищает кеш бота. r очищает кеш недавно воспроизведенных треков, f "
-"очищает избранное, без опции очищает весь кеш"
+"r/f Очищает кеш бота. r очищает кеш недавно воспроизведенных треков, f очищает "
+"избранное, без опции очищает весь кеш"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:179
 msgid "Cache cleared"
@@ -199,13 +196,12 @@ msgstr "Избранное удалено"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:193
 msgid ""
-"Join channel. first argument is channel name or id, second argument is "
-"password, split argument \" | \", if password is undefined, don't type "
-"second argument"
+"Join channel. first argument is channel name or id, second argument is password, "
+"split argument \" | \", if password is undefined, don't type second argument"
 msgstr ""
 "Присоединиться к каналу.\n"
-"Первый аргумент это имя канала или его ID, второй аргумент это пароль "
-"канала, соединитель между аргументами \" | \".\n"
+"Первый аргумент это имя канала или его ID, второй аргумент это пароль канала, "
+"соединитель между аргументами \" | \".\n"
 "Если пароля в канале нет, не пишите второй аргумент"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:213
@@ -279,12 +275,12 @@ msgstr "Конфигурация сохранена"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:363
 msgid ""
-"+/-USERNAME Manages a list of administrators. +USERNAME adds a user. "
-"-USERNAME removes it. Without an option shows the list"
+"+/-USERNAME Manages a list of administrators. +USERNAME adds a user. -USERNAME "
+"removes it. Without an option shows the list"
 msgstr ""
 "+/-ИМЯ ПОЛЬЗОВАТЕЛЯ Управляет списком администраторов. +ИМЯ ПОЛЬЗОВАТЕЛЯ "
-"добавляет пользователя. -ИМЯ ПОЛЬЗОВАТЕЛЯ удаляет пользователя. Без опции"
-" показывает список"
+"добавляет пользователя. -ИМЯ ПОЛЬЗОВАТЕЛЯ удаляет пользователя. Без опции "
+"показывает список"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:379
 msgid "This user is not in the admin list"
@@ -292,12 +288,12 @@ msgstr "Этого пользователя нет в списке админи�
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:395
 msgid ""
-"+/-USERNAME Manages a list of banned users. +USERNAME adds a user. "
-"-USERNAME removes it. Without an option shows the list"
+"+/-USERNAME Manages a list of banned users. +USERNAME adds a user. -USERNAME "
+"removes it. Without an option shows the list"
 msgstr ""
-"+/-ИМЯ ПОЛЬЗОВАТЕЛЯ Управляет списком заблокированных пользователей. +ИМЯ"
-" ПОЛЬЗОВАТЕЛЯ добавляет пользователя. -ИМЯ ПОЛЬЗОВАТЕЛЯ удаляет "
-"пользователя. Без опции показывает список"
+"+/-ИМЯ ПОЛЬЗОВАТЕЛЯ Управляет списком заблокированных пользователей. +ИМЯ "
+"ПОЛЬЗОВАТЕЛЯ добавляет пользователя. -ИМЯ ПОЛЬЗОВАТЕЛЯ удаляет пользователя. Без "
+"опции показывает список"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:411
 msgid "This user is not banned"
@@ -325,8 +321,8 @@ msgstr "Показывает информацию о боте"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:34
 msgid ""
-"QUERY Plays tracks found for the query. If no query is given, plays or "
-"pauses current track"
+"QUERY Plays tracks found for the query. If no query is given, plays or pauses "
+"current track"
 msgstr ""
 "ЗАПРОС Воспроизводит найденные по запросу треки. Если запрос не указан, "
 "запускает или приостанавливает  воспроизведение текущего трека"
@@ -341,8 +337,8 @@ msgid "{nickname} requested {request}"
 msgstr "{nickname} запросил {request}"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:56
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:221
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:238
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:212
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:229
 msgid "Playing {}"
 msgstr "Воспроизводится {}"
 
@@ -386,101 +382,93 @@ msgid "{nickname} stopped playback"
 msgstr "{nickname} остановил воспроизведение"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:116
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:184
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:203
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:227
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:244
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:159
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:175
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:194
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:218
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:235
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:382
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:391
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:400
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:453
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:471
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:517
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:577
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:444
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:462
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:508
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:568
 msgid "Nothing is playing"
 msgstr "Ничего не воспроизводится"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:122
 #, python-brace-format
 msgid ""
-"VOLUME Sets the volume to a value between 0 and {max_volume}. If no "
-"volume is specified, the current volume level is displayed"
+"VOLUME Sets the volume to a value between 0 and {max_volume}. If no volume is "
+"specified, the current volume level is displayed"
 msgstr ""
-"ГРОМКОСТЬ Устанавливает для громкости значение от 0 до {max_volume}. Если"
-" громкость не указана, отображается текущий уровень громкости"
+"ГРОМКОСТЬ Устанавливает для громкости значение от 0 до {max_volume}. Если "
+"громкость не указана, отображается текущий уровень громкости"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:143
 msgid "get the current position of the track"
 msgstr "получить текущую позицию трека"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:152
-msgid "Current Position: {} ({} second)"
-msgstr "Текущая позиция: {} ({} секунду)"
-
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:160
-msgid "Current Position: {} ({} seconds)"
-msgstr "Текущая позиция: {} ({} секунды)"
-
-# | msgid "Nothing is playing"
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:168
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:151
 #, fuzzy
-msgid "nothing is playing"
-msgstr "Ничего не воспроизводится"
+msgid "Current Position: {}"
+msgstr "Текущая позиция: {}"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:178
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:169
 #, python-brace-format
 msgid "STEP Seeks current track backward. the default step is {seek_step} seconds"
 msgstr "ШАГ Прокручивает текущий трек назад. шаг по умолчанию {seek_step} секунды"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:197
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:188
 #, python-brace-format
 msgid "STEP Seeks current track forward. the default step is {seek_step} seconds"
 msgstr "ШАГ Прокручивает текущий трек вперед. шаг по умолчанию {seek_step} секунды"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:216
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:207
 msgid "Plays next track"
 msgstr "Воспроизводит следующий трек"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:225
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:216
 msgid "No next track"
 msgstr "Нет следующего трека"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:233
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:224
 msgid "Plays previous track"
 msgstr "Воспроизводит предыдущий трек"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:242
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:233
 msgid "No previous track"
 msgstr "Нет предыдущего трека"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:250
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:241
 msgid ""
-"MODE Sets the playback mode. If no mode is specified, the current mode "
-"and a list of modes are displayed"
+"MODE Sets the playback mode. If no mode is specified, the current mode and a "
+"list of modes are displayed"
 msgstr ""
-"РЕЖИМ Устанавливает режим воспроизведения. Если режим не указан, "
-"отображается текущий режим и список режимов"
+"РЕЖИМ Устанавливает режим воспроизведения. Если режим не указан, отображается "
+"текущий режим и список режимов"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:256
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:247
 msgid "Single Track"
 msgstr "Один трек"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:257
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:248
 msgid "Repeat Track"
 msgstr "Повтор трека"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:258
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:249
 msgid "Track list"
 msgstr "Список треков"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:259
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:250
 msgid "Repeat track list"
 msgstr "Повтор списка треков"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:260
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:251
 msgid "Random"
 msgstr "Случайный трек"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:262
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:253
 #, python-brace-format
 msgid ""
 "Current mode: {current_mode}\n"
@@ -489,22 +477,22 @@ msgstr ""
 "Текущий_ режим: {current_mode}\n"
 "{modes}"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:281
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:272
 #, python-brace-format
 msgid "Current mode: {mode}"
 msgstr "Текущий режим: {mode}"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:293
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:284
 msgid ""
-"SERVICE Selects the service to play from, sv SERVICE h returns additional"
-" help. If no service is specified, the current service and a list of "
-"available services are displayed"
+"SERVICE Selects the service to play from, sv SERVICE h returns additional help. "
+"If no service is specified, the current service and a list of available services "
+"are displayed"
 msgstr ""
-"СЕРВИС Выбирает сервис для воспроизведения. Если сервис не указан, "
-"показывает текущий сервис и список доступных\n"
+"СЕРВИС Выбирает сервис для воспроизведения. Если сервис не указан, показывает "
+"текущий сервис и список доступных\n"
 "Если набрать \"sv имя сервиса h\", покажет справку"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:302
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:293
 msgid ""
 "Unknown service.\n"
 "{}"
@@ -512,7 +500,7 @@ msgstr ""
 "Неизвестный сервис.\n"
 "{}"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:310
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:301
 msgid ""
 "Current service: {}\n"
 "Warning: {}"
@@ -520,11 +508,11 @@ msgstr ""
 "Текущий сервис: {}\n"
 "внимание!"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:313
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:304
 msgid "Current service: {}"
 msgstr "Текущий сервис: {}"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:319
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:310
 msgid ""
 "Error: {error}\n"
 "{service} is disabled"
@@ -532,19 +520,19 @@ msgstr ""
 "Ошибка:\n"
 "сервис запрещён"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:326
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:317
 msgid "{service} is disabled"
 msgstr "Передача речи отключена"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:332
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:323
 msgid "This service has no additional help"
 msgstr "Этот сервис не содержит дополнительной справки"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:352
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:343
 msgid "{} (Warning: {})"
 msgstr "{} (Внимание: {})"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:358
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:349
 #, python-brace-format
 msgid ""
 "Current service: {current_service}\n"
@@ -554,93 +542,92 @@ msgid ""
 msgstr ""
 "Текущий сервис: {current_service}\n"
 "Доступные: {available_services}\n"
-"Отправьте \"sv имя сервиса h\" для дополнительной справки по конкретному "
-"сервису"
+"Отправьте \"sv имя сервиса h\" для дополнительной справки по конкретному сервису"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:370
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:361
 msgid "NUMBER Selects track by number from the list of current results"
 msgstr "НОМЕР Выбирает трек по номеру из списка текущих результатов"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:383
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:374
 msgid "Incorrect number"
 msgstr "Неверный номер"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:385
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:396
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:376
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:387
 msgid "Playing {} {}"
 msgstr "Воспроизводится {} {}"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:389
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:465
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:498
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:537
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:380
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:456
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:489
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:528
 msgid "Out of list"
 msgstr "Вне списка"
 
 # | msgid "" "SPEED Sets playback speed from bot.25 to 4. If no speed is
 # given,
 # | shows " "current speed"
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:406
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:397
 msgid ""
-"SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows "
-"current speed"
+"SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows current "
+"speed"
 msgstr ""
-"СКОРОСТЬ Устанавливает скорость воспроизведения от 0.25 до 4. Если "
-"скорость не указана, показывает текущую скорость"
+"СКОРОСТЬ Устанавливает скорость воспроизведения от 0.25 до 4. Если скорость не "
+"указана, показывает текущую скорость"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:412
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:403
 msgid "Current rate: {}"
 msgstr "Текущая скорость: {}"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:425
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:416
 msgid ""
-"+/-NUMBER Manages favorite tracks. + adds the current track to favorites."
-" - removes a track requested from favorites. If a number is specified "
-"after +/-, adds/removes a track with that number"
+"+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - "
+"removes a track requested from favorites. If a number is specified after +/-, "
+"adds/removes a track with that number"
 msgstr ""
 "+/-НОМЕР Управляет списком избранных треков. + добавляет текущий трек в "
-"избранное. - удаляет запрошенный трек из избранного. Если номер указан "
-"после +/-, добавляет/удаляет трек с этим номером"
+"избранное. - удаляет запрошенный трек из избранного. Если номер указан после "
+"+/-, добавляет/удаляет трек с этим номером"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:431
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:422
 msgid "This command is not available for guest users"
 msgstr "Эта команда недоступна для гостевых пользователей"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:469
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:460
 msgid "This track is not in favorites"
 msgstr "Этого трека нет в избранном"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:506
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:497
 msgid "Gets a direct link to the current track"
 msgstr "Получает прямую ссылку на текущий трек"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:515
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:506
 msgid "URL is not available"
 msgstr "Поток не доступен"
 
 # | msgid "" "NUMBER Plays a track with  the given number from bot list of
 # | recent " "tracks. Without a number shows recent tracks"
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:523
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:514
 msgid ""
-"NUMBER Plays a track with  the given number from a list of recent tracks."
-" Without a number shows recent tracks"
+"NUMBER Plays a track with  the given number from a list of recent tracks. "
+"Without a number shows recent tracks"
 msgstr ""
-"НОМЕР Воспроизводит трек с заданным номером из списка последних треков. "
-"Без номера показывает последние треки"
+"НОМЕР Воспроизводит трек с заданным номером из списка последних треков. Без "
+"номера показывает последние треки"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:555
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:546
 msgid "Downloads the current track and uploads it to the channel."
 msgstr "Скачивает проигрываемый трек и выгружает его на канал"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:565
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:556
 msgid "Cannot upload file to channel"
 msgstr "Невозможно загрузить файл на канал"
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:573
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:564
 msgid "Downloading..."
 msgstr "Скачивание..."
 
-#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:575
+#: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:566
 msgid "Live streams cannot be downloaded"
 msgstr "Прямые трансляции не могут быть загружены"
 
@@ -683,127 +670,3 @@ msgstr "Токен не указан"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/services/yam.py:46
 msgid "You don't have Yandex Plus"
 msgstr "У Вас нет Yandex Plus"
-
-#~ msgid "The cache file is already used by another instance of the bot."
-#~ msgstr "Кеш-файл уже используется другим экземпляром бота"
-
-#~ msgid "Blocks or unblocks commands."
-#~ msgstr "Блокирует или разблокирует команды"
-
-#~ msgid "Unknown user command"
-#~ msgstr "Неизвестная команда пользователя"
-
-#~ msgid "Changes the gender of the bot"
-#~ msgstr "Меняет пол бота"
-
-#~ msgid ""
-#~ "Clears the entire cache. If an "
-#~ "argument is specified, only favorites or"
-#~ " the history of recently played "
-#~ "tracks are deleted"
-#~ msgstr ""
-#~ "Очищает весь кеш. Если указан аргумент,"
-#~ " удаляются только избранное или история "
-#~ "недавно воспроизведенных треков"
-
-#~ msgid "History cleared"
-#~ msgstr "История очищена"
-
-#~ msgid ""
-#~ "Enables or disables channel messages "
-#~ "sent by the bot when requesting to"
-#~ " play music, stop current music, and"
-#~ " other events"
-#~ msgstr ""
-#~ "Включает или отключает сообщения канала, "
-#~ "отправляемые ботом при запросе воспроизведения"
-#~ " музыки, остановки текущей музыки и "
-#~ "других событий"
-
-#~ msgid ""
-#~ "Shows a list of administrators. If "
-#~ "username is specified with a specific"
-#~ " command argument, adds or removes it"
-#~ " from the list"
-#~ msgstr ""
-#~ "Показывает список администраторов. Если имя"
-#~ " пользователя указано с конкретным "
-#~ "аргументом команды, добавляет или удаляет "
-#~ "его из списка"
-
-#~ msgid ""
-#~ "Shows a list of banned users. If"
-#~ " username is specified with a "
-#~ "specific command argument, adds or "
-#~ "removes it from the list"
-#~ msgstr ""
-#~ "Показывает список заблокированных пользователей. "
-#~ "Если имя пользователя указано с "
-#~ "конкретным аргументом команды, добавляет или"
-#~ " удаляет его из списка"
-
-#~ msgid "Nothing is currently playing"
-#~ msgstr "В данный момент ничего не Воспроизводится"
-
-#~ msgid "Sorry, guest users can not use this command"
-#~ msgstr "К сожалению, гостевые пользователи не могут использовать эту команду"
-
-#~ msgid "Shows history of playing (64 last tracks)"
-#~ msgstr "Показывает историю воспроизведения (64 последних трека)"
-
-#~ msgid "Must be integer"
-#~ msgstr "Должно быть целым числом"
-
-#~ msgid ""
-#~ "TTMediaBot - bot for music streaming in TeamTalk.\n"
-#~ "Authors: Gumerov_amir, A11CF0."
-#~ msgstr ""
-#~ "TTMediaBot - бот для потоковой передачи музыки в TeamTalk.\n"
-#~ "Авторы: Гумеров_амир, A11CF0."
-
-#~ msgid "Volume is unlocked"
-#~ msgstr "Громкость разблокирована"
-
-#~ msgid "VOLUME Sets volume to a value from 0 to {max_volume}"
-#~ msgstr "ГРОМКОСТЬ Устанавливает громкость в процентах от 0 до {max_volume}"
-
-#~ msgid "Incorrect position"
-#~ msgstr "Не верная позиция"
-
-#~ msgid "shows list of admin users, if user_name is given adds it to list"
-#~ msgstr ""
-#~ "показывает список администраторов, если имя"
-#~ " пользователя указано, добавляет его в "
-#~ "список"
-
-#~ msgid "must be integer"
-#~ msgstr "Должно быть целым числом"
-
-#~ msgid "Unable to perform a search. Please try again"
-#~ msgstr "Поиск не удался. Попробуйте снова"
-
-#~ msgid ""
-#~ "The stream cannot be played\n"
-#~ "Additional error info:\n"
-#~ msgstr ""
-#~ "Поток не может быть проигран\n"
-#~ "Дополнительная информация об ошибке\n"
-
-#~ msgid "not found"
-#~ msgstr "Не найдено"
-
-#~ msgid "List is empty"
-#~ msgstr "Список пуст"
-
-#~ msgid "Task scheduler"
-#~ msgstr "Планировщик задач"
-
-#~ msgid "The list is is empty"
-#~ msgstr "Список пуст"
-
-#~ msgid "You don't have Yandex Plus"
-#~ msgstr "У вас нет Яндекс плюс"
-
-#~ msgid "unknown"
-#~ msgstr ""
-

@@ -146,27 +146,18 @@ class GetPositionCommand(Command):
 
     def __call__(self, arg: str, user: User) -> Optional[str]:
         if self.player.state != State.Stopped:
-            if round(self.player.get_position()) == 1:
-                self.run_async(
-                    self.ttclient.send_message,
-                    self.translator.translate(
-                        "Current Position: {} ({} second)"
-                    ).format(str(datetime.timedelta(seconds=round(self.player.get_position()))), round(self.player.get_position())),
-                    user,
-                )
-            else:
-                self.run_async(
-                    self.ttclient.send_message,
-                    self.translator.translate(
-                        "Current Position: {} ({} seconds)"
-                    ).format(str(datetime.timedelta(seconds=round(self.player.get_position()))), round(self.player.get_position())),
-                    user,
-                )
+            self.run_async(
+                self.ttclient.send_message,
+                self.translator.translate(
+                    "Current Position: {}"
+                ).format(self.player.get_position()),
+                user,
+            )
         else:
             self.run_async(
                 self.ttclient.send_message,
                 self.translator.translate(
-                    "nothing is playing"
+                    "Nothing is playing"
                 ),
                 user,
             )
