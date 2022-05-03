@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TTMediaBot\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-04-21 16:56+0800\n"
-"PO-Revision-Date: 2022-04-21 17:10+0800\n"
+"POT-Creation-Date: 2022-04-22 18:50+0800\n"
+"PO-Revision-Date: 2022-04-23 02:29+0800\n"
 "Last-Translator: Гумеров Амир Эдуардович <ar8200@bk.ru>\n"
 "Language-Team: TTMediaBot's developers\n"
 "Language: ru\n"
@@ -161,8 +161,8 @@ msgid "The language has been changed"
 msgstr "Язык изменен"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:147
-msgid "Incorrect language"
-msgstr "Неправильный язык"
+msgid "Invalid language"
+msgstr "Неверный язык"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:149
 #, python-brace-format
@@ -410,7 +410,6 @@ msgid "get the current position of the track"
 msgstr "получить текущую позицию трека"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:151
-#, fuzzy
 msgid "Current Position: {}"
 msgstr "Текущая позиция: {}"
 
@@ -617,7 +616,7 @@ msgstr ""
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:546
 msgid "Downloads the current track and uploads it to the channel."
-msgstr "Скачивает проигрываемый трек и выгружает его на канал"
+msgstr "Скачивает проигрываемый трек и выгружает его на канал."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:556
 msgid "Cannot upload file to channel"
@@ -633,27 +632,27 @@ msgstr "Прямые трансляции не могут быть загруж�
 
 # | msgid "Playing: {track_name}"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/connectors/tt_player_connector.py:36
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Playing: {track_name} ({duration})"
-msgstr "Воспроизводится: {track_name}"
+msgstr "Воспроизводится: {track_name} ({duration})"
 
 # | msgid "Playing: {stream_url}"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/connectors/tt_player_connector.py:43
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Playing: {stream_url} ({duration})"
-msgstr "Воспроизводится: {stream_url}"
+msgstr "Воспроизводится: {stream_url} ({duration})"
 
 # | msgid "Paused: {track_name}"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/connectors/tt_player_connector.py:55
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Paused: {track_name} ({duration})"
-msgstr "Приостановлено: {track_name}"
+msgstr "Приостановлено: {track_name} ({duration})"
 
 # | msgid "Paused: {stream_url}"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/connectors/tt_player_connector.py:62
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Paused: {stream_url} ({duration})"
-msgstr "Приостановлено: {stream_url}"
+msgstr "Приостановлено: {stream_url} ({duration})"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/player/__init__.py:205
 msgid "unknown duration"
@@ -670,3 +669,6 @@ msgstr "Токен не указан"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/services/yam.py:46
 msgid "You don't have Yandex Plus"
 msgstr "У Вас нет Yandex Plus"
+
+#~ msgid "Incorrect language"
+#~ msgstr "Неправильный язык"

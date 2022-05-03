@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TTMediaBot\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-04-21 16:56+0800\n"
-"PO-Revision-Date: 2022-04-21 17:07+0800\n"
+"POT-Creation-Date: 2022-04-22 18:50+0800\n"
+"PO-Revision-Date: 2022-04-23 03:04+0800\n"
 "Last-Translator: \n"
 "Language-Team: TTMediaBot's developers\n"
 "Language: tr\n"
@@ -20,7 +20,6 @@ msgstr ""
 "X-Generator: Poedit 3.0.1\n"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/app_vars.py:11
-#, fuzzy
 msgid ""
 "A media streaming bot for TeamTalk.\n"
 "Authors: Amir Gumerov, Vladislav Kopylov, Beqa Gozalishvili, Kirill Belousov.\n"
@@ -49,7 +48,7 @@ msgstr "Siz engellendiniz"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/__init__.py:130
 msgid "You are not in bot's channel"
-msgstr "botun kanalında değilsiniz"
+msgstr "Botun kanalında değilsiniz"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/__init__.py:134
 msgid "Bot is locked"
@@ -64,21 +63,18 @@ msgid "Unknown command"
 msgstr "Bilinmeyen komut"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:20
-#, fuzzy
 msgid "enable or disable the volume fading"
 msgstr "ses azaltmayı etkinleştirin veya devre dışı bırakın"
 
 # | msgid "Event handling is enabled"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:32
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:39
-#, fuzzy
 msgid "volume fading is now enabled"
 msgstr "ses kısma artık etkin"
 
 # | msgid "Event handling is disabled"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:34
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:41
-#, fuzzy
 msgid "volume fading is now disabled"
 msgstr "ses kısma artık devre dışı"
 
@@ -163,8 +159,8 @@ msgid "The language has been changed"
 msgstr "Dil değiştirildi"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:147
-msgid "Incorrect language"
-msgstr "yanlış dil"
+msgid "Invalid language"
+msgstr "Geçersiz dil"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:149
 #, python-brace-format
@@ -202,14 +198,16 @@ msgid ""
 "password, split argument \" | \", if password is undefined, don't type second "
 "argument"
 msgstr ""
+"Kanala katılın. ilk argüman kanal adı veya kimliğidir, ikinci argüman şifredir, "
+"bölünmüş argüman \" | \", şifre tanımsızsa ikinci argüman yazmayın"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:213
 msgid "This channel does not exist"
-msgstr ""
+msgstr "Bu kanal mevcut değil"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:227
 msgid "Error joining channel: {error}"
-msgstr ""
+msgstr "Kanala katılma hatası: {error}"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:275
 msgid "Enables or disables voice transmission"
@@ -346,11 +344,10 @@ msgstr "Sorgunuz için hiçbir şey bulunamadı"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:62
 msgid "The selected service is currently unavailable"
-msgstr ""
+msgstr "Seçilen hizmet şu anda kullanılamıyor"
 
 # | msgid "URL Plays a stream from bot given URL"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:75
-#, fuzzy
 msgid "URL Plays a stream from a given URL"
 msgstr "URL Belirli bir URL'den akış oynatır"
 
@@ -364,7 +361,6 @@ msgid "Incorrect protocol"
 msgstr "Yanlış protokol"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:93
-#, fuzzy
 msgid "Cannot process stream URL"
 msgstr "Akış URL'si alınamıyor"
 
@@ -410,7 +406,6 @@ msgid "get the current position of the track"
 msgstr "parçanın mevcut konumunu al"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:151
-#, fuzzy
 msgid "Current Position: {}"
 msgstr "Şu anki pozisyon: {}"
 
@@ -471,7 +466,7 @@ msgid "Random"
 msgstr "Rastgele"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:253
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Current mode: {current_mode}\n"
 "{modes}"
@@ -485,7 +480,6 @@ msgid "Current mode: {mode}"
 msgstr "Geçerli mod: {mode}"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:284
-#, fuzzy
 msgid ""
 "SERVICE Selects the service to play from, sv SERVICE h returns additional help. "
 "If no service is specified, the current service and a list of available "
@@ -503,7 +497,6 @@ msgstr ""
 "{}"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:301
-#, fuzzy
 msgid ""
 "Current service: {}\n"
 "Warning: {}"
@@ -518,22 +511,23 @@ msgid ""
 "Error: {error}\n"
 "{service} is disabled"
 msgstr ""
+"Hata: {hata}\\n\n"
+"{service} devre dışı"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:317
-#, fuzzy
 msgid "{service} is disabled"
 msgstr "Ses iletimi devre dışı"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:323
 msgid "This service has no additional help"
-msgstr ""
+msgstr "Bu hizmetin ek yardımı yok"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:343
 msgid "{} (Warning: {})"
-msgstr ""
+msgstr "{} (Uyarı: {})"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:349
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Current service: {current_service}\n"
 "Available:\n"
@@ -541,7 +535,9 @@ msgid ""
 "send sv SERVICE h for additional help"
 msgstr ""
 "Şu anki hizmet: {current_service}\n"
-"Mevcut: {available_services}"
+"Mevcut:\n"
+"{available_services}\n"
+"ek yardım için sv SERVICE h gönder"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:361
 msgid "NUMBER Selects track by number from the list of current results"
@@ -567,13 +563,12 @@ msgstr "Liste dışı"
 # given,
 # | shows " "current speed"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:397
-#, fuzzy
 msgid ""
 "SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows current "
 "speed"
 msgstr ""
 "HIZ Hızı 0.25 ile 4 arasında bir değere ayarlar. Herhangi bir oran verilmezse "
-"mevcut oranı gösterir."
+"mevcut oranı gösterir"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:403
 msgid "Current rate: {}"
@@ -608,7 +603,6 @@ msgstr "URL mevcut değil"
 # | msgid "" "NUMBER Plays a track with  the given number from bot list of
 # | recent " "tracks. Without a number shows recent tracks"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:514
-#, fuzzy
 msgid ""
 "NUMBER Plays a track with  the given number from a list of recent tracks. "
 "Without a number shows recent tracks"
@@ -617,9 +611,8 @@ msgstr ""
 "olmadan son parçaları gösterir"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:546
-#, fuzzy
 msgid "Downloads the current track and uploads it to the channel."
-msgstr "Oynatılmakta olan parçayı indirir ve kanala yükler"
+msgstr "Oynatılmakta olan parçayı indirir ve kanala yükler."
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:556
 msgid "Cannot upload file to channel"
@@ -635,25 +628,25 @@ msgstr "Canlı akışlar indirilemiyor"
 
 # | msgid "Playing: {track_name}"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/connectors/tt_player_connector.py:36
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Playing: {track_name} ({duration})"
 msgstr "Oynatılıyor: {track_name} ({duration})"
 
 # | msgid "Playing: {stream_url}"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/connectors/tt_player_connector.py:43
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Playing: {stream_url} ({duration})"
 msgstr "Oynatılıyor: {stream_url} ({duration})"
 
 # | msgid "Paused: {track_name}"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/connectors/tt_player_connector.py:55
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Paused: {track_name} ({duration})"
 msgstr "Duraklatıldı: {track_name} ({duration})"
 
 # | msgid "Paused: {stream_url}"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/connectors/tt_player_connector.py:62
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Paused: {stream_url} ({duration})"
 msgstr "Duraklatıldı: {stream_url} ({duration})"
 
@@ -667,8 +660,11 @@ msgstr "bilinmeyen konum"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/services/yam.py:42
 msgid "Token is not provided"
-msgstr ""
+msgstr "Jeton sağlanmadı"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/services/yam.py:46
 msgid "You don't have Yandex Plus"
-msgstr ""
+msgstr "Yandex Plus'ınız yok"
+
+#~ msgid "Incorrect language"
+#~ msgstr "yanlış dil"

@@ -144,7 +144,7 @@ class ChangeLanguageCommand(Command):
                 self.ttclient.change_status_text("")
                 return self.translator.translate("The language has been changed")
             except errors.LocaleNotFoundError:
-                return self.translator.translate("Incorrect language")
+                return self.translator.translate("Invalid language")
         else:
             return self.translator.translate(
                 "Current language: {current_language}. Available languages: {available_languages}"

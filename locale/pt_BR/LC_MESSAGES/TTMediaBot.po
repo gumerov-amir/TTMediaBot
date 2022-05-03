@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: TTMediaBot\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-04-21 16:56+0800\n"
-"PO-Revision-Date: 2022-04-21 17:14+0800\n"
+"POT-Creation-Date: 2022-04-22 18:50+0800\n"
+"PO-Revision-Date: 2022-04-23 02:25+0800\n"
 "Last-Translator: \n"
 "Language-Team: TTMediaBot's developers\n"
 "Language: pt_BR\n"
@@ -20,7 +20,6 @@ msgstr ""
 "X-Generator: Poedit 3.0.1\n"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/app_vars.py:11
-#, fuzzy
 msgid ""
 "A media streaming bot for TeamTalk.\n"
 "Authors: Amir Gumerov, Vladislav Kopylov, Beqa Gozalishvili, Kirill Belousov.\n"
@@ -41,7 +40,7 @@ msgstr "Comando desconhecido. Envie \"h\" para obter ajuda."
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/__init__.py:114
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/modules/uploader.py:61
 msgid "Error: {}"
-msgstr "erro: {}"
+msgstr "Erro: {}"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/__init__.py:126
 msgid "You are banned"
@@ -114,7 +113,7 @@ msgid ""
 "+/-COMMAND Blocks or unblocks commands. +COMMAND adds command to the blocklist. "
 "-COMMAND removes from it. Without a command shows the blocklist"
 msgstr ""
-" /-COMMAND Bloqueia ou desbloqueia comandos.  COMMAND adiciona comando ao "
+"/-COMMAND Bloqueia ou desbloqueia comandos.  COMMAND adiciona comando ao "
 "blocklist. -O COMANDO remove-o. Sem um comando mostra a lista de bloqueios"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:99
@@ -161,8 +160,8 @@ msgid "The language has been changed"
 msgstr "A linguagem foi alterada"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:147
-msgid "Incorrect language"
-msgstr "linguagem incorreta"
+msgid "Invalid language"
+msgstr "Linguagem incorreta"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/admin_commands.py:149
 #, python-brace-format
@@ -305,7 +304,7 @@ msgstr "Reinicia o bot"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/command.py:28
 msgid "help text not found"
-msgstr "Texto  de ajuda não encontrado"
+msgstr "texto  de ajuda não encontrado"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:16
 msgid "Shows command help"
@@ -336,7 +335,7 @@ msgstr "{nickname} solicitou {request}"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:212
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:229
 msgid "Playing {}"
-msgstr "tocando {}"
+msgstr "Tocando {}"
 
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/commands/user_commands.py:60
 msgid "Nothing is found for your query"
@@ -632,25 +631,25 @@ msgstr "Transmissões ao vivo não podem ser baixadas"
 
 # | msgid "Playing: {track_name}"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/connectors/tt_player_connector.py:36
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Playing: {track_name} ({duration})"
 msgstr "Reproduzindo: {track_name} ({duration})"
 
 # | msgid "Playing: {stream_url}"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/connectors/tt_player_connector.py:43
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Playing: {stream_url} ({duration})"
 msgstr "Reproduzindo: {stream_url} ({duration})"
 
 # | msgid "Paused: {track_name}"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/connectors/tt_player_connector.py:55
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Paused: {track_name} ({duration})"
 msgstr "{track_name} Pausado ({duration})"
 
 # | msgid "Paused: {stream_url}"
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/connectors/tt_player_connector.py:62
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Paused: {stream_url} ({duration})"
 msgstr "{stream_url} Pausado ({duration})"
 
@@ -669,3 +668,6 @@ msgstr ""
 #: C:/Users/Calvin/Documents/git/TTMediaBot/bot/services/yam.py:46
 msgid "You don't have Yandex Plus"
 msgstr ""
+
+#~ msgid "Incorrect language"
+#~ msgstr "linguagem incorreta"
