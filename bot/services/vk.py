@@ -61,7 +61,7 @@ class VkService(_Service):
             }
         )
         self._session = vk_api.VkApi(
-            token=self.config.token, session=http, api_version="5.131"
+            token=self.config.token, session=http, api_version="5.89"
         )
         self.api = self._session.get_api()
         try:
