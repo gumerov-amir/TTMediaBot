@@ -1,6 +1,7 @@
 from __future__ import annotations
 import copy
 import os
+from threading import Lock
 from typing import Any, Dict, Optional, TYPE_CHECKING
 
 from bot.player.enums import TrackType
@@ -29,6 +30,7 @@ class Track:
         self.format = format
         self.extra_info = extra_info
         self.type = type
+        self._lock = Lock()
         self._is_fetched = False
 
     def download(self, directory: str) -> str:
@@ -51,12 +53,14 @@ class Track:
         self._original_track.name = track.name
         self.format = track.format
         self.type = track.type
+        self.extra_info = track.extra_info
         self._is_fetched = True
 
     @property
     def url(self) -> str:
-        self._fetch_stream_data()
-        return self._url
+        with self._lock:
+            self._fetch_stream_data()
+            return self._url
 
     @url.setter
     def url(self, value: str) -> None:
@@ -64,9 +68,10 @@ class Track:
 
     @property
     def name(self) -> str:
-        if not self._name:
-            self._fetch_stream_data()
-        return self._name
+        with self._lock:
+            if not self._name:
+                self._fetch_stream_data()
+            return self._name
 
     @name.setter
     def name(self, value: str) -> None:
@@ -89,3 +94,12 @@ class Track:
             return True
         else:
             return False
+
+    def __getstate__(self) -> Dict[str, Any]:
+        state: Dict[str, Any] = self.__dict__.copy()
+        del state["_lock"]
+        return state
+
+    def __setstate__(self, state: Dict[str, Any]):
+        self.__dict__.update(state)
+        self._lock = Lock()

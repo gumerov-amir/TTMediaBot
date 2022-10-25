@@ -6,6 +6,7 @@ if TYPE_CHECKING:
     from bot import Bot
 
 from yt_dlp import YoutubeDL
+from yt_dlp.downloader import get_suitable_downloader
 from youtubesearchpython import VideosSearch
 
 from bot.config.models import YtModel
@@ -35,6 +36,14 @@ class YtService(_Service):
             "socket_timeout": 5,
             "logger": logging.getLogger("root"),
         }
+
+    def download(self, track: Track, file_path: str) -> None:
+        info = track.extra_info
+        if not info:
+            super().download(track, file_path)
+        with YoutubeDL(self._ydl_config) as ydl:
+            dl = get_suitable_downloader(info)(ydl, self._ydl_config)
+            dl.download(file_path, info)
 
     def get(
         self,
@@ -81,7 +90,7 @@ class YtService(_Service):
             else:
                 type = TrackType.Default
             return [
-                Track(service=self.name, url=url, name=title, format=format, type=type)
+                Track(service=self.name, url=url, name=title, format=format, type=type, extra_info=stream)
             ]
 
     def search(self, query: str) -> List[Track]:
