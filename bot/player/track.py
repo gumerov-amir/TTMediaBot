@@ -53,6 +53,7 @@ class Track:
         self._original_track.name = track.name
         self.format = track.format
         self.type = track.type
+        self.extra_info = track.extra_info
         self._is_fetched = True
 
     @property
