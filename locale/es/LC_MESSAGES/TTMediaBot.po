@@ -1,0 +1,595 @@
+# Translations template for TTMediaBot.
+# Copyright (C) 2022 TTMediaBot-team
+# This file is distributed under the same license as the TTMediaBot project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: TTMediaBot 2.3.0\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2022-05-12 14:25+0200\n"
+"PO-Revision-Date: 2022-05-12 15:06+0200\n"
+"Last-Translator: Iván Novegil Cancelas <ivan.novegil.cancelas@gmail.com>\n"
+"Language-Team: Iván Novegil Cancelas <ivan.novegil.cancelas@gmail.com>\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Generated-By: Babel 2.10.1\n"
+"X-Generator: Poedit 3.0.1\n"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/app_vars.py:11
+msgid ""
+"A media streaming bot for TeamTalk.\n"
+"Authors: Amir Gumerov, Vladislav Kopylov, Beqa Gozalishvili, Kirill "
+"Belousov.\n"
+"Home page: https://github.com/gumerov-amir/TTMediaBotLicense: Mit License"
+msgstr ""
+"Un robot de transmisión multimedia para TeamTalk.\n"
+"Autores: Amir Gumerov, Vladislav Kopylov, Beqa Gozalishvili, Kirill "
+"Belousov.\n"
+"Página web: https://github.com/gumerov-amir/TTMediaBotLicencia: Mit License"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/TeamTalk/__init__.py:150
+msgid "Send \"h\" for help"
+msgstr "Envía \"h\" para ayuda"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/__init__.py:104
+msgid "Unknown command. Send \"h\" for help."
+msgstr "Orden desconocida. Envía \"h\" para ayuda."
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/__init__.py:110
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/modules/uploader.py:61
+msgid "Error: {}"
+msgstr "Error: {}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/__init__.py:122
+msgid "You are banned"
+msgstr "Estás bloqueado"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/__init__.py:126
+msgid "You are not in bot's channel"
+msgstr "No estás en el mismo canal que el bot"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/__init__.py:130
+msgid "Bot is locked"
+msgstr "El bot está bloqueado"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/__init__.py:134
+msgid "This command is blocked"
+msgstr "Esta orden está bloqueada"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/__init__.py:158
+msgid "Unknown command"
+msgstr "Orden desconocida"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:20
+msgid ""
+"+/-COMMAND Blocks or unblocks commands. +COMMAND adds command to the "
+"blocklist. -COMMAND removes from it. Without a command shows the blocklist"
+msgstr ""
+"+/-ORDEN Bloquea o desbloquea la orden. +ORDEN añade la orden a la lista de "
+"bloqueadas. -ORDEN la elimina de la misma. Sin ninguna orden muestra la "
+"lista de bloqueadas"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:32
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:322
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:352
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:453
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:465
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:513
+msgid "The list is empty"
+msgstr "La lista está vacía"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:37
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:304
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:336
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:416
+msgid "Added"
+msgstr "Añadida"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:39
+msgid "This command is already added"
+msgstr "Esta orden ya está añadida"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:45
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:310
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:342
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:428
+msgid "Deleted"
+msgstr "Eliminada"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:47
+msgid "This command is not blocked"
+msgstr "Esta orden no está bloqueada"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:55
+msgid "GENDER Changes bot's gender. n neutral, m male, f female"
+msgstr "GÉNERO Cambia el género del bot. n neutral, m masculino, f femenino"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:70
+msgid "LANGUAGE Changes bot's language"
+msgstr "IDIOMA Cambia el idioma del bot"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:78
+msgid "The language has been changed"
+msgstr "el idioma ha sido cambiado"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:80
+msgid "Incorrect language"
+msgstr "Idioma incorrecto"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:82
+msgid ""
+"Current language: {current_language}. Available languages: "
+"{available_languages}"
+msgstr ""
+"Idioma actual: {current_language}. Idiomas disponibles: {available_languages}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:93
+msgid "NICKNAME Changes bot's nickname"
+msgstr "SOBRENOMBRE Cambia el sobrenombre del bot"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:103
+msgid ""
+"r/f Clears bot's cache. r clears recents, f clears favorites, without an "
+"option clears the entire cache"
+msgstr ""
+"r/f Limpia la memoria caché del bot. r limpia la lista de recientes, f "
+"limpia los favoritos, sin ninguna opción limpia la caché entera"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:112
+msgid "Cache cleared"
+msgstr "Caché vaciada"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:116
+msgid "Recents cleared"
+msgstr "Lista de recientes vaciada"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:120
+msgid "Favorites cleared"
+msgstr "Favoritos vaciados"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:126
+msgid ""
+"Join channel. first argument is channel name or id, second argument is "
+"password, split argument \" | \", if password is undefined, don't type "
+"second argument"
+msgstr ""
+"Unirse a un canal. el primer argumento es el nombre o id del canal, el "
+"segundo argumento es la contraseña, separador de argumento \" | \", si la "
+"contraseña no está establecida no escribas el segundo argumento"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:146
+msgid "This channel does not exist"
+msgstr "Este canal no existe"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:160
+msgid "Error joining channel: {error}"
+msgstr "Error al unirse al canal: {error}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:208
+msgid "Enables or disables voice transmission"
+msgstr "Activa o desactiva la transmisión de voz"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:215
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:217
+msgid "Voice transmission enabled"
+msgstr "Transmisión de voz activada"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:222
+msgid "Voice transmission disabled"
+msgstr "Transmisión de voz desactivada"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:228
+msgid "Locks or unlocks the bot"
+msgstr "Bloquea o desbloquea el bot"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:233
+msgid "Locked"
+msgstr "Bloqueado"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:235
+msgid "Unlocked"
+msgstr "Desbloqueado"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:242
+msgid "STATUS Changes bot's status"
+msgstr "ESTADO Cambia el estado del bot"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:252
+msgid "Enables or disables event handling"
+msgstr "Activa o desactiva el procesamiento de eventos"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:259
+msgid "Event handling is enabled"
+msgstr "El procesamiento de eventos se ha activado"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:261
+msgid "Event handling is disabled"
+msgstr "El procesamiento de eventos se ha desactivado"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:268
+msgid "Enables or disables sending of channel messages"
+msgstr "Activa o desactiva el envío de mensajes del canal"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:277
+msgid "Channel messages enabled"
+msgstr "Mensajes del canal activados"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:279
+msgid "Channel messages disabled"
+msgstr "Mensajes del canal desactivados"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:286
+msgid "Saves bot's configuration"
+msgstr "Guarda la configuración del bot"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:290
+msgid "Configuration saved"
+msgstr "Configuración guardada"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:296
+msgid ""
+"+/-USERNAME Manages a list of administrators. +USERNAME adds a user. -"
+"USERNAME removes it. Without an option shows the list"
+msgstr ""
+"+/-NOMBREUSUARIO Gestiona una lista de administradores. +NOMBREUSUARIO añade "
+"un usuario. -NOMBREUSUARIO lo elimina. Sin ninguna opción muestra la lista"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:312
+msgid "This user is not in the admin list"
+msgstr "Este usuario no está en la lista de admins"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:328
+msgid ""
+"+/-USERNAME Manages a list of banned users. +USERNAME adds a user. -USERNAME "
+"removes it. Without an option shows the list"
+msgstr ""
+"+/-NOMBREUSUARIO Gestiona una lista de usuarios bloqueados. +NOMBREUSUARIO "
+"añade un usuario. -NOMBREUSUARIO lo elimina. Sin ninguna opción muestra la "
+"lista"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:344
+msgid "This user is not banned"
+msgstr "Este usuario no está bloqueado"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:358
+msgid "Quits the bot"
+msgstr "Apaga el bot"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/admin_commands.py:367
+msgid "Restarts the bot"
+msgstr "Reinicia el bot"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/command.py:28
+msgid "help text not found"
+msgstr "texto de ayuda no encontrado"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:16
+msgid "Shows command help"
+msgstr "muestra la ayuda de órdenes"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:25
+msgid "Shows information about the bot"
+msgstr "Muestra información sobre el bot"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:34
+msgid ""
+"QUERY Plays tracks found for the query. If no query is given, plays or "
+"pauses current track"
+msgstr ""
+"TEXTOBÚSQUEDA Reproduce pistas encontradas para el texto de búsqueda. Si no "
+"se indica un texto de búsqueda, reproduce o pausa la pista actual"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:42
+msgid "Searching..."
+msgstr "Buscando..."
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:50
+msgid "{nickname} requested {request}"
+msgstr "{nickname} ha solicitado {request}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:56
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:186
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:203
+msgid "Playing {}"
+msgstr "Reproduciendo {}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:60
+msgid "Nothing is found for your query"
+msgstr "No se encuentra nada para tu texto de búsqueda"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:62
+msgid "The selected service is currently unavailable"
+msgstr "El servicio seleccionado está actualmente no disponible"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:75
+msgid "URL Plays a stream from a given URL"
+msgstr "URL Reproduce una transmisión (stream) desde una URL dada"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:84
+msgid "{nickname} requested playing from a URL"
+msgstr "{nickname} ha solicitado reproducir desde una URL"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:91
+msgid "Incorrect protocol"
+msgstr "Protocolo incorrecto"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:93
+msgid "Cannot process stream URL"
+msgstr "No se puede procesar la URL de la transmisión"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:95
+msgid "The path cannot be found"
+msgstr "No se puede encontrar la ruta"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:103
+msgid "Stops playback"
+msgstr "Detiene la reproducción"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:110
+msgid "{nickname} stopped playback"
+msgstr "{nickname} ha detenido la reproducción"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:116
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:149
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:168
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:192
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:209
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:356
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:365
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:418
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:436
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:482
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:542
+msgid "Nothing is playing"
+msgstr "Nada en reproducción"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:122
+msgid ""
+"VOLUME Sets the volume to a value between 0 and {max_volume}. If no volume "
+"is specified, the current volume level is displayed"
+msgstr ""
+"VOLUMEN Establece el volumen a un valor entre 0 y {max_volume}. Si no se "
+"especifica ningún volumen, se muestra el nivel actual de volumen"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:143
+msgid ""
+"STEP Seeks current track backward. the default step is {seek_step} seconds"
+msgstr ""
+"DURACIÓN Rebobina la pista actual. La duración por defecto es {seek_step} "
+"segundos"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:162
+msgid ""
+"STEP Seeks current track forward. the default step is {seek_step} seconds"
+msgstr ""
+"DURACIÓN Avanza en la pista actual. La duración por defecto es {seek_step} "
+"segundos."
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:181
+msgid "Plays next track"
+msgstr "Reproduce la pista siguiente"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:190
+msgid "No next track"
+msgstr "Sin pista siguiente"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:198
+msgid "Plays previous track"
+msgstr "Reproduce la pista anterior"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:207
+msgid "No previous track"
+msgstr "Sin pista anterior"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:215
+msgid ""
+"MODE Sets the playback mode. If no mode is specified, the current mode and a "
+"list of modes are displayed"
+msgstr ""
+"MODO Establece el modo de reproducción. Si no se especifica ningún modo, se "
+"muestran el modo actual y una lista de modos"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:221
+msgid "Single Track"
+msgstr "Una sola pista"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:222
+msgid "Repeat Track"
+msgstr "Repetir pista"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:223
+msgid "Track list"
+msgstr "Lista de pistas"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:224
+msgid "Repeat track list"
+msgstr "Repetir lista de pistas"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:225
+msgid "Random"
+msgstr "Aleatorio"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:227
+msgid ""
+"Current mode: {current_mode}\n"
+"{modes}"
+msgstr ""
+"Modo actual: {current_mode}\n"
+"{modes}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:246
+msgid "Current mode: {mode}"
+msgstr "Modo actual: {mode}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:258
+msgid ""
+"SERVICE Selects the service to play from, sv SERVICE h returns additional "
+"help. If no service is specified, the current service and a list of "
+"available services are displayed"
+msgstr ""
+"SERVICIO Selecciona el servicio desde el que reproducir, sv SERVICIO h "
+"devuelve ayuda adicional. Si no se especifica ningún servicio, se muestran "
+"el servicio actual y una lista de servicios disponibles"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:267
+msgid ""
+"Unknown service.\n"
+"{}"
+msgstr ""
+"Servicio desconocido.\n"
+"{}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:275
+msgid ""
+"Current service: {}\n"
+"Warning: {}"
+msgstr ""
+"Servicio actual: {}\n"
+"Advertencia: {}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:278
+msgid "Current service: {}"
+msgstr "Servicio actual: {}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:284
+msgid ""
+"Error: {error}\n"
+"{service} is disabled"
+msgstr ""
+"Error: {error}\n"
+"{service} está desactivado"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:291
+msgid "{service} is disabled"
+msgstr "{service} está desactivado"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:297
+msgid "This service has no additional help"
+msgstr "Este servicio no tiene ayuda adicional"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:317
+msgid "{} (Warning: {})"
+msgstr "{} (Advertencia: {})"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:323
+msgid ""
+"Current service: {current_service}\n"
+"Available:\n"
+"{available_services}\n"
+"send sv SERVICE h for additional help"
+msgstr ""
+"Servicio actual: {current_service}\n"
+"Disponibles:\n"
+"{available_services}\n"
+"envía sv SERVICIO h para ayuda adicional"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:335
+msgid "NUMBER Selects track by number from the list of current results"
+msgstr "NÚMERO Selecciona la pista por número de la lista actual de resultados"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:348
+msgid "Incorrect number"
+msgstr "Número incorrecto"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:350
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:361
+msgid "Playing {} {}"
+msgstr "Reproduciendo {} {}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:354
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:430
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:463
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:502
+msgid "Out of list"
+msgstr "Fuera de la lista"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:371
+msgid ""
+"SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows "
+"current speed"
+msgstr ""
+"VELOCIDAD Establece la velocidad de reproducción desde 0.25 hasta 4 (el "
+"separador decimal es el punto). Si no se especifica ninguna velocidad, "
+"muestra la velocidad actual."
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:377
+msgid "Current rate: {}"
+msgstr "Velocidad actual: {}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:390
+msgid ""
+"+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - "
+"removes a track requested from favorites. If a number is specified after "
+"+/-, adds/removes a track with that number"
+msgstr ""
+"+/-NÚMERO Gestiona las pistas favoritas. + añade la pista actual a "
+"favoritos. - elimina una pista solicitada de favoritos. Si se especifica un "
+"número tras +/-, añade/elimina una pista con ese número"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:396
+msgid "This command is not available for guest users"
+msgstr "Esta orden no está disponible para usuarios invitados"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:434
+msgid "This track is not in favorites"
+msgstr "Esta pista no está en favoritos"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:471
+msgid "Gets a direct link to the current track"
+msgstr "Obtiene un enlace directo a la pista actual"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:480
+msgid "URL is not available"
+msgstr "La URL no está disponible"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:488
+msgid ""
+"NUMBER Plays a track with  the given number from a list of recent tracks. "
+"Without a number shows recent tracks"
+msgstr ""
+"NÚMERO Reproduce una pista con el número dado de una lista de pistas "
+"recientes. Sin ningún número muestra las pistas recientes"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:520
+msgid "Downloads the current track and uploads it to the channel."
+msgstr "Descarga la pista actual y la sube al canal."
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:530
+msgid "Cannot upload file to channel"
+msgstr "No se puede subir el archivo al canal"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:538
+msgid "Downloading..."
+msgstr "Descargando..."
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/commands/user_commands.py:540
+msgid "Live streams cannot be downloaded"
+msgstr "Las transmisiones en directo no se pueden descargar"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/connectors/tt_player_connector.py:35
+msgid "Playing: {track_name}"
+msgstr "Reproduciendo: {track_name}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/connectors/tt_player_connector.py:41
+msgid "Playing: {stream_url}"
+msgstr "Reproduciendo: {stream_url}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/connectors/tt_player_connector.py:52
+msgid "Paused: {track_name}"
+msgstr "En pausa: {track_name}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/connectors/tt_player_connector.py:58
+msgid "Paused: {stream_url}"
+msgstr "En pausa: {stream_url}"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/services/yam.py:42
+msgid "Token is not provided"
+msgstr "No se ha proporcionado un token"
+
+#: /mnt/c/Users/inovegil/repos_git/TTMediaBot/bot/services/yam.py:46
+msgid "You don't have Yandex Plus"
+msgstr "No tienes Yandex Plus"
