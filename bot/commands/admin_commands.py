@@ -374,3 +374,12 @@ class RestartCommand(Command):
         else:
             args.insert(0, sys.executable)
             os.execv(sys.executable, args)
+
+
+class GetChannelIDCommand(Command):
+    @property
+    def help(self) -> str:
+        return self.translator.translate("Returns current channel's ID")
+
+    def __call__(self, arg: str, user: User) -> Optional[str]:
+        return str(self.ttclient.channel.id)
