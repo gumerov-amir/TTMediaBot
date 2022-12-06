@@ -18,7 +18,11 @@ cache_data_type = Dict[str, Any]
 
 class Cache:
     def __init__(self, cache_data: cache_data_type):
-        self.cache_version = cache_data["cache_version"] if "cache_version" in cache_data else CacheManager.version
+        self.cache_version = (
+            cache_data["cache_version"]
+            if "cache_version" in cache_data
+            else CacheManager.version
+        )
         self.recents: deque[Track] = (
             cache_data["recents"]
             if "recents" in cache_data
@@ -30,7 +34,11 @@ class Cache:
 
     @property
     def data(self):
-        return {"cache_version": self.cache_version, "recents": self.recents, "favorites": self.favorites}
+        return {
+            "cache_version": self.cache_version,
+            "recents": self.recents,
+            "favorites": self.favorites,
+        }
 
 
 class CacheManager:
