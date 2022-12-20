@@ -45,9 +45,9 @@ def get_url_suffix_from_platform() -> str:
 def download() -> None:
     r = requests.get(url)
     page = bs4.BeautifulSoup(r.text, features="html.parser")
-    # The last tested version series is v5.9x
+    # The last tested version series is v5.8x
     versions = page.find_all("li")
-    version = [i for i in versions if "5.9" in i.text][-1].a.get("href")[0:-1]
+    version = [i for i in versions if "5.8" in i.text][-1].a.get("href")[0:-1]
     download_url = (
         url
         + "/"
