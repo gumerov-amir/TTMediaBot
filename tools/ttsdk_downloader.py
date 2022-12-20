@@ -35,7 +35,7 @@ def get_url_suffix_from_platform() -> str:
         sys.exit("Darwin is not supported")
     else:
         if machine == "AMD64" or machine == "x86_64":
-            return "ubuntu22_x86_64"
+            return "ubuntu18_x86_64"
         elif "arm" in machine:
             return "raspbian_armhf"
         else:
@@ -45,9 +45,9 @@ def get_url_suffix_from_platform() -> str:
 def download() -> None:
     r = requests.get(url)
     page = bs4.BeautifulSoup(r.text, features="html.parser")
-    # The last tested version is 5.11
+    # The last tested version series is v5.9x
     versions = page.find_all("li")
-    version = [i for i in versions if "5.11" in i.text][-1].a.get("href")[0:-1]
+    version = [i for i in versions if "5.9" in i.text][-1].a.get("href")[0:-1]
     download_url = (
         url
         + "/"
