@@ -70,6 +70,7 @@ class CommandProcessor:
             "va": admin_commands.VoiceTransmissionCommand,
             "rs": admin_commands.RestartCommand,
             "q": admin_commands.QuitCommand,
+            "gcid": admin_commands.GetChannelIDCommand,
         }
 
     def run(self):
