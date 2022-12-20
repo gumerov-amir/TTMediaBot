@@ -35,7 +35,7 @@ def get_url_suffix_from_platform() -> str:
         sys.exit("Darwin is not supported")
     else:
         if machine == "AMD64" or machine == "x86_64":
-            return "ubuntu18_x86_64"
+            return "ubuntu22_x86_64"
         elif "arm" in machine:
             return "raspbian_armhf"
         else:
@@ -45,9 +45,9 @@ def get_url_suffix_from_platform() -> str:
 def download() -> None:
     r = requests.get(url)
     page = bs4.BeautifulSoup(r.text, features="html.parser")
-    # last tested version is 5.8
+    # The last tested version is 5.11
     versions = page.find_all("li")
-    version = [i for i in versions if "5.8" in i.text][-1].a.get("href")[0:-1]
+    version = [i for i in versions if "5.11" in i.text][-1].a.get("href")[0:-1]
     download_url = (
         url
         + "/"
@@ -72,39 +72,17 @@ def extract() -> None:
 
 def move() -> None:
     path = os.path.join(cd, "ttsdk", os.listdir(os.path.join(cd, "ttsdk"))[0])
-    try:
-        if sys.platform == "win32":
+    libraries = ["TeamTalk_DLL", "TeamTalkPy"]
+    for library in libraries:
+        try:
             os.rename(
-                os.path.join(path, "Library/TeamTalk_DLL/TeamTalk5.dll"),
-                os.path.join(cd, "TeamTalk5.dll"),
+                os.path.join(path, "Library", library), os.path.join(cd, library)
             )
-        else:
+        except OSError:
+            shutil.rmtree(os.path.join(cd, library))
             os.rename(
-                os.path.join(path, "Library/TeamTalk_DLL/libTeamTalk5.so"),
-                os.path.join(cd, "libTeamTalk5.so"),
+                os.path.join(path, "Library", library), os.path.join(cd, library)
             )
-    except FileExistsError:
-        if sys.platform == "win32":
-            os.remove(os.path.join(cd, "TeamTalk5.dll"))
-            os.rename(
-                os.path.join(path, "Library/TeamTalk_DLL/TeamTalk5.dll"),
-                os.path.join(cd, "TeamTalk5.dll"),
-            )
-        else:
-            os.remove(os.path.join(cd, "libTeamTalk5.so"))
-            os.rename(
-                os.path.join(path, "Library/TeamTalk_DLL/libTeamTalk5.so"),
-                os.path.join(cd, "libTeamTalk5.so"),
-            )
-    try:
-        os.rename(
-            os.path.join(path, "Library/TeamTalkPy"), os.path.join(cd, "TeamTalkPy")
-        )
-    except OSError:
-        shutil.rmtree(os.path.join(cd, "TeamTalkPy"))
-        os.rename(
-            os.path.join(path, "Library/TeamTalkPy"), os.path.join(cd, "TeamTalkPy")
-        )
     try:
         os.rename(
             os.path.join(path, "License.txt"), os.path.join(cd, "TTSDK_license.txt")
