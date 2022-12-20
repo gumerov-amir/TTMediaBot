@@ -130,6 +130,7 @@ dmypy.json
 
 *.dll
 *.so
+TeamTalk_DLL/
 TeamTalkPy/
 config.json
 *config.json
