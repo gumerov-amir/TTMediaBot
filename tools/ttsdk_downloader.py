@@ -69,9 +69,6 @@ def extract() -> None:
         os.path.join(os.getcwd(), "ttsdk.7z"), outdir=os.path.join(os.getcwd(), "ttsdk")
     )
 
-
-import os
-
 def move() -> None:
     path = os.path.join(os.getcwd(), "ttsdk", os.listdir(os.path.join(os.getcwd(), "ttsdk"))[0])
     libraries = ["TeamTalk_DLL", "TeamTalkPy"]
