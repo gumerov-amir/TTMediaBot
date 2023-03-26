@@ -18,51 +18,60 @@ import downloader
 
 url = "https://sourceforge.net/projects/mpv-player-windows/files/libmpv/"
 
-cd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
 
 def download():
-    r = requests.get(url)
+    try:
+        r = requests.get(url)
+        r.raise_for_status() # raise an error if there was a problem with the request
+    except requests.exceptions.RequestException as e:
+        print(f"Error: {e}")
+        return
+    
     page = bs4.BeautifulSoup(r.text, features="html.parser")
-    table = page.table
+    table = page.find("table")
+    
     if platform.architecture()[0][0:2] == "64":
-        download_url = table.find("a", href=True, title=re.compile("x86_64")).get(
-            "href"
-        )
+        download_url = table.find("a", href=True, title=re.compile("x86_64")).get("href")
     else:
         download_url = table.find("a", href=True, title=re.compile("i686")).get("href")
-    downloader.download_file(download_url, os.path.join(cd, "libmpv.7z"))
+    
+    try:
+        downloader.download_file(download_url, os.path.join(os.getcwd(), "libmpv.7z"))
+    except Exception as e:
+        print(f"Error downloading file: {e}")
 
 
 def extract():
     try:
-        os.mkdir(os.path.join(cd, "libmpv"))
+        os.mkdir(os.path.join(os.getcwd(), "libmpv"))
     except FileExistsError:
-        shutil.rmtree(os.path.join(cd, "libmpv"))
-        os.mkdir(os.path.join(cd, "libmpv"))
-    patoolib.extract_archive(
-        os.path.join(cd, "libmpv.7z"),
-        outdir=os.path.join(cd, "libmpv"),
-    )
-
+        shutil.rmtree(os.path.join(os.getcwd(), "libmpv"))
+        os.mkdir(os.path.join(os.getcwd(), "libmpv"))
+    try:
+        patoolib.extract_archive(
+            os.path.join(os.getcwd(), "libmpv.7z"),
+            outdir=os.path.join(os.getcwd(), "libmpv"),
+        )
+    except Exception as e:
+        print(f"Error extracting file: {e}")
+        return
 
 def move():
     try:
-        os.rename(
-            os.path.join(cd, "libmpv", "mpv-2.dll"),
-            os.path.join(cd, "mpv.dll"),
-        )
-    except FileExistsError:
-        os.remove(os.path.join(cd, "mpv.dll"))
-        os.rename(
-            os.path.join(cd, "libmpv", "mpv-2.dll"),
-            os.path.join(cd, "mpv.dll"),
-        )
-
+        source = os.path.join(os.getcwd(), "libmpv", "libmpv-2.dll")
+        dest = os.path.join(os.getcwd(), "mpv.dll")
+        if not os.path.exists(source):
+            raise FileNotFoundError("The file mpv-2.dll does not exist")
+            return
+        elif os.path.exists(dest):
+            os.remove(dest)
+        os.rename(source, dest)
+    except (FileNotFoundError, FileExistsError, Exception) as e:
+        print(f"Error moving file: {e}")
 
 def clean():
-    os.remove(os.path.join(cd, "libmpv.7z"))
-    shutil.rmtree(os.path.join(cd, "libmpv"))
+    os.remove(os.path.join(os.getcwd(), "libmpv.7z"))
+    shutil.rmtree(os.path.join(os.getcwd(), "libmpv"))
 
 
 def install():
