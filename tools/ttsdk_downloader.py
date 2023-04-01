@@ -15,9 +15,8 @@ sys.path.append(path)
 import downloader
 
 
-url = "http://bearware.dk/teamtalksdk"
+url = "https://bearware.dk/teamtalksdk"
 
-cd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def get_url_suffix_from_platform() -> str:
@@ -43,7 +42,8 @@ def get_url_suffix_from_platform() -> str:
 
 
 def download() -> None:
-    r = requests.get(url)
+    headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+    r = requests.get(url, headers=headers)
     page = bs4.BeautifulSoup(r.text, features="html.parser")
     # The last tested version series is v5.8x
     versions = page.find_all("li")
@@ -56,47 +56,47 @@ def download() -> None:
         + "tt5sdk_{v}_{p}.7z".format(v=version, p=get_url_suffix_from_platform())
     )
     print("Downloading from " + download_url)
-    downloader.download_file(download_url, os.path.join(cd, "ttsdk.7z"))
+    downloader.download_file(download_url, os.path.join(os.getcwd(), "ttsdk.7z"))
 
 
 def extract() -> None:
     try:
-        os.mkdir(os.path.join(cd, "ttsdk"))
+        os.mkdir(os.path.join(os.getcwd(), "ttsdk"))
     except FileExistsError:
-        shutil.rmtree(os.path.join(cd, "ttsdk"))
-        os.mkdir(os.path.join(cd, "ttsdk"))
+        shutil.rmtree(os.path.join(os.getcwd(), "ttsdk"))
+        os.mkdir(os.path.join(os.getcwd(), "ttsdk"))
     patoolib.extract_archive(
-        os.path.join(cd, "ttsdk.7z"), outdir=os.path.join(cd, "ttsdk")
+        os.path.join(os.getcwd(), "ttsdk.7z"), outdir=os.path.join(os.getcwd(), "ttsdk")
     )
 
-
 def move() -> None:
-    path = os.path.join(cd, "ttsdk", os.listdir(os.path.join(cd, "ttsdk"))[0])
+    path = os.path.join(os.getcwd(), "ttsdk", os.listdir(os.path.join(os.getcwd(), "ttsdk"))[0])
     libraries = ["TeamTalk_DLL", "TeamTalkPy"]
+    dest_dir = os.path.join(os.getcwd(), os.pardir) if os.path.basename(os.getcwd()) == "tools" else os.getcwd()
     for library in libraries:
         try:
             os.rename(
-                os.path.join(path, "Library", library), os.path.join(cd, library)
+                os.path.join(path, "Library", library), os.path.join(dest_dir, library)
             )
         except OSError:
-            shutil.rmtree(os.path.join(cd, library))
+            shutil.rmtree(os.path.join(dest_dir, library))
             os.rename(
-                os.path.join(path, "Library", library), os.path.join(cd, library)
+                os.path.join(path, "Library", library), os.path.join(dest_dir, library)
             )
     try:
         os.rename(
-            os.path.join(path, "License.txt"), os.path.join(cd, "TTSDK_license.txt")
+            os.path.join(path, "License.txt"), os.path.join(dest_dir, "TTSDK_license.txt")
         )
     except FileExistsError:
-        os.remove(os.path.join(cd, "TTSDK_license.txt"))
+        os.remove(os.path.join(dest_dir, "TTSDK_license.txt"))
         os.rename(
-            os.path.join(path, "License.txt"), os.path.join(cd, "TTSDK_license.txt")
+            os.path.join(path, "License.txt"), os.path.join(dest_dir, "TTSDK_license.txt")
         )
 
 
 def clean() -> None:
-    os.remove(os.path.join(cd, "ttsdk.7z"))
-    shutil.rmtree(os.path.join(cd, "ttsdk"))
+    os.remove(os.path.join(os.getcwd(), "ttsdk.7z"))
+    shutil.rmtree(os.path.join(os.getcwd(), "ttsdk"))
 
 
 def install() -> None:
