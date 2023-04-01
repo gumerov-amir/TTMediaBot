@@ -32,7 +32,7 @@ class YtService(_Service):
     def initialize(self):
         self._ydl_config = {
             "skip_download": True,
-            "format": "m4a/bestaudio/best",
+            "format": "m4a/bestaudio/best[protocol!=m3u8_native]/best",
             "socket_timeout": 5,
             "logger": logging.getLogger("root"),
         }
