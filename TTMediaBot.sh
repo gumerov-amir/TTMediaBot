@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 PROGNAME=TTMediaBot.py
 PROGDIR=$(dirname "$(readlink -f $0)")

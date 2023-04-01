@@ -82,7 +82,7 @@ class VkService(_Service):
     ) -> List[Track]:
         parsed_url = urlparse(url)
         path = parsed_url.path[1::]
-        if path.startswith("video_"):
+        if path.startswith("video-"):
             raise errors.ServiceError()
         try:
             if "music/" in path:

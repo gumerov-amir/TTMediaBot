@@ -27,6 +27,7 @@ class Player:
             "demuxer_max_back_bytes": 1048576,
             "demuxer_max_bytes": 2097152,
             "video": False,
+            "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36",
             "ytdl": False,
         }
         mpv_options.update(self.config.player_options)
