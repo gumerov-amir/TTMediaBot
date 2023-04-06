@@ -1,23 +1,26 @@
 # Russian translations for TTMediaBot.
-# Copyright (C) 2022 TTMediaBot-team
+# Copyright (C) 2023 TTMediaBot-team
 # This file is distributed under the same license as the TTMediaBot project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2022.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version:  TTMediaBot\n"
+"Project-Id-Version: TTMediaBot\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
 "POT-Creation-Date: 2022-04-03 10:35+0300\n"
-"PO-Revision-Date: 2022-04-02 01:03+0300\n"
-"Last-Translator: Гумеров Амир Эдуардович <ar8200@bk.ru>\n"
-"Language: ru\n"
+"PO-Revision-Date: 2023-04-05 12:40+0300\n"
+"Last-Translator: Гумеров Амир Эдуардович <gumerov.amir.e@gmail.com>\n"
 "Language-Team: TTMediaBot's developers\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
-"n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2)\n"
+"Language: ru\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.9.1\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+"Generated-By: Babel 2.12.1\n"
+"X-Generator: Poedit 3.0.1\n"
+"X-Poedit-Basepath: ../../..\n"
+"X-Poedit-SearchPath-0: .\n"
 
 #: Z:/development/python/TTMediaBot/bot/app_vars.py:11
 msgid ""
@@ -26,7 +29,7 @@ msgid ""
 "Belousov.\n"
 "Home page: https://github.com/gumerov-amir/TTMediaBotLicense: Mit License"
 msgstr ""
-"TTMediaBot - бот для потоковой передачи мультимедиа для TeamTalk.\n"
+"Бот для потоковой передачи мультимедиа для TeamTalk.\n"
 "Авторы: Gumerov_amir, A11CF0, Beqa Gozalishvili, Kirill Belousov.\n"
 "Домашняя страница: https://github.com/gumerov-amir/TTMediaBot"
 
@@ -66,11 +69,10 @@ msgstr "Неизвестная команда"
 #: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:20
 msgid ""
 "+/-COMMAND Blocks or unblocks commands. +COMMAND adds command to the "
-"blocklist. -COMMAND removes from it. Without a command shows the "
-"blocklist"
+"blocklist. -COMMAND removes from it. Without a command shows the blocklist"
 msgstr ""
-"+/-КОМАНДА Блокирует или разблокирует команды. +КОМАНДА добавляет команду"
-" в список заблокированных команд. -КОМАНДА удаляет из него. Без команды "
+"+/-КОМАНДА Блокирует или разблокирует команды. +КОМАНДА добавляет команду в "
+"список заблокированных команд. -КОМАНДА удаляет из него. Без команды "
 "показывает список заблокированных команд"
 
 #: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:32
@@ -121,11 +123,11 @@ msgid "Incorrect language"
 msgstr "Неправильный язык"
 
 #: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:82
-#, python-brace-format
 msgid ""
 "Current language: {current_language}. Available languages: "
 "{available_languages}"
-msgstr "Текущий язык: {current_language}. Доступные языки: {available_languages}"
+msgstr ""
+"Текущий язык: {current_language}. Доступные языки: {available_languages}"
 
 #: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:93
 msgid "NICKNAME Changes bot's nickname"
@@ -145,11 +147,11 @@ msgstr "Кеш очищен"
 
 #: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:116
 msgid "Recents cleared"
-msgstr "Кэш недавно воспроизведенных треков очищен"
+msgstr "Недавние очищены"
 
 #: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:120
 msgid "Favorites cleared"
-msgstr "Избранное удалено"
+msgstr "Избранное очищено"
 
 #: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:126
 msgid ""
@@ -168,7 +170,7 @@ msgstr "Нет такого канала"
 
 #: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:160
 msgid "Error joining channel: {error}"
-msgstr "Ошибка при присоединении к каналу"
+msgstr "Ошибка при присоединении к каналу: {error}"
 
 #: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:208
 msgid "Enables or disables voice transmission"
@@ -233,12 +235,12 @@ msgstr "Конфигурация сохранена"
 
 #: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:296
 msgid ""
-"+/-USERNAME Manages a list of administrators. +USERNAME adds a user. "
-"-USERNAME removes it. Without an option shows the list"
+"+/-USERNAME Manages a list of administrators. +USERNAME adds a user. -"
+"USERNAME removes it. Without an option shows the list"
 msgstr ""
 "+/-ИМЯ ПОЛЬЗОВАТЕЛЯ Управляет списком администраторов. +ИМЯ ПОЛЬЗОВАТЕЛЯ "
-"добавляет пользователя. -ИМЯ ПОЛЬЗОВАТЕЛЯ удаляет пользователя. Без опции"
-" показывает список"
+"добавляет пользователя. -ИМЯ ПОЛЬЗОВАТЕЛЯ удаляет пользователя. Без опции "
+"показывает список"
 
 #: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:312
 msgid "This user is not in the admin list"
@@ -246,12 +248,12 @@ msgstr "Этого пользователя нет в списке админи�
 
 #: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:328
 msgid ""
-"+/-USERNAME Manages a list of banned users. +USERNAME adds a user. "
-"-USERNAME removes it. Without an option shows the list"
+"+/-USERNAME Manages a list of banned users. +USERNAME adds a user. -USERNAME "
+"removes it. Without an option shows the list"
 msgstr ""
-"+/-ИМЯ ПОЛЬЗОВАТЕЛЯ Управляет списком заблокированных пользователей. +ИМЯ"
-" ПОЛЬЗОВАТЕЛЯ добавляет пользователя. -ИМЯ ПОЛЬЗОВАТЕЛЯ удаляет "
-"пользователя. Без опции показывает список"
+"+/-ИМЯ ПОЛЬЗОВАТЕЛЯ Управляет списком заблокированных пользователей. +ИМЯ "
+"ПОЛЬЗОВАТЕЛЯ добавляет пользователя. -ИМЯ ПОЛЬЗОВАТЕЛЯ удаляет пользователя. "
+"Без опции показывает список"
 
 #: Z:/development/python/TTMediaBot/bot/commands/admin_commands.py:344
 msgid "This user is not banned"
@@ -290,7 +292,6 @@ msgid "Searching..."
 msgstr "Поиск..."
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:50
-#, python-brace-format
 msgid "{nickname} requested {request}"
 msgstr "{nickname} запросил {request}"
 
@@ -306,7 +307,7 @@ msgstr "По вашему запросу ничего не найдено"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:62
 msgid "The selected service is currently unavailable"
-msgstr "В данный момент, выбранный сервис недоступен"
+msgstr "В данный момент выбранный сервис недоступен"
 
 # | msgid "URL Plays a stream from bot given URL"
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:75
@@ -314,7 +315,6 @@ msgid "URL Plays a stream from a given URL"
 msgstr "АДРЕс Воспроизводит поток по заданному адресу"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:84
-#, python-brace-format
 msgid "{nickname} requested playing from a URL"
 msgstr "{nickname} запросил воспроизведение потока"
 
@@ -324,7 +324,7 @@ msgstr "Неверный протокол"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:93
 msgid "Cannot process stream URL"
-msgstr "Невозможно получить адрес потока"
+msgstr "Невозможно обработать адрес потока"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:95
 msgid "The path cannot be found"
@@ -335,7 +335,6 @@ msgid "Stops playback"
 msgstr "Останавливает воспроизведение"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:110
-#, python-brace-format
 msgid "{nickname} stopped playback"
 msgstr "{nickname} остановил воспроизведение"
 
@@ -354,23 +353,24 @@ msgid "Nothing is playing"
 msgstr "Ничего не воспроизводится"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:122
-#, python-brace-format
 msgid ""
-"VOLUME Sets the volume to a value between 0 and {max_volume}. If no "
-"volume is specified, the current volume level is displayed"
+"VOLUME Sets the volume to a value between 0 and {max_volume}. If no volume "
+"is specified, the current volume level is displayed"
 msgstr ""
-"ГРОМКОСТЬ Устанавливает для громкости значение от 0 до {max_volume}. Если"
-" громкость не указана, отображается текущий уровень громкости"
+"ГРОМКОСТЬ Устанавливает для громкости значение от 0 до {max_volume}. Если "
+"громкость не указана, отображается текущий уровень громкости"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:143
-#, python-brace-format
-msgid "STEP Seeks current track backward. the default step is {seek_step} seconds"
-msgstr "ШАГ Прокручивает текущий трек назад. шаг по умолчанию {seek_step} секунды"
+msgid ""
+"STEP Seeks current track backward. the default step is {seek_step} seconds"
+msgstr ""
+"ШАГ Прокручивает текущий трек назад. шаг по умолчанию {seek_step} секунды"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:162
-#, python-brace-format
-msgid "STEP Seeks current track forward. the default step is {seek_step} seconds"
-msgstr "ШАГ Прокручивает текущий трек вперед. шаг по умолчанию {seek_step} секунды"
+msgid ""
+"STEP Seeks current track forward. the default step is {seek_step} seconds"
+msgstr ""
+"ШАГ Прокручивает текущий трек вперед. шаг по умолчанию {seek_step} секунды"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:181
 msgid "Plays next track"
@@ -390,8 +390,8 @@ msgstr "Нет предыдущего трека"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:215
 msgid ""
-"MODE Sets the playback mode. If no mode is specified, the current mode "
-"and a list of modes are displayed"
+"MODE Sets the playback mode. If no mode is specified, the current mode and a "
+"list of modes are displayed"
 msgstr ""
 "РЕЖИМ Устанавливает режим воспроизведения. Если режим не указан, "
 "отображается текущий режим и список режимов"
@@ -417,7 +417,6 @@ msgid "Random"
 msgstr "Случайный трек"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:227
-#, python-brace-format
 msgid ""
 "Current mode: {current_mode}\n"
 "{modes}"
@@ -426,14 +425,13 @@ msgstr ""
 "{modes}"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:246
-#, python-brace-format
 msgid "Current mode: {mode}"
 msgstr "Текущий режим: {mode}"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:258
 msgid ""
-"SERVICE Selects the service to play from, sv SERVICE h returns additional"
-" help. If no service is specified, the current service and a list of "
+"SERVICE Selects the service to play from, sv SERVICE h returns additional "
+"help. If no service is specified, the current service and a list of "
 "available services are displayed"
 msgstr ""
 "СЕРВИС Выбирает сервис для воспроизведения. Если сервис не указан, "
@@ -465,12 +463,12 @@ msgid ""
 "Error: {error}\n"
 "{service} is disabled"
 msgstr ""
-"Ошибка:\n"
-"сервис запрещён"
+"Ошибка: {error}\n"
+"{service} отключён"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:291
 msgid "{service} is disabled"
-msgstr "Передача речи отключена"
+msgstr "{service} отключён"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:297
 msgid "This service has no additional help"
@@ -481,7 +479,6 @@ msgid "{} (Warning: {})"
 msgstr "{} (Внимание: {})"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:323
-#, python-brace-format
 msgid ""
 "Current service: {current_service}\n"
 "Available:\n"
@@ -521,8 +518,8 @@ msgid ""
 "SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows "
 "current speed"
 msgstr ""
-"СКОРОСТЬ Устанавливает скорость воспроизведения от 0.25 до 4. Если "
-"скорость не указана, показывает текущую скорость"
+"СКОРОСТЬ Устанавливает скорость воспроизведения от 0.25 до 4. Если скорость "
+"не указана, показывает текущую скорость"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:377
 msgid "Current rate: {}"
@@ -530,17 +527,17 @@ msgstr "Текущая скорость: {}"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:390
 msgid ""
-"+/-NUMBER Manages favorite tracks. + adds the current track to favorites."
-" - removes a track requested from favorites. If a number is specified "
-"after +/-, adds/removes a track with that number"
+"+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - "
+"removes a track requested from favorites. If a number is specified after "
+"+/-, adds/removes a track with that number"
 msgstr ""
 "+/-НОМЕР Управляет списком избранных треков. + добавляет текущий трек в "
-"избранное. - удаляет запрошенный трек из избранного. Если номер указан "
-"после +/-, добавляет/удаляет трек с этим номером"
+"избранное. - удаляет запрошенный трек из избранного. Если номер указан после "
+"+/-, добавляет/удаляет трек с этим номером"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:396
 msgid "This command is not available for guest users"
-msgstr "Эта команда недоступна для гостевых пользователей"
+msgstr "Эта команда недоступна для анонимных пользователей"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:434
 msgid "This track is not in favorites"
@@ -558,19 +555,19 @@ msgstr "Поток не доступен"
 # | recent " "tracks. Without a number shows recent tracks"
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:488
 msgid ""
-"NUMBER Plays a track with  the given number from a list of recent tracks."
-" Without a number shows recent tracks"
+"NUMBER Plays a track with  the given number from a list of recent tracks. "
+"Without a number shows recent tracks"
 msgstr ""
-"НОМЕР Воспроизводит трек с заданным номером из списка последних треков. "
-"Без номера показывает последние треки"
+"НОМЕР Воспроизводит трек с заданным номером из списка последних треков. Без "
+"номера показывает последние треки"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:520
 msgid "Downloads the current track and uploads it to the channel."
-msgstr "Скачивает проигрываемый трек и выгружает его на канал"
+msgstr "Скачивает проигрываемый трек и выгружает его в канал."
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:530
 msgid "Cannot upload file to channel"
-msgstr "Невозможно загрузить файл на канал"
+msgstr "Невозможно загрузить файл в канал"
 
 #: Z:/development/python/TTMediaBot/bot/commands/user_commands.py:538
 msgid "Downloading..."
@@ -581,32 +578,31 @@ msgid "Live streams cannot be downloaded"
 msgstr "Прямые трансляции не могут быть загружены"
 
 #: Z:/development/python/TTMediaBot/bot/connectors/tt_player_connector.py:35
-#, python-brace-format
 msgid "Playing: {track_name}"
 msgstr "Воспроизводится: {track_name}"
 
 #: Z:/development/python/TTMediaBot/bot/connectors/tt_player_connector.py:41
-#, python-brace-format
 msgid "Playing: {stream_url}"
 msgstr "Воспроизводится: {stream_url}"
 
 #: Z:/development/python/TTMediaBot/bot/connectors/tt_player_connector.py:52
-#, python-brace-format
 msgid "Paused: {track_name}"
 msgstr "Приостановлено: {track_name}"
 
 #: Z:/development/python/TTMediaBot/bot/connectors/tt_player_connector.py:58
-#, python-brace-format
 msgid "Paused: {stream_url}"
 msgstr "Приостановлено: {stream_url}"
 
 #: Z:/development/python/TTMediaBot/bot/services/yam.py:39
 msgid "Token is not provided"
-msgstr "Токен не указан"
+msgstr "Токен не предоставлен"
 
 #: Z:/development/python/TTMediaBot/bot/services/yam.py:43
 msgid "You don't have Yandex Plus"
-msgstr "У Вас нет Yandex Plus"
+msgstr "У вас нет Яндекс Плюс"
+
+#~ msgid "Returns current channel's ID"
+#~ msgstr "Выводит id текущего канала"
 
 #~ msgid "The cache file is already used by another instance of the bot."
 #~ msgstr "Кеш-файл уже используется другим экземпляром бота"
@@ -621,56 +617,43 @@ msgstr "У Вас нет Yandex Plus"
 #~ msgstr "Меняет пол бота"
 
 #~ msgid ""
-#~ "Clears the entire cache. If an "
-#~ "argument is specified, only favorites or"
-#~ " the history of recently played "
-#~ "tracks are deleted"
+#~ "Clears the entire cache. If an argument is specified, only favorites or "
+#~ "the history of recently played tracks are deleted"
 #~ msgstr ""
-#~ "Очищает весь кеш. Если указан аргумент,"
-#~ " удаляются только избранное или история "
-#~ "недавно воспроизведенных треков"
+#~ "Очищает весь кеш. Если указан аргумент, удаляются только избранное или "
+#~ "история недавно воспроизведенных треков"
 
 #~ msgid "History cleared"
 #~ msgstr "История очищена"
 
 #~ msgid ""
-#~ "Enables or disables channel messages "
-#~ "sent by the bot when requesting to"
-#~ " play music, stop current music, and"
-#~ " other events"
+#~ "Enables or disables channel messages sent by the bot when requesting to "
+#~ "play music, stop current music, and other events"
 #~ msgstr ""
-#~ "Включает или отключает сообщения канала, "
-#~ "отправляемые ботом при запросе воспроизведения"
-#~ " музыки, остановки текущей музыки и "
-#~ "других событий"
+#~ "Включает или отключает сообщения канала, отправляемые ботом при запросе "
+#~ "воспроизведения музыки, остановки текущей музыки и других событий"
 
 #~ msgid ""
-#~ "Shows a list of administrators. If "
-#~ "username is specified with a specific"
-#~ " command argument, adds or removes it"
-#~ " from the list"
+#~ "Shows a list of administrators. If username is specified with a specific "
+#~ "command argument, adds or removes it from the list"
 #~ msgstr ""
-#~ "Показывает список администраторов. Если имя"
-#~ " пользователя указано с конкретным "
-#~ "аргументом команды, добавляет или удаляет "
-#~ "его из списка"
+#~ "Показывает список администраторов. Если имя пользователя указано с "
+#~ "конкретным аргументом команды, добавляет или удаляет его из списка"
 
 #~ msgid ""
-#~ "Shows a list of banned users. If"
-#~ " username is specified with a "
-#~ "specific command argument, adds or "
-#~ "removes it from the list"
+#~ "Shows a list of banned users. If username is specified with a specific "
+#~ "command argument, adds or removes it from the list"
 #~ msgstr ""
-#~ "Показывает список заблокированных пользователей. "
-#~ "Если имя пользователя указано с "
-#~ "конкретным аргументом команды, добавляет или"
-#~ " удаляет его из списка"
+#~ "Показывает список заблокированных пользователей. Если имя пользователя "
+#~ "указано с конкретным аргументом команды, добавляет или удаляет его из "
+#~ "списка"
 
 #~ msgid "Nothing is currently playing"
 #~ msgstr "В данный момент ничего не Воспроизводится"
 
 #~ msgid "Sorry, guest users can not use this command"
-#~ msgstr "К сожалению, гостевые пользователи не могут использовать эту команду"
+#~ msgstr ""
+#~ "К сожалению, гостевые пользователи не могут использовать эту команду"
 
 #~ msgid "Shows history of playing (64 last tracks)"
 #~ msgstr "Показывает историю воспроизведения (64 последних трека)"
@@ -696,9 +679,8 @@ msgstr "У Вас нет Yandex Plus"
 
 #~ msgid "shows list of admin users, if user_name is given adds it to list"
 #~ msgstr ""
-#~ "показывает список администраторов, если имя"
-#~ " пользователя указано, добавляет его в "
-#~ "список"
+#~ "показывает список администраторов, если имя пользователя указано, "
+#~ "добавляет его в список"
 
 #~ msgid "must be integer"
 #~ msgstr "Должно быть целым числом"
@@ -724,7 +706,3 @@ msgstr "У Вас нет Yandex Plus"
 
 #~ msgid "The list is is empty"
 #~ msgstr "Список пуст"
-
-#~ msgid "You don't have Yandex Plus"
-#~ msgstr "У вас нет Яндекс плюс"
-
