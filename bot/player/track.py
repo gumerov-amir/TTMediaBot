@@ -34,7 +34,6 @@ class Track:
         self._is_fetched = False
 
     def download(self, directory: str) -> str:
-        print(self.service)
         service: Service = get_service_by_name(self.service)
         file_name = self.name + "." + self.format
         file_name = utils.clean_file_name(file_name)

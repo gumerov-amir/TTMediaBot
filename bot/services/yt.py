@@ -41,6 +41,7 @@ class YtService(_Service):
         info = track.extra_info
         if not info:
             super().download(track, file_path)
+            return
         with YoutubeDL(self._ydl_config) as ydl:
             dl = get_suitable_downloader(info)(ydl, self._ydl_config)
             dl.download(file_path, info)
