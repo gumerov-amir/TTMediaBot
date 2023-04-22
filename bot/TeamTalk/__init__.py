@@ -9,10 +9,10 @@ from queue import Queue
 from bot import app_vars
 from bot.sound_devices import SoundDevice, SoundDeviceType
 
-
 if sys.platform == "win32":
     if sys.version_info.major == 3 and sys.version_info.minor >= 8:
         os.add_dll_directory(app_vars.directory)
+        os.add_dll_directory(os.path.join(app_vars.directory, "TeamTalk_DLL"))
     else:
         os.chdir(app_vars.directory)
 
