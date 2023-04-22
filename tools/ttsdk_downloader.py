@@ -110,8 +110,7 @@ def install() -> None:
     print("moved. cleaning")
     clean()
     print("cleaned.")
-    print("Installed")
-
+    print("Installed, exiting.")
 
 if __name__ == "__main__":
     install()
