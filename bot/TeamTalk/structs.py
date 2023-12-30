@@ -170,6 +170,8 @@ class UserRight(Flag):
     LockedStatus = TeamTalkPy.UserRight.USERRIGHT_LOCKED_STATUS
     RecordVoice = TeamTalkPy.UserRight.USERRIGHT_RECORD_VOICE
     ViewHiddenChannels = TeamTalkPy.UserRight.USERRIGHT_VIEW_HIDDEN_CHANNELS
+    textMessageUser = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_USER
+    textMessageChannel = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_CHANNEL
 
 
 class UserAccount:
