@@ -172,6 +172,43 @@ class UserRightPre15(Flag):
     LockedStatus = TeamTalkPy.UserRight.USERRIGHT_LOCKED_STATUS
     RecordVoice = TeamTalkPy.UserRight.USERRIGHT_RECORD_VOICE
     ViewHiddenChannels = TeamTalkPy.UserRight.USERRIGHT_VIEW_HIDDEN_CHANNELS
+    textMessageUser = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_USER
+    textMessageChannel = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_CHANNEL
+
+
+class UserRight15(Flag):
+    Null = TeamTalkPy.UserRight.USERRIGHT_NONE
+    MultiLogin = TeamTalkPy.UserRight.USERRIGHT_MULTI_LOGIN
+    ViewAllUsers = TeamTalkPy.UserRight.USERRIGHT_VIEW_ALL_USERS
+    CreateTemporaryChannel = TeamTalkPy.UserRight.USERRIGHT_CREATE_TEMPORARY_CHANNEL
+    ModifyChannels = TeamTalkPy.UserRight.USERRIGHT_MODIFY_CHANNELS
+    BroadcastTextMessage = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_BROADCAST
+    KickUsers = TeamTalkPy.UserRight.USERRIGHT_KICK_USERS
+    BanUsers = TeamTalkPy.UserRight.USERRIGHT_BAN_USERS
+    MoveUsers = TeamTalkPy.UserRight.USERRIGHT_MOVE_USERS
+    OperatorEnable = TeamTalkPy.UserRight.USERRIGHT_OPERATOR_ENABLE
+    UploadFiles = TeamTalkPy.UserRight.USERRIGHT_UPLOAD_FILES
+    DownloadFiles = TeamTalkPy.UserRight.USERRIGHT_DOWNLOAD_FILES
+    UpdateServerProperties = TeamTalkPy.UserRight.USERRIGHT_UPDATE_SERVERPROPERTIES
+    TransmitVoice = TeamTalkPy.UserRight.USERRIGHT_TRANSMIT_VOICE
+    TransmitVideoCapture = TeamTalkPy.UserRight.USERRIGHT_TRANSMIT_VIDEOCAPTURE
+    TransmitDesktop = TeamTalkPy.UserRight.USERRIGHT_TRANSMIT_DESKTOP
+    TransmitDesktopInput = TeamTalkPy.UserRight.USERRIGHT_TRANSMIT_DESKTOPINPUT
+    TransmitMediaFileAudio = TeamTalkPy.UserRight.USERRIGHT_TRANSMIT_MEDIAFILE_AUDIO
+    TransmitMediaFileVideo = TeamTalkPy.UserRight.USERRIGHT_TRANSMIT_MEDIAFILE_VIDEO
+    TransmitMediaFile = TeamTalkPy.UserRight.USERRIGHT_TRANSMIT_MEDIAFILE
+    LockedNickname = TeamTalkPy.UserRight.USERRIGHT_LOCKED_NICKNAME
+    LockedStatus = TeamTalkPy.UserRight.USERRIGHT_LOCKED_STATUS
+    RecordVoice = TeamTalkPy.UserRight.USERRIGHT_RECORD_VOICE
+    ViewHiddenChannels = TeamTalkPy.UserRight.USERRIGHT_VIEW_HIDDEN_CHANNELS
+    textMessageUser = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_USER
+    textMessageChannel = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_CHANNEL
+
+
+if major == "5" and minor >= "15":
+    UserRight = UserRight15
+else:
+    UserRight = UserRightPre15
 
 
 class UserRight15(Flag):
