@@ -2,7 +2,7 @@ from enum import Enum, Flag
 
 import TeamTalkPy
 
-major, minor, patch, build = TeamTalkPy.getVersion().split(".")
+major, minor, patch, build = TeamTalkPy.ttstr(TeamTalkPy.getVersion()).split(".")
 
 
 class State(Enum):
