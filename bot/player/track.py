@@ -1,6 +1,6 @@
 from __future__ import annotations
 import copy
-import os
+from pathlib import Path
 from threading import Lock
 from typing import Any, Dict, Optional, TYPE_CHECKING
 
@@ -37,7 +37,7 @@ class Track:
         service: Service = get_service_by_name(self.service)
         file_name = self.name + "." + self.format
         file_name = utils.clean_file_name(file_name)
-        file_path = os.path.join(directory, file_name)
+        file_path = Path(directory) / file_name
         service.download(self, file_path)
         return file_path
 

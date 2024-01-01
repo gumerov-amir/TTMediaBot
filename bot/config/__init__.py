@@ -1,5 +1,5 @@
 import json
-import os
+from pathlib import Path
 import sys
 from typing import Any, Dict, Optional
 
@@ -22,10 +22,10 @@ class ConfigManager:
 
     def __init__(self, file_name: Optional[str]) -> None:
         if file_name:
-            if os.path.isfile(file_name):
-                self.file_name = os.path.abspath(file_name)
+            if Path(file_name).exists():
+                self.file_name = Path(file_name).resolve()
                 config_dict = config_migrator.migrate(self, self._load())
-                self.config_dir = os.path.dirname(self.file_name)
+                self.config_dir = Path(self.file_name).parent
                 self._lock()
             else:
                 sys.exit("Incorrect configuration file path")

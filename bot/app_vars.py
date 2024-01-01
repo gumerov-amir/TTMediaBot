@@ -1,5 +1,5 @@
 from __future__ import annotations
-import os
+from pathlib import Path
 from typing import Callable, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -22,4 +22,4 @@ max_message_length = 256
 recents_max_lenth = 32
 tt_event_timeout = 2
 
-directory = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+directory = Path(__file__).resolve().parent.parent

@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 
-import os
+from pathlib import Path
 import sys
 import subprocess
 
 
-cd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-locale_path = os.path.join(cd, "locale")
-pot_file_path = os.path.join(locale_path, "TTMediaBot.pot")
-source_paths = [os.path.join(cd, "bot"), os.path.join(cd, "TTMediaBot.py")]
+cd = Path(__file__).resolve().parent.parent
+locale_path = cd / "locale"
+pot_file_path = locale_path / "TTMediaBot.pot"
+source_paths = [cd / "bot", cd / "TTMediaBot.py"]
 babel_prefix = "{} -m babel.messages.frontend".format(sys.executable)
 locale_domain = "TTMediaBot"
 

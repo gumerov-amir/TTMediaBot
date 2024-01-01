@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 from bot import app_vars
 
@@ -13,4 +13,4 @@ def clean_file_name(file_name: str) -> str:
 
 
 def get_abs_path(file_name: str) -> str:
-    return os.path.join(app_vars.directory, file_name)
+    return Path(app_vars.directory) / file_name

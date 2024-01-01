@@ -2,7 +2,7 @@ from __future__ import annotations
 from enum import Flag
 import logging
 from logging.handlers import RotatingFileHandler
-import os
+from pathlib import Path
 import sys
 from typing import TYPE_CHECKING, Any, List
 
@@ -37,10 +37,10 @@ def initialize_logger(bot: Bot) -> None:
             file_name = bot.log_file_name
         else:
             file_name = config.file_name
-        if os.path.isdir(os.path.join(*os.path.split(file_name)[0:-1])):
+        if Path(file_name).resolve().parent.is_dir():
             file = file_name
         else:
-            file = os.path.join(bot.config_manager.config_dir, file_name)
+            file = Path(bot.config_manager.config_dir) / file_name
         rotating_file_handler = RotatingFileHandler(
             filename=file,
             mode="a",

@@ -1,5 +1,5 @@
 from __future__ import annotations
-import os
+from pathlib import Path
 from typing import TYPE_CHECKING, List
 from urllib.parse import urlparse
 
@@ -46,25 +46,25 @@ class Streamer:
             else:
                 return fetched_data
         elif is_admin:
-            if os.path.isfile(url):
+            if Path(url).is_file():
                 track = Track(
                     url=url,
-                    name=os.path.split(url)[-1],
-                    format=os.path.splitext(url)[1],
+                    name=Path(url).name,
+                    format=Path(url).suffix,
                     type=TrackType.Local,
                 )
                 return [
                     track,
                 ]
-            elif os.path.isdir(url):
+            elif Path(url).is_dir():
                 tracks: List[Track] = []
-                for path, _, files in os.walk(url):
-                    for file in sorted(files):
-                        url = os.path.join(path, file)
-                        name = os.path.split(url)[-1]
-                        format = os.path.splitext(url)[1]
+                for path in sorted(Path(url).rglob('*')):
+                    print(str(path))
+                    if path.is_file():
+                        name = path.name
+                        format = path.suffix
                         track = Track(
-                            url=url, name=name, format=format, type=TrackType.Local
+                            url=str(path), name=name, format=format, type=TrackType.Local
                         )
                         tracks.append(track)
                 return tracks

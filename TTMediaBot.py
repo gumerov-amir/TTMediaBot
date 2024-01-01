@@ -1,6 +1,6 @@
 from typing import Optional
 
-from os import path
+from pathlib import Path
 
 from argparse import ArgumentParser
 
@@ -13,7 +13,7 @@ parser.add_argument(
     "-c",
     "--config",
     help="Path to the configuration file",
-    default=path.join(app_vars.directory, "config.json"),
+    default=Path(app_vars.directory) / "config.json",
 )
 parser.add_argument("-C", "--cache", help="Path to the cache file", default=None)
 parser.add_argument("-l", "--log", help="Path to the log file", default=None)
