@@ -14,7 +14,7 @@ config_data_type = Dict[str, Any]
 
 def save_default_file() -> None:
     with open(utils.get_abs_path("config_default.json"), "w") as f:
-        json.dump(ConfigModel().dict(), f, indent=4, ensure_ascii=False)
+        json.dump(ConfigModel().model_dump(), f, indent=4, ensure_ascii=False)
 
 
 class ConfigManager:
@@ -61,5 +61,5 @@ class ConfigManager:
 
     def save(self):
         self.file_locker.release()
-        self._dump(self.config.dict())
+        self._dump(self.config.model_dump())
         self.file_locker.acquire()
