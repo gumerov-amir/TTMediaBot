@@ -56,17 +56,24 @@ class TeamTalkModel(BaseModel):
     event_handling: EventHandlingModel = EventHandlingModel()
 
 
-class VkModel(BaseModel):
+class SponsorBlock(BaseModel):
     enabled: bool = True
+    audio_notification: bool = True
+
+
+class BaseService(BaseModel):
+    enabled: bool = True
+
+
+class VkModel(BaseService):
     token: str = ""
 
 
-class YtModel(BaseModel):
-    enabled: bool = True
+class YtModel(BaseService):
+    sponsor_block: SponsorBlock = SponsorBlock()
 
 
-class YamModel(BaseModel):
-    enabled: bool = True
+class YamModel(BaseService):
     token: str = ""
 
 
