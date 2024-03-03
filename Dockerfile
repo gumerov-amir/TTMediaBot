@@ -1,19 +1,26 @@
-FROM python:3.11-slim-bullseye
-RUN apt update \
-    && apt upgrade -y \
-    && apt install -y --no-install-recommends \
-    gettext \
-    libmpv1 \
-    p7zip \
-    pulseaudio \
-    && apt autoclean \
-    && apt clean \
-    && rm -rf /var/lib/apt/list
+FROM ubuntu:22.04
+
+RUN apt update
+RUN apt upgrade -y
+RUN apt install -y gettext libmpv1 p7zip pulseaudio python3-pip
+RUN apt autoclean
+RUN rm -rf /var/lib/apt/list
+
+# Create a user named 'ttbot' and set the working directory
 RUN useradd -ms /bin/bash ttbot
 USER ttbot
 WORKDIR /home/ttbot
+
+# Copy the requirements file and install dependencies
 COPY --chown=ttbot requirements.txt .
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
+
+# Copy the rest of the application files
 COPY --chown=ttbot . .
-RUN python tools/ttsdk_downloader.py && python tools/compile_locales.py
+
+# Run necessary scripts
+RUN python3 tools/ttsdk_downloader.py
+RUN python3 tools/compile_locales.py
+
+# Set the command to start the application
 CMD pulseaudio --start && ./TTMediaBot.sh -c data/config.json --cache data/TTMediaBotCache.dat --log data/TTMediaBot.log
