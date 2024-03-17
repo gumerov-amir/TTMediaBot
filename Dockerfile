@@ -1,9 +1,9 @@
-FROM python:3.11-slim-bullseye
+FROM python:3.11-slim-bookworm
 RUN apt update \
     && apt upgrade -y \
     && apt install -y --no-install-recommends \
     gettext \
-    libmpv1 \
+    libmpv2 \
     p7zip \
     pulseaudio \
     && apt autoclean \
