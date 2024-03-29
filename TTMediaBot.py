@@ -1,8 +1,6 @@
-from typing import Optional
-
-from os import path
-
 from argparse import ArgumentParser
+from os import path
+from typing import Optional
 
 from bot import Bot, app_vars
 from bot.config import save_default_file
@@ -25,6 +23,11 @@ parser.add_argument(
     help='Save default config to "config_default.json" and exit',
     action="store_true",
 )
+parser.add_argument(
+    "--dockerized",
+    help="Automatically cleans pulseaudio configurations and restarts pulseaudio. use only inside docker containers.",
+    action="store_true",
+)
 args = parser.parse_args()
 
 
@@ -34,7 +37,14 @@ def main(
     log: Optional[str] = args.log,
     devices: bool = args.devices,
     default_config: bool = args.default_config,
+    dockerized: bool = args.dockerized,
 ) -> None:
+    if dockerized:
+        import subprocess
+
+        subprocess.run(["pulseaudio", "--kill"])
+        subprocess.run(["rm", "-rf", "/home/ttbot/.config/pulse"])
+        subprocess.run(["pulseaudio", "--start"])
     if devices:
         bot = Bot(None, None, None)
         echo_sound_devices(bot.sound_device_manager)

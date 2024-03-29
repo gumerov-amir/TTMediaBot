@@ -16,4 +16,5 @@ COPY --chown=ttbot requirements.txt .
 RUN pip install -r requirements.txt
 COPY --chown=ttbot . .
 RUN python tools/ttsdk_downloader.py && python tools/compile_locales.py
-CMD rm -rf /home/ttbot/.config/pulse && pulseaudio --start && ./TTMediaBot.sh -c data/config.json --cache data/TTMediaBotCache.dat --log data/TTMediaBot.log
+ENV LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:/home/ttbot/TeamTalk_DLL:/home/ttbot"
+ENTRYPOINT [ "python", "TTMediaBot.py","--dockerized", "-c", "data/config.json", "--cache", "data/TTMediaBotCache.dat", "--log", "data/TTMediaBot.log" ]

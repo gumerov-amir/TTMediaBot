@@ -3,12 +3,12 @@ from __future__ import annotations
 import logging
 import re
 from threading import Thread
-from typing import Any, List, TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING, Any, List, Tuple
 
 from bot import app_vars, errors
-from bot.TeamTalk.structs import Message, User, UserType
 from bot.commands import admin_commands, user_commands
 from bot.commands.task_processor import TaskProcessor
+from bot.TeamTalk.structs import Message, User, UserType
 
 re_command = re.compile("[a-z]+")
 re_arg_split = re.compile(r"(?<!\\)\|")
@@ -78,6 +78,7 @@ class CommandProcessor:
 
     def __call__(self, message: Message) -> None:
         command_thread = Thread(target=self._run, args=(message,))
+        command_thread.daemon = True
         command_thread.start()
 
     def _run(self, message: Message) -> None:
