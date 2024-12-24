@@ -281,11 +281,13 @@ class TeamTalk:
             user.uVersion,
             self.get_user_account(_str(user.szUsername)),
             UserType(user.uUserType),
-            True
-            if _str(user.szUsername) in self.config.users.admins
-            or user.uUserType == 2
-            or user.nUserID in self.temporary_admins
-            else False,
+            (
+                True
+                if _str(user.szUsername) in self.config.users.admins
+                or user.uUserType == 2
+                or user.nUserID in self.temporary_admins
+                else False
+            ),
             _str(user.szUsername) in self.config.users.banned_users,
         )
 

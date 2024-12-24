@@ -91,7 +91,14 @@ class YtService(_Service):
             else:
                 type = TrackType.Default
             return [
-                Track(service=self.name, url=url, name=title, format=format, type=type, extra_info=stream)
+                Track(
+                    service=self.name,
+                    url=url,
+                    name=title,
+                    format=format,
+                    type=type,
+                    extra_info=stream,
+                )
             ]
 
     def search(self, query: str) -> List[Track]:

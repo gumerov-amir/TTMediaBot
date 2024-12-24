@@ -30,16 +30,13 @@ class Service(ABC):
         url: str,
         extra_info: Optional[Dict[str, Any]] = None,
         process: bool = False,
-    ) -> List[Track]:
-        ...
+    ) -> List[Track]: ...
 
     @abstractmethod
-    def initialize(self) -> None:
-        ...
+    def initialize(self) -> None: ...
 
     @abstractmethod
-    def search(self, query: str) -> List[Track]:
-        ...
+    def search(self, query: str) -> List[Track]: ...
 
 
 from bot.services.vk import VkService

@@ -503,9 +503,11 @@ class MpvEvent(Structure):
             "event_id": self.event_id.value,
             "error": self.error,
             "reply_userdata": self.reply_userdata,
-            "event": cast(self.data, POINTER(dtype)).contents.as_dict(decoder=decoder)
-            if dtype
-            else None,
+            "event": (
+                cast(self.data, POINTER(dtype)).contents.as_dict(decoder=decoder)
+                if dtype
+                else None
+            ),
         }
 
 
