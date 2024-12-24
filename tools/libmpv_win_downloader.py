@@ -1,28 +1,31 @@
 #!/usr/bin/env python3
 
-import bs4
-import patoolib
-import requests
-
 import os
 import platform
 import re
 import shutil
 import sys
 
+import bs4
+import patoolib
+import requests
+
 path = os.path.dirname(os.path.realpath(__file__))
 path = os.path.dirname(path)
 sys.path.append(path)
 import downloader
 
-
 url = "https://sourceforge.net/projects/mpv-player-windows/files/libmpv/"
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:133.0) Gecko/20100101 Firefox/133.0"
+}
+
 
 def get_page(url):
     r = requests.get(url, headers=headers)
     r.raise_for_status()
     return r.text
+
 
 def get_redirect_url(content):
     bs = bs4.BeautifulSoup(content, features="html.parser")
@@ -30,17 +33,21 @@ def get_redirect_url(content):
     url = meta_refresh.split("url=")[1]
     return url
 
+
 def download():
     downloads = get_page(url)
     page = bs4.BeautifulSoup(downloads, features="html.parser")
     table = page.find("table")
     if platform.architecture()[0][0:2] == "64":
-        version_url = table.find("a", href=True, title=re.compile("x86_64-[^v]")).get("href")
+        version_url = table.find("a", href=True, title=re.compile("x86_64-[^v]")).get(
+            "href"
+        )
     else:
         version_url = table.find("a", href=True, title=re.compile("i686-")).get("href")
     download_page = get_page(version_url)
     download_url = get_redirect_url(download_page)
     downloader.download_file(download_url, os.path.join(path, "libmpv.7z"))
+
 
 def extract():
     temp_path = os.path.join(path, "libmpv")
@@ -54,6 +61,7 @@ def extract():
         outdir=temp_path,
     )
 
+
 def move_file():
     source = os.path.join(path, "libmpv", "libmpv-2.dll")
     dest = os.path.join(path, "mpv.dll")
@@ -61,9 +69,11 @@ def move_file():
         os.remove(dest)
     shutil.move(source, dest)
 
+
 def clean():
     os.remove(os.path.join(os.getcwd(), "libmpv.7z"))
     shutil.rmtree(os.path.join(os.getcwd(), "libmpv"))
+
 
 def install():
     if sys.platform != "win32":
@@ -82,6 +92,7 @@ def install():
     clean()
     print("cleaned.")
     print("Installed, exiting.")
+
 
 if __name__ == "__main__":
     install()
