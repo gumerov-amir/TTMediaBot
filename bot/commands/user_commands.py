@@ -1,10 +1,11 @@
 from __future__ import annotations
-from typing import List, Optional, TYPE_CHECKING
 
+from typing import TYPE_CHECKING, List, Optional
+
+from bot import app_vars, errors
 from bot.commands.command import Command
 from bot.player.enums import Mode, State, TrackType
 from bot.TeamTalk.structs import User, UserRight
-from bot import errors, app_vars
 
 if TYPE_CHECKING:
     from bot.TeamTalk.structs import User
@@ -540,3 +541,20 @@ class DownloadCommand(Command):
                 return self.translator.translate("Live streams cannot be downloaded")
         else:
             return self.translator.translate("Nothing is playing")
+
+
+class SudoCommand(Command):
+    def help(self) -> str:
+        return self.translator.translate(
+            "Accepts admin password and allows an usual user to become a temporary administrator of the bot until logout"
+        )
+
+    def __call__(self, arg: str, user: User) -> Optional[str]:
+        if user.is_admin:
+            return self.translator.translate("You are already an administrator")
+        if self._bot.ttclient.try_add_temporary_admin(arg, user):
+            return self.translator.translate(
+                "You are temporary admin until you log out"
+            )
+        else:
+            return self.translator.translate("Wrong password or other error")

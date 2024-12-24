@@ -36,6 +36,7 @@
         "reconnection_attempts": -1,
         "reconnection_timeout": 10,
         "users": {
+            "temporary_admin_password": "",
             "admins": [
                 "admin"
             ],
