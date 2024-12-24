@@ -3,12 +3,12 @@ from __future__ import annotations
 import logging
 import re
 from threading import Thread
-from typing import Any, List, TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING, Any, List, Tuple
 
 from bot import app_vars, errors
-from bot.TeamTalk.structs import Message, User, UserType
 from bot.commands import admin_commands, user_commands
 from bot.commands.task_processor import TaskProcessor
+from bot.TeamTalk.structs import Message, User, UserType
 
 re_command = re.compile("[a-z]+")
 re_arg_split = re.compile(r"(?<!\\)\|")
@@ -51,6 +51,7 @@ class CommandProcessor:
             "gl": user_commands.GetLinkCommand,
             "dl": user_commands.DownloadCommand,
             "r": user_commands.RecentsCommand,
+            "sudo": user_commands.SudoCommand,
         }
         self.admin_commands_dict = {
             "cg": admin_commands.ChangeGenderCommand,
@@ -113,6 +114,8 @@ class CommandProcessor:
             )
 
     def check_access(self, user: User, command: str) -> bool:
+        if command == "sudo":
+            return True
         if (
             not user.is_admin and user.type != UserType.Admin
         ) or app_vars.app_name in user.client_name:

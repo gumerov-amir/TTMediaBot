@@ -27,6 +27,7 @@ class PlayerModel(BaseModel):
 
 
 class TeamTalkUserModel(BaseModel):
+    temporary_admin_password: str = ""
     admins: List[str] = ["admin"]
     banned_users: List[str] = []
 

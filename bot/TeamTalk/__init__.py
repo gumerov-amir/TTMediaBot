@@ -1,10 +1,11 @@
 from __future__ import annotations
+
 import logging
 import os
 import re
 import sys
-from typing import AnyStr, List, TYPE_CHECKING, Optional, Union
 from queue import Queue
+from typing import TYPE_CHECKING, AnyStr, List, Optional, Union
 
 from bot import app_vars
 from bot.sound_devices import SoundDevice, SoundDeviceType
@@ -16,11 +17,9 @@ if sys.platform == "win32":
     else:
         os.chdir(app_vars.directory)
 
-from bot.TeamTalk.thread import TeamTalkThread
-from bot.TeamTalk.structs import *
-
 import TeamTalkPy
-
+from bot.TeamTalk.structs import *
+from bot.TeamTalk.thread import TeamTalkThread
 
 re_line_endings = re.compile("[\\r\\n]")
 
@@ -95,6 +94,7 @@ class TeamTalk:
         self.reconnect = False
         self.reconnect_attempt = 0
         self.user_account: UserAccount
+        self.temporary_admins: set[int] = set()
 
     def initialize(self) -> None:
         logging.debug("Initializing TeamTalk")
@@ -108,10 +108,12 @@ class TeamTalk:
         self.disconnect()
         self.state = State.NOT_CONNECTED
         self.tt.closeTeamTalk()
+        self.temporary_admins.clear()
         logging.debug("Teamtalk closed")
 
     def connect(self) -> None:
         self.state = State.CONNECTING
+        self.temporary_admins.clear()
         self.tt.connect(
             _str(self.config.hostname),
             self.config.tcp_port,
@@ -280,10 +282,20 @@ class TeamTalk:
             self.get_user_account(_str(user.szUsername)),
             UserType(user.uUserType),
             True
-            if _str(user.szUsername) in self.config.users.admins or user.uUserType == 2
+            if _str(user.szUsername) in self.config.users.admins
+            or user.uUserType == 2
+            or user.nUserID in self.temporary_admins
             else False,
             _str(user.szUsername) in self.config.users.banned_users,
         )
+
+    def try_add_temporary_admin(self, password: str, user: User) -> bool:
+        if not self.config.users.temporary_admin_password:
+            return False
+        if password == self.config.users.temporary_admin_password:
+            self.temporary_admins.add(user.id)
+            return True
+        return False
 
     def get_user_account(self, username: str) -> UserAccount:
         return UserAccount(username, "", "", UserType.Null, UserRight.Null, "/")
