@@ -10,6 +10,7 @@ class GeneralModel(BaseModel):
     blocked_commands: List[str] = []
     delete_uploaded_files_after: int = 300
     time_format: str = r"%H:%M"
+    start_commands: List[str] = []
 
 
 class SoundDevicesModel(BaseModel):
