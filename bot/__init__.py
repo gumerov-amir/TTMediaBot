@@ -4,6 +4,8 @@ import queue
 import sys
 import time
 from typing import Optional
+from bot.TeamTalk.structs import Message, MessageType, User, UserType, UserStatusMode, UserState
+from bot import errors
 
 from pydantic.error_wrappers import ValidationError
 
@@ -88,6 +90,17 @@ class Bot:
         self.tt_player_connector.start()
         self.command_processor.run()
         logging.info("Started")
+        logging.info(f"Processing {len(self.config.general.start_commands)} startup command(s)...")
+        startup_context_user = User(
+            id=-1, nickname="Startup", username="", 
+            channel=self.ttclient.channel, 
+            type=UserType.Admin, is_admin=True, 
+            status="", gender=UserStatusMode.N, state=UserState.Null, 
+            client_name="", version=0, user_account=None, is_banned=False
+        )
+        for command in self.config.general.start_commands:
+            message = Message(text=command, user=startup_context_user, channel=self.ttclient.channel, type=MessageType.User)
+            self.command_processor(message)
         self._close = False
         while not self._close:
             try:
