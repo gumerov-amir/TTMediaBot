@@ -5,7 +5,7 @@
         "cache_file_name": "TTMediaBotCache.dat",
         "blocked_commands": [],
         "delete_uploaded_files_after": 300,
-        "time_format": "%H:%M"
+        "time_format": "%H:%M",
         "start_commands": []
     },
     "sound_devices": {
