@@ -1,9 +1,12 @@
 from __future__ import annotations
 import logging
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from urllib.parse import urlparse, parse_qs
 
 if TYPE_CHECKING:
     from bot import Bot
+
+import requests
 
 from yt_dlp import YoutubeDL
 from yt_dlp.downloader import get_suitable_downloader
@@ -18,6 +21,8 @@ from bot import errors
 
 
 class YtService(_Service):
+    SPONSOR_BLOCK_API_URL = "https://sponsor.ajay.app/api/"
+
     def __init__(self, bot: Bot, config: YtModel):
         self.bot = bot
         self.config = config
@@ -59,6 +64,9 @@ class YtService(_Service):
                 info = ydl.extract_info(url, process=False)
             else:
                 info = extra_info
+            segments = self.get_sponsor_block_segments(url)
+            if segments:
+                info["sb_segments"] = segments
             info_type = None
             if "_type" in info:
                 info_type = info["_type"]
@@ -106,3 +114,21 @@ class YtService(_Service):
             return tracks
         else:
             raise errors.NothingFoundError("")
+
+    def get_sponsor_block_segments(self, video_url):
+        video_id = None
+        parsed_url = urlparse(video_url)
+        if parsed_url.path == "/watch":
+            query_params = parse_qs(parsed_url.query)
+            if "v" in query_params:
+                video_id  = query_params["v"][0]
+
+        if not video_id:
+            return None
+
+        url = f"{self.SPONSOR_BLOCK_API_URL}skipSegments"
+        params = {"videoID": video_id}
+        res = requests.get(url, params=params)
+        if res.status_code == 200:
+            return res.json()
+        return None

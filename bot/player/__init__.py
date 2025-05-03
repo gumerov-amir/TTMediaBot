@@ -1,6 +1,7 @@
 from __future__ import annotations
 import html
 import logging
+import os
 import time
 from typing import Any, Dict, Callable, List, Optional, TYPE_CHECKING
 import random
@@ -20,8 +21,21 @@ if TYPE_CHECKING:
 class Player:
     def __init__(self, bot: Bot):
         self.config = bot.config.player
+        self.sponsor_block_config = bot.config.services.yt.sponsor_block
         self.cache = bot.cache
         self.cache_manager = bot.cache_manager
+        self._player = self.create_player_instance()
+        if self.sponsor_block_config.enabled and self.sponsor_block_config.audio_notification:
+            self._notifications_player = self.create_player_instance()
+        self._log_level = 5
+        self.track_list: List[Track] = []
+        self.track: Track = Track()
+        self.track_index: int = -1
+        self.state = State.Stopped
+        self.mode = Mode.TrackList
+        self.volume = self.config.default_volume
+
+    def create_player_instance(self):
         mpv_options = {
             "demuxer_lavf_o": "http_persistent=false",
             "demuxer_max_back_bytes": 1048576,
@@ -32,17 +46,11 @@ class Player:
         }
         mpv_options.update(self.config.player_options)
         try:
-            self._player = mpv.MPV(**mpv_options, log_handler=self.log_handler)
+            return mpv.MPV(**mpv_options, log_handler=self.log_handler)
         except AttributeError:
             del mpv_options["demuxer_max_back_bytes"]
-            self._player = mpv.MPV(**mpv_options, log_handler=self.log_handler)
-        self._log_level = 5
-        self.track_list: List[Track] = []
-        self.track: Track = Track()
-        self.track_index: int = -1
-        self.state = State.Stopped
-        self.mode = Mode.TrackList
-        self.volume = self.config.default_volume
+            return mpv.MPV(**mpv_options, log_handler=self.log_handler)
+
 
     def initialize(self) -> None:
         logging.debug("Initializing player")
@@ -53,6 +61,7 @@ class Player:
         self.register_event_callback("end-file", self.on_end_file)
         self._player.observe_property("metadata", self.on_metadata_update)
         self._player.observe_property("media-title", self.on_metadata_update)
+        self._player.observe_property("time-pos", self.on_position_change)
         logging.debug("Player callbacks registered")
 
     def close(self) -> None:
@@ -67,7 +76,7 @@ class Player:
         tracks: Optional[List[Track]] = None,
         start_track_index: Optional[int] = None,
     ) -> None:
-        if tracks != None:
+        if tracks is not None:
             self.track_list = tracks
             if not start_track_index and self.mode == Mode.Random:
                 self.shuffle(True)
@@ -281,3 +290,14 @@ class Player:
                 new_name = html.unescape(self._player.media_title)
             if self.track.name != new_name and new_name:
                 self.track.name = new_name
+
+    def on_position_change(self, name, value):
+        if name != "time-pos" or value is None: return
+        if self.track.service != "yt": return
+        for segment in self.track.extra_info["sb_segments"]:
+            segment = segment["segment"]
+            if segment[0] <= value <= segment[0] + 1:
+                self._notifications_player.volume = self.volume
+                self._notifications_player.play(os.getcwd() + "/assets/beep.ogg")
+                self._player.seek(segment[1], reference="absolute")
+                break
