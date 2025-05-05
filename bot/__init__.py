@@ -7,7 +7,7 @@ from typing import Optional
 from bot.TeamTalk.structs import Message, MessageType, User, UserType, UserStatusMode, UserState
 from bot import errors
 
-from pydantic.error_wrappers import ValidationError
+from pydantic import ValidationError
 
 from bot import (
     TeamTalk,
