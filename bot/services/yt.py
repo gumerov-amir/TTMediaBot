@@ -1,5 +1,6 @@
 from __future__ import annotations
 import logging
+import os
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -37,6 +38,9 @@ class YtService(_Service):
             "logger": logging.getLogger("root"),
         }
 
+        if self.config.cookiefile_path and os.path.isfile(self.config.cookiefile_path):
+            self._ydl_config |= {"cookiefile": self.config.cookiefile_path}
+            
     def download(self, track: Track, file_path: str) -> None:
         info = track.extra_info
         if not info:
