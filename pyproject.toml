@@ -67,8 +67,9 @@ ignore = [
     "COM812",
     "D211",
     "D213",
-    "FBT",    # Ignore boolean trap for now, too hard to fix
-    "LOG015", # We use many of them, too difficult to fix now
+    "FBT",     # Ignore boolean trap for now, too hard to fix
+    "LOG015",  # We use many of them, too difficult to fix now
+    "PLR0913", # We need functions with many arguments
 ]
 
 [tool.ruff.lint.mccabe]

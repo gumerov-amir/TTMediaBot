@@ -98,11 +98,11 @@ class Bot:
             f"Processing {len(self.config.general.start_commands)} startup command(s)...",
         )
         startup_context_user = User(
-            id=-1,
+            user_id=-1,
             nickname="Startup",
             username="",
             channel=self.ttclient.channel,
-            type=UserType.Admin,
+            user_type=UserType.Admin,
             is_admin=True,
             status="",
             gender=UserStatusMode.N,
@@ -117,7 +117,7 @@ class Bot:
                 text=command,
                 user=startup_context_user,
                 channel=self.ttclient.channel,
-                type=MessageType.User,
+                message_type=MessageType.User,
             )
             self.command_processor(message)
         self._close = False
