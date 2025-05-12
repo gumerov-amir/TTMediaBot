@@ -3,12 +3,12 @@ from __future__ import annotations
 import logging
 import re
 from threading import Thread
-from typing import Any, List, TYPE_CHECKING, Tuple
+from typing import TYPE_CHECKING, Any, List, Tuple
 
 from bot import app_vars, errors
-from bot.TeamTalk.structs import Message, User, UserType
 from bot.commands import admin_commands, user_commands
 from bot.commands.task_processor import TaskProcessor
+from bot.TeamTalk.structs import Message, User, UserType
 
 re_command = re.compile("[a-z]+")
 re_arg_split = re.compile(r"(?<!\\)\|")
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 
 
 class CommandProcessor:
-    def __init__(self, bot: Bot):
+    def __init__(self, bot: Bot) -> None:
         self.task_processor = TaskProcessor(self)
         self.bot = bot
         self.config = bot.config
@@ -73,7 +73,7 @@ class CommandProcessor:
             "gcid": admin_commands.GetChannelIDCommand,
         }
 
-    def run(self):
+    def run(self) -> None:
         self.task_processor.start()
 
     def __call__(self, message: Message) -> None:
@@ -117,65 +117,61 @@ class CommandProcessor:
             not user.is_admin and user.type != UserType.Admin
         ) or app_vars.app_name in user.client_name:
             if app_vars.app_name in user.client_name:
-                raise errors.AccessDeniedError("")
-            elif user.is_banned:
+                msg = ""
+                raise errors.AccessDeniedError(msg)
+            if user.is_banned:
                 raise errors.AccessDeniedError(
                     self.translator.translate("You are banned"),
                 )
-            elif user.channel.id != self.ttclient.channel.id:
+            if user.channel.id != self.ttclient.channel.id:
                 raise errors.AccessDeniedError(
                     self.translator.translate("You are not in bot's channel"),
                 )
-            elif self.locked:
+            if self.locked:
                 raise errors.AccessDeniedError(
                     self.translator.translate("Bot is locked"),
                 )
-            elif command in self.config.general.blocked_commands:
+            if command in self.config.general.blocked_commands:
                 raise errors.AccessDeniedError(
                     self.translator.translate("This command is blocked"),
                 )
-            else:
-                return True
-        else:
             return True
+        return True
 
     def get_command(self, command: str, user: User) -> Any:
         if command in self.commands_dict:
             return self.commands_dict[command]
-        elif (
+        if (
             user.is_admin or user.type == UserType.Admin
         ) and command in self.admin_commands_dict:
             return self.admin_commands_dict[command]
-        else:
-            raise errors.UnknownCommandError()
+        raise errors.UnknownCommandError
 
     def help(self, arg: str, user: User) -> str:
         if arg:
             if arg in self.commands_dict:
-                return "{} {}".format(arg, self.commands_dict[arg](self).help)
-            elif user.is_admin and arg in self.admin_commands_dict:
-                return "{} {}".format(arg, self.admin_commands_dict[arg](self).help)
-            else:
-                return self.translator.translate("Unknown command")
-        else:
-            help_strings: List[str] = []
-            for i in list(self.commands_dict):
+                return f"{arg} {self.commands_dict[arg](self).help}"
+            if user.is_admin and arg in self.admin_commands_dict:
+                return f"{arg} {self.admin_commands_dict[arg](self).help}"
+            return self.translator.translate("Unknown command")
+        help_strings: list[str] = []
+        for i in list(self.commands_dict):
+            help_strings.append(self.help(i, user))
+        if user.is_admin:
+            for i in list(self.admin_commands_dict):
                 help_strings.append(self.help(i, user))
-            if user.is_admin:
-                for i in list(self.admin_commands_dict):
-                    help_strings.append(self.help(i, user))
-            return "\n".join(help_strings)
+        return "\n".join(help_strings)
 
-    def parse_command(self, text: str) -> Tuple[str, str]:
+    def parse_command(self, text: str) -> tuple[str, str]:
         text = text.strip()
         try:
             command = re.findall(re_command, text.split(" ")[0].lower())[0]
         except IndexError:
-            raise errors.ParseCommandError()
+            raise errors.ParseCommandError
         arg = " ".join(text.split(" ")[1::])
         return command, arg
 
-    def split_arg(self, arg: str) -> List[str]:
+    def split_arg(self, arg: str) -> list[str]:
         args = re.split(re_arg_split, arg)
         for i, arg in enumerate(args):
             args[i] = args[i].strip().replace("\\|", "|")

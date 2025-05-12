@@ -1,10 +1,11 @@
 from __future__ import annotations
-from typing import List, Optional, TYPE_CHECKING
 
+from typing import TYPE_CHECKING
+
+from bot import app_vars, errors
 from bot.commands.command import Command
 from bot.player.enums import Mode, State, TrackType
 from bot.TeamTalk.structs import User, UserRight
-from bot import errors, app_vars
 
 if TYPE_CHECKING:
     from bot.TeamTalk.structs import User
@@ -15,7 +16,7 @@ class HelpCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Shows command help")
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         return self.command_processor.help(arg, user)
 
 
@@ -24,7 +25,7 @@ class AboutCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Shows information about the bot")
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         return app_vars.client_name + "\n" + app_vars.about_text(self.translator)
 
 
@@ -32,10 +33,10 @@ class PlayPauseCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "QUERY Plays tracks found for the query. If no query is given, plays or pauses current track"
+            "QUERY Plays tracks found for the query. If no query is given, plays or pauses current track",
         )
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         if arg:
             self.run_async(
                 self.ttclient.send_message,
@@ -48,25 +49,27 @@ class PlayPauseCommand(Command):
                     self.run_async(
                         self.ttclient.send_message,
                         self.translator.translate(
-                            "{nickname} requested {request}"
+                            "{nickname} requested {request}",
                         ).format(nickname=user.nickname, request=arg),
                         type=2,
                     )
                 self.run_async(self.player.play, track_list)
                 return self.translator.translate("Playing {}").format(
-                    track_list[0].name
+                    track_list[0].name,
                 )
             except errors.NothingFoundError:
                 return self.translator.translate("Nothing is found for your query")
             except errors.ServiceError:
                 return self.translator.translate(
-                    "The selected service is currently unavailable"
+                    "The selected service is currently unavailable",
                 )
-        else:
-            if self.player.state == State.Playing:
-                self.run_async(self.player.pause)
-            elif self.player.state == State.Paused:
-                self.run_async(self.player.play)
+        elif self.player.state == State.Playing:
+            self.run_async(self.player.pause)
+            return None
+        elif self.player.state == State.Paused:
+            self.run_async(self.player.play)
+            return None
+        return None
 
 
 class PlayUrlCommand(Command):
@@ -74,7 +77,7 @@ class PlayUrlCommand(Command):
     def help(self) -> str:
         return self.translator.translate("URL Plays a stream from a given URL")
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         if arg:
             try:
                 tracks = self.module_manager.streamer.get(arg, user.is_admin)
@@ -82,7 +85,7 @@ class PlayUrlCommand(Command):
                     self.run_async(
                         self.ttclient.send_message,
                         self.translator.translate(
-                            "{nickname} requested playing from a URL"
+                            "{nickname} requested playing from a URL",
                         ).format(nickname=user.nickname),
                         type=2,
                     )
@@ -102,28 +105,29 @@ class StopCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Stops playback")
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         if self.player.state != State.Stopped:
             self.player.stop()
             if self.config.general.send_channel_messages:
                 self.ttclient.send_message(
                     self.translator.translate("{nickname} stopped playback").format(
-                        nickname=user.nickname
+                        nickname=user.nickname,
                     ),
-                    type=2,
+                    message_type=2,
                 )
-        else:
-            return self.translator.translate("Nothing is playing")
+                return None
+            return None
+        return self.translator.translate("Nothing is playing")
 
 
 class VolumeCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "VOLUME Sets the volume to a value between 0 and {max_volume}. If no volume is specified, the current volume level is displayed"
+            "VOLUME Sets the volume to a value between 0 and {max_volume}. If no volume is specified, the current volume level is displayed",
         ).format(max_volume=self.config.player.max_volume)
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         if arg:
             try:
                 volume = int(arg)
@@ -141,10 +145,10 @@ class SeekBackCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "STEP Seeks current track backward. the default step is {seek_step} seconds"
+            "STEP Seeks current track backward. the default step is {seek_step} seconds",
         ).format(seek_step=self.config.player.seek_step)
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         if self.player.state == State.Stopped:
             return self.translator.translate("Nothing is playing")
         if arg:
@@ -154,16 +158,17 @@ class SeekBackCommand(Command):
                 raise errors.InvalidArgumentError
         else:
             self.player.seek_back()
+            return None
 
 
 class SeekForwardCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "STEP Seeks current track forward. the default step is {seek_step} seconds"
+            "STEP Seeks current track forward. the default step is {seek_step} seconds",
         ).format(seek_step=self.config.player.seek_step)
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         if self.player.state == State.Stopped:
             return self.translator.translate("Nothing is playing")
         if arg:
@@ -173,6 +178,7 @@ class SeekForwardCommand(Command):
                 raise errors.InvalidArgumentError
         else:
             self.player.seek_forward()
+            return None
 
 
 class NextTrackCommand(Command):
@@ -180,11 +186,11 @@ class NextTrackCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Plays next track")
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         try:
             self.player.next()
             return self.translator.translate("Playing {}").format(
-                self.player.track.name
+                self.player.track.name,
             )
         except errors.NoNextTrackError:
             return self.translator.translate("No next track")
@@ -197,11 +203,11 @@ class PreviousTrackCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Plays previous track")
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         try:
             self.player.previous()
             return self.translator.translate("Playing {}").format(
-                self.player.track.name
+                self.player.track.name,
             )
         except errors.NoPreviousTrackError:
             return self.translator.translate("No previous track")
@@ -213,10 +219,10 @@ class ModeCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "MODE Sets the playback mode. If no mode is specified, the current mode and a list of modes are displayed"
+            "MODE Sets the playback mode. If no mode is specified, the current mode and a list of modes are displayed",
         )
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         self.mode_names = {
             Mode.SingleTrack: self.translator.translate("Single Track"),
             Mode.RepeatTrack: self.translator.translate("Repeat Track"),
@@ -225,15 +231,12 @@ class ModeCommand(Command):
             Mode.Random: self.translator.translate("Random"),
         }
         mode_help = self.translator.translate(
-            "Current mode: {current_mode}\n{modes}"
+            "Current mode: {current_mode}\n{modes}",
         ).format(
             current_mode=self.mode_names[self.player.mode],
-            modes="\n".join(
-                [
-                    "{value} {name}".format(name=self.mode_names[i], value=i.value)
-                    for i in Mode.__members__.values()
-                ]
-            ),
+            modes="\n".join([
+                f"{i.value} {self.mode_names[i]}" for i in Mode.__members__.values()
+            ]),
         )
         if arg:
             try:
@@ -244,7 +247,7 @@ class ModeCommand(Command):
                     self.player.shuffle(False)
                 self.player.mode = Mode(mode)
                 return self.translator.translate("Current mode: {mode}").format(
-                    mode=self.mode_names[self.player.mode]
+                    mode=self.mode_names[self.player.mode],
                 )
             except ValueError:
                 return "Incorrect mode\n" + mode_help
@@ -256,16 +259,16 @@ class ServiceCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "SERVICE Selects the service to play from, sv SERVICE h returns additional help. If no service is specified, the current service and a list of available services are displayed"
+            "SERVICE Selects the service to play from, sv SERVICE h returns additional help. If no service is specified, the current service and a list of available services are displayed",
         )
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         args = arg.split(" ")
         if args[0]:
             service_name = args[0].lower()
             if service_name not in self.service_manager.services:
                 return self.translator.translate("Unknown service.\n{}").format(
-                    self.service_help
+                    self.service_help,
                 )
             service = self.service_manager.services[service_name]
             if len(args) == 1:
@@ -273,70 +276,66 @@ class ServiceCommand(Command):
                     self.service_manager.service = service
                     if service.warning_message:
                         return self.translator.translate(
-                            "Current service: {}\nWarning: {}"
+                            "Current service: {}\nWarning: {}",
                         ).format(service.name, service.warning_message)
                     return self.translator.translate("Current service: {}").format(
-                        service.name
+                        service.name,
                     )
-                elif not service.is_enabled:
+                if not service.is_enabled:
                     if service.error_message:
                         return self.translator.translate(
-                            "Error: {error}\n{service} is disabled".format(
-                                error=service.error_message,
-                                service=service.name,
-                            )
+                            f"Error: {service.error_message}\n{service.name} is disabled",
                         )
-                    else:
-                        return self.translator.translate(
-                            "{service} is disabled".format(service=service.name)
-                        )
-            elif len(args) >= 1:
+                    return self.translator.translate(
+                        f"{service.name} is disabled",
+                    )
+                return None
+            if len(args) >= 1:
                 if service.help:
                     return service.help
-                else:
-                    return self.translator.translate(
-                        "This service has no additional help"
-                    )
-        else:
-            return self.service_help
+                return self.translator.translate(
+                    "This service has no additional help",
+                )
+            return None
+        return self.service_help
 
     @property
     def service_help(self):
-        services: List[str] = []
+        services: list[str] = []
         for i in self.service_manager.services:
             service = self.service_manager.services[i]
             if not service.is_enabled:
                 if service.error_message:
                     services.append(
-                        "{} (Error: {})".format(service.name, service.error_message)
+                        f"{service.name} (Error: {service.error_message})",
                     )
                 else:
-                    services.append("{} (Error)".format(service.name))
+                    services.append(f"{service.name} (Error)")
             elif service.warning_message:
                 services.append(
                     self.translator.translate("{} (Warning: {})").format(
-                        service.name, service.warning_message
-                    )
+                        service.name,
+                        service.warning_message,
+                    ),
                 )
             else:
                 services.append(service.name)
-        help = self.translator.translate(
-            "Current service: {current_service}\nAvailable:\n{available_services}\nsend sv SERVICE h for additional help"
+        return self.translator.translate(
+            "Current service: {current_service}\nAvailable:\n{available_services}\nsend sv SERVICE h for additional help",
         ).format(
             current_service=self.service_manager.service.name,
             available_services="\n".join(services),
         )
-        return help
 
 
 class SelectTrackCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "NUMBER Selects track by number from the list of current results"
+            "NUMBER Selects track by number from the list of current results",
         )
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         if arg:
             try:
                 number = int(arg)
@@ -348,7 +347,8 @@ class SelectTrackCommand(Command):
                     return self.translator.translate("Incorrect number")
                 self.player.play_by_index(index)
                 return self.translator.translate("Playing {} {}").format(
-                    arg, self.player.track.name
+                    arg,
+                    self.player.track.name,
                 )
             except errors.IncorrectTrackIndexError:
                 return self.translator.translate("Out of list")
@@ -356,55 +356,52 @@ class SelectTrackCommand(Command):
                 return self.translator.translate("Nothing is playing")
             except ValueError:
                 raise errors.InvalidArgumentError
+        elif self.player.state != State.Stopped:
+            return self.translator.translate("Playing {} {}").format(
+                self.player.track_index + 1,
+                self.player.track.name,
+            )
         else:
-            if self.player.state != State.Stopped:
-                return self.translator.translate("Playing {} {}").format(
-                    self.player.track_index + 1, self.player.track.name
-                )
-            else:
-                return self.translator.translate("Nothing is playing")
+            return self.translator.translate("Nothing is playing")
 
 
 class SpeedCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows current speed"
+            "SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows current speed",
         )
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         if not arg:
             return self.translator.translate("Current rate: {}").format(
-                str(self.player.get_speed())
+                str(self.player.get_speed()),
             )
-        else:
-            try:
-                self.player.set_speed(float(arg))
-            except ValueError:
-                raise errors.InvalidArgumentError()
+        try:
+            self.player.set_speed(float(arg))
+        except ValueError:
+            raise errors.InvalidArgumentError
 
 
 class FavoritesCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - removes a track requested from favorites. If a number is specified after +/-, adds/removes a track with that number"
+            "+/-NUMBER Manages favorite tracks. + adds the current track to favorites. - removes a track requested from favorites. If a number is specified after +/-, adds/removes a track with that number",
         )
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         if user.username == "":
             return self.translator.translate(
-                "This command is not available for guest users"
+                "This command is not available for guest users",
             )
         if arg:
             if arg[0] == "+":
                 return self._add(user)
-            elif arg[0] == "-":
+            if arg[0] == "-":
                 return self._del(arg, user)
-            else:
-                return self._play(arg, user)
-        else:
-            return self._list(user)
+            return self._play(arg, user)
+        return self._list(user)
 
     def _add(self, user: User) -> str:
         if self.player.state != State.Stopped:
@@ -414,8 +411,7 @@ class FavoritesCommand(Command):
                 self.cache.favorites[user.username] = [self.player.track.get_raw()]
             self.cache_manager.save()
             return self.translator.translate("Added")
-        else:
-            return self.translator.translate("Nothing is playing")
+        return self.translator.translate("Nothing is playing")
 
     def _del(self, arg: str, user: User) -> str:
         if (self.player.state != State.Stopped and len(arg) == 1) or len(arg) > 1:
@@ -436,29 +432,26 @@ class FavoritesCommand(Command):
             return self.translator.translate("Nothing is playing")
 
     def _list(self, user: User) -> str:
-        track_names: List[str] = []
+        track_names: list[str] = []
         try:
             for number, track in enumerate(self.cache.favorites[user.username]):
                 track_names.append(
-                    "{number}: {track_name}".format(
-                        number=number + 1,
-                        track_name=track.name if track.name else track.url,
-                    )
+                    f"{number + 1}: {track.name if track.name else track.url}",
                 )
         except KeyError:
             pass
         if len(track_names) > 0:
             return "\n".join(track_names)
-        else:
-            return self.translator.translate("The list is empty")
+        return self.translator.translate("The list is empty")
 
-    def _play(self, arg: str, user: User) -> Optional[str]:
+    def _play(self, arg: str, user: User) -> str | None:
         try:
             self.player.play(
-                self.cache.favorites[user.username], start_track_index=int(arg) - 1
+                self.cache.favorites[user.username],
+                start_track_index=int(arg) - 1,
             )
         except ValueError:
-            raise errors.InvalidArgumentError()
+            raise errors.InvalidArgumentError
         except IndexError:
             return self.translator.translate("Out of list")
         except KeyError:
@@ -470,26 +463,24 @@ class GetLinkCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Gets a direct link to the current track")
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         if self.player.state != State.Stopped:
             url = self.player.track.url
             if url:
                 shortener = self.module_manager.shortener
                 return shortener.get(url) if shortener else url
-            else:
-                return self.translator.translate("URL is not available")
-        else:
-            return self.translator.translate("Nothing is playing")
+            return self.translator.translate("URL is not available")
+        return self.translator.translate("Nothing is playing")
 
 
 class RecentsCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "NUMBER Plays a track with  the given number from a list of recent tracks. Without a number shows recent tracks"
+            "NUMBER Plays a track with  the given number from a list of recent tracks. Without a number shows recent tracks",
         )
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         if arg:
             try:
                 self.player.play(
@@ -497,11 +488,11 @@ class RecentsCommand(Command):
                     start_track_index=int(arg) - 1,
                 )
             except ValueError:
-                raise errors.InvalidArgumentError()
+                raise errors.InvalidArgumentError
             except IndexError:
                 return self.translator.translate("Out of list")
         else:
-            track_names: List[str] = []
+            track_names: list[str] = []
             for number, track in enumerate(reversed(self.cache.recents)):
                 if track.name:
                     track_names.append(f"{number + 1}: {track.name}")
@@ -518,25 +509,21 @@ class DownloadCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "Downloads the current track and uploads it to the channel."
+            "Downloads the current track and uploads it to the channel.",
         )
 
-    def __call__(self, arg: str, user: User) -> Optional[str]:
+    def __call__(self, arg: str, user: User) -> str | None:
         if not (
             self.ttclient.user.user_account.rights & UserRight.UploadFiles
             == UserRight.UploadFiles
         ):
             raise PermissionError(
-                self.translator.translate("Cannot upload file to channel")
+                self.translator.translate("Cannot upload file to channel"),
             )
         if self.player.state != State.Stopped:
             track = self.player.track
-            if track.url and (
-                track.type == TrackType.Default or track.type == TrackType.Local
-            ):
+            if track.url and (track.type in (TrackType.Default, TrackType.Local)):
                 self.module_manager.uploader(self.player.track, user)
                 return self.translator.translate("Downloading...")
-            else:
-                return self.translator.translate("Live streams cannot be downloaded")
-        else:
-            return self.translator.translate("Nothing is playing")
+            return self.translator.translate("Live streams cannot be downloaded")
+        return self.translator.translate("Nothing is playing")

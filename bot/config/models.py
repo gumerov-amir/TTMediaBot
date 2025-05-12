@@ -1,4 +1,4 @@
-from typing import Any, Dict, List, Union
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -7,10 +7,11 @@ class GeneralModel(BaseModel):
     language: str = "en"
     send_channel_messages: bool = True
     cache_file_name: str = "TTMediaBotCache.dat"
-    blocked_commands: List[str] = []
+    blocked_commands: list[str] = []
     delete_uploaded_files_after: int = 300
     time_format: str = r"%H:%M"
-    start_commands: List[str] = []
+    start_commands: list[str] = []
+
 
 class SoundDevicesModel(BaseModel):
     output_device: int = 0
@@ -23,11 +24,12 @@ class PlayerModel(BaseModel):
     volume_fading: bool = True
     volume_fading_interval: float = 0.025
     seek_step: int = 5
-    player_options: Dict[str, Any] = {}
+    player_options: dict[str, Any] = {}
+
 
 class TeamTalkUserModel(BaseModel):
-    admins: List[str] = ["admin"]
-    banned_users: List[str] = []
+    admins: list[str] = ["admin"]
+    banned_users: list[str] = []
 
 
 class EventHandlingModel(BaseModel):
@@ -45,7 +47,7 @@ class TeamTalkModel(BaseModel):
     gender: str = "n"
     username: str = ""
     password: str = ""
-    channel: Union[int, str] = "/"
+    channel: int | str = "/"
     channel_password: str = ""
     license_name: str = ""
     license_key: str = ""
@@ -62,6 +64,8 @@ class VkModel(BaseModel):
 
 class YtModel(BaseModel):
     enabled: bool = True
+
+
 class YtModel(BaseModel):
     enabled: bool = True
     cookiefile_path: str = ""
@@ -83,7 +87,7 @@ class LoggerModel(BaseModel):
     log: bool = True
     level: str = "INFO"
     format: str = "%(levelname)s [%(asctime)s]: %(message)s in %(threadName)s file: %(filename)s line %(lineno)d function %(funcName)s"
-    mode: Union[int, str] = "FILE"
+    mode: int | str = "FILE"
     file_name: str = "TTMediaBot.log"
     max_file_size: int = 0
     backup_count: int = 0
@@ -92,7 +96,7 @@ class LoggerModel(BaseModel):
 class ShorteningModel(BaseModel):
     shorten_links: bool = False
     service: str = "clckru"
-    service_params: Dict[str, Any] = {}
+    service_params: dict[str, Any] = {}
 
 
 class ConfigModel(BaseModel):

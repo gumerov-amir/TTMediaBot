@@ -1,12 +1,11 @@
 from __future__ import annotations
-from enum import Flag
+
 import logging
-from logging.handlers import RotatingFileHandler
 import os
 import sys
-from typing import TYPE_CHECKING, Any, List
-
-from bot import app_vars
+from enum import Flag
+from logging.handlers import RotatingFileHandler
+from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     from bot import Bot
@@ -23,7 +22,7 @@ def initialize_logger(bot: Bot) -> None:
     logging.addLevelName(5, "PLAYER_DEBUG")
     level = logging.getLevelName(config.level)
     formatter = logging.Formatter(config.format)
-    handlers: List[Any] = []
+    handlers: list[Any] = []
     try:
         mode = (
             Mode(config.mode)
@@ -33,10 +32,7 @@ def initialize_logger(bot: Bot) -> None:
     except KeyError:
         sys.exit("Invalid log mode name")
     if mode & Mode.FILE == Mode.FILE:
-        if bot.log_file_name:
-            file_name = bot.log_file_name
-        else:
-            file_name = config.file_name
+        file_name = bot.log_file_name if bot.log_file_name else config.file_name
         if os.path.isdir(os.path.join(*os.path.split(file_name)[0:-1])):
             file = file_name
         else:

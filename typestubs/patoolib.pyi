@@ -1,9 +1,7 @@
-from typing import Optional
-
 def extract_archive(
     archive: str,
     verbosity: int = ...,
-    outdir: Optional[str] = ...,
-    program: Optional[str] = ...,
+    outdir: str | None = ...,
+    program: str | None = ...,
     interactive: bool = ...,
 ) -> None: ...

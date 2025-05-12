@@ -1,23 +1,23 @@
 from __future__ import annotations
-import threading
-import time
+
 import os
 import tempfile
-from typing import TYPE_CHECKING
+import threading
+import time
 from queue import Empty
+from typing import TYPE_CHECKING
 
-
-from bot.player.track import Track
+from bot import app_vars
 from bot.player.enums import TrackType
 from bot.TeamTalk.structs import ErrorType, User
-from bot import app_vars
 
 if TYPE_CHECKING:
     from bot import Bot
+    from bot.player.track import Track
 
 
 class Uploader:
-    def __init__(self, bot: Bot):
+    def __init__(self, bot: Bot) -> None:
         self.config = bot.config
         self.ttclient = bot.ttclient
         self.translator = bot.translator
@@ -47,8 +47,7 @@ class Uploader:
                 file = self.ttclient.uploaded_files_queue.get_nowait()
                 if file.name == file_name:
                     break
-                else:
-                    self.ttclient.uploaded_files_queue.put(file)
+                self.ttclient.uploaded_files_queue.put(file)
             except Empty:
                 pass
             try:
@@ -59,7 +58,7 @@ class Uploader:
                 ):
                     self.ttclient.send_message(
                         self.translator.translate("Error: {}").format(
-                            "Max diskusage exceeded"
+                            "Max diskusage exceeded",
                         ),
                         user,
                     )

@@ -1,10 +1,10 @@
 from __future__ import annotations
-from abc import ABC, abstractmethod
+
 import logging
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 import downloader
-
 from bot import app_vars, errors
 
 if TYPE_CHECKING:
@@ -16,7 +16,7 @@ class Service(ABC):
     name: str
     is_enabled: bool
     hidden: bool
-    hostnames: List[str]
+    hostnames: list[str]
     error_message: str
     warning_message: str
     help: str
@@ -28,18 +28,15 @@ class Service(ABC):
     def get(
         self,
         url: str,
-        extra_info: Optional[Dict[str, Any]] = None,
+        extra_info: dict[str, Any] | None = None,
         process: bool = False,
-    ) -> List[Track]:
-        ...
+    ) -> list[Track]: ...
 
     @abstractmethod
-    def initialize(self) -> None:
-        ...
+    def initialize(self) -> None: ...
 
     @abstractmethod
-    def search(self, query: str) -> List[Track]:
-        ...
+    def search(self, query: str) -> list[Track]: ...
 
 
 from bot.services.vk import VkService
@@ -50,7 +47,7 @@ from bot.services.yt import YtService
 class ServiceManager:
     def __init__(self, bot: Bot) -> None:
         self.config = bot.config.services
-        self.services: Dict[str, Service] = {
+        self.services: dict[str, Service] = {
             "vk": VkService(bot, self.config.vk),
             "yam": YamService(bot, self.config.yam),
             "yt": YtService(bot, self.config.yt),

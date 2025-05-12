@@ -1,24 +1,25 @@
 from __future__ import annotations
+
 import html
 import logging
-import time
-from typing import Any, Dict, Callable, List, Optional, TYPE_CHECKING
 import random
+import time
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
 import mpv
-
 from bot import errors
 from bot.player.enums import Mode, State, TrackType
 from bot.player.track import Track
 from bot.sound_devices import SoundDevice, SoundDeviceType
 
-
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from bot import Bot
 
 
 class Player:
-    def __init__(self, bot: Bot):
+    def __init__(self, bot: Bot) -> None:
         self.config = bot.config.player
         self.cache = bot.cache
         self.cache_manager = bot.cache_manager
@@ -37,7 +38,7 @@ class Player:
             del mpv_options["demuxer_max_back_bytes"]
             self._player = mpv.MPV(**mpv_options, log_handler=self.log_handler)
         self._log_level = 5
-        self.track_list: List[Track] = []
+        self.track_list: list[Track] = []
         self.track: Track = Track()
         self.track_index: int = -1
         self.state = State.Stopped
@@ -64,10 +65,10 @@ class Player:
 
     def play(
         self,
-        tracks: Optional[List[Track]] = None,
-        start_track_index: Optional[int] = None,
+        tracks: list[Track] | None = None,
+        start_track_index: int | None = None,
     ) -> None:
-        if tracks != None:
+        if tracks is not None:
             self.track_list = tracks
             if not start_track_index and self.mode == Mode.Random:
                 self.shuffle(True)
@@ -98,7 +99,7 @@ class Player:
             try:
                 if self.cache.recents[-1] != self.track_list[self.track_index]:
                     self.cache.recents.append(
-                        self.track_list[self.track_index].get_raw()
+                        self.track_list[self.track_index].get_raw(),
                     )
             except:
                 self.cache.recents.append(self.track_list[self.track_index].get_raw())
@@ -126,7 +127,7 @@ class Player:
             if self.mode == Mode.RepeatTrackList:
                 self.play_by_index(0)
             else:
-                raise errors.NoNextTrackError()
+                raise errors.NoNextTrackError
 
     def previous(self) -> None:
         track_index = self.track_index
@@ -138,11 +139,10 @@ class Player:
                     ]
                 except IndexError:
                     track_index = len(self.track_list) - 1
+            elif track_index == 0 and self.mode != Mode.RepeatTrackList:
+                raise errors.NoPreviousTrackError
             else:
-                if track_index == 0 and self.mode != Mode.RepeatTrackList:
-                    raise errors.NoPreviousTrackError
-                else:
-                    track_index -= 1
+                track_index -= 1
         else:
             track_index = 0
         try:
@@ -160,10 +160,10 @@ class Player:
             self._play(self.track.url)
             self.state = State.Playing
         else:
-            raise errors.IncorrectTrackIndexError()
+            raise errors.IncorrectTrackIndexError
 
     def set_volume(self, volume: int) -> None:
-        volume = volume if volume <= self.config.max_volume else self.config.max_volume
+        volume = min(volume, self.config.max_volume)
         self.volume = volume
         if self.config.volume_fading:
             n = 1 if self._player.volume < volume else -1
@@ -178,22 +178,22 @@ class Player:
 
     def set_speed(self, arg: float) -> None:
         if arg < 0.25 or arg > 4:
-            raise ValueError()
+            raise ValueError
         self._player.speed = arg
 
-    def seek_back(self, step: Optional[float] = None) -> None:
+    def seek_back(self, step: float | None = None) -> None:
         step = step if step else self.config.seek_step
         if step <= 0:
-            raise ValueError()
+            raise ValueError
         try:
             self._player.seek(-step, reference="relative")
         except SystemError:
             self.stop()
 
-    def seek_forward(self, step: Optional[float] = None) -> None:
+    def seek_forward(self, step: float | None = None) -> None:
         step = step if step else self.config.seek_step
         if step <= 0:
-            raise ValueError()
+            raise ValueError
         try:
             self._player.seek(step, reference="relative")
         except SystemError:
@@ -210,13 +210,15 @@ class Player:
             raise errors.IncorrectPositionError()
         self._player.seek(arg, reference="absolute")"""
 
-    def get_output_devices(self) -> List[SoundDevice]:
-        devices: List[SoundDevice] = []
+    def get_output_devices(self) -> list[SoundDevice]:
+        devices: list[SoundDevice] = []
         for device in self._player.audio_device_list:
             devices.append(
                 SoundDevice(
-                    device["description"], device["name"], SoundDeviceType.Output
-                )
+                    device["description"],
+                    device["name"],
+                    SoundDeviceType.Output,
+                ),
             )
         return devices
 
@@ -225,20 +227,22 @@ class Player:
 
     def shuffle(self, enable: bool) -> None:
         if enable:
-            self._index_list = [i for i in range(0, len(self.track_list))]
+            self._index_list = list(range(len(self.track_list)))
             random.shuffle(self._index_list)
         else:
             del self._index_list
 
     def register_event_callback(
-        self, callback_name: str, callback_func: Callable[[mpv.MpvEvent], None]
+        self,
+        callback_name: str,
+        callback_func: Callable[[mpv.MpvEvent], None],
     ) -> None:
         self._player.event_callback(callback_name)(callback_func)
 
     def log_handler(self, level: str, component: str, message: str) -> None:
-        logging.log(self._log_level, "{}: {}: {}".format(level, component, message))
+        logging.log(self._log_level, f"{level}: {component}: {message}")
 
-    def _parse_metadata(self, metadata: Dict[str, Any]) -> str:
+    def _parse_metadata(self, metadata: dict[str, Any]) -> str:
         stream_names = ["icy-name"]
         stream_name = None
         title = None
@@ -250,7 +254,7 @@ class Player:
                 title = html.unescape(metadata[i])
             if "artist" in i:
                 artist = html.unescape(metadata[i])
-        chunks: List[str] = []
+        chunks: list[str] = []
         chunks.append(artist) if artist else ...
         chunks.append(title) if title else ...
         chunks.append(stream_name) if stream_name else ...
@@ -270,7 +274,7 @@ class Player:
 
     def on_metadata_update(self, name: str, value: Any) -> None:
         if self.state == State.Playing and (
-            self.track.type == TrackType.Direct or self.track.type == TrackType.Local
+            self.track.type in (TrackType.Direct, TrackType.Local)
         ):
             metadata = self._player.metadata
             try:

@@ -51,7 +51,12 @@ class ChannelType(Flag):
 
 class Channel:
     def __init__(
-        self, id: int, name: str, topic: str, max_users: int, type: ChannelType
+        self,
+        id: int,
+        name: str,
+        topic: str,
+        max_users: int,
+        type: ChannelType,
     ) -> None:
         self.id = id
         self.name = name
@@ -175,6 +180,7 @@ class UserRightPre15(Flag):
 
 
 if major == "5" and minor >= "15":
+
     class UserRight15(Flag):
         Null = TeamTalkPy.UserRight.USERRIGHT_NONE
         MultiLogin = TeamTalkPy.UserRight.USERRIGHT_MULTI_LOGIN
@@ -237,10 +243,7 @@ class UserRight15(Flag):
     textMessageChannel = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_CHANNEL
 
 
-if major == "5" and minor >= "15":
-    UserRight = UserRight15
-else:
-    UserRight = UserRightPre15
+UserRight = UserRight15 if major == "5" and minor >= "15" else UserRightPre15
 
 
 class UserAccount:
@@ -303,7 +306,11 @@ class MessageType(Enum):
 
 class Message:
     def __init__(
-        self, text: str, user: User, channel: Channel, type: MessageType
+        self,
+        text: str,
+        user: User,
+        channel: Channel,
+        type: MessageType,
     ) -> None:
         self.text = text
         self.channel = channel
@@ -313,7 +320,12 @@ class Message:
 
 class File:
     def __init__(
-        self, id: int, name: str, channel: Channel, size: int, username: str
+        self,
+        id: int,
+        name: str,
+        channel: Channel,
+        size: int,
+        username: str,
     ) -> None:
         self.id = id
         self.name = name
@@ -384,7 +396,7 @@ class Event:
         message: Message,
         user: User,
         user_account: UserAccount,
-    ):
+    ) -> None:
         self.event_type = event_type
         self.source = source
         # ("ttType", INT32),

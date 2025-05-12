@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
-import requests
-
-from getpass import getpass
 import json
-import os
+from getpass import getpass
+
+import requests
 
 
 class AuthenticationError(Exception):
@@ -52,41 +51,46 @@ def request_auth(login: str, password: str, scope: str = "", code: str = "") -> 
     r = requests.get(url, headers=headers)
     if r.status_code == 200 and "access_token" in r.text:
         res = r.json()
-        access_token = res["access_token"]
-        return access_token
-    elif "need_validation" in r.text:
+        return res["access_token"]
+    if "need_validation" in r.text:
         res = r.json()
         sid = res["validation_sid"]
         code = handle_2fa(sid)
-        access_token = request_auth(login, password, scope=scope, code=code)
-        return access_token
-    else:
-        raise AuthenticationError(r.text)
+        return request_auth(login, password, scope=scope, code=code)
+    raise AuthenticationError(r.text)
 
 
 def handle_2fa(sid: str) -> str:
     if not sid:
-        raise ValueError("No sid is given")
+        msg = "No sid is given"
+        raise ValueError(msg)
     url = api_url + "auth.validatePhone?sid=" + sid + "&v=" + api_ver
     headers = {"User-Agent": user_agent}
     r = requests.get(url, headers=headers)
     if r.status_code == 200:
-        print("Two factor authentication is required")
         code = ""
         while not code:
             code = input("SMS code: ")
             if len(code) != 6 or not code.isdigit():
-                print("SMS code must be a string of 6 digits")
                 continue
             return code
-    else:
-        raise PhoneValidationError(r.text)
+        return None
+    raise PhoneValidationError(r.text)
 
 
 def validate_token(token: str) -> str:
     if not (token):
-        raise ValueError("Required argument is missing")
-    url = api_url + "auth.refreshToken?access_token=" + token + "&receipt=" + receipt + "&v=" + api_ver
+        msg = "Required argument is missing"
+        raise ValueError(msg)
+    url = (
+        api_url
+        + "auth.refreshToken?access_token="
+        + token
+        + "&receipt="
+        + receipt
+        + "&v="
+        + api_ver
+    )
     headers = {"User-Agent": user_agent}
     r = requests.get(url, headers=headers)
     if r.status_code == 200 and "token" in r.text:
@@ -94,19 +98,14 @@ def validate_token(token: str) -> str:
         received_token = res["response"]["token"]
         if not received_token:
             raise TokenValidationError(r.text)
-        else:
-            return received_token
-    else:
-        raise TokenValidationError(r.text)
+        return received_token
+    raise TokenValidationError(r.text)
 
 
-def main():
+def main() -> None:
     login = ""
     password = ""
     try:
-        print("VK Authentication Helper for TTMediaBot")
-        print()
-        print("Enter your VK credentials to continue")
         while not login:
             login = input("Phone, email or  login: ")
         while not password:
@@ -116,17 +115,15 @@ def main():
         y_or_n = input("Do you want to save the token to the configuration file? y/n")
         if y_or_n == "y":
             config_file = input("Configuration file path: ")
-            with open(config_file, "r") as f:
+            with open(config_file) as f:
                 data = json.load(f)
             data["services"]["vk"]["token"] = validated_token
             with open(config_file, "w") as f:
                 json.dump(data, f, indent=4, ensure_ascii=False)
-            print("Your token has been successfully saved to the configuration file")
         else:
-            print("Your VK token:")
-            print(validated_token)
-    except Exception as e:
-        print(e)
+            pass
+    except Exception:
+        pass
     input("Press enter to continue")
 
 

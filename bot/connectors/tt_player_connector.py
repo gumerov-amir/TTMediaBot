@@ -1,25 +1,26 @@
 from __future__ import annotations
+
 import logging
-from threading import Thread
 import time
+from threading import Thread
 from typing import TYPE_CHECKING
 
-from bot.player import State
 from bot import app_vars
+from bot.player import State
 
 if TYPE_CHECKING:
     from bot import Bot
 
 
 class TTPlayerConnector(Thread):
-    def __init__(self, bot: Bot):
+    def __init__(self, bot: Bot) -> None:
         super().__init__(daemon=True)
         self.name = "TTPlayerConnector"
         self.player = bot.player
         self.ttclient = bot.ttclient
         self.translator = bot.translator
 
-    def run(self):
+    def run(self) -> None:
         last_player_state = State.Stopped
         last_track_meta = {"name": None, "url": None}
         self._close = False
@@ -33,14 +34,14 @@ class TTPlayerConnector(Thread):
                         if self.player.track.name:
                             self.ttclient.change_status_text(
                                 self.translator.translate(
-                                    "Playing: {track_name}"
-                                ).format(track_name=self.player.track.name)
+                                    "Playing: {track_name}",
+                                ).format(track_name=self.player.track.name),
                             )
                         else:
                             self.ttclient.change_status_text(
                                 self.translator.translate(
-                                    "Playing: {stream_url}"
-                                ).format(stream_url=self.player.track.url)
+                                    "Playing: {stream_url}",
+                                ).format(stream_url=self.player.track.url),
                             )
                     elif self.player.state == State.Stopped:
                         self.ttclient.disable_voice_transmission()
@@ -50,14 +51,14 @@ class TTPlayerConnector(Thread):
                         if self.player.track.name:
                             self.ttclient.change_status_text(
                                 self.translator.translate(
-                                    "Paused: {track_name}"
-                                ).format(track_name=self.player.track.name)
+                                    "Paused: {track_name}",
+                                ).format(track_name=self.player.track.name),
                             )
                         else:
                             self.ttclient.change_status_text(
                                 self.translator.translate(
-                                    "Paused: {stream_url}"
-                                ).format(stream_url=self.player.track.url)
+                                    "Paused: {stream_url}",
+                                ).format(stream_url=self.player.track.url),
                             )
                 if (
                     self.player.track.get_meta() != last_track_meta
@@ -68,11 +69,11 @@ class TTPlayerConnector(Thread):
                         "{state}: {name}".format(
                             state=self.ttclient.status.split(":")[0],
                             name=self.player.track.name,
-                        )
+                        ),
                     )
             except Exception:
                 logging.error("", exc_info=True)
             time.sleep(app_vars.loop_timeout)
 
-    def close(self):
+    def close(self) -> None:
         self._close = True

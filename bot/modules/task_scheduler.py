@@ -1,8 +1,7 @@
-"""
-from __future__ import annotations
+"""from __future__ import annotations
 import threading
 import time
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING.
 
 from bot import app_vars
 

@@ -1,26 +1,41 @@
 from __future__ import annotations
+
 import logging
 import os
 import re
 import sys
-from typing import AnyStr, List, TYPE_CHECKING, Optional, Union
+from pathlib import Path
 from queue import Queue
+from typing import TYPE_CHECKING, AnyStr
 
 from bot import app_vars
 from bot.sound_devices import SoundDevice, SoundDeviceType
 
 if sys.platform == "win32":
-    if sys.version_info.major == 3 and sys.version_info.minor >= 8:
-        os.add_dll_directory(app_vars.directory)
-        os.add_dll_directory(os.path.join(app_vars.directory, "TeamTalk_DLL"))
-    else:
-        os.chdir(app_vars.directory)
-
-from bot.TeamTalk.thread import TeamTalkThread
-from bot.TeamTalk.structs import *
+    os.add_dll_directory(app_vars.directory)
+    os.add_dll_directory(str(Path(app_vars.directory) / "TeamTalk_DLL"))
 
 import TeamTalkPy
-
+from bot.TeamTalk.structs import (
+    Channel,
+    ChannelType,
+    Error,
+    ErrorType,
+    Event,
+    EventType,
+    File,
+    Flags,
+    Message,
+    MessageType,
+    State,
+    User,
+    UserAccount,
+    UserRight,
+    UserState,
+    UserStatusMode,
+    UserType,
+)
+from bot.TeamTalk.thread import TeamTalkThread
 
 re_line_endings = re.compile("[\\r\\n]")
 
@@ -32,13 +47,11 @@ def _str(data: AnyStr) -> AnyStr:
     if isinstance(data, str):
         if os.supports_bytes_environ:
             return bytes(data, "utf-8")
-        else:
-            return data
-    else:
-        return str(data, "utf-8")
+        return data
+    return str(data, "utf-8")
 
 
-def split(text: str, max_length: int = app_vars.max_message_length) -> List[str]:
+def split(text: str, max_length: int = app_vars.max_message_length) -> list[str]:  # noqa: PLR0912
     if len(text) <= max_length:
         lines = [text]
     else:
@@ -61,12 +74,12 @@ def split(text: str, max_length: int = app_vars.max_message_length) -> List[str]
                         ):
                             words[-1] += " " + word
                         elif len(words) == 1 and len(words[0]) == 0:
-                            words[0] == word
+                            words[0] = word
                         else:
                             words.append(word)
                     else:
                         chunk = word
-                        for _ in range(0, int(len(chunk) / max_length) + 1):
+                        for _ in range(int(len(chunk) / max_length) + 1):
                             words.append(chunk[0:max_length])
                             chunk = chunk[max_length::]
                 lines += words
@@ -78,7 +91,8 @@ class TeamTalk:
         self.config = bot.config.teamtalk
         self.translator = bot.translator
         TeamTalkPy.setLicense(
-            _str(self.config.license_name), _str(self.config.license_key)
+            _str(self.config.license_name),
+            _str(self.config.license_key),
         )
         self.tt = TeamTalkPy.TeamTalk()
         self.state = State.NOT_CONNECTED
@@ -146,51 +160,53 @@ class TeamTalk:
     def default_status(self) -> str:
         if self.config.status:
             return self.config.status
-        else:
-            return self.translator.translate('Send "h" for help')
+        return self.translator.translate('Send "h" for help')
 
     def send_message(
-        self, text: str, user: Optional[User] = None, type: int = 1
+        self,
+        text: str,
+        user: User | None = None,
+        message_type: int = 1,
     ) -> None:
         for string in split(text):
             message = TeamTalkPy.TextMessage()
             message.nFromUserID = self.tt.getMyUserID()
-            message.nMsgType = type
+            message.nMsgType = message_type
             message.szMessage = _str(string)
-            if type == 1:
+            if message_type == MessageType.User:
                 if isinstance(user, int):
                     message.nToUserID = user
                 else:
                     message.nToUserID = user.id
-            elif type == 2:
+            elif message_type == MessageType.Channel:
                 message.nChannelID = self.tt.getMyChannelID()
             self.tt.doTextMessage(message)
 
-    def send_file(self, channel: Union[int, str], file_path: str):
+    def send_file(self, channel: int | str, file_path: str) -> bool:
         if isinstance(channel, int):
             channel_id = channel
         else:
             channel_id = self.tt.getChannelIDFromPath(_str(channel))
             if channel_id == 0:
-                raise ValueError()
+                raise ValueError
         return self.tt.doSendFile(channel_id, _str(file_path))
 
-    def delete_file(self, channel: Union[int, str], file_id: int) -> int:
+    def delete_file(self, channel: int | str, file_id: int) -> int:
         if isinstance(channel, int):
             channel_id = channel
         else:
             channel_id = self.tt.getChannelIDFromPath(_str(channel))
             if channel_id == 0 or file_id == 0:
-                raise ValueError()
+                raise ValueError
         return self.tt.doDeleteFile(channel_id, file_id)
 
-    def join_channel(self, channel: Union[str, int], password: str) -> int:
+    def join_channel(self, channel: str | int, password: str) -> int:
         if isinstance(channel, int):
             channel_id = channel
         else:
             channel_id = self.tt.getChannelIDFromPath(_str(channel))
             if channel_id == 0:
-                raise ValueError()
+                raise ValueError
         return self.tt.doJoinChannelByID(channel_id, _str(password))
 
     def change_nickname(self, nickname: str) -> None:
@@ -264,8 +280,8 @@ class TeamTalk:
     def channel(self) -> Channel:
         return self.get_channel(self.tt.getMyChannelID())
 
-    def get_user(self, id: int) -> User:
-        user = self.tt.getUser(id)
+    def get_user(self, user_id: int) -> User:
+        user = self.tt.getUser(user_id)
         gender = UserStatusMode(user.nStatusMode)
         return User(
             user.nUserID,
@@ -279,9 +295,10 @@ class TeamTalk:
             user.uVersion,
             self.get_user_account(_str(user.szUsername)),
             UserType(user.uUserType),
-            True
-            if _str(user.szUsername) in self.config.users.admins or user.uUserType == 2
-            else False,
+            bool(
+                _str(user.szUsername) in self.config.users.admins
+                or user.uUserType == UserType.Admin
+            ),
             _str(user.szUsername) in self.config.users.banned_users,
         )
 
@@ -348,9 +365,9 @@ class TeamTalk:
             user_account,
         )
 
-    def get_input_devices(self) -> List[SoundDevice]:
-        devices: List[SoundDevice] = []
-        device_list = [i for i in self.tt.getSoundDevices()]
+    def get_input_devices(self) -> list[SoundDevice]:
+        devices: list[SoundDevice] = []
+        device_list = list(self.tt.getSoundDevices())
         for device in device_list:
             if sys.platform == "win32":
                 if (
@@ -362,7 +379,7 @@ class TeamTalk:
                             _str(device.szDeviceName),
                             device.nDeviceID,
                             SoundDeviceType.Input,
-                        )
+                        ),
                     )
             else:
                 devices.append(
@@ -370,12 +387,12 @@ class TeamTalk:
                         _str(device.szDeviceName),
                         device.nDeviceID,
                         SoundDeviceType.Input,
-                    )
+                    ),
                 )
         return devices
 
-    def set_input_device(self, id: int) -> None:
-        self.tt.initSoundInputDevice(id)
+    def set_input_device(self, device_id: int) -> None:
+        self.tt.initSoundInputDevice(device_id)
 
     def enable_voice_transmission(self) -> None:
         self.tt.enableVoiceTransmission(True)

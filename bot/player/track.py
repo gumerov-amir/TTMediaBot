@@ -1,11 +1,12 @@
 from __future__ import annotations
+
 import copy
 import os
 from threading import Lock
-from typing import Any, Dict, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
-from bot.player.enums import TrackType
 from bot import utils
+from bot.player.enums import TrackType
 
 if TYPE_CHECKING:
     from bot.services import Service
@@ -21,7 +22,7 @@ class Track:
         url: str = "",
         name: str = "",
         format: str = "",
-        extra_info: Optional[Dict[str, Any]] = None,
+        extra_info: dict[str, Any] | None = None,
         type: TrackType = TrackType.Default,
     ) -> None:
         self.service = service
@@ -41,7 +42,7 @@ class Track:
         service.download(self, file_path)
         return file_path
 
-    def _fetch_stream_data(self):
+    def _fetch_stream_data(self) -> None:
         if self.type != TrackType.Dynamic or self._is_fetched:
             return
         self._original_track = copy.deepcopy(self)
@@ -76,7 +77,7 @@ class Track:
     def name(self, value: str) -> None:
         self._name = value
 
-    def get_meta(self) -> Dict[str, Any]:
+    def get_meta(self) -> dict[str, Any]:
         try:
             return {"name": self.name, "url": self.url}
         except:
@@ -85,20 +86,16 @@ class Track:
     def get_raw(self) -> Track:
         if hasattr(self, "_original_track"):
             return self._original_track
-        else:
-            return self
+        return self
 
-    def __bool__(self):
-        if self.service or self.url:
-            return True
-        else:
-            return False
+    def __bool__(self) -> bool:
+        return bool(self.service or self.url)
 
-    def __getstate__(self) -> Dict[str, Any]:
-        state: Dict[str, Any] = self.__dict__.copy()
+    def __getstate__(self) -> dict[str, Any]:
+        state: dict[str, Any] = self.__dict__.copy()
         del state["_lock"]
         return state
 
-    def __setstate__(self, state: Dict[str, Any]):
+    def __setstate__(self, state: dict[str, Any]):
         self.__dict__.update(state)
         self._lock = Lock()

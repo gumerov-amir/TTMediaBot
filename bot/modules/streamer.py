@@ -1,6 +1,7 @@
 from __future__ import annotations
+
 import os
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
 from bot import errors
@@ -12,12 +13,12 @@ if TYPE_CHECKING:
 
 
 class Streamer:
-    def __init__(self, bot: Bot):
-        self.allowed_schemes: List[str] = ["http", "https", "rtmp", "rtsp"]
+    def __init__(self, bot: Bot) -> None:
+        self.allowed_schemes: list[str] = ["http", "https", "rtmp", "rtsp"]
         self.config = bot.config
         self.service_manager = bot.service_manager
 
-    def get(self, url: str, is_admin: bool) -> List[Track]:
+    def get(self, url: str, is_admin: bool) -> list[Track]:
         parsed_url = urlparse(url)
         if parsed_url.scheme in self.allowed_schemes:
             track = Track(url=url, type=TrackType.Direct)
@@ -38,14 +39,13 @@ class Streamer:
                             track,
                         ]
             if len(fetched_data) == 1 and fetched_data[0].url.startswith(
-                str(track.url)
+                str(track.url),
             ):
                 return [
                     track,
                 ]
-            else:
-                return fetched_data
-        elif is_admin:
+            return fetched_data
+        if is_admin:
             if os.path.isfile(url):
                 track = Track(
                     url=url,
@@ -56,19 +56,22 @@ class Streamer:
                 return [
                     track,
                 ]
-            elif os.path.isdir(url):
-                tracks: List[Track] = []
+            if os.path.isdir(url):
+                tracks: list[Track] = []
                 for path, _, files in os.walk(url):
                     for file in sorted(files):
                         url = os.path.join(path, file)
                         name = os.path.split(url)[-1]
                         format = os.path.splitext(url)[1]
                         track = Track(
-                            url=url, name=name, format=format, type=TrackType.Local
+                            url=url,
+                            name=name,
+                            format=format,
+                            type=TrackType.Local,
                         )
                         tracks.append(track)
                 return tracks
-            else:
-                raise errors.PathNotFoundError("")
-        else:
-            raise errors.IncorrectProtocolError("")
+            msg = ""
+            raise errors.PathNotFoundError(msg)
+        msg = ""
+        raise errors.IncorrectProtocolError(msg)

@@ -1,5 +1,6 @@
+from collections.abc import Callable
 from ctypes import *
-from typing import Any, Callable, Dict, List, Optional
+from typing import Any
 
 class MpvEventID(c_int):
     NONE: int
@@ -28,34 +29,33 @@ class MpvEventID(c_int):
     CHAPTER_CHANGE: int
 
 class MpvEvent(Structure):
-    _fields_ = [
-        ("event_id", MpvEventID),
-        ("error", c_int),
-        ("reply_userdata", c_ulonglong),
-        ("data", c_void_p),
-    ]
+    _fields_ = ...
 
 class MPV:
     def __init__(
         self,
         *extra_mpv_flags: Any,
-        log_handler: Optional[Callable[[str, str, str], None]] = ...,
+        log_handler: Callable[[str, str, str], None] | None = ...,
         start_event_thread: bool = ...,
-        loglevel: Optional[str] = ...,
-        **extra_mpv_opts: Any
+        loglevel: str | None = ...,
+        **extra_mpv_opts: Any,
     ) -> None: ...
     audio_device: str
-    audio_device_list: List[Dict[str, Any]]
+    audio_device_list: list[dict[str, Any]]
     idle_active: bool
     duration: float
     def event_callback(
-        self, *event_types: str
+        self,
+        *event_types: str,
     ) -> Callable[[Callable[[MpvEvent], None]], None]: ...
     media_title: str
-    metadata: Dict[str, Any]
+    metadata: dict[str, Any]
     pause: bool
     def seek(
-        self, amount: float, reference: str = ..., precision: str = ...
+        self,
+        amount: float,
+        reference: str = ...,
+        precision: str = ...,
     ) -> None: ...
     speed: float
     def stop(self, keep_playlist: bool = ...) -> None: ...
