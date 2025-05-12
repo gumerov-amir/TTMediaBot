@@ -7,11 +7,12 @@ import sys
 import time
 import types
 from importlib.machinery import SourceFileLoader
+from pathlib import Path
 from threading import Thread
 from types import ModuleType
 from typing import TYPE_CHECKING, Any
 
-from bot.TeamTalk.structs import *
+from bot.TeamTalk.structs import Event, EventType, Flags, MessageType, State
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -28,7 +29,7 @@ class TeamTalkThread(Thread):
         self.config = ttclient.config
         self.ttclient = ttclient
 
-    def run(self) -> None:
+    def run(self) -> None:  # noqa: C901, PLR0912, PLR0915
         if self.config.event_handling.load_event_handlers:
             self.event_handlers = self.import_event_handlers()
         self._close = False
@@ -133,21 +134,21 @@ class TeamTalkThread(Thread):
     def import_event_handlers(self) -> ModuleType:
         try:
             if (
-                os.path.isfile(self.config.event_handling.event_handlers_file_name)
-                and os.path.splitext(
+                Path(self.config.event_handling.event_handlers_file_name).is_file()
+                and Path(
                     self.config.event_handling.event_handlers_file_name,
-                )[1]
+                ).suffix
                 == ".py"
             ):
                 module = SourceFileLoader(
-                    os.path.splitext(
+                    Path(
                         self.config.event_handling.event_handlers_file_name,
-                    )[0],
+                    ).stem,
                     self.config.event_handling.event_handlers_file_name,
                 ).load_module()
-            elif os.path.isdir(
+            elif Path(
                 self.config.event_handling.event_handlers_file_name,
-            ) and "__init__.py" in os.listdir(
+            ).is_dir() and "__init__.py" in os.listdir(  # noqa: PTH208
                 self.config.event_handling.event_handlers_file_name,
             ):
                 module = SourceFileLoader(
@@ -160,9 +161,9 @@ class TeamTalkThread(Thread):
                     "Incorrect path to event handlers. An empty module will be used",
                 )
                 module = types.ModuleType("event_handlers")
-        except Exception as e:
+        except Exception:
             logging.exception(
-                f"Can't load specified event handlers. Error: {e}. An empty module will be used.",
+                "Can't load specified event handlers. An empty module will be used.",
             )
             module = types.ModuleType("event_handlers")
         return module
