@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import re
 from threading import Thread
-from typing import TYPE_CHECKING, Any, List, Tuple
+from typing import TYPE_CHECKING
 
 from bot import app_vars, errors
 from bot.commands import admin_commands, user_commands
@@ -15,6 +15,7 @@ re_arg_split = re.compile(r"(?<!\\)\|")
 
 if TYPE_CHECKING:
     from bot import Bot
+    from bot.commands.command import Command
 
 
 class CommandProcessor:
@@ -61,7 +62,6 @@ class CommandProcessor:
             "cm": admin_commands.ChannelMessagesCommand,
             "jc": admin_commands.JoinChannelCommand,
             "bc": admin_commands.BlockCommandCommand,
-            # "ts": TaskSchedulerCommand,
             "l": admin_commands.LockCommand,
             "ua": admin_commands.AdminUsersCommand,
             "ub": admin_commands.BannedUsersCommand,
@@ -81,6 +81,8 @@ class CommandProcessor:
         command_thread.start()
 
     def _run(self, message: Message) -> None:
+        command_name = ""
+        arg = ""
         try:
             command_name, arg = self.parse_command(message.text)
             if self.check_access(message.user, command_name):
@@ -138,7 +140,7 @@ class CommandProcessor:
             return True
         return True
 
-    def get_command(self, command: str, user: User) -> Any:
+    def get_command(self, command: str, user: User) -> Command:
         if command in self.commands_dict:
             return self.commands_dict[command]
         if (
@@ -154,25 +156,27 @@ class CommandProcessor:
             if user.is_admin and arg in self.admin_commands_dict:
                 return f"{arg} {self.admin_commands_dict[arg](self).help}"
             return self.translator.translate("Unknown command")
-        help_strings: list[str] = []
-        for i in list(self.commands_dict):
-            help_strings.append(self.help(i, user))
+        help_strings: list[str] = [
+            self.help(command_name, user) for command_name in self.commands_dict
+        ]
         if user.is_admin:
-            for i in list(self.admin_commands_dict):
-                help_strings.append(self.help(i, user))
+            help_strings.extend(
+                self.help(command_name, user)
+                for command_name in self.admin_commands_dict
+            )
         return "\n".join(help_strings)
 
     def parse_command(self, text: str) -> tuple[str, str]:
         text = text.strip()
         try:
             command = re.findall(re_command, text.split(" ")[0].lower())[0]
-        except IndexError:
-            raise errors.ParseCommandError
+        except IndexError as e:
+            raise errors.ParseCommandError from e
         arg = " ".join(text.split(" ")[1::])
         return command, arg
 
     def split_arg(self, arg: str) -> list[str]:
         args = re.split(re_arg_split, arg)
-        for i, arg in enumerate(args):
+        for i, _ in enumerate(args):
             args[i] = args[i].strip().replace("\\|", "|")
         return args

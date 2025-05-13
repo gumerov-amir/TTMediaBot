@@ -22,7 +22,7 @@ class BlockCommandCommand(Command):
             "+/-COMMAND Blocks or unblocks commands. +COMMAND adds command to the blocklist. -COMMAND removes from it. Without a command shows the blocklist",
         )
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _: User) -> str | None:
         arg = arg.lower()
         if len(arg) >= 1 and arg[1:] not in self.command_processor.commands_dict:
             raise errors.InvalidArgumentError
@@ -54,12 +54,12 @@ class ChangeGenderCommand(Command):
             "GENDER Changes bot's gender. n neutral, m male, f female",
         )
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _: User) -> str | None:
         try:
             self.ttclient.change_gender(arg)
             self.config.teamtalk.gender = arg
-        except KeyError:
-            raise errors.InvalidArgumentError
+        except KeyError as e:
+            raise errors.InvalidArgumentError from e
 
 
 class ChangeLanguageCommand(Command):
@@ -67,7 +67,7 @@ class ChangeLanguageCommand(Command):
     def help(self) -> str:
         return self.translator.translate("LANGUAGE Changes bot's language")
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _: User) -> str | None:
         if arg:
             try:
                 self.translator.set_locale(arg)
@@ -90,7 +90,7 @@ class ChangeNicknameCommand(Command):
     def help(self) -> str:
         return self.translator.translate("NICKNAME Changes bot's nickname")
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _: User) -> str | None:
         self.ttclient.change_nickname(arg)
         self.config.teamtalk.nickname = arg
 
@@ -102,7 +102,7 @@ class ClearCacheCommand(Command):
             "r/f Clears bot's cache. r clears recents, f clears favorites, without an option clears the entire cache",
         )
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _: User) -> str | None:
         if not arg:
             self.cache.recents.clear()
             self.cache.favorites.clear()
@@ -126,12 +126,12 @@ class JoinChannelCommand(Command):
             'Join channel. first argument is channel name or id, second argument is password, split argument " | ", if password is undefined, don\'t type second argument',
         )
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _: User) -> str | None:
         args = self.command_processor.split_arg(arg)
         if not arg:
             channel = self.config.teamtalk.channel
             password = self.config.teamtalk.channel_password
-        elif len(args) == 2:
+        elif len(args) == 2:  # noqa: PLR2004
             channel = args[0]
             password = args[1]
         else:
@@ -204,7 +204,7 @@ class VoiceTransmissionCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Enables or disables voice transmission")
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, _arg: str, _user: User) -> str | None:
         if not self.ttclient.is_voice_transmission_enabled:
             self.ttclient.enable_voice_transmission()
             if self.player.state == State.Stopped:
@@ -223,7 +223,7 @@ class LockCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Locks or unlocks the bot")
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, _arg: str, _user: User) -> str | None:
         self.command_processor.locked = not self.command_processor.locked
         return (
             self.translator.translate("Locked")
@@ -237,7 +237,7 @@ class ChangeStatusCommand(Command):
     def help(self) -> str:
         return self.translator.translate("STATUS Changes bot's status")
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _user: User) -> str | None:
         self.ttclient.change_status_text(arg)
         self.config.teamtalk.status = arg
 
@@ -247,7 +247,7 @@ class EventHandlingCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Enables or disables event handling")
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, _arg: str, _user: User) -> str | None:
         self.config.teamtalk.event_handling.load_event_handlers = (
             not self.config.teamtalk.event_handling.load_event_handlers
         )
@@ -265,7 +265,7 @@ class ChannelMessagesCommand(Command):
             "Enables or disables sending of channel messages",
         )
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, _arg: str, _user: User) -> str | None:
         self.config.general.send_channel_messages = (
             not self.config.general.send_channel_messages
         )
@@ -281,7 +281,7 @@ class SaveConfigCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Saves bot's configuration")
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, _arg: str, _user: User) -> str | None:
         self.config_manager.save()
         return self.translator.translate("Configuration saved")
 
@@ -293,7 +293,7 @@ class AdminUsersCommand(Command):
             "+/-USERNAME Manages a list of administrators. +USERNAME adds a user. -USERNAME removes it. Without an option shows the list",
         )
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _user: User) -> str | None:
         if arg:
             if arg[0] == "+":
                 self.config.teamtalk.users.admins.append(arg[1::])
@@ -324,7 +324,7 @@ class BannedUsersCommand(Command):
             "+/-USERNAME Manages a list of banned users. +USERNAME adds a user. -USERNAME removes it. Without an option shows the list",
         )
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _user: User) -> str | None:
         if arg:
             if arg[0] == "+":
                 self.config.teamtalk.users.banned_users.append(arg[1::])
@@ -351,7 +351,7 @@ class QuitCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Quits the bot")
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, _arg: str, _user: User) -> str | None:
         self._bot.close()
 
 
@@ -360,14 +360,14 @@ class RestartCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Restarts the bot")
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, _arg: str, _user: User) -> str | None:
         self._bot.close()
         args = sys.argv
         if sys.platform == "win32":
-            subprocess.run([sys.executable, *args], check=False)
+            subprocess.run([sys.executable, *args], check=False)  # noqa: S603
         else:
             args.insert(0, sys.executable)
-            os.execv(sys.executable, args)
+            os.execv(sys.executable, args)  # noqa: S606
 
 
 class GetChannelIDCommand(Command):
@@ -375,5 +375,5 @@ class GetChannelIDCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Returns current channel's ID")
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, _arg: str, _user: User) -> str | None:
         return str(self.ttclient.channel.id)

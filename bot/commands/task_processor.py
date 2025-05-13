@@ -15,8 +15,8 @@ class Task:
         self,
         command_id: int,
         function: Callable[..., None],
-        args: Any,
-        kwargs: Any,
+        args: list,
+        kwargs: dict[str, Any],
     ) -> None:
         self.command_id = command_id
         self.function = function

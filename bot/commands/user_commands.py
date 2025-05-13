@@ -25,7 +25,7 @@ class AboutCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Shows information about the bot")
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, _arg: str, _user: User) -> str | None:
         return app_vars.client_name + "\n" + app_vars.about_text(self.translator)
 
 
@@ -105,7 +105,7 @@ class StopCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Stops playback")
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, _arg: str, user: User) -> str | None:
         if self.player.state != State.Stopped:
             self.player.stop()
             if self.config.general.send_channel_messages:
@@ -113,7 +113,7 @@ class StopCommand(Command):
                     self.translator.translate("{nickname} stopped playback").format(
                         nickname=user.nickname,
                     ),
-                    message_type=2,
+                    message_type=MessageType.Channel,
                 )
                 return None
             return None
@@ -127,16 +127,19 @@ class VolumeCommand(Command):
             "VOLUME Sets the volume to a value between 0 and {max_volume}. If no volume is specified, the current volume level is displayed",
         ).format(max_volume=self.config.player.max_volume)
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _user: User) -> str | None:
         if arg:
             try:
                 volume = int(arg)
                 if 0 <= volume <= self.config.player.max_volume:
                     self.player.set_volume(int(arg))
                 else:
-                    raise ValueError
-            except ValueError:
-                raise errors.InvalidArgumentError
+                    msg = "Volume is either negative or exceeds the maximum volume allowed in config"
+                    raise ValueError(  # noqa: TRY301
+                        msg
+                    )
+            except ValueError as e:
+                raise errors.InvalidArgumentError from e
         else:
             return str(self.player.volume)
 
@@ -148,14 +151,14 @@ class SeekBackCommand(Command):
             "STEP Seeks current track backward. the default step is {seek_step} seconds",
         ).format(seek_step=self.config.player.seek_step)
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _user: User) -> str | None:
         if self.player.state == State.Stopped:
             return self.translator.translate("Nothing is playing")
         if arg:
             try:
                 self.player.seek_back(float(arg))
-            except ValueError:
-                raise errors.InvalidArgumentError
+            except ValueError as e:
+                raise errors.InvalidArgumentError from e
         else:
             self.player.seek_back()
             return None
@@ -168,14 +171,14 @@ class SeekForwardCommand(Command):
             "STEP Seeks current track forward. the default step is {seek_step} seconds",
         ).format(seek_step=self.config.player.seek_step)
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _user: User) -> str | None:
         if self.player.state == State.Stopped:
             return self.translator.translate("Nothing is playing")
         if arg:
             try:
                 self.player.seek_forward(float(arg))
-            except ValueError:
-                raise errors.InvalidArgumentError
+            except ValueError as e:
+                raise errors.InvalidArgumentError from e
         else:
             self.player.seek_forward()
             return None
@@ -186,7 +189,7 @@ class NextTrackCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Plays next track")
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, _arg: str, _user: User) -> str | None:
         try:
             self.player.next()
             return self.translator.translate("Playing {}").format(
@@ -203,7 +206,7 @@ class PreviousTrackCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Plays previous track")
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, _arg: str, _user: User) -> str | None:
         try:
             self.player.previous()
             return self.translator.translate("Playing {}").format(
@@ -222,7 +225,7 @@ class ModeCommand(Command):
             "MODE Sets the playback mode. If no mode is specified, the current mode and a list of modes are displayed",
         )
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _user: User) -> str | None:
         self.mode_names = {
             Mode.SingleTrack: self.translator.translate("Single Track"),
             Mode.RepeatTrack: self.translator.translate("Repeat Track"),
@@ -262,7 +265,7 @@ class ServiceCommand(Command):
             "SERVICE Selects the service to play from, sv SERVICE h returns additional help. If no service is specified, the current service and a list of available services are displayed",
         )
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _user: User) -> str | None:  # noqa: PLR0911
         args = arg.split(" ")
         if args[0]:
             service_name = args[0].lower()
@@ -300,7 +303,7 @@ class ServiceCommand(Command):
         return self.service_help
 
     @property
-    def service_help(self):
+    def service_help(self) -> str:
         services: list[str] = []
         for i in self.service_manager.services:
             service = self.service_manager.services[i]
@@ -335,7 +338,7 @@ class SelectTrackCommand(Command):
             "NUMBER Selects track by number from the list of current results",
         )
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _user: User) -> str | None:
         if arg:
             try:
                 number = int(arg)
@@ -354,8 +357,8 @@ class SelectTrackCommand(Command):
                 return self.translator.translate("Out of list")
             except errors.NothingIsPlayingError:
                 return self.translator.translate("Nothing is playing")
-            except ValueError:
-                raise errors.InvalidArgumentError
+            except ValueError as e:
+                raise errors.InvalidArgumentError from e
         elif self.player.state != State.Stopped:
             return self.translator.translate("Playing {} {}").format(
                 self.player.track_index + 1,
@@ -372,15 +375,15 @@ class SpeedCommand(Command):
             "SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows current speed",
         )
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _user: User) -> str | None:
         if not arg:
             return self.translator.translate("Current rate: {}").format(
                 str(self.player.get_speed()),
             )
         try:
             self.player.set_speed(float(arg))
-        except ValueError:
-            raise errors.InvalidArgumentError
+        except ValueError as e:
+            raise errors.InvalidArgumentError from e
 
 
 class FavoritesCommand(Command):
@@ -450,8 +453,8 @@ class FavoritesCommand(Command):
                 self.cache.favorites[user.username],
                 start_track_index=int(arg) - 1,
             )
-        except ValueError:
-            raise errors.InvalidArgumentError
+        except ValueError as e:
+            raise errors.InvalidArgumentError from e
         except IndexError:
             return self.translator.translate("Out of list")
         except KeyError:
@@ -463,7 +466,7 @@ class GetLinkCommand(Command):
     def help(self) -> str:
         return self.translator.translate("Gets a direct link to the current track")
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, _arg: str, _user: User) -> str | None:
         if self.player.state != State.Stopped:
             url = self.player.track.url
             if url:
@@ -480,15 +483,15 @@ class RecentsCommand(Command):
             "NUMBER Plays a track with  the given number from a list of recent tracks. Without a number shows recent tracks",
         )
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, arg: str, _user: User) -> str | None:
         if arg:
             try:
                 self.player.play(
                     list(reversed(list(self.cache.recents))),
                     start_track_index=int(arg) - 1,
                 )
-            except ValueError:
-                raise errors.InvalidArgumentError
+            except ValueError as e:
+                raise errors.InvalidArgumentError from e
             except IndexError:
                 return self.translator.translate("Out of list")
         else:
@@ -512,7 +515,7 @@ class DownloadCommand(Command):
             "Downloads the current track and uploads it to the channel.",
         )
 
-    def __call__(self, arg: str, user: User) -> str | None:
+    def __call__(self, _arg: str, user: User) -> str | None:
         if not (
             self.ttclient.user.user_account.rights & UserRight.UploadFiles
             == UserRight.UploadFiles

@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import pickle
 from collections import deque
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 import portalocker
@@ -27,7 +28,7 @@ class Cache:
         self.favorites: dict[str, list[Track]] = cache_data.get("favorites", {})
 
     @property
-    def data(self):
+    def data(self) -> dict[str, Any]:
         return {
             "cache_version": self.cache_version,
             "recents": self.recents,
@@ -49,12 +50,12 @@ class CacheManager:
         self._lock()
 
     def _dump(self, data: cache_data_type) -> None:
-        with open(self.file_name, "wb") as f:
+        with Path(self.file_name).open("wb") as f:
             pickle.dump(data, f)
 
     def _load(self) -> cache_data_type:
-        with open(self.file_name, "rb") as f:
-            return pickle.load(f)
+        with Path(self.file_name).open("rb") as f:
+            return pickle.load(f)  # noqa: S301
 
     def _lock(self) -> None:
         self.file_locker = portalocker.Lock(
@@ -64,8 +65,8 @@ class CacheManager:
         )
         try:
             self.file_locker.acquire()
-        except portalocker.exceptions.LockException:
-            raise PermissionError
+        except portalocker.exceptions.LockException as e:
+            raise PermissionError from e
 
     def close(self) -> None:
         self.file_locker.release()

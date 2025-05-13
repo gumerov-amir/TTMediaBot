@@ -29,5 +29,5 @@ class Command:
     def help(self) -> str:
         return self.translator.translate("help text not found")
 
-    def run_async(self, func: Callable[..., None], *args: Any, **kwargs: Any) -> None:
+    def run_async(self, func: Callable[..., None], *args: Any, **kwargs: Any) -> None:  # noqa: ANN401
         self._task_processor.task_queue.put(Task(id(self), func, args, kwargs))
