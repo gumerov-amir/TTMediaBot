@@ -6,9 +6,6 @@ from typing import TYPE_CHECKING, Any
 
 import downloader
 from bot import app_vars, errors
-from bot.services.vk import VkService
-from bot.services.yam import YamService
-from bot.services.yt import YtService
 
 if TYPE_CHECKING:
     from bot import Bot
@@ -40,6 +37,12 @@ class Service(ABC):
 
     @abstractmethod
     def search(self, query: str) -> list[Track]: ...
+
+
+# These imports *should* be here to prevent circular imports
+from bot.services.vk import VkService  # noqa: E402
+from bot.services.yam import YamService  # noqa: E402
+from bot.services.yt import YtService  # noqa: E402
 
 
 class ServiceManager:
