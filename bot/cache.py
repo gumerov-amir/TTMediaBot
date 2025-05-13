@@ -46,10 +46,10 @@ class CacheManager:
             self.cache = Cache(self.data)
         except FileNotFoundError:
             self.cache = Cache({})
-            self._dump(self.cache.data)
+            self.dump(self.cache.data)
         self._lock()
 
-    def _dump(self, data: cache_data_type) -> None:
+    def dump(self, data: cache_data_type) -> None:
         with Path(self.file_name).open("wb") as f:
             pickle.dump(data, f)
 
@@ -73,5 +73,5 @@ class CacheManager:
 
     def save(self) -> None:
         self.file_locker.release()
-        self._dump(self.cache.data)
+        self.dump(self.cache.data)
         self.file_locker.acquire()

@@ -62,7 +62,7 @@ class TTEventError(Exception):
     pass
 
 
-class ConnectionError(Exception):
+class TTConnectionError(Exception):
     pass
 
 

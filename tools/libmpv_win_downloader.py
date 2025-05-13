@@ -5,15 +5,16 @@ import platform
 import re
 import shutil
 import sys
+from pathlib import Path
 
 import bs4
 import patoolib
 import requests
 
-path = os.path.dirname(os.path.realpath(__file__))
-path = os.path.dirname(path)
-sys.path.append(path)
 import downloader
+
+path = str(Path(os.path.realpath(__file__)).parent.parent)
+sys.path.append(path)
 
 url = "https://sourceforge.net/projects/mpv-player-windows/files/libmpv/"
 headers = {
@@ -21,13 +22,13 @@ headers = {
 }
 
 
-def get_page(url):
-    r = requests.get(url, headers=headers)
+def get_page(url: str) -> str:
+    r = requests.get(url, headers=headers, timeout=60)
     r.raise_for_status()
     return r.text
 
 
-def get_redirect_url(content):
+def get_redirect_url(content: str | bytes) -> str:
     bs = bs4.BeautifulSoup(content, features="html.parser")
     meta_refresh = bs.find("meta", attrs={"http-equiv": "refresh"}).get("content")
     return meta_refresh.split("url=")[1]
@@ -45,33 +46,33 @@ def download() -> None:
         version_url = table.find("a", href=True, title=re.compile("i686-")).get("href")
     download_page = get_page(version_url)
     download_url = get_redirect_url(download_page)
-    downloader.download_file(download_url, os.path.join(path, "libmpv.7z"))
+    downloader.download_file(download_url, str(Path(path) / "libmpv.7z"))
 
 
 def extract() -> None:
-    temp_path = os.path.join(path, "libmpv")
+    temp_path = Path(path) / "libmpv"
     try:
-        os.mkdir(temp_path)
+        temp_path.mkdir(exist_ok=False)
     except FileExistsError:
-        shutil.rmtree(temp_path)
-        os.mkdir(temp_path)
+        temp_path.unlink()
+        temp_path.mkdir()
     patoolib.extract_archive(
-        os.path.join(path, "libmpv.7z"),
-        outdir=temp_path,
+        str(Path(path) / "libmpv.7z"),
+        outdir=str(temp_path),
     )
 
 
 def move_file() -> None:
-    source = os.path.join(path, "libmpv", "libmpv-2.dll")
-    dest = os.path.join(path, "mpv.dll")
-    if os.path.exists(dest):
-        os.remove(dest)
+    source = Path(path) / "libmpv", "libmpv-2.dll"
+    dest = Path(path) / "mpv.dll"
+    if dest.exists():
+        dest.unlink()
     shutil.move(source, dest)
 
 
 def clean() -> None:
-    os.remove(os.path.join(os.getcwd(), "libmpv.7z"))
-    shutil.rmtree(os.path.join(os.getcwd(), "libmpv"))
+    (Path.cwd() / "libmpv.7z").unlink(missing_ok=True)
+    shutil.rmtree(Path.cwd() / "libmpv")
 
 
 def install() -> None:

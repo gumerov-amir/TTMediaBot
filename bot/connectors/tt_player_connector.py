@@ -72,7 +72,7 @@ class TTPlayerConnector(Thread):
                         ),
                     )
             except Exception:
-                logging.error("", exc_info=True)
+                logging.exception("")
             time.sleep(app_vars.loop_timeout)
 
     def close(self) -> None:

@@ -10,10 +10,12 @@ if TYPE_CHECKING:
 
 
 class SoundDevice:
-    def __init__(self, name: str, id: int | str, type: SoundDeviceType) -> None:
+    def __init__(
+        self, name: str, device_id: int | str, device_type: SoundDeviceType
+    ) -> None:
         self.name = name
-        self.id = id
-        self.type = type
+        self.id = device_id
+        self.type = device_type
 
 
 class SoundDeviceType(Enum):

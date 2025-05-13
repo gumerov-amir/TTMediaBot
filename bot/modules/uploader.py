@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-import os
 import tempfile
 import threading
 import time
+from pathlib import Path
 from queue import Empty
 from typing import TYPE_CHECKING
 
@@ -41,7 +41,7 @@ class Uploader:
         else:
             file_path = track.url
         command_id = self.ttclient.send_file(self.ttclient.channel.id, file_path)
-        file_name = os.path.basename(file_path)
+        file_name = Path(file_path).name
         while True:
             try:
                 file = self.ttclient.uploaded_files_queue.get_nowait()

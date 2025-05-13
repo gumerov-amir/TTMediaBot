@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import logging
-import os
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
@@ -38,7 +38,7 @@ class YtService(_Service):
             "logger": logging.getLogger("root"),
         }
 
-        if self.config.cookiefile_path and os.path.isfile(self.config.cookiefile_path):
+        if self.config.cookiefile_path and Path(self.config.cookiefile_path).is_file():
             self._ydl_config |= {"cookiefile": self.config.cookiefile_path}
 
     def download(self, track: Track, file_path: str) -> None:
@@ -76,12 +76,14 @@ class YtService(_Service):
                 return tracks
             if not process:
                 return [
-                    Track(service=self.name, extra_info=info, type=TrackType.Dynamic),
+                    Track(
+                        service=self.name, extra_info=info, track_type=TrackType.Dynamic
+                    ),
                 ]
             try:
                 stream = ydl.process_ie_result(info)
-            except Exception:
-                raise errors.ServiceError
+            except Exception as e:
+                raise errors.ServiceError from e
             if "url" in stream:
                 url = stream["url"]
             else:
@@ -89,15 +91,15 @@ class YtService(_Service):
             title = stream["title"]
             if "uploader" in stream:
                 title += " - {}".format(stream["uploader"])
-            format = stream["ext"]
-            type = TrackType.Live if stream.get("is_live") else TrackType.Default
+            track_format = stream["ext"]
+            track_type = TrackType.Live if stream.get("is_live") else TrackType.Default
             return [
                 Track(
                     service=self.name,
                     url=url,
                     name=title,
-                    format=format,
-                    type=type,
+                    track_format=track_format,
+                    track_type=track_type,
                     extra_info=stream,
                 ),
             ]
@@ -110,7 +112,7 @@ class YtService(_Service):
                 track = Track(
                     service=self.name,
                     url=video["link"],
-                    type=TrackType.Dynamic,
+                    track_type=TrackType.Dynamic,
                 )
                 tracks.append(track)
             return tracks

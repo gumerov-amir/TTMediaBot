@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import os
+from pathlib import Path
 from typing import TYPE_CHECKING
 from urllib.parse import urlparse
 
@@ -21,7 +22,7 @@ class Streamer:
     def get(self, url: str, is_admin: bool) -> list[Track]:
         parsed_url = urlparse(url)
         if parsed_url.scheme in self.allowed_schemes:
-            track = Track(url=url, type=TrackType.Direct)
+            track = Track(url=url, track_type=TrackType.Direct)
             fetched_data = [track]
             for service in self.service_manager.services.values():
                 try:
@@ -33,7 +34,7 @@ class Streamer:
                         break
                 except errors.ServiceError:
                     continue
-                except Exception:
+                except Exception:  # noqa: BLE001
                     if service.name == self.service_manager.fallback_service:
                         return [
                             track,
@@ -46,28 +47,26 @@ class Streamer:
                 ]
             return fetched_data
         if is_admin:
-            if os.path.isfile(url):
+            if Path(url).is_file():
                 track = Track(
                     url=url,
                     name=os.path.split(url)[-1],
-                    format=os.path.splitext(url)[1],
-                    type=TrackType.Local,
+                    track_format=Path(url).suffix,
+                    track_type=TrackType.Local,
                 )
                 return [
                     track,
                 ]
-            if os.path.isdir(url):
+            if Path(url).is_dir():
                 tracks: list[Track] = []
                 for path, _, files in os.walk(url):
                     for file in sorted(files):
-                        url = os.path.join(path, file)
-                        name = os.path.split(url)[-1]
-                        format = os.path.splitext(url)[1]
+                        file_path = Path(path) / file
                         track = Track(
-                            url=url,
-                            name=name,
-                            format=format,
-                            type=TrackType.Local,
+                            url=str(file_path),
+                            name=file_path.name,
+                            track_format=file_path.suffix,
+                            track_type=TrackType.Local,
                         )
                         tracks.append(track)
                 return tracks

@@ -5,6 +5,7 @@ import os
 import sys
 from enum import Flag
 from logging.handlers import RotatingFileHandler
+from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
@@ -33,10 +34,10 @@ def initialize_logger(bot: Bot) -> None:
         sys.exit("Invalid log mode name")
     if mode & Mode.FILE == Mode.FILE:
         file_name = bot.log_file_name if bot.log_file_name else config.file_name
-        if os.path.isdir(os.path.join(*os.path.split(file_name)[0:-1])):
+        if Path().joinpath(*os.path.split(file_name)[0:-1]).is_dir():
             file = file_name
         else:
-            file = os.path.join(bot.config_manager.config_dir, file_name)
+            file = Path(bot.config_manager.config_dir) / file_name
         rotating_file_handler = RotatingFileHandler(
             filename=file,
             mode="a",

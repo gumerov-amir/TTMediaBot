@@ -72,6 +72,7 @@ ignore = [
     "PLR0913", # We need functions with many arguments
     "G004",    # Why not?
     "E501",    # It's cool for formatting, but bothers when refactoring
+    "TRY300",
 ]
 
 [tool.ruff.lint.mccabe]

@@ -4,7 +4,7 @@ import html
 import logging
 import random
 import time
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any
 
 import mpv
 from bot import errors
@@ -101,7 +101,7 @@ class Player:
                     self.cache.recents.append(
                         self.track_list[self.track_index].get_raw(),
                     )
-            except:
+            except:  # noqa: E722
                 self.cache.recents.append(self.track_list[self.track_index].get_raw())
             self.cache_manager.save()
         self._player.pause = False
@@ -123,11 +123,11 @@ class Player:
             track_index = 0
         try:
             self.play_by_index(track_index)
-        except errors.IncorrectTrackIndexError:
+        except errors.IncorrectTrackIndexError as e:
             if self.mode == Mode.RepeatTrackList:
                 self.play_by_index(0)
             else:
-                raise errors.NoNextTrackError
+                raise errors.NoNextTrackError from e
 
     def previous(self) -> None:
         track_index = self.track_index
@@ -147,11 +147,11 @@ class Player:
             track_index = 0
         try:
             self.play_by_index(track_index)
-        except errors.IncorrectTrackIndexError:
+        except errors.IncorrectTrackIndexError as e:
             if self.mode == Mode.RepeatTrackList:
                 self.play_by_index(len(self.track_list) - 1)
             else:
-                raise errors.NoPreviousTrackError
+                raise errors.NoPreviousTrackError from e
 
     def play_by_index(self, index: int) -> None:
         if index < len(self.track_list) and index >= (0 - len(self.track_list)):
@@ -177,7 +177,7 @@ class Player:
         return self._player.speed
 
     def set_speed(self, arg: float) -> None:
-        if arg < 0.25 or arg > 4:
+        if arg < 0.25 or arg > 4:  # noqa: PLR2004 # No idea on what are these values
             raise ValueError
         self._player.speed = arg
 
@@ -211,19 +211,18 @@ class Player:
         self._player.seek(arg, reference="absolute")"""
 
     def get_output_devices(self) -> list[SoundDevice]:
-        devices: list[SoundDevice] = []
-        for device in self._player.audio_device_list:
-            devices.append(
-                SoundDevice(
-                    device["description"],
-                    device["name"],
-                    SoundDeviceType.Output,
-                ),
+        devices: list[SoundDevice] = [
+            SoundDevice(
+                device["description"],
+                device["name"],
+                SoundDeviceType.Output,
             )
+            for device in self._player.audio_device_list
+        ]
         return devices
 
-    def set_output_device(self, id: str) -> None:
-        self._player.audio_device = id
+    def set_output_device(self, device_id: str) -> None:
+        self._player.audio_device = device_id
 
     def shuffle(self, enable: bool) -> None:
         if enable:
@@ -247,20 +246,20 @@ class Player:
         stream_name = None
         title = None
         artist = None
-        for i in metadata:
-            if i in stream_names:
-                stream_name = html.unescape(metadata[i])
-            if "title" in i:
-                title = html.unescape(metadata[i])
-            if "artist" in i:
-                artist = html.unescape(metadata[i])
+        for k, v in metadata.items():
+            if k in stream_names:
+                stream_name = html.unescape(v)
+            if "title" in k:
+                title = html.unescape(v)
+            if "artist" in k:
+                artist = html.unescape(v)
         chunks: list[str] = []
         chunks.append(artist) if artist else ...
         chunks.append(title) if title else ...
         chunks.append(stream_name) if stream_name else ...
         return " - ".join(chunks)
 
-    def on_end_file(self, event: mpv.MpvEvent) -> None:
+    def on_end_file(self, _event: mpv.MpvEvent) -> None:
         if self.state == State.Playing and self._player.idle_active:
             if self.mode == Mode.SingleTrack or self.track.type == TrackType.Direct:
                 self.stop()
@@ -272,7 +271,7 @@ class Player:
                 except errors.NoNextTrackError:
                     self.stop()
 
-    def on_metadata_update(self, name: str, value: Any) -> None:
+    def on_metadata_update(self, _name: str, _value: Any) -> None:  # noqa: ANN401
         if self.state == State.Playing and (
             self.track.type in (TrackType.Direct, TrackType.Local)
         ):

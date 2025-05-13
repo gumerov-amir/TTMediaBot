@@ -19,6 +19,6 @@ class Shortener:
             if self.shorten_links:
                 return self.shorten_service.short(url)
         except Exception:
-            logging.error("", exc_info=True)
+            logging.exception("")
             self.shorten_links = False
         return url

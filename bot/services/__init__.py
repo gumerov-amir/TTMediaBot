@@ -2,10 +2,13 @@ from __future__ import annotations
 
 import logging
 from abc import ABC, abstractmethod
-from typing import TYPE_CHECKING, Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any
 
 import downloader
 from bot import app_vars, errors
+from bot.services.vk import VkService
+from bot.services.yam import YamService
+from bot.services.yt import YtService
 
 if TYPE_CHECKING:
     from bot import Bot
@@ -37,11 +40,6 @@ class Service(ABC):
 
     @abstractmethod
     def search(self, query: str) -> list[Track]: ...
-
-
-from bot.services.vk import VkService
-from bot.services.yam import YamService
-from bot.services.yt import YtService
 
 
 class ServiceManager:
@@ -79,4 +77,4 @@ class ServiceManager:
                 raise errors.ServiceIsDisabledError(service.error_message)
             return service
         except KeyError as e:
-            raise errors.ServiceNotFoundError(str(e))
+            raise errors.ServiceNotFoundError(str(e)) from e

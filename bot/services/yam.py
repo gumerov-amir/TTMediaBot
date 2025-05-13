@@ -35,8 +35,8 @@ class YamService(Service):
         try:
             self.api.init()
         except (UnauthorizedError, NetworkError) as e:
-            logging.exception(e)
-            raise errors.ServiceError(e)
+            logging.exception("")
+            raise errors.ServiceError(e) from e
         if not self.api.account_status().account.uid:
             self.warning_message = self.bot.translator.translate(
                 "Token is not provided",
@@ -66,12 +66,13 @@ class YamService(Service):
                     raise errors.ServiceError
                 for volume in album.volumes:
                     for track in volume:
-                        tracks.append(
+                        tracks.extend(
                             Track(
                                 service=self.name,
                                 extra_info={"track_id": track.track_id},
-                                type=TrackType.Dynamic,
-                            ),
+                                track_type=TrackType.Dynamic,
+                            )
+                            for track in volume
                         )
                 return tracks
             if "/artist/" in path:
@@ -84,7 +85,7 @@ class YamService(Service):
                         Track(
                             service=self.name,
                             extra_info={"track_id": track.track_id},
-                            type=TrackType.Dynamic,
+                            track_type=TrackType.Dynamic,
                         ),
                     )
                 return tracks
@@ -101,7 +102,7 @@ class YamService(Service):
                         Track(
                             service=self.name,
                             extra_info={"track_id": track.track_id},
-                            type=TrackType.Dynamic,
+                            track_type=TrackType.Dynamic,
                         ),
                     )
                 return tracks
@@ -115,8 +116,8 @@ class YamService(Service):
                     track.title,
                 ),
                 url=track.get_download_info(get_direct_links=True)[0].direct_link,
-                type=TrackType.Default,
-                format=self.format,
+                track_type=TrackType.Default,
+                track_format=self.format,
             ),
         ]
 
@@ -125,12 +126,13 @@ class YamService(Service):
         found_tracks = self.api.search(text=query, nocorrect=True, type_="all").tracks
         if found_tracks:
             for track in found_tracks.results:
-                tracks.append(
+                tracks.extend(
                     Track(
                         service=self.name,
-                        type=TrackType.Dynamic,
+                        track_type=TrackType.Dynamic,
                         extra_info={"track_id": track.track_id},
-                    ),
+                    )
+                    for track in found_tracks.results
                 )
         found_podcast_episodes = self.api.search(
             text=query,
@@ -138,14 +140,14 @@ class YamService(Service):
             type_="podcast_episode",
         ).podcast_episodes
         if found_podcast_episodes:
-            for podcast_episode in found_podcast_episodes.results:
-                tracks.append(
-                    Track(
-                        service=self.name,
-                        type=TrackType.Dynamic,
-                        extra_info={"track_id": podcast_episode.track_id},
-                    ),
+            tracks.extend(
+                Track(
+                    service=self.name,
+                    track_type=TrackType.Dynamic,
+                    extra_info={"track_id": podcast_episode.track_id},
                 )
+                for podcast_episode in found_podcast_episodes.results
+            )
         if tracks:
             return tracks
         msg = ""
