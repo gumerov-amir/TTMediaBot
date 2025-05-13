@@ -3,7 +3,7 @@ import os
 import queue
 import sys
 import time
-from typing import Optional
+from pathlib import Path
 
 from pydantic import ValidationError
 
@@ -14,7 +14,6 @@ from bot import (
     commands,
     config,
     connectors,
-    errors,
     logger,
     modules,
     player,
@@ -56,12 +55,9 @@ class Bot:
                 self.cache_manager = cache.CacheManager(cache_file_name)
             else:
                 cache_file_name = self.config.general.cache_file_name
-                if not os.path.isdir(
-                    os.path.join(*os.path.split(cache_file_name)[0:-1]),
-                ):
-                    cache_file_name = os.path.join(
-                        self.config_manager.config_dir,
-                        cache_file_name,
+                if not Path().joinpath(*os.path.split(cache_file_name)[0:-1]).is_dir():
+                    cache_file_name = str(
+                        Path(self.config_manager.config_dir) / cache_file_name
                     )
                 self.cache_manager = cache.CacheManager(cache_file_name)
         except PermissionError:

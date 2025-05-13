@@ -70,6 +70,7 @@ ignore = [
     "FBT",     # Ignore boolean trap for now, too hard to fix
     "LOG015",  # We use many of them, too difficult to fix now
     "PLR0913", # We need functions with many arguments
+    "G004",    # Why not?
 ]
 
 [tool.ruff.lint.mccabe]
