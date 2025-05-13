@@ -166,12 +166,12 @@ class TeamTalk:
         self,
         text: str,
         user: User | None = None,
-        message_type: int = 1,
+        message_type: MessageType = MessageType.User,
     ) -> None:
         for string in split(text):
             message = TeamTalkPy.TextMessage()
             message.nFromUserID = self.tt.getMyUserID()
-            message.nMsgType = message_type
+            message.nMsgType = message_type.value
             message.szMessage = _str(string)
             if message_type == MessageType.User:
                 if isinstance(user, int):

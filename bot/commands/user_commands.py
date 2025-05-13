@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 from bot import app_vars, errors
 from bot.commands.command import Command
 from bot.player.enums import Mode, State, TrackType
-from bot.TeamTalk.structs import User, UserRight
+from bot.TeamTalk.structs import MessageType, User, UserRight
 
 if TYPE_CHECKING:
     from bot.TeamTalk.structs import User
@@ -51,7 +51,7 @@ class PlayPauseCommand(Command):
                         self.translator.translate(
                             "{nickname} requested {request}",
                         ).format(nickname=user.nickname, request=arg),
-                        type=2,
+                        message_type=MessageType.Channel,
                     )
                 self.run_async(self.player.play, track_list)
                 return self.translator.translate("Playing {}").format(
@@ -87,7 +87,7 @@ class PlayUrlCommand(Command):
                         self.translator.translate(
                             "{nickname} requested playing from a URL",
                         ).format(nickname=user.nickname),
-                        type=2,
+                        message_type=MessageType.Channel,
                     )
                 self.run_async(self.player.play, tracks)
             except errors.IncorrectProtocolError:
