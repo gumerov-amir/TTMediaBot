@@ -15,7 +15,7 @@ class Translator:
     def get_locales(self) -> list[str]:
         return [
             "en",
-            *[str(p) for p in (Path(app_vars.directory) / "locale").iterdir()],
+            *[p.name for p in (Path(app_vars.directory) / "locale").iterdir()],
         ]
 
     def set_locale(self, locale: str) -> None:
