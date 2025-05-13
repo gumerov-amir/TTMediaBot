@@ -54,7 +54,7 @@ class Uploader:
                 error = self.ttclient.errors_queue.get_nowait()
                 if (
                     error.command_id == command_id
-                    and error.type == ErrorType.MaxDiskusageExceeded
+                    and error.error_type == ErrorType.MaxDiskusageExceeded
                 ):
                     self.ttclient.send_message(
                         self.translator.translate("Error: {}").format(

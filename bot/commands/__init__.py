@@ -106,7 +106,7 @@ class CommandProcessor:
                 message.user,
             )
         except Exception as e:
-            logging.error("", exc_info=True)
+            logging.exception("")
             self.ttclient.send_message(
                 self.translator.translate("Error: {}").format(str(e)),
                 message.user,
@@ -114,7 +114,7 @@ class CommandProcessor:
 
     def check_access(self, user: User, command: str) -> bool:
         if (
-            not user.is_admin and user.type != UserType.Admin
+            not user.is_admin and user.user_type != UserType.Admin
         ) or app_vars.app_name in user.client_name:
             if app_vars.app_name in user.client_name:
                 msg = ""
@@ -142,7 +142,7 @@ class CommandProcessor:
         if command in self.commands_dict:
             return self.commands_dict[command]
         if (
-            user.is_admin or user.type == UserType.Admin
+            user.is_admin or user.user_type == UserType.Admin
         ) and command in self.admin_commands_dict:
             return self.admin_commands_dict[command]
         raise errors.UnknownCommandError

@@ -49,7 +49,7 @@ class TeamTalkThread(Thread):
                 self.ttclient.event_success_queue.put(event)
             elif (
                 event.event_type == EventType.USER_TEXT_MESSAGE
-                and event.message.type == MessageType.User
+                and event.message.message_type == MessageType.User
             ):
                 self.ttclient.message_queue.put(event.message)
             elif (

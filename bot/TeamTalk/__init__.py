@@ -177,7 +177,7 @@ class TeamTalk:
                 if isinstance(user, int):
                     message.nToUserID = user
                 else:
-                    message.nToUserID = user.id
+                    message.nToUserID = user.user_id
             elif message_type == MessageType.Channel:
                 message.nChannelID = self.tt.getMyChannelID()
             self.tt.doTextMessage(message)

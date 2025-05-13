@@ -62,7 +62,7 @@ class Channel:
         self.name = name
         self.topic = topic
         self.max_users = max_users
-        self.type = channel_type
+        self.channel_type = channel_type
 
 
 class ErrorType(Enum):
@@ -118,7 +118,7 @@ class ErrorType(Enum):
 class Error:
     def __init__(self, message: str, error_type: ErrorType, command_id: int) -> None:
         self.message = message
-        self.type = error_type
+        self.error_type = error_type
         self.command_id = command_id
 
 
@@ -259,7 +259,7 @@ class UserAccount:
         self.username = username
         self.password = password
         self.note = note
-        self.type = user_type
+        self.user_type = user_type
         self.rights = rights
         self.init_channel = init_channel
 
@@ -281,7 +281,7 @@ class User:
         is_admin: bool,
         is_banned: bool,
     ) -> None:
-        self.id = user_id
+        self.user_id = user_id
         self.nickname = nickname
         self.username = username
         self.channel = channel
@@ -291,7 +291,7 @@ class User:
         self.client_name = client_name
         self.version = version
         self.user_account = user_account
-        self.type = user_type
+        self.user_type = user_type
         self.is_admin = is_admin
         self.is_banned = is_banned
 
@@ -315,7 +315,7 @@ class Message:
         self.text = text
         self.channel = channel
         self.user = user
-        self.type = message_type
+        self.message_type = message_type
 
 
 class File:
