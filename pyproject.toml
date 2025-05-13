@@ -71,6 +71,7 @@ ignore = [
     "LOG015",  # We use many of them, too difficult to fix now
     "PLR0913", # We need functions with many arguments
     "G004",    # Why not?
+    "E501",    # It's cool for formatting, but bothers when refactoring
 ]
 
 [tool.ruff.lint.mccabe]
