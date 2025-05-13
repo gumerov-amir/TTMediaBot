@@ -65,6 +65,7 @@ ignore = [
     "D1", # Docstrings
     # Various incompatible stuff
     "COM812",
+    "D203",
     "D211",
     "D213",
     "FBT",     # Ignore boolean trap for now, too hard to fix
