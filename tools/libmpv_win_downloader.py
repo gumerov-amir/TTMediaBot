@@ -17,7 +17,7 @@ import downloader
 
 
 url = "https://sourceforge.net/projects/mpv-player-windows/files/libmpv/"
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36'}
 
 def get_page(url):
     r = requests.get(url, headers=headers)
