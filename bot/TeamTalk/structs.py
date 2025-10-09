@@ -51,13 +51,18 @@ class ChannelType(Flag):
 
 class Channel:
     def __init__(
-        self, id: int, name: str, topic: str, max_users: int, type: ChannelType
+        self,
+        channel_id: int,
+        name: str,
+        topic: str,
+        max_users: int,
+        channel_type: ChannelType,
     ) -> None:
-        self.id = id
+        self.id = channel_id
         self.name = name
         self.topic = topic
         self.max_users = max_users
-        self.type = type
+        self.channel_type = channel_type
 
 
 class ErrorType(Enum):
@@ -111,9 +116,9 @@ class ErrorType(Enum):
 
 
 class Error:
-    def __init__(self, message: str, type: ErrorType, command_id: int) -> None:
+    def __init__(self, message: str, error_type: ErrorType, command_id: int) -> None:
         self.message = message
-        self.type = type
+        self.error_type = error_type
         self.command_id = command_id
 
 
@@ -175,6 +180,7 @@ class UserRightPre15(Flag):
 
 
 if major == "5" and minor >= "15":
+
     class UserRight15(Flag):
         Null = TeamTalkPy.UserRight.USERRIGHT_NONE
         MultiLogin = TeamTalkPy.UserRight.USERRIGHT_MULTI_LOGIN
@@ -200,8 +206,8 @@ if major == "5" and minor >= "15":
         LockedStatus = TeamTalkPy.UserRight.USERRIGHT_LOCKED_STATUS
         RecordVoice = TeamTalkPy.UserRight.USERRIGHT_RECORD_VOICE
         ViewHiddenChannels = TeamTalkPy.UserRight.USERRIGHT_VIEW_HIDDEN_CHANNELS
-        textMessageUser = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_USER
-        textMessageChannel = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_CHANNEL
+        textMessageUser = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_USER  # noqa: N815
+        textMessageChannel = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_CHANNEL  # noqa: N815
 
     UserRight = UserRight15
 else:
@@ -233,14 +239,11 @@ class UserRight15(Flag):
     LockedStatus = TeamTalkPy.UserRight.USERRIGHT_LOCKED_STATUS
     RecordVoice = TeamTalkPy.UserRight.USERRIGHT_RECORD_VOICE
     ViewHiddenChannels = TeamTalkPy.UserRight.USERRIGHT_VIEW_HIDDEN_CHANNELS
-    textMessageUser = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_USER
-    textMessageChannel = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_CHANNEL
+    textMessageUser = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_USER  # noqa: N815
+    textMessageChannel = TeamTalkPy.UserRight.USERRIGHT_TEXTMESSAGE_CHANNEL  # noqa: N815
 
 
-if major == "5" and minor >= "15":
-    UserRight = UserRight15
-else:
-    UserRight = UserRightPre15
+UserRight = UserRight15 if major == "5" and minor >= "15" else UserRightPre15
 
 
 class UserAccount:
@@ -249,14 +252,14 @@ class UserAccount:
         username: str,
         password: str,
         note: str,
-        type: UserType,
+        user_type: UserType,
         rights: UserRight,
         init_channel: str,
     ) -> None:
         self.username = username
         self.password = password
         self.note = note
-        self.type = type
+        self.user_type = user_type
         self.rights = rights
         self.init_channel = init_channel
 
@@ -264,7 +267,7 @@ class UserAccount:
 class User:
     def __init__(
         self,
-        id: int,
+        user_id: int,
         nickname: str,
         username: str,
         status: str,
@@ -274,11 +277,11 @@ class User:
         client_name: str,
         version: int,
         user_account: UserAccount,
-        type: UserType,
+        user_type: UserType,
         is_admin: bool,
         is_banned: bool,
     ) -> None:
-        self.id = id
+        self.user_id = user_id
         self.nickname = nickname
         self.username = username
         self.channel = channel
@@ -288,7 +291,7 @@ class User:
         self.client_name = client_name
         self.version = version
         self.user_account = user_account
-        self.type = type
+        self.user_type = user_type
         self.is_admin = is_admin
         self.is_banned = is_banned
 
@@ -303,19 +306,28 @@ class MessageType(Enum):
 
 class Message:
     def __init__(
-        self, text: str, user: User, channel: Channel, type: MessageType
+        self,
+        text: str,
+        user: User,
+        channel: Channel,
+        message_type: MessageType,
     ) -> None:
         self.text = text
         self.channel = channel
         self.user = user
-        self.type = type
+        self.message_type = message_type
 
 
 class File:
     def __init__(
-        self, id: int, name: str, channel: Channel, size: int, username: str
+        self,
+        file_id: int,
+        name: str,
+        channel: Channel,
+        size: int,
+        username: str,
     ) -> None:
-        self.id = id
+        self.id = file_id
         self.name = name
         self.channel = channel
         self.size = size
@@ -384,26 +396,12 @@ class Event:
         message: Message,
         user: User,
         user_account: UserAccount,
-    ):
+    ) -> None:
         self.event_type = event_type
         self.source = source
-        # ("ttType", INT32),
-        # ("uReserved", UINT32),
         self.channel = channel
         self.error = error
-        # desktop_input
-        # ("filetransfer", FileTransfer),
-        # ("mediafileinfo", MediaFileInfo),
         self.file = file
-        # ("serverproperties", ServerProperties),
-        # ("serverstatistics", ServerStatistics),
         self.message: Message = message
         self.user = user
         self.user_account = user_account
-        # ("banneduser", BannedUser),
-        # ("bActive", BOOL),
-        # ("nBytesRemain", INT32),
-        # ("nStreamID", INT32),
-        # ("nPayloadSize", INT32),
-        # ("nStreamType", INT32),
-        # ("audioinputprogress", AudioInputProgress),

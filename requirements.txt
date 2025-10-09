@@ -9,3 +9,4 @@ vk-api
 yandex_music
 youtube-search-python
 yt-dlp
+httpx==0.27.0 # Exactly this version because it works with the latest youtube-search-python

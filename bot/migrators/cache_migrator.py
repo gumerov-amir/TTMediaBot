@@ -3,7 +3,6 @@ from __future__ import annotations
 import sys
 from typing import TYPE_CHECKING
 
-
 if TYPE_CHECKING:
     from bot.cache import CacheManager, cache_data_type
 
@@ -29,10 +28,10 @@ def migrate(
     elif cache_data["cache_version"] == cache_manager.version:
         return cache_data
     else:
-        for ver in migrate_functs:
+        for ver, fn in migrate_functs.items():
             if ver > cache_data["cache_version"]:
-                cache_data = migrate_functs[ver](cache_data)
-        cache_manager._dump(cache_data)
+                cache_data = fn(cache_data)
+        cache_manager.dump(cache_data)
     return cache_data
 
 

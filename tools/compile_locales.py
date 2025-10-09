@@ -1,20 +1,19 @@
 #!/usr/bin/env python3
 
-import os
-import sys
 import subprocess
+import sys
+from pathlib import Path
 
-
-cd = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-locale_path = os.path.join(cd, "locale")
-pot_file_path = os.path.join(locale_path, "TTMediaBot.pot")
-source_paths = [os.path.join(cd, "bot"), os.path.join(cd, "TTMediaBot.py")]
-babel_prefix = "{} -m babel.messages.frontend".format(sys.executable)
+cd = Path(__file__).resolve().parent.parent
+locale_path = cd / "locale"
+pot_file_path = locale_path / "TTMediaBot.pot"
+source_paths = [str(cd / "bot"), str(cd / "TTMediaBot.py")]
+babel_prefix = f"{sys.executable} -m babel.messages.frontend"
 locale_domain = "TTMediaBot"
 
 
-def extract():
-    code = subprocess.call(
+def extract() -> None:
+    code = subprocess.call(  # noqa: S602
         f"{babel_prefix} extract {' '.join(source_paths)} -o {pot_file_path} --keywords=translate -c translators: --copyright-holder=TTMediaBot-team --project=TTMediaBot",
         shell=True,
     )
@@ -22,8 +21,8 @@ def extract():
         sys.exit("Bable is not installed. please install all the requirements")
 
 
-def update():
-    code = subprocess.call(
+def update() -> None:
+    code = subprocess.call(  # noqa: S602
         f"{babel_prefix} update -i {pot_file_path} -d {locale_path} -D {locale_domain} --update-header-comment --previous",
         shell=True,
     )
@@ -31,18 +30,19 @@ def update():
         sys.exit(code)
 
 
-def compile():
-    code = subprocess.call(
-        f"{babel_prefix} compile -d {locale_path} -D {locale_domain}", shell=True
+def compile_locales() -> None:
+    code = subprocess.call(  # noqa: S602
+        f"{babel_prefix} compile -d {locale_path} -D {locale_domain}",
+        shell=True,
     )
     if code:
         sys.exit(code)
 
 
-def main():
+def main() -> None:
     extract()
     update()
-    compile()
+    compile_locales()
 
 
 if __name__ == "__main__":

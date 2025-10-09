@@ -24,10 +24,10 @@ def migrate(
     elif config_data["config_version"] == config_manager.version:
         return config_data
     else:
-        for ver in migrate_functs:
+        for ver, fn in migrate_functs.items():
             if ver > config_data["config_version"]:
-                config_data = migrate_functs[ver](config_data)
-        config_manager._dump(config_data)
+                config_data = fn(config_data)
+        config_manager.dump(config_data)
     return config_data
 
 

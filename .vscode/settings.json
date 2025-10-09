@@ -1,16 +1,12 @@
 {
-    "python.linting.enabled": true,
-    "python.linting.flake8Enabled": true,
-    "python.analysis.useLibraryCodeForTypes": true,
-    "python.analysis.typeCheckingMode": "strict",
-    "python.analysis.stubPath": "typestubs",
-    "python.formatting.provider": "black",
-    "editor.formatOnPaste": true,
-    "editor.formatOnSave": true,
-    "editor.formatOnSaveMode": "file",
-    "editor.formatOnType": true,
-    "files.exclude": {
-        "**/__pycache__": true,
-        ".*env": true
-    }
+  "python.linting.enabled": true,
+  "python.formatting.provider": "ruff",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "editor.formatOnType": false,
+  "files.exclude": {
+    "**/__pycache__": true,
+    ".*env": true
+  }
 }

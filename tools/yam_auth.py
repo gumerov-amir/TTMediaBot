@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 
-from getpass import getpass
 import json
-import os
+from getpass import getpass
 
 import requests
 
@@ -17,7 +16,11 @@ url = "https://oauth.yandex.ru/token"
 
 
 def get_token(
-    username, password, grant_type="password", x_captcha_answer=None, x_captcha_key=None
+    username,
+    password,
+    grant_type="password",
+    x_captcha_answer=None,
+    x_captcha_key=None,
 ):
     data = {
         "grant_type": grant_type,
@@ -27,26 +30,25 @@ def get_token(
         "password": password,
     }
     if x_captcha_answer and x_captcha_key:
-        data.update(
-            {"x_captcha_answer": x_captcha_answer, "x_captcha_key": x_captcha_key}
-        )
+        data.update({
+            "x_captcha_answer": x_captcha_answer,
+            "x_captcha_key": x_captcha_key,
+        })
     try:
         resp = requests.request("post", url, data=data, headers=HEADERS)
     except requests.RequestException as e:
         raise NetworkError(e)
     if not (200 <= resp.status_code <= 299):
-        raise SystemError("Error")
+        msg = "Error"
+        raise SystemError(msg)
     json_data = json.loads(resp.content.decode("utf-8"))
     return json_data["access_token"]
 
 
-def main():
+def main() -> None:
     login = ""
     password = ""
     try:
-        print("Yandex music Authentication Helper for TTMediaBot")
-        print()
-        print("Enter your Yandex credentials to continue")
         while not login:
             login = input("email or  login: ")
         while not password:
@@ -55,7 +57,7 @@ def main():
         y_or_n = input("Do you want to save the token to the configuration file? y/n")
         if y_or_n == "y":
             config_file = input("Configuration file path: ")
-            with open(config_file, "r") as f:
+            with open(config_file) as f:
                 data = json.load(f)
             try:
                 data["services"]["yam"]["token"] = token
@@ -63,12 +65,10 @@ def main():
                 data["services"]["yam"] = {"enabled": True, "token": token}
             with open(config_file, "w") as f:
                 json.dump(data, f, indent=4, ensure_ascii=False)
-            print("Your token has been successfully saved to the configuration file")
         else:
-            print("Your yandex music token:")
-            print(token)
-    except Exception as e:
-        print(e)
+            pass
+    except Exception:
+        pass
     input("Press enter to continue")
 
 

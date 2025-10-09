@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 
 from bot import app_vars
 
@@ -8,9 +8,8 @@ def clean_file_name(file_name: str) -> str:
         chr(i) for i in range(1, 32)
     ]:
         file_name = file_name.replace(char, "_")
-    file_name = file_name.strip()
-    return file_name
+    return file_name.strip()
 
 
 def get_abs_path(file_name: str) -> str:
-    return os.path.join(app_vars.directory, file_name)
+    return str(Path(app_vars.directory) / file_name)

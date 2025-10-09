@@ -1,24 +1,29 @@
 from __future__ import annotations
-from typing import Any, Dict, Optional
+
+from typing import Any
+
+from typing_extensions import Self
 
 class YoutubeDL:
     def __init__(
-        self, params: Optional[Dict[str, Any]] = ..., auto_init: bool = ...
+        self,
+        params: dict[str, Any] | None = ...,
+        auto_init: bool = ...,
     ) -> None: ...
-    def __enter__(self) -> YoutubeDL: ...
+    def __enter__(self) -> Self: ...
     def __exit__(self) -> None: ...
     def extract_info(
         self,
-        url: Optional[str],
+        url: str | None,
         download: bool = ...,
-        ie_key: Optional[str] = ...,
-        extra_info: Optional[Dict[str, Any]] = ...,
+        ie_key: str | None = ...,
+        extra_info: dict[str, Any] | None = ...,
         process: bool = ...,
         force_generic_extractor: bool = ...,
-    ) -> Dict[str, Any]: ...
+    ) -> dict[str, Any]: ...
     def process_ie_result(
         self,
-        ie_result: Dict[str, Any],
+        ie_result: dict[str, Any],
         download: bool = ...,
-        extra_info: Optional[Dict[str, Any]] = ...,
-    ) -> Dict[str, Any]: ...
+        extra_info: dict[str, Any] | None = ...,
+    ) -> dict[str, Any]: ...

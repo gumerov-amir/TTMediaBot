@@ -1,0 +1,88 @@
+[project]
+name = "TTMediaBot"
+version = "1.0.0"
+description = "A bot for music streaming to TeamTalk Servers."
+readme = "README.md"
+requires-python = ">=3.10,<3.14"
+dependencies = [
+    "babel>=2.17.0",
+    "beautifulsoup4>=4.13.4",
+    "httpx==0.27.0",
+    "mpv>=1.0.8",
+    "patool>=4.0.1",
+    "portalocker>=3.1.1",
+    "pydantic>=2.11.4",
+    "pyshorteners>=1.0.1",
+    "requests>=2.32.3",
+    "vk-api>=11.9.9",
+    "yandex-music>=2.2.0",
+    "youtube-search-python>=1.6.6",
+    "yt-dlp>=2025.4.30",
+]
+
+[dependency-groups]
+dev = ["ruff>=0.11.9", "vermin>=1.6.0"]
+
+[tool.ruff]
+line-length = 88
+indent-width = 4
+target-version = "py310"
+respect-gitignore = true
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+    ".venv",
+    "env",
+    "TeamTalkPy",
+    "mpv.py",
+]
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D1", # Docstrings
+    # Various incompatible stuff
+    "COM812",
+    "D203",
+    "D211",
+    "D213",
+    "FBT",     # Ignore boolean trap for now, too hard to fix
+    "LOG015",  # We use many of them, too difficult to fix now
+    "PLR0913", # We need functions with many arguments
+    "G004",    # Why not?
+    "E501",    # It's cool for formatting, but bothers when refactoring
+    "TRY300",
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 15 # For now. Too difficult to refactor
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+preview = true

@@ -1,14 +1,17 @@
 from __future__ import annotations
-import copy
-import os
-from threading import Lock
-from typing import Any, Dict, Optional, TYPE_CHECKING
 
-from bot.player.enums import TrackType
+import copy
+from pathlib import Path
+from threading import Lock
+from typing import TYPE_CHECKING, Any
+
 from bot import utils
+from bot.player.enums import TrackType
 
 if TYPE_CHECKING:
     from bot.services import Service
+
+    def get_service_by_name(service_name: str) -> Service: ...
 
 
 class Track:
@@ -20,16 +23,16 @@ class Track:
         service: str = "",
         url: str = "",
         name: str = "",
-        format: str = "",
-        extra_info: Optional[Dict[str, Any]] = None,
-        type: TrackType = TrackType.Default,
+        track_format: str = "",
+        extra_info: dict[str, Any] | None = None,
+        track_type: TrackType = TrackType.Default,
     ) -> None:
         self.service = service
         self.url = url
         self.name = name
-        self.format = format
+        self.format = track_format
         self.extra_info = extra_info
-        self.type = type
+        self.type = track_type
         self._lock = Lock()
         self._is_fetched = False
 
@@ -37,11 +40,11 @@ class Track:
         service: Service = get_service_by_name(self.service)
         file_name = self.name + "." + self.format
         file_name = utils.clean_file_name(file_name)
-        file_path = os.path.join(directory, file_name)
+        file_path = str(Path(directory) / file_name)
         service.download(self, file_path)
         return file_path
 
-    def _fetch_stream_data(self):
+    def _fetch_stream_data(self) -> None:
         if self.type != TrackType.Dynamic or self._is_fetched:
             return
         self._original_track = copy.deepcopy(self)
@@ -76,29 +79,25 @@ class Track:
     def name(self, value: str) -> None:
         self._name = value
 
-    def get_meta(self) -> Dict[str, Any]:
+    def get_meta(self) -> dict[str, Any]:
         try:
             return {"name": self.name, "url": self.url}
-        except:
+        except:  # noqa: E722
             return {"name": None, "url": ""}
 
     def get_raw(self) -> Track:
         if hasattr(self, "_original_track"):
             return self._original_track
-        else:
-            return self
+        return self
 
-    def __bool__(self):
-        if self.service or self.url:
-            return True
-        else:
-            return False
+    def __bool__(self) -> bool:
+        return bool(self.service or self.url)
 
-    def __getstate__(self) -> Dict[str, Any]:
-        state: Dict[str, Any] = self.__dict__.copy()
+    def __getstate__(self) -> dict[str, Any]:
+        state: dict[str, Any] = self.__dict__.copy()
         del state["_lock"]
         return state
 
-    def __setstate__(self, state: Dict[str, Any]):
+    def __setstate__(self, state: dict[str, Any]) -> None:
         self.__dict__.update(state)
         self._lock = Lock()

@@ -1,19 +1,20 @@
 from __future__ import annotations
+
 import logging
-from typing import Any, Dict, List, Optional, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 from urllib.parse import urlparse
 
 if TYPE_CHECKING:
     from bot import Bot
+    from bot.config.models import VkModel
 
-import mpv
 import requests
 import vk_api
 
-from bot.config.models import VkModel
+import mpv
+from bot import errors
 from bot.player.track import Track
 from bot.services import Service as _Service
-from bot import errors
 
 
 class VkService(_Service):
@@ -41,11 +42,7 @@ class VkService(_Service):
             super().download(track, file_path)
             return
         _mpv = mpv.MPV(
-            **{
-                "demuxer_lavf_o": "http_persistent=false",
-                "ao": "null",
-                "ao_null_untimed": True,
-            }
+            demuxer_lavf_o="http_persistent=false", ao="null", ao_null_untimed=True
         )
         _mpv.play(track.url)
         _mpv.record_file = file_path
@@ -55,13 +52,13 @@ class VkService(_Service):
 
     def initialize(self) -> None:
         http = requests.Session()
-        http.headers.update(
-            {
-                "User-agent": "VKAndroidApp/6.2-5091 (Android 9; SDK 28; samsungexynos7870; samsung j6lte; 720x1450)"
-            }
-        )
+        http.headers.update({
+            "User-agent": "VKAndroidApp/6.2-5091 (Android 9; SDK 28; samsungexynos7870; samsung j6lte; 720x1450)",
+        })
         self._session = vk_api.VkApi(
-            token=self.config.token, session=http, api_version="5.89"
+            token=self.config.token,
+            session=http,
+            api_version="5.89",
         )
         self.api = self._session.get_api()
         try:
@@ -71,23 +68,23 @@ class VkService(_Service):
             vk_api.exceptions.ApiError,
             requests.exceptions.ConnectionError,
         ) as e:
-            logging.error(e)
-            raise errors.ServiceError(e)
+            logging.exception("")
+            raise errors.ServiceError(e) from e
 
     def get(
         self,
         url: str,
-        extra_info: Optional[Dict[str, Any]] = None,
-        process: bool = False,
-    ) -> List[Track]:
+        _extra_info: dict[str, Any] | None = None,
+        _process: bool = False,
+    ) -> list[Track]:
         parsed_url = urlparse(url)
         path = parsed_url.path[1::]
         if path.startswith("video-"):
-            raise errors.ServiceError()
+            raise errors.ServiceError
         try:
             if "music/" in path:
-                id = path.split("/")[-1]
-                ids = id.split("_")
+                object_id = path.split("/")[-1]
+                ids = object_id.split("_")
                 o_id = ids[0]
                 p_id = ids[1]
                 audios = self.api.audio.get(owner_id=int(o_id), album_id=int(p_id))
@@ -99,12 +96,12 @@ class VkService(_Service):
             else:
                 object_info = self.api.utils.resolveScreenName(screen_name=path)
                 if object_info["type"] == "group":
-                    id = -object_info["object_id"]
+                    object_id = -object_info["object_id"]
                 else:
-                    id = object_info["object_id"]
-                audios = self.api.audio.get(owner_id=id, count=6000)
+                    object_id = object_info["object_id"]
+                audios = self.api.audio.get(owner_id=object_id, count=6000)
             if "count" in audios and audios["count"] > 0:
-                tracks: List[Track] = []
+                tracks: list[Track] = []
                 for audio in audios["items"]:
                     if "url" not in audio or not audio["url"]:
                         continue
@@ -112,37 +109,32 @@ class VkService(_Service):
                         service=self.name,
                         url=audio["url"],
                         name="{} - {}".format(audio["artist"], audio["title"]),
-                        format=self.format,
+                        track_format=self.format,
                     )
                     tracks.append(track)
                 if tracks:
                     return tracks
-                else:
-                    raise errors.NothingFoundError()
-            else:
                 raise errors.NothingFoundError
+            raise errors.NothingFoundError
         except NotImplementedError as e:
-            print("vk get error")
-            print(e)
-            raise NotImplementedError()
+            raise NotImplementedError from e
 
-    def search(self, query: str) -> List[Track]:
+    def search(self, query: str) -> list[Track]:
         results = self.api.audio.search(q=query, count=300, sort=0)
         if "count" in results and results["count"] > 0:
-            tracks: List[Track] = []
+            tracks: list[Track] = []
             for track in results["items"]:
                 if "url" not in track or not track["url"]:
                     continue
-                track = Track(
-                    service=self.name,
-                    url=track["url"],
-                    name="{} - {}".format(track["artist"], track["title"]),
-                    format=self.format,
+                tracks.append(
+                    Track(
+                        service=self.name,
+                        url=track["url"],
+                        name="{} - {}".format(track["artist"], track["title"]),
+                        track_format=self.format,
+                    )
                 )
-                tracks.append(track)
             if tracks:
                 return tracks
-            else:
-                raise errors.NothingFoundError()
-        else:
-            raise errors.NothingFoundError()
+            raise errors.NothingFoundError
+        raise errors.NothingFoundError

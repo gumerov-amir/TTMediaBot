@@ -1,15 +1,17 @@
 from __future__ import annotations
 
-from typing import Any, TYPE_CHECKING, Callable
+from typing import TYPE_CHECKING, Any
 
 from bot.commands.task_processor import Task
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     from bot.commands import CommandProcessor
 
 
 class Command:
-    def __init__(self, command_processor: CommandProcessor):
+    def __init__(self, command_processor: CommandProcessor) -> None:
         self._bot = command_processor.bot
         self.cache = command_processor.cache
         self.cache_manager = command_processor.cache_manager
@@ -27,5 +29,5 @@ class Command:
     def help(self) -> str:
         return self.translator.translate("help text not found")
 
-    def run_async(self, func: Callable[..., None], *args: Any, **kwargs: Any) -> None:
+    def run_async(self, func: Callable[..., None], *args: Any, **kwargs: Any) -> None:  # noqa: ANN401
         self._task_processor.task_queue.put(Task(id(self), func, args, kwargs))
