@@ -1,0 +1,589 @@
+# Korean (South Korea) translations for TTMediaBot.
+# Copyright (C) 2025 TTMediaBot-team
+# This file is distributed under the same license as the TTMediaBot project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: TTMediaBot VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2026-01-03 13:08+0900\n"
+"PO-Revision-Date: 2025-12-21 21:41+0900\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ko_KR\n"
+"Language-Team: ko_KR <LL@li.org>\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: C:/TTMediaBot/bot/TeamTalk/__init__.py:163
+msgid "Send \"h\" for help"
+msgstr "도움말을 보려면 \"h\" 입력"
+
+#: C:/TTMediaBot/bot/app_vars.py:16
+msgid ""
+"A media streaming bot for TeamTalk.\n"
+"Authors: Amir Gumerov, Vladislav Kopylov, Beqa Gozalishvili, Kirill "
+"Belousov.\n"
+"Home page: https://github.com/gumerov-amir/TTMediaBotLicense: Mit License"
+msgstr ""
+"TeamTalk용 미디어 스트리밍 봇입니다.\n"
+"제작자: Amir Gumerov, Vladislav Kopylov, Beqa Gozalishvili, Kirill Belousov."
+"\n"
+"홈페이지: https://github.com/gumerov-amir/TTMediaBot라이선스: Mit 라이선스"
+
+#: C:/TTMediaBot/bot/commands/__init__.py:107
+msgid "Unknown command. Send \"h\" for help."
+msgstr "알 수 없는 명령어입니다. 도움말을 보려면 \"h\" 를 입력하세요."
+
+#: C:/TTMediaBot/bot/commands/__init__.py:113
+#: C:/TTMediaBot/bot/modules/uploader.py:60
+#, python-brace-format
+msgid "Error: {}"
+msgstr "오류: {}"
+
+#: C:/TTMediaBot/bot/commands/__init__.py:126
+msgid "You are banned"
+msgstr "당신은 차단되었습니다"
+
+#: C:/TTMediaBot/bot/commands/__init__.py:130
+msgid "You are not in bot's channel"
+msgstr "봇의 채널에 있지 않습니다"
+
+#: C:/TTMediaBot/bot/commands/__init__.py:134
+msgid "Bot is locked"
+msgstr "봇이 잠겨 있습니다"
+
+#: C:/TTMediaBot/bot/commands/__init__.py:138
+msgid "This command is blocked"
+msgstr "차단된 명령어입니다"
+
+#: C:/TTMediaBot/bot/commands/__init__.py:158
+msgid "Unknown command"
+msgstr "알 수 없는 명령어입니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:22
+msgid ""
+"+/-COMMAND Blocks or unblocks commands. +COMMAND adds command to the "
+"blocklist. -COMMAND removes from it. Without a command shows the "
+"blocklist"
+msgstr ""
+"+/-COMMAND 명령어를 차단하거나 차단 해제합니다. +COMMAND는 명령어를 차단하고, -COMMAND는 차단 해제합니다. "
+"옵션이 없으면 차단 목록이 표시됩니다."
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:33
+#: C:/TTMediaBot/bot/commands/admin_commands.py:317
+#: C:/TTMediaBot/bot/commands/admin_commands.py:346
+#: C:/TTMediaBot/bot/commands/user_commands.py:448
+#: C:/TTMediaBot/bot/commands/user_commands.py:461
+#: C:/TTMediaBot/bot/commands/user_commands.py:507
+msgid "The list is empty"
+msgstr "목록이 비어 있습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:38
+#: C:/TTMediaBot/bot/commands/admin_commands.py:300
+#: C:/TTMediaBot/bot/commands/admin_commands.py:331
+#: C:/TTMediaBot/bot/commands/user_commands.py:416
+msgid "Added"
+msgstr "추가되었습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:39
+msgid "This command is already added"
+msgstr "이미 차단된 명령어입니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:45
+#: C:/TTMediaBot/bot/commands/admin_commands.py:306
+#: C:/TTMediaBot/bot/commands/admin_commands.py:337
+#: C:/TTMediaBot/bot/commands/user_commands.py:427
+msgid "Deleted"
+msgstr "삭제되었습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:46
+msgid "This command is not blocked"
+msgstr "차단되어 있지 않은 명령어입니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:54
+msgid "GENDER Changes bot's gender. n neutral, m male, f female"
+msgstr "GENDER 봇의 성별을 변경합니다. n 중립, m 남성, f 여성"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:68
+msgid "LANGUAGE Changes bot's language"
+msgstr "LANGUAGE 봇의 언어를 변경합니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:76
+msgid "The language has been changed"
+msgstr "언어가 변경되었습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:78
+msgid "Incorrect language"
+msgstr "잘못된 언어입니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:81
+#, python-brace-format
+msgid ""
+"Current language: {current_language}. Available languages: "
+"{available_languages}"
+msgstr "현재 언어: {current_language}. 사용 가능한 언어: {available_languages}"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:91
+msgid "NICKNAME Changes bot's nickname"
+msgstr "NICKNAME 봇의 대화명을 변경합니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:102
+msgid ""
+"r/f Clears bot's cache. r clears recents, f clears favorites, without an "
+"option clears the entire cache"
+msgstr "r/f 봇의 캐시를 지웁니다. r 기록 지우기, f 즐겨찾기 지우기, 옵션 없으면 모든 캐시 지우기"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:110
+msgid "Cache cleared"
+msgstr "캐시가 삭제되었습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:114
+msgid "Recents cleared"
+msgstr "기록이 삭제되었습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:118
+msgid "Favorites cleared"
+msgstr "즐겨찾기가 삭제되었습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:126
+msgid ""
+"Join channel. first argument is channel name or id, second argument is "
+"password, split argument \" | \", if password is undefined, don't type "
+"second argument"
+msgstr ""
+"채널에 입장합니다. 첫 번째 인수는 채널 이름 또는 ID, 두 번째 인수는 비밀번호입니다. 인수는 \" | \"로 구분하며, "
+"비밀번호가 없는 경우 두 번째 인수는 입력하지 않습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:145
+msgid "This channel does not exist"
+msgstr "해당 채널은 존재하지 않습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:205
+msgid "Enables or disables voice transmission"
+msgstr "말하기 전송을 활성화 또는 비활성화합니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:212
+#: C:/TTMediaBot/bot/commands/admin_commands.py:214
+msgid "Voice transmission enabled"
+msgstr "말하기가 활성화되었습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:218
+msgid "Voice transmission disabled"
+msgstr "말하기가 비활성화되었습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:224
+msgid "Locks or unlocks the bot"
+msgstr "봇을 잠그거나 잠금 해제합니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:229
+msgid "Locked"
+msgstr "잠겼습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:231
+msgid "Unlocked"
+msgstr "잠금 해제되었습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:238
+msgid "STATUS Changes bot's status"
+msgstr "STATUS 봇의 상태 메시지를 변경합니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:248
+msgid "Enables or disables event handling"
+msgstr "이벤트 헨들링을 활성화 또는 비활성화합니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:255
+msgid "Event handling is enabled"
+msgstr "이벤트 헨들링이 활성화되었습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:257
+msgid "Event handling is disabled"
+msgstr "이벤트 헨들링이 비활성화되었습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:265
+msgid "Enables or disables sending of channel messages"
+msgstr "채널 메시지 전송을 활성화 또는 비활성화합니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:273
+msgid "Channel messages enabled"
+msgstr "채널 메시지가 활성화되었습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:275
+msgid "Channel messages disabled"
+msgstr "채널 메시지가 비활성화되었습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:282
+msgid "Saves bot's configuration"
+msgstr "봇의 설정을 저장합니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:286
+msgid "Configuration saved"
+msgstr "설정이 저장되었습니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:293
+msgid ""
+"+/-USERNAME Manages a list of administrators. +USERNAME adds a user. "
+"-USERNAME removes it. Without an option shows the list"
+msgstr ""
+"+/-USERNAME 관리자 목록을 관리합니다. +USERNAME은 사용자를 관리자로 지정하고, -USERNAME은 제거합니다. "
+"옵션이 없으면 목록이 표시됩니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:309
+msgid "This user is not in the admin list"
+msgstr "해당 사용자는 관리자가 아닙니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:324
+msgid ""
+"+/-USERNAME Manages a list of banned users. +USERNAME adds a user. "
+"-USERNAME removes it. Without an option shows the list"
+msgstr ""
+"+/-USERNAME 차단된 사용자 목록을 관리합니다. +USERNAME은 사용자를 차단하고, -USERNAME은 차단 해제합니다."
+" 옵션이 없으면 목록이 표시됩니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:339
+msgid "This user is not banned"
+msgstr "차단되어 있지 않은 사용자입니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:352
+msgid "Quits the bot"
+msgstr "봇을 종료합니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:361
+msgid "Restarts the bot"
+msgstr "봇을 재시작합니다"
+
+#: C:/TTMediaBot/bot/commands/admin_commands.py:376
+msgid "Returns current channel's ID"
+msgstr "현재 채널의 ID를 표시합니다"
+
+#: C:/TTMediaBot/bot/commands/command.py:30
+msgid "help text not found"
+msgstr "도움말이 존재하지 않습니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:17
+msgid "Shows command help"
+msgstr "명령어 도움말을 표시합니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:26
+msgid "Shows information about the bot"
+msgstr "봇에 대한 정보를 표시합니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:36
+msgid ""
+"QUERY Plays tracks found for the query. If no query is given, plays or "
+"pauses current track"
+msgstr "QUERY 쿼리에 해당하는 트랙을 재생합니다. 쿼리가 제공되지 않으면 현재 트랙을 재생하거나 일시 정지합니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:43
+msgid "Searching..."
+msgstr "검색 중..."
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:52
+#, python-brace-format
+msgid "{nickname} requested {request}"
+msgstr "{nickname}님이 {request}을(를) 요청했습니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:57
+#: C:/TTMediaBot/bot/commands/user_commands.py:195
+#: C:/TTMediaBot/bot/commands/user_commands.py:212
+#, python-brace-format
+msgid "Playing {}"
+msgstr "{} 재생 중"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:61
+msgid "Nothing is found for your query"
+msgstr "검색 결과가 없습니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:64
+msgid "The selected service is currently unavailable"
+msgstr "선택된 서비스를 일시적으로 이용할 수 없습니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:78
+msgid "URL Plays a stream from a given URL"
+msgstr "URL 주어진 URL에서 스트림을 재생합니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:88
+#, python-brace-format
+msgid "{nickname} requested playing from a URL"
+msgstr "{nickname}님이 URL에서 재생을 요청했습니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:94
+msgid "Incorrect protocol"
+msgstr "잘못된 프로토콜입니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:96
+msgid "Cannot process stream URL"
+msgstr "스트림 URL을 처리할 수 없습니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:98
+msgid "The path cannot be found"
+msgstr "경로를 찾을 수 없습니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:106
+msgid "Stops playback"
+msgstr "재생을 정지합니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:113
+#, python-brace-format
+msgid "{nickname} stopped playback"
+msgstr "{nickname}님이 재생을 정지했습니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:120
+#: C:/TTMediaBot/bot/commands/user_commands.py:156
+#: C:/TTMediaBot/bot/commands/user_commands.py:176
+#: C:/TTMediaBot/bot/commands/user_commands.py:201
+#: C:/TTMediaBot/bot/commands/user_commands.py:218
+#: C:/TTMediaBot/bot/commands/user_commands.py:359
+#: C:/TTMediaBot/bot/commands/user_commands.py:368
+#: C:/TTMediaBot/bot/commands/user_commands.py:417
+#: C:/TTMediaBot/bot/commands/user_commands.py:435
+#: C:/TTMediaBot/bot/commands/user_commands.py:476
+#: C:/TTMediaBot/bot/commands/user_commands.py:532
+msgid "Nothing is playing"
+msgstr "재생 중인 항목이 없습니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:127
+#, python-brace-format
+msgid ""
+"VOLUME Sets the volume to a value between 0 and {max_volume}. If no "
+"volume is specified, the current volume level is displayed"
+msgstr "VOLUME 볼륨을 0부터 {max_volume} 사이의 값으로 설정합니다. 값을 지정하지 않으면 현재 볼륨이 표시됩니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:151
+#, python-brace-format
+msgid "STEP Seeks current track backward. the default step is {seek_step} seconds"
+msgstr "STEP 현재 트랙을 되감기합니다. 기본 이동 시간은 {seek_step}초입니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:171
+#, python-brace-format
+msgid "STEP Seeks current track forward. the default step is {seek_step} seconds"
+msgstr "STEP 현재 트랙을 빨리감기합니다. 기본 이동 시간은 {seek_step}초입니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:190
+msgid "Plays next track"
+msgstr "다음 트랙을 재생합니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:199
+msgid "No next track"
+msgstr "다음 트랙이 없습니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:207
+msgid "Plays previous track"
+msgstr "이전 트랙을 재생합니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:216
+msgid "No previous track"
+msgstr "이전 트랙이 없습니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:225
+msgid ""
+"MODE Sets the playback mode. If no mode is specified, the current mode "
+"and a list of modes are displayed"
+msgstr "MODE 재생 모드를 설정합니다. 값을 지정하지 않으면 현재 모드와 사용 가능한 모드 목록이 표시됩니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:230
+msgid "Single Track"
+msgstr "단일 트랙"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:231
+msgid "Repeat Track"
+msgstr "트랙 반복"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:232
+msgid "Track list"
+msgstr "여러 트랙"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:233
+msgid "Repeat track list"
+msgstr "여러 트랙 반복"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:234
+msgid "Random"
+msgstr "랜덤"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:237
+#, python-brace-format
+msgid ""
+"Current mode: {current_mode}\n"
+"{modes}"
+msgstr ""
+"현재 모드: {current_mode}\n"
+"{modes}"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:252
+#, python-brace-format
+msgid "Current mode: {mode}"
+msgstr "현재 모드: {mode}"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:265
+msgid ""
+"SERVICE Selects the service to play from, sv SERVICE h returns additional"
+" help. If no service is specified, the current service and a list of "
+"available services are displayed"
+msgstr ""
+"SERVICE 재생할 서비스를 선택합니다. sv SERVICE h 를 입력하면 추가 도움말을 표시합니다. 서비스를 지정하지 않으면 "
+"현재 서비스와 사용 가능한 서비스 목록이 표시됩니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:273
+#, python-brace-format
+msgid ""
+"Unknown service.\n"
+"{}"
+msgstr ""
+"알 수 없는 서비스입니다.\n"
+"{}"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:282
+#, python-brace-format
+msgid ""
+"Current service: {}\n"
+"Warning: {}"
+msgstr ""
+"현재 서비스: {}\n"
+"경고: {}"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:284
+#, python-brace-format
+msgid "Current service: {}"
+msgstr "현재 서비스: {}"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:300
+msgid "This service has no additional help"
+msgstr "해당 서비스에는 추가 도움말이 없습니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:319
+#, python-brace-format
+msgid "{} (Warning: {})"
+msgstr "{} (경고: {})"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:327
+#, python-brace-format
+msgid ""
+"Current service: {current_service}\n"
+"Available:\n"
+"{available_services}\n"
+"send sv SERVICE h for additional help"
+msgstr ""
+"현재 서비스: {current_service}\n"
+"사용 가능:\n"
+"{available_services}\n"
+"추가 도움말을 보려면 sv SERVICE h를 입력하세요"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:338
+msgid "NUMBER Selects track by number from the list of current results"
+msgstr "NUMBER 현재 결과 목록에서 번호로 트랙을 선택합니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:350
+msgid "Incorrect number"
+msgstr "잘못된 번호입니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:352
+#: C:/TTMediaBot/bot/commands/user_commands.py:363
+#, python-brace-format
+msgid "Playing {} {}"
+msgstr "{} {} 재생 중"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:357
+#: C:/TTMediaBot/bot/commands/user_commands.py:429
+#: C:/TTMediaBot/bot/commands/user_commands.py:459
+#: C:/TTMediaBot/bot/commands/user_commands.py:496
+msgid "Out of list"
+msgstr "목록 밖입니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:375
+msgid ""
+"SPEED Sets playback speed from 0.25 to 4. If no speed is given, shows "
+"current speed"
+msgstr "SPEED 재생 속도를 0.25부터 4 사이의 값으로 설정합니다. 값이 지정되지 않으면 현재 속도를 표시합니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:380
+#, python-brace-format
+msgid "Current rate: {}"
+msgstr "현재 속도: {}"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:393
+msgid ""
+"+/-NUMBER Manages favorite tracks. + adds the current track to favorites."
+" - removes a track requested from favorites. If a number is specified "
+"after +/-, adds/removes a track with that number"
+msgstr ""
+"+/-NUMBER 즐겨찾는 트랙을 관리합니다. +는 현재 트랙을 즐겨찾기에 추가하고, -는 즐겨찾기에서 트랙을 제거합니다. +/- "
+"뒤에 숫자가 지정되면 해당 숫자의 트랙을 추가/제거합니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:399
+msgid "This command is not available for guest users"
+msgstr "게스트 사용자는 사용할 수 없는 명령어입니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:433
+msgid "This track is not in favorites"
+msgstr "해당 트랙은 즐겨찾기에 없습니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:467
+msgid "Gets a direct link to the current track"
+msgstr "현재 트랙의 직접 링크를 가져옵니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:475
+msgid "URL is not available"
+msgstr "URL을 사용할 수 없습니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:483
+msgid ""
+"NUMBER Plays a track with  the given number from a list of recent tracks."
+" Without a number shows recent tracks"
+msgstr "NUMBER 최근 트랙 목록에서 해당 번호의 트랙을 재생합니다. 숫자가 없으면 최근 트랙이 표시됩니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:515
+msgid "Downloads the current track and uploads it to the channel."
+msgstr "현재 트랙을 다운로드하고 채널에 업로드합니다."
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:524
+msgid "Cannot upload file to channel"
+msgstr "채널에 파일을 업로드할 수 없습니다"
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:530
+msgid "Downloading..."
+msgstr "다운로드 중..."
+
+#: C:/TTMediaBot/bot/commands/user_commands.py:531
+msgid "Live streams cannot be downloaded"
+msgstr "실시간 스트림은 다운로드할 수 없습니다"
+
+#: C:/TTMediaBot/bot/connectors/tt_player_connector.py:40
+#, python-brace-format
+msgid "Playing: {track_name}"
+msgstr "{track_name} 재생 중"
+
+#: C:/TTMediaBot/bot/connectors/tt_player_connector.py:46
+#, python-brace-format
+msgid "Playing: {stream_url}"
+msgstr "{stream_url} 재생 중"
+
+#: C:/TTMediaBot/bot/connectors/tt_player_connector.py:57
+#, python-brace-format
+msgid "Paused: {track_name}"
+msgstr "{track_name} 일시 정지됨"
+
+#: C:/TTMediaBot/bot/connectors/tt_player_connector.py:63
+#, python-brace-format
+msgid "Paused: {stream_url}"
+msgstr "{stream_url} 일시 정지됨"
+
+#: C:/TTMediaBot/bot/connectors/tt_player_connector.py:89
+msgid "No other users detected. Playback will stop in 30 seconds."
+msgstr "다른 사용자가 없으므로 30초 후 재생을 정지합니다."
+
+#: C:/TTMediaBot/bot/connectors/tt_player_connector.py:94
+msgid "Stopping playback due to no other users."
+msgstr "다른 사용자가 없어 재생을 정지했습니다."
+
+#: C:/TTMediaBot/bot/services/yam.py:47
+msgid "Token is not provided"
+msgstr "토큰이 제공되지 않았습니다"
+
+#: C:/TTMediaBot/bot/services/yam.py:51
+msgid "You don't have Yandex Plus"
+msgstr "Yandex Plus 구독자가 아닙니다"
+
