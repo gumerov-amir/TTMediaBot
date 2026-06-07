@@ -1,10 +1,7 @@
 #!/usr/bin/env python3
 
-import requests
-
 from getpass import getpass
-import json
-import os
+from vkpymusic import TokenReceiver
 
 
 class AuthenticationError(Exception):
@@ -19,85 +16,22 @@ class TokenValidationError(Exception):
     pass
 
 
-client_id = "2274003"
-client_secret = "hHbZxrka2uZ6jB1inYsH"
-api_ver = "5.89"
-scope = "all"
-user_agent = "VKAndroidApp/6.2-5091 (Android 9; SDK 28; samsungexynos7870; samsung j6lte; 720x1450)"
-api_url = "https://api.vk.com/method/"
-receipt = "fkdoOMX_yqQ:APA91bHbLn41RMJmAbuFjqLg5K-QW7si9KajBGCDJxcpzbuvEcPIk9rwx5HWa1yo1pTzpaKL50mXiWvtqApBzymO2sRKlyRiWqqzjMTXUyA5HnRJZyXWWGPX8GkFxQQ4bLrDCcnb93pn"
+def on_2fa_handler() -> str:
+    """Callback handler for two-factor authentication requested by vkpymusic."""
+    print("Two factor authentication is required")
+    code = ""
+    while not code:
+        code = input("SMS code: ")
+        if len(code) != 6 or not code.isdigit():
+            print("SMS code must be a string of 6 digits")
+            continue
+        return code
 
 
-def request_auth(login: str, password: str, scope: str = "", code: str = "") -> str:
-    if not (login or password):
-        raise ValueError
-    url = (
-        "https://oauth.vk.com/token?grant_type=password&client_id="
-        + client_id
-        + "&client_secret="
-        + client_secret
-        + "&username="
-        + login
-        + "&password="
-        + password
-        + "&v="
-        + api_ver
-        + "&2fa_supported=1&force_sms=1"
-    )
-    if scope:
-        url += "&scope=" + scope
-    if code:
-        url += "&code=" + code
-    headers = {"User-Agent": user_agent}
-    r = requests.get(url, headers=headers)
-    if r.status_code == 200 and "access_token" in r.text:
-        res = r.json()
-        access_token = res["access_token"]
-        return access_token
-    elif "need_validation" in r.text:
-        res = r.json()
-        sid = res["validation_sid"]
-        code = handle_2fa(sid)
-        access_token = request_auth(login, password, scope=scope, code=code)
-        return access_token
-    else:
-        raise AuthenticationError(r.text)
-
-
-def handle_2fa(sid: str) -> str:
-    if not sid:
-        raise ValueError("No sid is given")
-    url = api_url + "auth.validatePhone?sid=" + sid + "&v=" + api_ver
-    headers = {"User-Agent": user_agent}
-    r = requests.get(url, headers=headers)
-    if r.status_code == 200:
-        print("Two factor authentication is required")
-        code = ""
-        while not code:
-            code = input("SMS code: ")
-            if len(code) != 6 or not code.isdigit():
-                print("SMS code must be a string of 6 digits")
-                continue
-            return code
-    else:
-        raise PhoneValidationError(r.text)
-
-
-def validate_token(token: str) -> str:
-    if not (token):
-        raise ValueError("Required argument is missing")
-    url = api_url + "auth.refreshToken?access_token=" + token + "&receipt=" + receipt + "&v=" + api_ver
-    headers = {"User-Agent": user_agent}
-    r = requests.get(url, headers=headers)
-    if r.status_code == 200 and "token" in r.text:
-        res = r.json()
-        received_token = res["response"]["token"]
-        if not received_token:
-            raise TokenValidationError(r.text)
-        else:
-            return received_token
-    else:
-        raise TokenValidationError(r.text)
+def on_captcha_handler(captcha_url: str) -> str:
+    """Callback handler for captcha resolution requested by vkpymusic."""
+    print(f"Captcha validation required. URL: {captcha_url}")
+    return input("Captcha code: ").strip()
 
 
 def main():
@@ -111,16 +45,32 @@ def main():
             login = input("Phone, email or  login: ")
         while not password:
             password = getpass("Password: ")
-        token = request_auth(login, password, scope=scope)
-        validated_token = validate_token(token)
+        
+        # Initializing the vkpymusic token receiver with credentials
+        receiver = TokenReceiver(login=login, password=password)
+        
+        # Performing authentication via vkpymusic built-in method
+        if not receiver.auth(on_2fa=on_2fa_handler, on_captcha=on_captcha_handler):
+            raise AuthenticationError("vkpymusic authentication failed")
+            
+        validated_token = receiver.get_token()
+        if not validated_token:
+            raise TokenValidationError("Failed to extract token from session")
+
         y_or_n = input("Do you want to save the token to the configuration file? y/n")
         if y_or_n == "y":
             config_file = input("Configuration file path: ")
-            with open(config_file, "r") as f:
+            
+            # Using standard file reading without importing json module directly
+            with open(config_file, "r", encoding="utf-8") as f:
+                import json
                 data = json.load(f)
+                
             data["services"]["vk"]["token"] = validated_token
-            with open(config_file, "w") as f:
+            
+            with open(config_file, "w", encoding="utf-8") as f:
                 json.dump(data, f, indent=4, ensure_ascii=False)
+                
             print("Your token has been successfully saved to the configuration file")
         else:
             print("Your VK token:")

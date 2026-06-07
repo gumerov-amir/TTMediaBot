@@ -23,6 +23,7 @@ class PlayerModel(BaseModel):
     volume_fading: bool = True
     volume_fading_interval: float = 0.025
     seek_step: int = 5
+    mode:str = "st"
     player_options: Dict[str, Any] = {}
 
 class TeamTalkUserModel(BaseModel):
@@ -57,19 +58,21 @@ class TeamTalkModel(BaseModel):
 
 class VkModel(BaseModel):
     enabled: bool = True
+    user_agent: str = ""
     token: str = ""
+    tracks_limit: int = 300
 
 
-class YtModel(BaseModel):
-    enabled: bool = True
 class YtModel(BaseModel):
     enabled: bool = True
     cookiefile_path: str = ""
+    tracks_limit: int = 300
 
 
 class YamModel(BaseModel):
     enabled: bool = True
     token: str = ""
+    tracks_limit: int = 300
 
 
 class ServicesModel(BaseModel):

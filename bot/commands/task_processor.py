@@ -2,7 +2,7 @@ from __future__ import annotations
 from threading import Thread
 from queue import Queue
 from typing import TYPE_CHECKING, Any, Callable
-
+from logging import error
 if TYPE_CHECKING:
     from bot.commands import CommandProcessor
 
@@ -27,4 +27,7 @@ class TaskProcessor(Thread):
         while True:
             task = self.task_queue.get()
             if task.command_id == self.command_processor.current_command_id:
-                task.function(*task.args, **task.kwargs)
+                try:
+                    task.function(*task.args, **task.kwargs)
+                except Exception as e:
+                    error(e, exc_info=True)

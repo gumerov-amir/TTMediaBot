@@ -7,5 +7,5 @@ pyshorteners
 requests
 vk-api
 yandex_music
-youtube-search-python
+git+https://github.com/CertifiedCoders/youtube-search-python.git
 yt-dlp

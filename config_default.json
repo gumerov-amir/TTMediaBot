@@ -19,6 +19,7 @@
         "volume_fading": true,
         "volume_fading_interval": 0.025,
         "seek_step": 5,
+        "mode": "st",
         "player_options": {}
     },
     "teamtalk": {
@@ -52,15 +53,19 @@
         "default_service": "vk",
         "vk": {
             "enabled": true,
-            "token": ""
+            "user_agent": "",
+            "token": "",
+            "tracks_limit": 300
         },
         "yam": {
             "enabled": true,
-            "token": ""
+            "token": "",
+            "tracks_limit": 300
         },
         "yt": {
             "enabled": true,
-            "cookiefile_path": ""
+            "cookiefile_path": "",
+            "tracks_limit": 100
         }
     },
     "logger": {

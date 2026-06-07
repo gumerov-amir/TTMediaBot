@@ -99,7 +99,7 @@ class YtService(_Service):
             ]
 
     def search(self, query: str) -> List[Track]:
-        search = VideosSearch(query, limit=300).result()
+        search = VideosSearch(query, limit=self.config.tracks_limit).result()
         if search["result"]:
             tracks: List[Track] = []
             for video in search["result"]:

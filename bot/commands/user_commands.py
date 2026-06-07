@@ -35,6 +35,14 @@ class PlayPauseCommand(Command):
             "QUERY Plays tracks found for the query. If no query is given, plays or pauses current track"
         )
 
+    def getMessageForUser(self,track,arg = None):
+        return arg and self.translator.translate("Playing {} {}").format(
+            track.name,
+            arg
+        ) or self.translator.translate("Playing {}").format(
+            track.name
+        )
+
     def __call__(self, arg: str, user: User) -> Optional[str]:
         if arg:
             self.run_async(
@@ -52,21 +60,19 @@ class PlayPauseCommand(Command):
                         ).format(nickname=user.nickname, request=arg),
                         type=2,
                     )
-                self.run_async(self.player.play, track_list)
-                return self.translator.translate("Playing {}").format(
-                    track_list[0].name
-                )
+                self.player.play(track_list)
+                return self.getMessageForUser(self.player.track)
             except errors.NothingFoundError:
                 return self.translator.translate("Nothing is found for your query")
             except errors.ServiceError:
                 return self.translator.translate(
                     "The selected service is currently unavailable"
                 )
-        else:
+        elif self.player.track:
             if self.player.state == State.Playing:
-                self.run_async(self.player.pause)
-            elif self.player.state == State.Paused:
-                self.run_async(self.player.play)
+                self.player.pause()
+            else:
+                self.player.play()
 
 
 class PlayUrlCommand(Command):
@@ -175,7 +181,7 @@ class SeekForwardCommand(Command):
             self.player.seek_forward()
 
 
-class NextTrackCommand(Command):
+class NextTrackCommand(PlayPauseCommand):
     @property
     def help(self) -> str:
         return self.translator.translate("Plays next track")
@@ -183,16 +189,13 @@ class NextTrackCommand(Command):
     def __call__(self, arg: str, user: User) -> Optional[str]:
         try:
             self.player.next()
-            return self.translator.translate("Playing {}").format(
-                self.player.track.name
-            )
+            return self.getMessageForUser(self.player.track)
         except errors.NoNextTrackError:
-            return self.translator.translate("No next track")
-        except errors.NothingIsPlayingError:
-            return self.translator.translate("Nothing is playing")
+            return self.translator.translate    ("No next track")
+        except errors.NothingIsPlayingError:            return self.translator.translate("Nothing is playing")
 
 
-class PreviousTrackCommand(Command):
+class PreviousTrackCommand(PlayPauseCommand):
     @property
     def help(self) -> str:
         return self.translator.translate("Plays previous track")
@@ -200,9 +203,7 @@ class PreviousTrackCommand(Command):
     def __call__(self, arg: str, user: User) -> Optional[str]:
         try:
             self.player.previous()
-            return self.translator.translate("Playing {}").format(
-                self.player.track.name
-            )
+            return self.getMessageForUser(self.player.track)
         except errors.NoPreviousTrackError:
             return self.translator.translate("No previous track")
         except errors.NothingIsPlayingError:
@@ -329,7 +330,7 @@ class ServiceCommand(Command):
         return help
 
 
-class SelectTrackCommand(Command):
+class SelectTrackCommand(PlayPauseCommand):
     @property
     def help(self) -> str:
         return self.translator.translate(
@@ -347,9 +348,7 @@ class SelectTrackCommand(Command):
                 else:
                     return self.translator.translate("Incorrect number")
                 self.player.play_by_index(index)
-                return self.translator.translate("Playing {} {}").format(
-                    arg, self.player.track.name
-                )
+                return self.getMessageForUser(self.player.track,arg)
             except errors.IncorrectTrackIndexError:
                 return self.translator.translate("Out of list")
             except errors.NothingIsPlayingError:
@@ -358,9 +357,7 @@ class SelectTrackCommand(Command):
                 raise errors.InvalidArgumentError
         else:
             if self.player.state != State.Stopped:
-                return self.translator.translate("Playing {} {}").format(
-                    self.player.track_index + 1, self.player.track.name
-                )
+                return self.getMessageForUser(self.player.track,self.player.track_index+1)
             else:
                 return self.translator.translate("Nothing is playing")
 

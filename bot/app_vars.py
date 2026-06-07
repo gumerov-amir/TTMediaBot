@@ -18,7 +18,7 @@ License: Mit License\
 )
 fallback_service = "yt"
 loop_timeout = 0.01
-max_message_length = 256
+max_message_length = 511 #bytes,excluding null terminated character.
 recents_max_lenth = 32
 tt_event_timeout = 2
 

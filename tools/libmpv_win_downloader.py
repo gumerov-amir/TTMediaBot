@@ -15,9 +15,8 @@ path = os.path.dirname(path)
 sys.path.append(path)
 import downloader
 
-
 url = "https://sourceforge.net/projects/mpv-player-windows/files/libmpv/"
-headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'}
+headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:148.0) Gecko/20100101 Firefox/148.0'}
 
 def get_page(url):
     r = requests.get(url, headers=headers)
@@ -40,7 +39,7 @@ def download():
         version_url = table.find("a", href=True, title=re.compile("i686-")).get("href")
     download_page = get_page(version_url)
     download_url = get_redirect_url(download_page)
-    downloader.download_file(download_url, os.path.join(path, "libmpv.7z"))
+    downloader.download_file(download_url, os.path.join(path, "libmpv.7z"), headers = headers)
 
 def extract():
     temp_path = os.path.join(path, "libmpv")
@@ -62,8 +61,8 @@ def move_file():
     shutil.move(source, dest)
 
 def clean():
-    os.remove(os.path.join(os.getcwd(), "libmpv.7z"))
-    shutil.rmtree(os.path.join(os.getcwd(), "libmpv"))
+    os.remove(os.path.join(path, "libmpv.7z"))
+    shutil.rmtree(os.path.join(path, "libmpv"))
 
 def install():
     if sys.platform != "win32":

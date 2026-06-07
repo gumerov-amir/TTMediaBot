@@ -1,14 +1,12 @@
 from __future__ import annotations
-import logging
 from typing import Any, Dict, List, Optional, TYPE_CHECKING
 from urllib.parse import urlparse
+import logging
+import mpv
+from vkpymusic import Service
 
 if TYPE_CHECKING:
     from bot import Bot
-
-import mpv
-import requests
-import vk_api
 
 from bot.config.models import VkModel
 from bot.player.track import Track
@@ -22,12 +20,8 @@ class VkService(_Service):
         self.config = config
         self.name = "vk"
         self.hostnames = [
-            "vk.com",
-            "www.vk.com",
-            "vkontakte.ru",
-            "www.vkontakte.ru",
-            "m.vk.com",
-            "m.vkontakte.ru",
+            "vk.com", "://vk.com", "vkontakte.ru", 
+            "www.vkontakte.ru", "://vk.com", "m.vkontakte.ru"
         ]
         self.is_enabled = config.enabled
         self.error_message = ""
@@ -35,44 +29,40 @@ class VkService(_Service):
         self.help = ""
         self.format = "mp3"
         self.hidden = False
+        self.service: Optional[Service] = None
+
+    def initialize(self) -> None:
+        self.service = Service(
+            token=self.config.token, 
+            user_agent=self.config.user_agent
+        )
 
     def download(self, track: Track, file_path: str) -> None:
         if ".m3u8" not in track.url:
             super().download(track, file_path)
             return
-        _mpv = mpv.MPV(
-            **{
-                "demuxer_lavf_o": "http_persistent=false",
-                "ao": "null",
-                "ao_null_untimed": True,
-            }
-        )
+        
+        _mpv = mpv.MPV(demuxer_lavf_o="http_persistent=false", ao="null", ao_null_untimed=True)
         _mpv.play(track.url)
         _mpv.record_file = file_path
         while not _mpv.idle_active:
             pass
         _mpv.terminate()
 
-    def initialize(self) -> None:
-        http = requests.Session()
-        http.headers.update(
-            {
-                "User-agent": "VKAndroidApp/6.2-5091 (Android 9; SDK 28; samsungexynos7870; samsung j6lte; 720x1450)"
-            }
-        )
-        self._session = vk_api.VkApi(
-            token=self.config.token, session=http, api_version="5.89"
-        )
-        self.api = self._session.get_api()
-        try:
-            self.api.account.getInfo()
-        except (
-            vk_api.exceptions.ApiHttpError,
-            vk_api.exceptions.ApiError,
-            requests.exceptions.ConnectionError,
-        ) as e:
-            logging.error(e)
-            raise errors.ServiceError(e)
+    def _to_tracks(self, songs: List[Song]) -> List[Track]:
+        """Вспомогательный метод для быстрой конвертации объектов vkpymusic в объекты Bot Track."""
+        tracks = [
+            Track(
+                service=self.name,
+                url=song.url,
+                name=f"{song.artist} - {song.title}",
+                format=self.format,
+            )
+            for song in songs if song.url
+        ]
+        if not tracks:
+            raise errors.NothingFoundError()
+        return tracks
 
     def get(
         self,
@@ -80,69 +70,36 @@ class VkService(_Service):
         extra_info: Optional[Dict[str, Any]] = None,
         process: bool = False,
     ) -> List[Track]:
-        parsed_url = urlparse(url)
-        path = parsed_url.path[1::]
+        path = urlparse(url).path.lstrip("/")
         if path.startswith("video-"):
             raise errors.ServiceError()
+
         try:
+            # 1. Ссылка на плейлист или альбом
             if "music/" in path:
-                id = path.split("/")[-1]
-                ids = id.split("_")
-                o_id = ids[0]
-                p_id = ids[1]
-                audios = self.api.audio.get(owner_id=int(o_id), album_id=int(p_id))
+                owner_id, playlist_id = path.split("/")[-1].split("_")
+                playlist = self.service.get_songs_by_playlist_id(int(owner_id), int(playlist_id))
+                songs = playlist.songs if playlist else []
+
+            # 2. Ссылка на конкретный трек (audioXXXX_XXXX)
             elif "audio" in path:
-                audios = {
-                    "count": 1,
-                    "items": self.api.audio.getById(audios=[path[5::]]),
-                }
+                owner_id, song_id = path.replace("audio", "").split("_")
+                song = self.service.get_song_by_id(int(owner_id), int(song_id))
+                songs = [song] if song else []
+
+            # 3. Прямой ID пользователя или сообщества (например, ://vk.com или ://vk.com)
             else:
-                object_info = self.api.utils.resolveScreenName(screen_name=path)
-                if object_info["type"] == "group":
-                    id = -object_info["object_id"]
-                else:
-                    id = object_info["object_id"]
-                audios = self.api.audio.get(owner_id=id, count=6000)
-            if "count" in audios and audios["count"] > 0:
-                tracks: List[Track] = []
-                for audio in audios["items"]:
-                    if "url" not in audio or not audio["url"]:
-                        continue
-                    track = Track(
-                        service=self.name,
-                        url=audio["url"],
-                        name="{} - {}".format(audio["artist"], audio["title"]),
-                        format=self.format,
-                    )
-                    tracks.append(track)
-                if tracks:
-                    return tracks
-                else:
-                    raise errors.NothingFoundError()
-            else:
-                raise errors.NothingFoundError
-        except NotImplementedError as e:
-            print("vk get error")
-            print(e)
-            raise NotImplementedError()
+                songs = self.service.get_songs_by_userid(int(path), count=100)
+
+            return self._to_tracks(songs)
+
+        except (ValueError, Exception) as e:
+            logging.error(f"Ошибка при обработке VK URL '{url}': {e}")
+            raise errors.NothingFoundError()
 
     def search(self, query: str) -> List[Track]:
-        results = self.api.audio.search(q=query, count=300, sort=0)
-        if "count" in results and results["count"] > 0:
-            tracks: List[Track] = []
-            for track in results["items"]:
-                if "url" not in track or not track["url"]:
-                    continue
-                track = Track(
-                    service=self.name,
-                    url=track["url"],
-                    name="{} - {}".format(track["artist"], track["title"]),
-                    format=self.format,
-                )
-                tracks.append(track)
-            if tracks:
-                return tracks
-            else:
-                raise errors.NothingFoundError()
-        else:
-            raise errors.NothingFoundError()
+        if not self.service:
+            raise errors.ServiceError("Сервис VK не инициализирован")
+
+        songs = self.service.search_songs_by_text(query, self.config.tracks_limit)
+        return self._to_tracks(songs)

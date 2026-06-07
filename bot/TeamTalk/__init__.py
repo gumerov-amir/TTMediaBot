@@ -39,37 +39,50 @@ def _str(data: AnyStr) -> AnyStr:
 
 
 def split(text: str, max_length: int = app_vars.max_message_length) -> List[str]:
-    if len(text) <= max_length:
+    text = text.replace("","")
+    def Len(text: str):
+        return len(text.encode())
+    space_len = Len(" ")
+    new_line_len = Len("\n")
+    if Len(text) <= max_length:
         lines = [text]
     else:
         lines = [""]
         for line in text.split("\n"):
-            if len(line) <= max_length:
-                if len(lines[-1]) > 0 and len(lines[-1]) + len(line) + 1 <= max_length:
+            if Len(line) <= max_length:
+                if Len(lines[-1]) > 0 and Len(lines[-1]) + Len(line) + new_line_len <= max_length:
                     lines[-1] += "\n" + line
-                elif len(lines) == 1 and len(lines[0]) == 0:
+                elif len(lines) == 1 and Len(lines[0]) == 0:
                     lines[0] = line
                 else:
                     lines.append(line)
             else:
+                if len(lines) == 1 and Len(lines[0]) == 0:
+                    lines.clear()
                 words = [""]
                 for word in line.split(" "):
-                    if len(word) <= max_length:
+                    if Len(word) <= max_length:
                         if (
-                            len(words[-1]) > 0
-                            and len(words[-1]) + len(word) + 1 <= max_length
+                            Len(words[-1]) > 0
+                            and Len(words[-1]) + Len(word) + space_len <= max_length
                         ):
                             words[-1] += " " + word
-                        elif len(words) == 1 and len(words[0]) == 0:
-                            words[0] == word
+                        elif len(words) == 1 and Len(words[0]) == 0:
+                            words[0] = word
                         else:
                             words.append(word)
                     else:
                         chunk = word
-                        for _ in range(0, int(len(chunk) / max_length) + 1):
-                            words.append(chunk[0:max_length])
-                            chunk = chunk[max_length::]
-                lines += words
+                        # We dont know exact number of iterations,because we can get an errors during encoding,so length decoded chunk can be less than max_length.
+                        while Len(chunk) > 0:
+                            old_len = Len(chunk)
+                            words.append(chunk.encode()[0:max_length]).decode(errors="ignore")
+                            chunk = chunk[len(words[-1])::]
+                            # avoiding of infinit loop
+                            if Len(chunk) == old_len:
+                                break
+                if not (len(words) == 1 and len(words[0]) == 0):
+                    lines += words
     return lines
 
 

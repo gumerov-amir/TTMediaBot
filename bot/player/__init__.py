@@ -12,12 +12,24 @@ from bot.player.enums import Mode, State, TrackType
 from bot.player.track import Track
 from bot.sound_devices import SoundDevice, SoundDeviceType
 
+from yt_dlp.utils import YoutubeDLError
 
 if TYPE_CHECKING:
     from bot import Bot
 
 
 class Player:
+    @property
+    def track(self) -> Track:
+        if self.track_index >= 0 and self.track_index <len(self.track_list):
+            return self.track_list[self.track_index]
+        elif not hasattr(self, "_track"):
+            self._track = Track()
+        return self._track
+    @track.setter
+    def track(self, value: Track) -> None:
+        self._track = value
+
     def __init__(self, bot: Bot):
         self.config = bot.config.player
         self.cache = bot.cache
@@ -41,7 +53,7 @@ class Player:
         self.track: Track = Track()
         self.track_index: int = -1
         self.state = State.Stopped
-        self.mode = Mode.TrackList
+        self.mode = Mode(self.config.mode)
         self.volume = self.config.default_volume
 
     def initialize(self) -> None:
@@ -67,20 +79,24 @@ class Player:
         tracks: Optional[List[Track]] = None,
         start_track_index: Optional[int] = None,
     ) -> None:
-        if tracks != None:
-            self.track_list = tracks
-            if not start_track_index and self.mode == Mode.Random:
-                self.shuffle(True)
-                self.track_index = self._index_list[0]
-                self.track = self.track_list[self.track_index]
-            else:
-                self.track_index = start_track_index if start_track_index else 0
-                self.track = tracks[self.track_index]
-            self._play(self.track.url)
+        if tracks != None or self.state ==State.Stopped:
+            if tracks != None:
+                self.track_list = tracks
+                if not start_track_index and self.mode == Mode.Random:
+                    self.shuffle(True)
+                    self.track_index = self._index_list[0]
+                elif start_track_index != self.track_index:
+                    self.track_index = start_track_index if start_track_index else 0
+            try:
+                self._play(self.track.url)
+            except YoutubeDLError:
+                if (len(    tracks)==1):
+                    raise   
+                self.next()
         else:
             self._player.pause = False
+            self.state = State.Playing
         self._player.volume = self.volume
-        self.state = State.Playing
 
     def pause(self) -> None:
         self.state = State.Paused
@@ -89,9 +105,6 @@ class Player:
     def stop(self) -> None:
         self.state = State.Stopped
         self._player.stop()
-        self.track_list = []
-        self.track = Track()
-        self.track_index = -1
 
     def _play(self, arg: str, save_to_recents: bool = True) -> None:
         if save_to_recents:
@@ -105,60 +118,44 @@ class Player:
             self.cache_manager.save()
         self._player.pause = False
         self._player.play(arg)
+        self.state = State.Playing
 
-    def next(self) -> None:
-        track_index = self.track_index
-        if len(self.track_list) > 0:
+    def move(self, forward: bool) -> None:
+        error = forward and errors.NoNextTrackError or errors.NoPreviousTrackError
+        step = forward and 1 or -1
+        prev_index = track_index = self.track_index
+        def raiseErrorIfNeed():
+            if track_index <= 0 and not forward or track_index >= len(self.track_list) - 1 and forward:
+                self.track_index = prev_index
+                raise error
+        raiseErrorIfNeed()
+        track_index = self.track_index + step
+        range_start = track_index
+        range_end = forward and len(self.track_list) or -1
+        for i in range(range_start,range_end,step):
             if self.mode == Mode.Random:
-                try:
-                    track_index = self._index_list[
-                        self._index_list.index(self.track_index) + 1
-                    ]
-                except IndexError:
-                    track_index = 0
+                track_index = self._index_list[
+                    self._index_list.index(track_index)
+                ]
             else:
-                track_index += 1
-        else:
-            track_index = 0
-        try:
-            self.play_by_index(track_index)
-        except errors.IncorrectTrackIndexError:
-            if self.mode == Mode.RepeatTrackList:
-                self.play_by_index(0)
-            else:
-                raise errors.NoNextTrackError()
+                track_index = i
+            try:
+                self.play_by_index(track_index)
+                break
+            except YoutubeDLError as e:
+                error = e
+                raiseErrorIfNeed()
 
-    def previous(self) -> None:
-        track_index = self.track_index
-        if len(self.track_list) > 0:
-            if self.mode == Mode.Random:
-                try:
-                    track_index = self._index_list[
-                        self._index_list.index(self.track_index) - 1
-                    ]
-                except IndexError:
-                    track_index = len(self.track_list) - 1
-            else:
-                if track_index == 0 and self.mode != Mode.RepeatTrackList:
-                    raise errors.NoPreviousTrackError
-                else:
-                    track_index -= 1
-        else:
-            track_index = 0
-        try:
-            self.play_by_index(track_index)
-        except errors.IncorrectTrackIndexError:
-            if self.mode == Mode.RepeatTrackList:
-                self.play_by_index(len(self.track_list) - 1)
-            else:
-                raise errors.NoPreviousTrackError
+    def next(self, prev_index: Optional[int] =-1) -> None:
+        self.move(True)
+        
+    def previous(self, prev_index: Optional[int] =-1) -> None:
+        self.move(False)
 
     def play_by_index(self, index: int) -> None:
-        if index < len(self.track_list) and index >= (0 - len(self.track_list)):
-            self.track = self.track_list[index]
-            self.track_index = self.track_list.index(self.track)
+        if index < len(self.track_list) and index >= 0:
+            self.track_index = index
             self._play(self.track.url)
-            self.state = State.Playing
         else:
             raise errors.IncorrectTrackIndexError()
 
@@ -265,7 +262,7 @@ class Player:
             else:
                 try:
                     self.next()
-                except errors.NoNextTrackError:
+                except Exception:
                     self.stop()
 
     def on_metadata_update(self, name: str, value: Any) -> None:
