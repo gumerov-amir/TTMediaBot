@@ -68,7 +68,29 @@ output should be null audio output, input should be pulse.
 * The correct number will be the last one as input, that is, if we selected the output as line 1 with the number 3, the input device would be line 1 with number 7 of the two options, number 5 and number 7.
 * The same method applies to all numbers and all Input / Outputs.
 
-# support us
+note also that you don't have to downgrade surten libraries like httpx, instead if you aren't on a proxy you can patch httpx and request/related instead.
+
+1: change the following script in "C:\Users\yourusername\AppData\Local\Programs\Python\Python312\Lib\site-packages\requestsreurn httpx.post(self.url, headers=self.headers, data=self.data, proxies=self.proxies)
+to:
+return httpx.post(self.url, headers=self.headers, data=self.data)
+2. Save the file.
+Step 2: Clear Python Cache
+• Remove cached files to ensure the patch takes effect:
+rmdir /s /q C:\Users\HP\AppData\Local\Programs\Python\Python312\Lib\site-packages\youtubesearchpython\__pycache__
+rmdir /s /q filepath\TTMediaBot-master\__pycache__
+Step 3: Verify config.json
+• Ensure config.json is set to avoid proxies:
+"player": {
+    "default_volume": 50,
+    "max_volume": 100,
+    "volume_fading": true,
+    "volume_fading_interval": 0.025,
+    "seek_step": 5,
+    "youtube_cookies_file": "",
+    "player_options": {
+        "noproxy": "*"
+        
+        # support us
 * yoomoney: https://yoomoney.ru/to/4100117354062028
 
 # contacts
