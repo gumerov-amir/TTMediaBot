@@ -44,21 +44,6 @@ class OptionBackToRootChannelCommand(Command):
             self.config.general.back_to_root_channel = True
             return self.translator.translate("Users can move the bot to their channels.")
 
-
-class SetRootChannelCommand(Command):
-    @property
-    def help(self) -> str:
-        return self.translator.translate(
-            "Sets the current bot channel as the return channel used by the go command."
-        )
-
-    def __call__(self, arg: str, user: User) -> Optional[str]:
-        self.config.general.root_channel_id = self.ttclient.channel.id
-        self.config.general.back_to_root_channel = True
-        return self.translator.translate(
-            "Return channel set to the current channel ID: {channel_id}."
-        ).format(channel_id=self.config.general.root_channel_id)
-
 class BlockCommandCommand(Command):
     @property
     def help(self) -> str:
@@ -151,10 +136,15 @@ class ClearCacheCommand(Command):
 
     def __call__(self, arg: str, user: User) -> Optional[str]:
         if not arg:
+            try:
+                for track in self.cache.recents:
+                    track.resume_position = None
+                    track.resume_duration = None
+            except Exception:
+                ...
             self.cache.recents.clear()
             self.cache.favorites.clear()
             self.cache.queue.clear()
-            self.cache.positions.clear()
             self.cache_manager.save()
             return self.translator.translate("Cache cleared")
         elif arg == "r":
