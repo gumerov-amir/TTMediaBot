@@ -45,6 +45,7 @@ class Service(ABC):
 from bot.services.vk import VkService
 from bot.services.yam import YamService
 from bot.services.yt import YtService
+from bot.services.dropbox import DropboxService
 
 
 class ServiceManager:
@@ -53,7 +54,9 @@ class ServiceManager:
         self.services: Dict[str, Service] = {
             "vk": VkService(bot, self.config.vk),
             "yam": YamService(bot, self.config.yam),
+            "dropbox": DropboxService(bot, self.config.dropbox),
             "yt": YtService(bot, self.config.yt),
+            "dropbox": DropboxService(bot, self.config.dropbox),
         }
         self.service: Service = self.services[self.config.default_service]
         self.fallback_service = app_vars.fallback_service

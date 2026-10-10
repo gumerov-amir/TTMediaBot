@@ -35,7 +35,10 @@ class CommandProcessor:
         self.commands_dict = {
             "h": user_commands.HelpCommand,
             "a": user_commands.AboutCommand,
+            "t": user_commands.TimeCommand,
+            "tr": user_commands.TimeRemainingCommand,
             "p": user_commands.PlayPauseCommand,
+            "go": user_commands.MoveUsersCommand,
             "u": user_commands.PlayUrlCommand,
             "sv": user_commands.ServiceCommand,
             "s": user_commands.StopCommand,
@@ -45,12 +48,17 @@ class CommandProcessor:
             "sb": user_commands.SeekBackCommand,
             "sf": user_commands.SeekForwardCommand,
             "v": user_commands.VolumeCommand,
+            "mu": user_commands.MuteCommand,
             "sp": user_commands.SpeedCommand,
+            "pi": user_commands.PitchCommand,
+            "ep": user_commands.EnablePositionsCommand,
+            "bb": user_commands.BassBoostCommand,
             "f": user_commands.FavoritesCommand,
             "m": user_commands.ModeCommand,
             "gl": user_commands.GetLinkCommand,
             "dl": user_commands.DownloadCommand,
             "r": user_commands.RecentsCommand,
+            "q": user_commands.QueueCommand,
         }
         self.admin_commands_dict = {
             "cg": admin_commands.ChangeGenderCommand,
@@ -69,8 +77,14 @@ class CommandProcessor:
             "sc": admin_commands.SaveConfigCommand,
             "va": admin_commands.VoiceTransmissionCommand,
             "rs": admin_commands.RestartCommand,
-            "q": admin_commands.QuitCommand,
+            "qq": admin_commands.QuitCommand,
+            "quit": admin_commands.QuitCommand,
             "gcid": admin_commands.GetChannelIDCommand,
+            "sm": admin_commands.OptionShowMetaCommand,
+            "br": admin_commands.OptionBackToRootChannelCommand,
+            "backc": admin_commands.SetRootChannelCommand,
+            "update": admin_commands.UpdateCommand,
+            "upd": admin_commands.UpdateCommand,
         }
 
     def run(self):
@@ -81,8 +95,16 @@ class CommandProcessor:
         command_thread.start()
 
     def _run(self, message: Message) -> None:
+        parts = [part.strip() for part in message.text.split("|")]
+        for part in parts:
+            if not part:
+                continue
+            self._run_single(message, part)
+
+    def _run_single(self, message: Message, text: str) -> None:
+        command_name = ""
         try:
-            command_name, arg = self.parse_command(message.text)
+            command_name, arg = self.parse_command(text)
             if self.check_access(message.user, command_name):
                 command_class = self.get_command(command_name, message.user)
                 command = command_class(self)
@@ -94,10 +116,16 @@ class CommandProcessor:
                         message.user,
                     )  # here was command.ttclient later
         except errors.InvalidArgumentError:
-            self.ttclient.send_message(
-                self.help(command_name, message.user),
-                message.user,
-            )
+            if command_name:
+                self.ttclient.send_message(
+                    self.help(command_name, message.user),
+                    message.user,
+                )
+            else:
+                self.ttclient.send_message(
+                    self.translator.translate('Unknown command. Send "h" for help.'),
+                    message.user,
+                )
         except errors.AccessDeniedError as e:
             self.ttclient.send_message(str(e), message.user)
         except (errors.ParseCommandError, errors.UnknownCommandError):
@@ -122,7 +150,10 @@ class CommandProcessor:
                 raise errors.AccessDeniedError(
                     self.translator.translate("You are banned"),
                 )
-            elif user.channel.id != self.ttclient.channel.id:
+            if command == "go":
+                return True
+
+            elif user.channel.id != self.ttclient.channel.id and command != "go":
                 raise errors.AccessDeniedError(
                     self.translator.translate("You are not in bot's channel"),
                 )
@@ -164,6 +195,9 @@ class CommandProcessor:
             if user.is_admin:
                 for i in list(self.admin_commands_dict):
                     help_strings.append(self.help(i, user))
+            help_strings.append(
+                self.translator.translate('Tip: use "|" to chain commands (e.g., "t | v 30")')
+            )
             return "\n".join(help_strings)
 
     def parse_command(self, text: str) -> Tuple[str, str]:

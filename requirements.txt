@@ -1,3 +1,4 @@
+httpx
 babel
 beautifulsoup4
 patool
@@ -8,4 +9,7 @@ requests
 vk-api
 yandex_music
 youtube-search-python
-yt-dlp
+yt-dlp-ejs
+deno
+yt-dlp>=2024.0.dev0
+cloudscraper

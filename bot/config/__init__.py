@@ -18,7 +18,7 @@ def save_default_file() -> None:
 
 
 class ConfigManager:
-    version = 1
+    version = 3
 
     def __init__(self, file_name: Optional[str]) -> None:
         if file_name:

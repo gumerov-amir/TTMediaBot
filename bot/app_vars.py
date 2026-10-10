@@ -10,14 +10,28 @@ app_version = "2.3.1"
 client_name = app_name + "-V" + app_version
 about_text: Callable[[Translator], str] = lambda translator: translator.translate(
     """\
-A media streaming bot for TeamTalk.
-Authors: Amir Gumerov, Vladislav Kopylov, Beqa Gozalishvili, Kirill Belousov.
-Home page: https://github.com/gumerov-amir/TTMediaBot\
-License: Mit License\
+TTMediaBot-V4.0
+Olá! Eu sou Nuno Costa. Este é o meu fork do TTMediaBot para TeamTalk 5.
+Este repositório foca em estabilidade, performance e suporte para YouTube Music.
+Repositório: https://www.github.com/nunotfc/TTMediaBot
+
+Diferenças em relação ao original:
+- Comando de fila (queue): modo de reprodução em fila com enfileiramento de tracks
+- Comando /update: verifica e instala atualizações pip, reinicia o bot automaticamente
+- Comando /bb: bass boost ajustável (0-10)
+- Comando /pi: pitch control (-12 a +12 semitons)
+- Comando /ep: salvar posição de reprodução ao pausar/parar
+- Comandos encadeados com | (ex: t | v 30)
+- Cache separada em arquivos (recents.dat, favorites.dat, queue.dat, meta.json)
+- Correções de memory leak, uso de CPU e race condition na inicialização
+- Resiliência: cache corrompido não crasha o bot
+- Suporte a Dropbox como serviço de stream
+
+Autores Originais: Amir Gumerov, Vladislav Kopylov, Beqa Gozalishvili, Kirill Belousov.\
 """
 )
 fallback_service = "yt"
-loop_timeout = 0.01
+loop_timeout = 0.1
 max_message_length = 256
 recents_max_lenth = 32
 tt_event_timeout = 2

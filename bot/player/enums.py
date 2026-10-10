@@ -13,6 +13,7 @@ class Mode(Enum):
     TrackList = "tl"
     RepeatTrackList = "rtl"
     Random = "rnd"
+    Queue = "q"
 
 
 class TrackType(Enum):

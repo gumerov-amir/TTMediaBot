@@ -3,6 +3,8 @@
     "general": {
         "language": "en",
         "send_channel_messages": true,
+        "back_to_root_channel": true,
+        "root_channel_id": 1,
         "cache_file_name": "TTMediaBotCache.dat",
         "blocked_commands": [],
         "delete_uploaded_files_after": 300,

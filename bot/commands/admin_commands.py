@@ -1,4 +1,5 @@
 from __future__ import annotations
+import json
 import os
 import subprocess
 import sys
@@ -13,6 +14,35 @@ from bot import app_vars, errors
 if TYPE_CHECKING:
     from bot.TeamTalk.structs import User
 
+class OptionShowMetaCommand(Command):
+    @property
+    def help(self) -> str:
+        return self.translator.translate(
+            "Toggles metadata display in the status message."
+        )
+
+    def __call__(self, arg: str, user: User) -> Optional[str]:
+        if self.config.general.showmeta:
+            self.config.general.showmeta = False
+            return self.translator.translate("Metadata display disabled.")
+        else:
+            self.config.general.showmeta = True
+            return self.translator.translate("Metadata display enabled.")
+
+class OptionBackToRootChannelCommand(Command):
+    @property
+    def help(self) -> str:
+        return self.translator.translate(
+            "Toggles the ability for users to move the bot to their channels automatically."
+        )
+
+    def __call__(self, arg: str, user: User) -> Optional[str]:
+        if self.config.general.back_to_root_channel:
+            self.config.general.back_to_root_channel = False
+            return self.translator.translate("Users can't move the bot to their channels.")
+        else:
+            self.config.general.back_to_root_channel = True
+            return self.translator.translate("Users can move the bot to their channels.")
 
 class BlockCommandCommand(Command):
     @property
@@ -101,13 +131,20 @@ class ClearCacheCommand(Command):
     @property
     def help(self) -> str:
         return self.translator.translate(
-            "r/f Clears bot's cache. r clears recents, f clears favorites, without an option clears the entire cache"
+            "r/f/q/p Clears bot's cache. r clears recents, f clears favorites, q clears the queue, p clears saved positions, without an option clears the entire cache"
         )
 
     def __call__(self, arg: str, user: User) -> Optional[str]:
         if not arg:
+            try:
+                for track in self.cache.recents:
+                    track.resume_position = None
+                    track.resume_duration = None
+            except Exception:
+                ...
             self.cache.recents.clear()
             self.cache.favorites.clear()
+            self.cache.queue.clear()
             self.cache_manager.save()
             return self.translator.translate("Cache cleared")
         elif arg == "r":
@@ -118,6 +155,19 @@ class ClearCacheCommand(Command):
             self.cache.favorites.clear()
             self.cache_manager.save()
             return self.translator.translate("Favorites cleared")
+        elif arg == "q":
+            self.cache.queue.clear()
+            self.cache_manager.save()
+            return self.translator.translate("Queue cleared")
+        elif arg == "p":
+            try:
+                for track in self.cache.recents:
+                    track.resume_position = None
+                    track.resume_duration = None
+                self.cache_manager.save()
+            except Exception:
+                self.cache_manager.save()
+            return self.translator.translate("Positions cleared")
 
 
 class JoinChannelCommand(Command):
@@ -383,3 +433,83 @@ class GetChannelIDCommand(Command):
 
     def __call__(self, arg: str, user: User) -> Optional[str]:
         return str(self.ttclient.channel.id)
+
+
+class UpdateCommand(Command):
+    @property
+    def help(self) -> str:
+        return self.translator.translate("Checks for updates and restarts the bot if packages are updated")
+
+    def __call__(self, arg: str, user: User) -> Optional[str]:
+        # Enviar mensagem de que está verificando
+        self.ttclient.send_message(
+            self.translator.translate("Checking for updates..."),
+            user
+        )
+
+        # Capturar versões atuais
+        old_packages = self._get_installed_packages()
+
+        # Executar upgrade
+        result = subprocess.run(
+            [sys.executable, "-m", "pip", "install", "-r", "requirements.txt", "--upgrade"],
+            capture_output=True,
+            text=True
+        )
+
+        if result.returncode != 0:
+            return self.translator.translate("Error updating packages: {}").format(result.stderr)
+
+        # Capturar novas versões
+        new_packages = self._get_installed_packages()
+
+        # Comparar e encontrar diferenças
+        updated = self._find_updated_packages(old_packages, new_packages)
+
+        if not updated:
+            return self.translator.translate("No updates available.")
+
+        # Format message com as atualizações
+        updates_text = self.translator.translate("Updates installed:\n{}").format(
+            "\n".join(updated)
+        )
+        self.ttclient.send_message(updates_text, user)
+
+        # Reiniciar o bot (igual ao RestartCommand)
+        self._bot.close()
+        args = sys.argv
+        if sys.platform == "win32":
+            subprocess.run([sys.executable] + args)
+        else:
+            args.insert(0, sys.executable)
+            os.execv(sys.executable, args)
+        return None
+
+    def _get_installed_packages(self) -> dict:
+        """Retorna dict com nome do pacote -> versão"""
+        result = subprocess.run(
+            [sys.executable, "-m", "pip", "list", "--format=json"],
+            capture_output=True,
+            text=True
+        )
+        if result.returncode == 0:
+            packages = json.loads(result.stdout)
+            return {pkg["name"].lower(): pkg["version"] for pkg in packages}
+        return {}
+
+    def _find_updated_packages(self, old: dict, new: dict) -> list:
+        """Retorna lista de mensagens descrevendo as atualizações"""
+        updated = []
+        for name, old_version in old.items():
+            new_version = new.get(name)
+            if new_version and new_version != old_version:
+                # Formatar mensagem tipo "Atualizado yt-dlp de 2024.1.1 para 2024.2.1"
+                msg = self.translator.translate(
+                    "Updated {package} from {old_version} to {new_version}"
+                ).format(
+                    package=name,
+                    old_version=old_version,
+                    new_version=new_version
+                )
+                updated.append(msg)
+        return updated

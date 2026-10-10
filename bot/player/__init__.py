@@ -17,9 +17,13 @@ if TYPE_CHECKING:
     from bot import Bot
 
 
+MAX_TRACK_LIST_SIZE = 1000
+
+
 class Player:
     def __init__(self, bot: Bot):
         self.config = bot.config.player
+        self.general_config = bot.config.general
         self.cache = bot.cache
         self.cache_manager = bot.cache_manager
         mpv_options = {
@@ -43,6 +47,14 @@ class Player:
         self.state = State.Stopped
         self.mode = Mode.TrackList
         self.volume = self.config.default_volume
+        self._queue_active_track = False
+        self.bass_boost_level = 0
+        self._position_saved_for_track: Optional[str] = None
+        self._suppress_position_clear = False
+        try:
+            self.set_bass_boost(self.config.bass_boost_level)
+        except Exception:
+            logging.error("Failed to apply initial bass boost", exc_info=True)
 
     def initialize(self) -> None:
         logging.debug("Initializing player")
@@ -67,8 +79,21 @@ class Player:
         tracks: Optional[List[Track]] = None,
         start_track_index: Optional[int] = None,
     ) -> None:
+        if (
+            self.general_config.enable_positions
+            and self.state != State.Stopped
+            and self.track
+            and self.track.url
+            and self.track.type != TrackType.Live
+        ):
+            self._save_position_marker()
+        self._queue_active_track = False
         if tracks != None:
+            # Limitar track_list para evitar consumo excessivo de RAM
+            if len(tracks) > MAX_TRACK_LIST_SIZE:
+                tracks = tracks[:MAX_TRACK_LIST_SIZE]
             self.track_list = tracks
+
             if not start_track_index and self.mode == Mode.Random:
                 self.shuffle(True)
                 self.track_index = self._index_list[0]
@@ -85,13 +110,17 @@ class Player:
     def pause(self) -> None:
         self.state = State.Paused
         self._player.pause = True
+        self._save_position_marker()
 
     def stop(self) -> None:
+        self._save_position_marker()
         self.state = State.Stopped
+        self._suppress_position_clear = True
         self._player.stop()
         self.track_list = []
         self.track = Track()
         self.track_index = -1
+        self._queue_active_track = False
 
     def _play(self, arg: str, save_to_recents: bool = True) -> None:
         if save_to_recents:
@@ -103,10 +132,76 @@ class Player:
             except:
                 self.cache.recents.append(self.track_list[self.track_index].get_raw())
             self.cache_manager.save()
+        self._position_saved_for_track = None
         self._player.pause = False
         self._player.play(arg)
 
+    def _play_queue_from_start(self) -> None:
+        if not self.cache.queue:
+            raise errors.NoNextTrackError()
+        self.track_list = list(self.cache.queue)
+        self.track_index = 0
+        self.track = self.track_list[self.track_index]
+        self._queue_active_track = True
+        self._play(self.track.url)
+
+    def _consume_current_queue_track(self) -> None:
+        if self.cache.queue and self.cache.queue[0].url == self.track.url:
+            self.cache.queue.pop(0)
+            self.cache_manager.save()
+        self._queue_active_track = False
+
+    def play_queue(self) -> None:
+        if not self.cache.queue:
+            raise errors.NothingIsPlayingError()
+        self._play_queue_from_start()
+        self._player.volume = self.volume
+        self.state = State.Playing
+        self._position_saved_for_track = None
+
+    def _save_position_marker(self) -> None:
+        if not self.general_config.enable_positions:
+            return
+        if not self.track or not self.track.url:
+            return
+        if self.track.type == TrackType.Live:
+            return
+        try:
+            position = float(self._player.time_pos or 0)
+            duration_value = self._player.duration
+            duration = float(duration_value) if duration_value else None
+        except Exception:
+            return
+        self.track.resume_position = position
+        self.track.resume_duration = duration if duration else 0
+        try:
+            for recent_track in reversed(self.cache.recents):
+                if recent_track.url == self.track.url:
+                    recent_track.resume_position = position
+                    recent_track.resume_duration = duration if duration else 0
+                    break
+        except Exception:
+            ...
+        try:
+            self.cache_manager.save()
+        except Exception:
+            logging.error("Failed to save positions", exc_info=True)
+
+    def _clear_position_entry(self) -> None:
+        pass
+
     def next(self) -> None:
+        if self.mode == Mode.Queue:
+            if self.cache.queue and self._queue_active_track:
+                self._consume_current_queue_track()
+            if self.cache.queue:
+                self._play_queue_from_start()
+                self._player.volume = self.volume
+                self.state = State.Playing
+                return
+            else:
+                self.stop()
+                raise errors.NoNextTrackError()
         track_index = self.track_index
         if len(self.track_list) > 0:
             if self.mode == Mode.Random:
@@ -129,6 +224,8 @@ class Player:
                 raise errors.NoNextTrackError()
 
     def previous(self) -> None:
+        if self.mode == Mode.Queue:
+            raise errors.NoPreviousTrackError
         track_index = self.track_index
         if len(self.track_list) > 0:
             if self.mode == Mode.Random:
@@ -173,6 +270,41 @@ class Player:
         else:
             self._player.volume = volume
 
+    def _clear_bass_boost(self) -> None:
+        try:
+            self._player.command("af", "clr")
+        except Exception:
+            ...
+
+    def _update_audio_filters(self) -> None:
+        """Combine bass_boost and pitch filters into a single af string"""
+        filters = []
+        # Add bass boost filter if active
+        if self.bass_boost_level > 0:
+            gain = (self.bass_boost_level * 60) // 100 - 30
+            filters.append(f"bass=g={gain}")
+        # Add pitch filter if active
+        pitch = self.get_pitch()
+        if pitch != 0:
+            sample_rate = 48000
+            pitch_factor = 2.0 ** (pitch / 12.0)
+            filters.append(f"lavfi=[asetrate={sample_rate}*{pitch_factor},aresample={sample_rate}]")
+        # Set combined filters
+        if filters:
+            self._player.af = ",".join(filters)
+        else:
+            self._player.af = ""
+
+    def set_bass_boost(self, level: int) -> None:
+        if level < 0 or level > 100:
+            raise ValueError()
+        self.bass_boost_level = level
+        self._update_audio_filters()
+        try:
+            self.config.bass_boost_level = level
+        except Exception:
+            ...
+
     def get_speed(self) -> float:
         return self._player.speed
 
@@ -180,6 +312,15 @@ class Player:
         if arg < 0.25 or arg > 4:
             raise ValueError()
         self._player.speed = arg
+
+    def get_pitch(self) -> int:
+        return getattr(self, '_pitch', 0)
+
+    def set_pitch(self, semitons: int) -> None:
+        if semitons < -12 or semitons > 12:
+            raise ValueError()
+        self._pitch = semitons
+        self._update_audio_filters()
 
     def seek_back(self, step: Optional[float] = None) -> None:
         step = step if step else self.config.seek_step
@@ -201,6 +342,14 @@ class Player:
 
     def get_duration(self) -> float:
         return self._player.duration
+
+    def seek_absolute(self, position: float) -> None:
+        if position < 0:
+            raise errors.IncorrectPositionError()
+        try:
+            self._player.command("seek", position, "absolute", "exact")
+        except SystemError:
+            self.stop()
 
     """def get_position(self) -> float:
         return self._player.time_pos
@@ -258,6 +407,23 @@ class Player:
 
     def on_end_file(self, event: mpv.MpvEvent) -> None:
         if self.state == State.Playing and self._player.idle_active:
+            if self._suppress_position_clear:
+                self._suppress_position_clear = False
+                return
+            self._clear_position_entry()
+            if self.mode == Mode.Queue:
+                if self._queue_active_track:
+                    self._consume_current_queue_track()
+                if self.cache.queue:
+                    try:
+                        self._play_queue_from_start()
+                        self._player.volume = self.volume
+                        self.state = State.Playing
+                    except errors.NoNextTrackError:
+                        self.stop()
+                else:
+                    self.stop()
+                return
             if self.mode == Mode.SingleTrack or self.track.type == TrackType.Direct:
                 self.stop()
             elif self.mode == Mode.RepeatTrack:

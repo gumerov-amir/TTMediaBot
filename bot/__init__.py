@@ -24,6 +24,8 @@ from bot import (
     app_vars,
 )
 
+from bot.player.enums import State
+from bot.player.enums import Mode
 
 class Bot:
     def __init__(
@@ -90,19 +92,49 @@ class Bot:
         self.tt_player_connector.start()
         self.command_processor.run()
         logging.info("Started")
+
+        # Esperar estar conectado E no canal antes de processar comandos de startup
+        logging.info("Waiting to join channel...")
+        max_wait = 30  # segundos máximos de espera
+        waited = 0
+        while not self.ttclient._joined_channel and waited < max_wait:
+            time.sleep(1)
+            waited += 1
+            if waited % 5 == 0:
+                logging.debug(f"Still waiting to join channel... ({waited}/{max_wait}s)")
+
+        if not self.ttclient._joined_channel:
+            logging.error("Timed out waiting to join channel!")
+        else:
+            logging.info(f"Successfully joined channel after {waited} seconds")
+
         logging.info(f"Processing {len(self.config.general.start_commands)} startup command(s)...")
         startup_context_user = User(
-            id=-1, nickname="Startup", username="", 
-            channel=self.ttclient.channel, 
-            type=UserType.Admin, is_admin=True, 
-            status="", gender=UserStatusMode.N, state=UserState.Null, 
+            id=-1, nickname="Startup", username="",
+            channel=self.ttclient.channel,
+            type=UserType.Admin, is_admin=True,
+            status="", gender=UserStatusMode.N, state=UserState.Null,
             client_name="", version=0, user_account=None, is_banned=False
         )
         for command in self.config.general.start_commands:
             message = Message(text=command, user=startup_context_user, channel=self.ttclient.channel, type=MessageType.User)
             self.command_processor(message)
+        if (
+            self.player.mode == Mode.Queue
+            and self.cache.queue
+            and self.player.state == State.Stopped
+        ):
+            try:
+                self.player.play_queue()
+            except (errors.NothingIsPlayingError, errors.NoNextTrackError):
+                pass
         self._close = False
         while not self._close:
+            root_channel_id = self.config.general.root_channel_id
+            if self.config.general.back_to_root_channel and len(self.ttclient.tt.getChannelUsers(self.ttclient.channel.id))==1 and self.ttclient.channel.id != root_channel_id:
+                if self.player.state != State.Stopped:
+                    self.player.stop()
+                self.ttclient.DoMoveUser(self.ttclient.user.id, root_channel_id)
             try:
                 message = self.ttclient.message_queue.get_nowait()
                 logging.info(

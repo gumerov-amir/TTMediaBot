@@ -30,6 +30,8 @@ class Track:
         self.format = format
         self.extra_info = extra_info
         self.type = type
+        self.resume_position: Optional[float] = None
+        self.resume_duration: Optional[float] = None
         self._lock = Lock()
         self._is_fetched = False
 
@@ -86,7 +88,21 @@ class Track:
         if hasattr(self, "_original_track"):
             return self._original_track
         else:
-            return self
+            # Retornar uma cópia rasa para evitar memory leak
+            # Sem isso, recents/favorites/queue mantêm referência aos tracks da track_list,
+            # impedindo que sejam liberados pelo garbage collector
+            raw = Track(
+                service=self.service,
+                url=self._url if hasattr(self, '_url') else self.url,
+                name=self._name if hasattr(self, '_name') else self.name,
+                format=self.format,
+                extra_info=self.extra_info,
+                type=self.type
+            )
+            raw.resume_position = self.resume_position
+            raw.resume_duration = self.resume_duration
+            raw._is_fetched = self._is_fetched
+            return raw
 
     def __bool__(self):
         if self.service or self.url:

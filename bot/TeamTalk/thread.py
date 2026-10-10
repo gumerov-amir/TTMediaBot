@@ -30,6 +30,7 @@ class TeamTalkThread(Thread):
         if self.config.event_handling.load_event_handlers:
             self.event_handlers = self.import_event_handlers()
         self._close = False
+        logging.info("TeamTalk thread started")
         while not self._close:
             event = self.ttclient.get_event(self.ttclient.tt.getMessage())
             if event.event_type == EventType.NONE:
@@ -38,6 +39,7 @@ class TeamTalkThread(Thread):
                 event.event_type == EventType.ERROR
                 and self.ttclient.state == State.CONNECTED
             ):
+                logging.warning(f"TeamTalk error: {event.error}")
                 self.ttclient.errors_queue.put(event.error)
             elif (
                 event.event_type == EventType.SUCCESS
@@ -74,45 +76,50 @@ class TeamTalkThread(Thread):
                     or self.config.reconnection_attempts < 0
                 ):
                     self.ttclient.disconnect()
+                    logging.info(f"Reconnecting in {self.config.reconnection_timeout} seconds...")
                     time.sleep(self.config.reconnection_timeout)
                     self.ttclient.connect()
                     self.ttclient.reconnect_attempt += 1
                 else:
-                    logging.error("Connection error")
+                    logging.error("Connection error - exiting")
                     sys.exit(1)
             elif event.event_type == EventType.CON_SUCCESS:
                 self.ttclient.reconnect_attempt = 0
+                logging.info("Connection successful, logging in...")
                 self.ttclient.login()
             elif event.event_type == EventType.ERROR:
                 if self.ttclient.flags & Flags.AUTHORIZED == Flags(0):
-                    logging.warning("Login failed")
+                    logging.warning(f"Login failed: {event.error}")
                     if (
                         self.ttclient.reconnect
                         and self.ttclient.reconnect_attempt
                         < self.config.reconnection_attempts
                         or self.config.reconnection_attempts < 0
                     ):
+                        logging.info(f"Retrying login in {self.config.reconnection_timeout} seconds...")
                         time.sleep(self.config.reconnection_timeout)
                         self.ttclient.login()
                     else:
-                        logging.error("Login error")
+                        logging.error("Login error - exiting")
                         sys.exit(1)
                 else:
-                    logging.warning("Failed to join channel")
+                    logging.warning(f"Failed to join channel: {event.error}")
                     if (
                         self.ttclient.reconnect
                         and self.ttclient.reconnect_attempt
                         < self.config.reconnection_attempts
                         or self.config.reconnection_attempts < 0
                     ):
+                        logging.info(f"Retrying to join channel in {self.config.reconnection_timeout} seconds...")
                         time.sleep(self.config.reconnection_timeout)
                         self.ttclient.join()
                     else:
-                        logging.error("Error joining channel")
+                        logging.error("Error joining channel - exiting")
                         sys.exit(1)
             elif event.event_type == EventType.MYSELF_LOGGEDIN:
                 self.ttclient.user_account = event.user_account
                 self.ttclient.reconnect_attempt = 0
+                logging.info("Logged in successfully, joining channel...")
                 self.ttclient.join()
             elif (
                 event.event_type == EventType.SUCCESS
@@ -121,7 +128,10 @@ class TeamTalkThread(Thread):
                 self.ttclient.reconnect_attempt = 0
                 self.ttclient.reconnect = True
                 self.ttclient.state = State.CONNECTED
+                self.ttclient._joined_channel = True  # Marcou como Connected = está no canal
                 self.ttclient.change_status_text(self.ttclient.status)
+                current_channel = self.ttclient.channel
+                logging.info(f"Connected to server and joined channel: {current_channel.name} (ID: {current_channel.id})")
             if self.config.event_handling.load_event_handlers:
                 self.run_event_handler(event)
 

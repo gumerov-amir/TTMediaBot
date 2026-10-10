@@ -95,6 +95,8 @@ class TeamTalk:
         self.reconnect = False
         self.reconnect_attempt = 0
         self.user_account: UserAccount
+        self._joined_channel = False  # Flag para saber se entrou no canal
+        self._ready_event = None  # Will be set after joining channel
 
     def initialize(self) -> None:
         logging.debug("Initializing TeamTalk")
@@ -139,8 +141,11 @@ class TeamTalk:
         else:
             channel_id = self.tt.getChannelIDFromPath(_str(self.config.channel))
             if channel_id == 0:
+                logging.warning(f"Channel '{self.config.channel}' not found, falling back to channel 1")
                 channel_id = 1
+        logging.info(f"Joining channel ID: {channel_id}")
         self.tt.doJoinChannelByID(channel_id, _str(self.config.channel_password))
+        self._joined_channel = False  # Será definido como True no evento CMD_JOINED_CHANNEL
 
     @property
     def default_status(self) -> str:
@@ -192,6 +197,8 @@ class TeamTalk:
             if channel_id == 0:
                 raise ValueError()
         return self.tt.doJoinChannelByID(channel_id, _str(password))
+    def DoMoveUser(self, channel: int, usuarioid: int)->None:
+        self.tt.doMoveUser(channel, usuarioid)
 
     def change_nickname(self, nickname: str) -> None:
         self.tt.doChangeNickname(_str(nickname))

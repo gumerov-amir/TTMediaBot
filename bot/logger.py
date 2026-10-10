@@ -56,4 +56,4 @@ def initialize_logger(bot: Bot) -> None:
         stream_handler.setFormatter(formatter)
         stream_handler.setLevel(level)
         handlers.append(stream_handler)
-    logging.basicConfig(level=level, format=config.format, handlers=handlers)
+    logging.basicConfig(level=level, format=config.format, handlers=handlers, force=True)

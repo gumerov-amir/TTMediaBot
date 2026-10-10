@@ -6,6 +6,11 @@ from pydantic import BaseModel
 class GeneralModel(BaseModel):
     language: str = "en"
     send_channel_messages: bool = True
+    back_to_root_channel: bool = True
+    root_channel_id: int = 1
+    showmeta: bool = True
+    enable_positions: bool = False
+
     cache_file_name: str = "TTMediaBotCache.dat"
     blocked_commands: List[str] = []
     delete_uploaded_files_after: int = 300
@@ -24,6 +29,7 @@ class PlayerModel(BaseModel):
     volume_fading_interval: float = 0.025
     seek_step: int = 5
     player_options: Dict[str, Any] = {}
+    bass_boost_level: int = 0
 
 class TeamTalkUserModel(BaseModel):
     admins: List[str] = ["admin"]
@@ -62,8 +68,6 @@ class VkModel(BaseModel):
 
 class YtModel(BaseModel):
     enabled: bool = True
-class YtModel(BaseModel):
-    enabled: bool = True
     cookiefile_path: str = ""
 
 
@@ -72,11 +76,16 @@ class YamModel(BaseModel):
     token: str = ""
 
 
+class DropboxModel(BaseModel):
+    enabled: bool = True
+
+
 class ServicesModel(BaseModel):
     default_service: str = "vk"
     vk: VkModel = VkModel()
     yam: YamModel = YamModel()
     yt: YtModel = YtModel()
+    dropbox: DropboxModel = DropboxModel()
 
 
 class LoggerModel(BaseModel):
